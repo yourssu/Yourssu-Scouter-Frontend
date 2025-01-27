@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { DialogOption } from "../StateButton/StateButton";
 import { Dialog } from "./Dialog";
 
 interface GenericDialogProps {
-  options: Array<{ label: string; value?: string; icon?: React.ReactNode }>;
+  options: DialogOption[];
   onSelect: (value: string) => void;
   children: React.ReactElement;
   width?: number;
