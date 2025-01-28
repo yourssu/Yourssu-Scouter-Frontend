@@ -1,8 +1,6 @@
 import {Route, Routes} from "react-router";
 import Main from "@/components/Main/Main.tsx";
 import {Members} from "@/pages/Members/Members.tsx";
-import SideNavigation from "@/components/SideNavigation/SideNavigation.tsx";
-import { Route, Routes } from "react-router";
 import { Test } from "./pages/Test";
 
 function App() {

@@ -11,3 +11,10 @@ export const StyledTabsListContainer = styled.div`
     align-items: center;
     border-bottom: 1px solid ${({theme}) => theme.semantic.color.lineBasicLight};
 `;
+
+export const StyledContainer = styled.div`
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+`;

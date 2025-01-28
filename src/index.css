@@ -14,7 +14,9 @@
 }
 
 #root {
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 
 a {
@@ -69,4 +71,8 @@ button:focus-visible {
   /* button {
     background-color: #f9f9f9;
   } */
+}
+
+*:focus-visible {
+  outline: none;
 }
