@@ -3,7 +3,7 @@ import {
     StyledLinks,
     StyledLogo,
     StyledLogoText, StyledNavigationLink, StyledSection, StyledSectionTitle
-} from "@/components/SideNavigation/SideNavigation.style.ts";
+} from "@/components/Main/SideNavigation/SideNavigation.style.ts";
 import Logo from "@/assets/logo.svg";
 import {Divider, IcCalenderLine, IcMailLine, IcPinLine, IcStarLine, IcUserLine} from "@yourssu/design-system-react";
 
