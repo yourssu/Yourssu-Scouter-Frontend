@@ -31,10 +31,7 @@ export const GenericDialog = ({
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         options={options}
-        onSelect={(value) => {
-          onSelect(value);
-          setIsOpen(false);
-        }}
+        onSelect={onSelect}
         position={position}
         width={width}
       />

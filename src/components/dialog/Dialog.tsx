@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DialogContainer, StyledTextButton } from "./Dialog.style";
 
 interface DialogOption {
@@ -20,10 +20,11 @@ export const Dialog = ({
   onClose,
   options,
   onSelect,
-  position,
+  position: initialPosition,
   width,
 }: DialogProps) => {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState(initialPosition);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -38,10 +39,33 @@ export const Dialog = ({
     return () => document.removeEventListener("mousedown", handleClick);
   }, [onClose]);
 
-  const handleOptionClick = (label: string) => {
-    onSelect(label);
-    onClose();
-  };
+  useEffect(() => {
+    if (isOpen && dialogRef.current) {
+      const updatePosition = () => {
+        const buttonRect =
+          dialogRef.current?.parentElement?.getBoundingClientRect();
+        const dialogHeight = dialogRef.current?.offsetHeight ?? 0;
+
+        if (!buttonRect) return;
+
+        const bottomSpace = window.innerHeight - buttonRect.bottom;
+        const shouldShowOnTop = bottomSpace < dialogHeight + 10;
+
+        setPosition(shouldShowOnTop ? "top" : "bottom");
+      };
+
+      const timer = setTimeout(updatePosition, 0);
+
+      window.addEventListener("scroll", updatePosition);
+      window.addEventListener("resize", updatePosition);
+
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("scroll", updatePosition);
+        window.removeEventListener("resize", updatePosition);
+      };
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -59,7 +83,10 @@ export const Dialog = ({
           variant="textSecondary"
           leftIcon={option.icon}
           onMouseDown={(e) => e.stopPropagation()}
-          onClick={() => handleOptionClick(option.label)}
+          onClick={() => {
+            onSelect(option.label);
+            onClose();
+          }}
         >
           {option.label}
         </StyledTextButton>
