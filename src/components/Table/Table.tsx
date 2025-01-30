@@ -328,7 +328,7 @@ const Table = ({tabType}: TableProps) => {
                             <StyledBasis key={headerGroup.id}>
                                 {headerGroup.headers.map(header => (
                                     <StyledCell
-                                        style={{minWidth: `${header.getSize()}px`}}
+                                        $minWidth={header.getSize()}
                                         key={header.id}
                                     >
                                         {header.isPlaceholder

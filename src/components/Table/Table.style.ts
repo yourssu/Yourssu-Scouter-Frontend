@@ -81,10 +81,11 @@ export const StyledList = styled.tr`
     background: ${({theme}) => theme.semantic.color.bgBasicDefault};
 `;
 
-export const StyledCell = styled.th`
+export const StyledCell = styled.th<{$minWidth: number}>`
     ${({theme}) => theme.typo.B1_Rg_16};
     text-align: left;
     padding-left: 16px;
+    min-width: ${({$minWidth}) => $minWidth}px;
 `;
 
 export const StyledEditIcon = styled.span`
