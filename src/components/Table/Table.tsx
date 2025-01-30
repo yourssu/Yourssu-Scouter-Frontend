@@ -1,6 +1,7 @@
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import {useEffect, useState} from "react";
 import {
+    StyledBorder,
     StyledBasis, StyledBodyCell, StyledBodyCellData, StyledCell,
     StyledContainer, StyledEditIcon, StyledList,
     StyledSearchBarContainer,
@@ -217,7 +218,7 @@ const Table = ({tabType}: TableProps) => {
         setData(prevData =>
             prevData.map(member =>
                 member.memberId === memberId
-                    ? { ...member, [type]: value }
+                    ? {...member, [type]: value}
                     : member
             )
         );
@@ -256,7 +257,8 @@ const Table = ({tabType}: TableProps) => {
         columnHelper.accessor('state', {
             header: "상태",
             cell: info => (
-                <MemberStateButton selectedValue={info.getValue()} onStateChange={handleSelect("state", info.row.original.memberId)} />
+                <MemberStateButton selectedValue={info.getValue()}
+                                   onStateChange={handleSelect("state", info.row.original.memberId)}/>
             ),
             size: 144,
         }),
@@ -366,6 +368,7 @@ const Table = ({tabType}: TableProps) => {
                     </tbody>
                 </StyledTable>
             </StyledTableContainer>
+            <StyledBorder/>
         </StyledTableContainerContainer>
     </StyledContainer>
 }

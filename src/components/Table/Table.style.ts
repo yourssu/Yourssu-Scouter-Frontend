@@ -7,6 +7,10 @@ export const StyledContainer = styled.div`
 `;
 
 export const StyledTableContainerContainer = styled.div`
+    position: relative;
+`;
+
+export const StyledTableContainer = styled.div`
     width: 100%;
     overflow: auto;
 
@@ -28,13 +32,8 @@ export const StyledTableContainerContainer = styled.div`
         background-color: #B5B9C4;
         transition: background-color 0.3s ease;
     }
-`;
-
-export const StyledTableContainer = styled.div`
-    width: fit-content;
-    overflow: hidden;
+    
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
-    border: 1px solid ${({theme}) => theme.semantic.color.lineBasicMedium};
 `;
 
 export const StyledSearchBarContainer = styled.div`
@@ -135,3 +134,14 @@ export const StyledBodyCellData = styled.span<{$special: boolean}>`
     flex-wrap: nowrap;
     width: 100%;
 `;
+
+export const StyledBorder = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 8px);
+    border-radius: ${({theme}) => theme.semantic.radius.l}px;
+    border: 1px solid ${({theme}) => theme.semantic.color.lineBasicMedium};
+    pointer-events: none;
+`
