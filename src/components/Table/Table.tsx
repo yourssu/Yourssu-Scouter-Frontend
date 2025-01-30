@@ -4,7 +4,7 @@ import {
     StyledBasis, StyledBodyCell, StyledBodyCellData, StyledCell,
     StyledContainer, StyledEditIcon, StyledList,
     StyledSearchBarContainer,
-    StyledTable, StyledTableContainer, StyledThead
+    StyledTable, StyledTableContainer, StyledTableContainerContainer, StyledThead
 } from "@/components/Table/Table.style.ts";
 import {Checkbox, IcEditLine, SearchBar} from "@yourssu/design-system-react";
 import {MemberStateButton, RoleStateButton} from "@/components/StateButton";
@@ -320,51 +320,53 @@ const Table = ({tabType}: TableProps) => {
                 />
             </SearchBar>
         </StyledSearchBarContainer>
-        <StyledTableContainer>
-            <StyledTable>
-                <StyledThead>
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <StyledBasis key={headerGroup.id}>
-                            {headerGroup.headers.map(header => (
-                                <StyledCell
-                                    style={{width: `${header.getSize()}px`}}
-                                    key={header.id}
-                                >
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                </StyledCell>
-                            ))}
-                        </StyledBasis>
-                    ))}
-                </StyledThead>
-                <tbody>
-                {table.getRowModel().rows.map(row => (
-                    <StyledList key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <StyledBodyCell key={cell.id}>
-                                <StyledBodyCellData
-                                    $special={specialCols.includes(cell.column.id)}
-                                    style={{minWidth: `${cell.column.getSize()}px`}}
-                                >
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    {
-                                        !specialCols.includes(cell.column.id) &&
-                                        <StyledEditIcon>
-                                            <IcEditLine width={20} height={20}/>
-                                        </StyledEditIcon>
-                                    }
-                                </StyledBodyCellData>
-                            </StyledBodyCell>
+        <StyledTableContainerContainer>
+            <StyledTableContainer>
+                <StyledTable>
+                    <StyledThead>
+                        {table.getHeaderGroups().map(headerGroup => (
+                            <StyledBasis key={headerGroup.id}>
+                                {headerGroup.headers.map(header => (
+                                    <StyledCell
+                                        style={{minWidth: `${header.getSize()}px`}}
+                                        key={header.id}
+                                    >
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </StyledCell>
+                                ))}
+                            </StyledBasis>
                         ))}
-                    </StyledList>
-                ))}
-                </tbody>
-            </StyledTable>
-        </StyledTableContainer>
+                    </StyledThead>
+                    <tbody>
+                    {table.getRowModel().rows.map(row => (
+                        <StyledList key={row.id}>
+                            {row.getVisibleCells().map(cell => (
+                                <StyledBodyCell key={cell.id}>
+                                    <StyledBodyCellData
+                                        $special={specialCols.includes(cell.column.id)}
+                                        style={{minWidth: `${cell.column.getSize()}px`}}
+                                    >
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        {
+                                            !specialCols.includes(cell.column.id) &&
+                                            <StyledEditIcon>
+                                                <IcEditLine width={20} height={20}/>
+                                            </StyledEditIcon>
+                                        }
+                                    </StyledBodyCellData>
+                                </StyledBodyCell>
+                            ))}
+                        </StyledList>
+                    ))}
+                    </tbody>
+                </StyledTable>
+            </StyledTableContainer>
+        </StyledTableContainerContainer>
     </StyledContainer>
 }
 

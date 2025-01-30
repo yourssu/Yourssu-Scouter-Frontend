@@ -21,14 +21,14 @@ export const Members = () => {
                 <Tabs.List size="large">
                     {
                         (Object.keys(tabItems) as TabType[]).map((key) =>
-                            <Tabs.Tab id={key}>{tabItems[key]}</Tabs.Tab>
+                            <Tabs.Tab key={key} id={key}>{tabItems[key]}</Tabs.Tab>
                         )
                     }
                 </Tabs.List>
             </StyledTabsListContainer>
             {
                 (Object.keys(tabItems) as TabType[]).map((key) =>
-                    <Tabs.Panel value={key}>
+                    <Tabs.Panel key={key} value={key}>
                         <Table tabType={tabItems[key]}/>
                     </Tabs.Panel>
                 )

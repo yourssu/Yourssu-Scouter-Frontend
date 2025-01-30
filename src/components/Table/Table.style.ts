@@ -6,13 +6,10 @@ export const StyledContainer = styled.div`
     padding: 0 40px 48px 40px;
 `;
 
-export const StyledTableContainer = styled.div`
+export const StyledTableContainerContainer = styled.div`
     width: 100%;
     overflow: auto;
 
-    border-radius: ${({theme}) => theme.semantic.radius.l}px;
-    border: 1px solid ${({theme}) => theme.semantic.color.lineBasicMedium};
-    
     &::-webkit-scrollbar-thumb {
         background-color: transparent;
         transition: background-color 0.3s ease;
@@ -31,6 +28,13 @@ export const StyledTableContainer = styled.div`
         background-color: #B5B9C4;
         transition: background-color 0.3s ease;
     }
+`;
+
+export const StyledTableContainer = styled.div`
+    width: fit-content;
+    overflow: hidden;
+    border-radius: ${({theme}) => theme.semantic.radius.l}px;
+    border: 1px solid ${({theme}) => theme.semantic.color.lineBasicMedium};
 `;
 
 export const StyledSearchBarContainer = styled.div`
