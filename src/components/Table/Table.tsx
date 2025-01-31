@@ -5,7 +5,7 @@ import {
     StyledBasis, StyledBodyCell, StyledBodyCellData, StyledCell,
     StyledContainer, StyledEditIcon, StyledList,
     StyledSearchBarContainer,
-    StyledTable, StyledTableContainer, StyledTableContainerContainer, StyledThead
+    StyledTable, StyledTableContainer, StyledTableContainerContainer, StyledThead, StyledBorderBox, StyledOuterBorder
 } from "@/components/Table/Table.style.ts";
 import {Checkbox, IcEditLine, SearchBar} from "@yourssu/design-system-react";
 import {MemberStateButton, RoleStateButton} from "@/components/StateButton";
@@ -369,6 +369,9 @@ const Table = ({tabType}: TableProps) => {
                 </StyledTable>
             </StyledTableContainer>
             <StyledBorder/>
+            <StyledBorderBox>
+                <StyledOuterBorder />
+            </StyledBorderBox>
         </StyledTableContainerContainer>
     </StyledContainer>
 }

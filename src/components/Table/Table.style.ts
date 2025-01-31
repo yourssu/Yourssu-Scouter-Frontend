@@ -145,3 +145,21 @@ export const StyledBorder = styled.div`
     border: 1px solid ${({theme}) => theme.semantic.color.lineBasicMedium};
     pointer-events: none;
 `
+
+export const StyledBorderBox = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 8px);
+    pointer-events: none;
+    overflow: hidden;
+`;
+
+export const StyledOuterBorder = styled.div`
+    width: 100%;
+    height: 100%;
+    border-radius: ${({theme}) => theme.semantic.radius.l}px;
+    box-shadow: 0 0 0 8px #FFF;
+    pointer-events: none;
+`;
