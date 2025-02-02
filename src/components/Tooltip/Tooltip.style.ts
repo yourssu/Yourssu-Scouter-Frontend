@@ -22,6 +22,11 @@ export const TooltipContent = styled.div<TooltipContentProps>`
   color: ${({ theme }) => theme.semantic.color.textBasicWhite};
   ${({ theme }) => theme.typo.C1_Rg_13};
 
+  &::after {
+    content: "";
+    position: absolute;
+  }
+
   ${({ $position = "top", $offset = 10 }) => {
     switch ($position) {
       case "bottom":
@@ -32,8 +37,10 @@ export const TooltipContent = styled.div<TooltipContentProps>`
 
           &::after {
             top: -8px;
-            bottom: auto;
-            border-top: none;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
             border-bottom: 8px solid #373a43;
           }
         `;
@@ -45,14 +52,12 @@ export const TooltipContent = styled.div<TooltipContentProps>`
           margin-bottom: 0;
 
           &::after {
-            left: auto;
             right: -8px;
             top: 50%;
             transform: translateY(-50%);
             border-left: 8px solid #373a43;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
-            border-right: none;
           }
         `;
       case "right":
@@ -69,7 +74,6 @@ export const TooltipContent = styled.div<TooltipContentProps>`
             border-right: 8px solid #373a43;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
-            border-left: none;
           }
         `;
       default:
@@ -79,8 +83,6 @@ export const TooltipContent = styled.div<TooltipContentProps>`
           transform: translateX(-50%);
 
           &::after {
-            content: "";
-            position: absolute;
             bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
