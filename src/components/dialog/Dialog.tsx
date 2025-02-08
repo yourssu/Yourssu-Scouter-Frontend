@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { DialogContainer, StyledTextButton } from "./Dialog.style";
 
 interface DialogOption {
@@ -13,6 +14,7 @@ interface DialogProps {
   onSelect: (value: string) => void;
   position: "top" | "bottom";
   width: number;
+  anchorEl: HTMLElement | null;
 }
 
 export const Dialog = ({
@@ -22,36 +24,47 @@ export const Dialog = ({
   onSelect,
   position: initialPosition,
   width,
+  anchorEl,
 }: DialogProps) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(initialPosition);
+  const [coordinates, setCoordinates] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (!(e.target instanceof Node)) return;
-
-      if (dialogRef.current && !dialogRef.current.contains(e.target)) {
+      if (
+        dialogRef.current &&
+        !dialogRef.current.contains(e.target) &&
+        !anchorEl?.contains(e.target)
+      ) {
         onClose();
       }
     };
 
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
-  }, [onClose]);
+  }, [onClose, anchorEl]);
 
   useEffect(() => {
-    if (isOpen && dialogRef.current) {
+    if (isOpen && anchorEl && dialogRef.current) {
       const updatePosition = () => {
-        const buttonRect =
-          dialogRef.current?.parentElement?.getBoundingClientRect();
+        const buttonRect = anchorEl.getBoundingClientRect();
         const dialogHeight = dialogRef.current?.offsetHeight ?? 0;
-
-        if (!buttonRect) return;
 
         const bottomSpace = window.innerHeight - buttonRect.bottom;
         const shouldShowOnTop = bottomSpace < dialogHeight + 10;
 
         setPosition(shouldShowOnTop ? "top" : "bottom");
+
+        const top = shouldShowOnTop
+          ? buttonRect.top - dialogHeight - 10
+          : buttonRect.bottom + 10;
+
+        setCoordinates({
+          top,
+          left: buttonRect.left,
+        });
       };
 
       const timer = setTimeout(updatePosition, 0);
@@ -65,16 +78,18 @@ export const Dialog = ({
         window.removeEventListener("resize", updatePosition);
       };
     }
-  }, [isOpen]);
+  }, [isOpen, anchorEl]);
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <DialogContainer
       ref={dialogRef}
       $isOpen={isOpen}
       $position={position}
       $width={width}
+      $top={coordinates.top}
+      $left={coordinates.left}
     >
       {options.map((option) => (
         <StyledTextButton
@@ -91,6 +106,7 @@ export const Dialog = ({
           {option.label}
         </StyledTextButton>
       ))}
-    </DialogContainer>
+    </DialogContainer>,
+    document.body
   );
 };

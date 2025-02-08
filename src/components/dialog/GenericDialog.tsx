@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { DialogOption } from "../StateButton/StateButton";
 import { Dialog } from "./Dialog";
 
@@ -18,6 +18,7 @@ export const GenericDialog = ({
   position = "bottom",
 }: GenericDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const dialogOpener = React.cloneElement(children, {
     onClick: () => setIsOpen((prev) => !prev),
@@ -25,7 +26,7 @@ export const GenericDialog = ({
   });
 
   return (
-    <div style={{ position: "relative" }}>
+    <div ref={anchorRef}>
       {dialogOpener}
       <Dialog
         isOpen={isOpen}
@@ -34,6 +35,7 @@ export const GenericDialog = ({
         onSelect={onSelect}
         position={position}
         width={width}
+        anchorEl={anchorRef.current}
       />
     </div>
   );
