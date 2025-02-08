@@ -22,14 +22,17 @@ export const StateButton = ({
 }: StateButtonProps) => {
   return (
     <GenericDialog options={options} onSelect={onSelect}>
-      <StyledBoxButton
-        size="small"
-        variant={variant}
-        rightIcon={<IcArrowsChevronUpLine />}
-        $selectedValue={selectedValue}
-      >
-        {selectedValue}
-      </StyledBoxButton>
+      {(triggerProps) => (
+        <StyledBoxButton
+          size="small"
+          variant={variant}
+          rightIcon={<IcArrowsChevronUpLine />}
+          $selectedValue={selectedValue}
+          {...triggerProps}
+        >
+          {selectedValue}
+        </StyledBoxButton>
+      )}
     </GenericDialog>
   );
 };
