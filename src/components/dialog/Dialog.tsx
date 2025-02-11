@@ -33,18 +33,14 @@ export const Dialog = ({
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (!(e.target instanceof Node)) return;
-      if (
-        dialogRef.current &&
-        !dialogRef.current.contains(e.target) &&
-        !anchorEl?.contains(e.target)
-      ) {
+      if (dialogRef.current && !dialogRef.current.contains(e.target)) {
         onClose();
       }
     };
 
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
-  }, [onClose, anchorEl]);
+  }, [onClose]);
 
   useEffect(() => {
     if (isOpen && anchorEl && dialogRef.current) {
@@ -57,39 +53,43 @@ export const Dialog = ({
 
         setPosition(shouldShowOnTop ? "top" : "bottom");
 
-        const top = shouldShowOnTop
-          ? buttonRect.top - dialogHeight - 10
-          : buttonRect.bottom + 10;
-
         setCoordinates({
-          top,
           left: buttonRect.left,
+          top: shouldShowOnTop
+            ? buttonRect.top - dialogHeight - 10
+            : buttonRect.bottom + 10,
         });
       };
 
-      const timer = setTimeout(updatePosition, 0);
+      updatePosition();
 
-      window.addEventListener("scroll", updatePosition);
-      window.addEventListener("resize", updatePosition);
+      const handleScroll = () => {
+        requestAnimationFrame(updatePosition);
+      };
+
+      window.addEventListener("scroll", handleScroll, true);
+      document.addEventListener("scroll", handleScroll, true);
+      window.addEventListener("resize", handleScroll);
 
       return () => {
-        clearTimeout(timer);
-        window.removeEventListener("scroll", updatePosition);
-        window.removeEventListener("resize", updatePosition);
+        window.removeEventListener("scroll", handleScroll, true);
+        document.removeEventListener("scroll", handleScroll, true);
+        window.removeEventListener("resize", handleScroll);
       };
     }
   }, [isOpen, anchorEl]);
 
-  if (!isOpen) return null;
-
-  return createPortal(
+  const dialog = (
     <DialogContainer
       ref={dialogRef}
       $isOpen={isOpen}
       $position={position}
       $width={width}
-      $top={coordinates.top}
-      $left={coordinates.left}
+      style={{
+        position: "fixed",
+        top: coordinates.top,
+        left: coordinates.left,
+      }}
     >
       {options.map((option) => (
         <StyledTextButton
@@ -106,7 +106,10 @@ export const Dialog = ({
           {option.label}
         </StyledTextButton>
       ))}
-    </DialogContainer>,
-    document.body
+    </DialogContainer>
   );
+
+  if (!isOpen) return null;
+
+  return createPortal(dialog, document.body);
 };
