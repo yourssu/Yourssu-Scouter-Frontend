@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { DialogOption } from "../StateButton/StateButton";
-import { Dialog } from "./Dialog";
 
+import { Dialog } from "./Dialog";
 interface GenericDialogProps {
   options: DialogOption[];
   onSelect: (value: string) => void;
-  children: React.ReactElement;
   width?: number;
   position?: "top" | "bottom";
+  children: (props: {
+    onClick: () => void;
+    onMouseDown: (e: React.MouseEvent) => void;
+  }) => React.ReactElement;
 }
 
 export const GenericDialog = ({
@@ -18,15 +21,14 @@ export const GenericDialog = ({
   position = "bottom",
 }: GenericDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const dialogOpener = React.cloneElement(children, {
-    onClick: () => setIsOpen((prev) => !prev),
-    onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),
-  });
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div style={{ position: "relative" }}>
-      {dialogOpener}
+    <div ref={anchorRef}>
+      {children({
+        onClick: () => setIsOpen((prev) => !prev),
+        onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),
+      })}
       <Dialog
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -34,6 +36,7 @@ export const GenericDialog = ({
         onSelect={onSelect}
         position={position}
         width={width}
+        anchorEl={anchorRef.current}
       />
     </div>
   );
