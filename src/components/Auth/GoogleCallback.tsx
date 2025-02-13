@@ -1,4 +1,4 @@
-import { authService } from "@/apis/auth.service.api";
+import { authService } from "@/apis/auth.service";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 
