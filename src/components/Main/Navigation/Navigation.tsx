@@ -1,10 +1,16 @@
-import {StyledContainer, StyledProfileImage} from "@/components/Main/Navigation/Navigation.style.ts";
+import { authService } from "@/apis/auth.service.api";
+import { StyledContainer, StyledProfileImage } from "./Navigation.style";
 
 const Navigation = () => {
-    return <StyledContainer>
-        {/*<StyledNickname>Jerome</StyledNickname>*/}
-        <StyledProfileImage />
+  const handleGoogleLogin = () => {
+    authService.initiateGoogleLogin();
+  };
+
+  return (
+    <StyledContainer>
+      <StyledProfileImage onClick={handleGoogleLogin} />
     </StyledContainer>
-}
+  );
+};
 
 export default Navigation;
