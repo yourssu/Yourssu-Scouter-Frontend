@@ -17,11 +17,13 @@ const handleTokenRefresh: BeforeRetryHook = async ({ error, retryCount }) => {
     return ky.stop;
   }
 
+  const refreshToken = tokenService.getRefreshToken();
+  if (!refreshToken) {
+    authService.logout();
+    return ky.stop;
+  }
+
   try {
-    const refreshToken = tokenService.getRefreshToken();
-    if (!refreshToken) {
-      throw new Error("refresh Token이 없음");
-    }
     await authService.refreshToken(refreshToken);
   } catch (error) {
     console.error("Token refresh 실패, 로그아웃", error);
