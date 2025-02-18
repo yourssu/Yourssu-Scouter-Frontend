@@ -5,33 +5,30 @@ import { tokenService } from "./token.service";
 
 const DEFAULT_API_RETRY_LIMIT = 2;
 
-const handleTokenRefresh: BeforeRetryHook = async ({ error, retryCount }) => {
+const stopWithLogout = (): typeof ky.stop => {
+  authService.logout();
+  return ky.stop;
+};
+
+const handleTokenRefresh: BeforeRetryHook = async ({ error }) => {
   const httpError = error as HTTPError;
 
   if (httpError.response.status !== 401) {
     return ky.stop;
   }
 
-  if (retryCount === DEFAULT_API_RETRY_LIMIT - 1) {
-    authService.logout();
-    return ky.stop;
-  }
-
   const refreshToken = tokenService.getRefreshToken();
   if (!refreshToken) {
-    authService.logout();
-    return ky.stop;
+    return stopWithLogout();
   }
 
   try {
     await authService.refreshToken(refreshToken);
   } catch (error) {
     console.error("Token refresh 실패, 로그아웃", error);
-    authService.logout();
-    return ky.stop;
+    return stopWithLogout();
   }
 };
-
 const setAuthHeader = (request: Request) => {
   const accessToken = tokenService.getAccessToken();
   if (accessToken) {
