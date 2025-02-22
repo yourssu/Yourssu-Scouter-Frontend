@@ -5,6 +5,8 @@ import {Checkbox} from "@yourssu/design-system-react";
 import {transformBoolean} from "@/utils/common.ts";
 import {MemberStateButton, RoleStateButton} from "@/components/StateButton";
 import Table from "@/components/Table/Table.tsx";
+import {usePatchMember} from "@/hooks/usePatchMember.ts";
+import PartsCell from "@/components/Cell/PartsCell.tsx";
 
 interface MemberTableProps {
     state: MemberState;
@@ -14,11 +16,14 @@ interface MemberTableProps {
 const columnHelper = createColumnHelper<Member>();
 
 const MemberTable = ({state, search}: MemberTableProps) => {
-    const handleSelect = (a: string, b: number) => {
-        console.log(a, b);
+    const patchMemberMutation = usePatchMember(state);
+
+    const handleSelect = (memberId: number, field: string, value: unknown) => {
+        patchMemberMutation.mutate({memberId, params: {[field]: value}});
     }
 
     const {data} = useGetMembers(state, search);
+
 
     const columns = [
         columnHelper.accessor('parts', {
@@ -31,27 +36,32 @@ const MemberTable = ({state, search}: MemberTableProps) => {
                 </div>
             },
             header: "구분",
-            size: 196,
+            size: 101,
         }),
         columnHelper.accessor('parts', {
             id: 'part',
             cell: info => {
                 const parts = info.getValue();
                 if (!Array.isArray(parts)) return '-';
-                return <div style={{display: "flex", flexDirection: "column"}}>
-                    {parts.map(p => <div key={p.part}>{p.part}</div>)}
-                </div>
+                return <PartsCell onSelect={() => {
+                }}>
+                    <div style={{display: "flex", flexDirection: "column"}}>
+                        {parts.map(p => <div key={p.part}>{p.part}</div>)}
+                    </div>
+                </PartsCell>
             },
             header: "파트",
-            size: 101,
+            size: 196,
         }),
         columnHelper.accessor('role', {
             header: "역할",
-            cell: info => (
-                <RoleStateButton selectedValue={info.getValue()} onStateChange={() => {
-
-                }}/>
-            ),
+            cell: info => {
+                return (
+                    <RoleStateButton selectedValue={info.getValue()} onStateChange={(value) => {
+                        handleSelect(info.row.original.memberId, 'role', value);
+                    }}/>
+                )
+            },
             size: 146,
         }),
         columnHelper.accessor('name', {
@@ -65,8 +75,10 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         columnHelper.accessor('state', {
             header: "상태",
             cell: info => (
-                <MemberStateButton selectedValue={info.getValue()}
-                                   onStateChange={() => handleSelect("state", info.row.original.memberId)}/>
+                <MemberStateButton
+                    selectedValue={info.getValue()}
+                    onStateChange={(value) => handleSelect(info.row.original.memberId, "state", value)}
+                />
             ),
             size: 144,
         }),
@@ -94,13 +106,18 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             header: "가입일",
             size: 142,
         }),
-        columnHelper.accessor('membershipFee', {
-            header: "회비 납부",
+        ...(state === '액티브' ? [columnHelper.accessor('membershipFee', {
+            header: () => <div style={{width: '100%', display: 'flex', justifyContent: 'center', paddingRight: 16}}>회비
+                납부</div>,
             cell: info => (
-                <Checkbox size="large" selected={transformBoolean(info.getValue())}>{""}</Checkbox>
+                <div style={{paddingLeft: 8, width: '100%', display: 'flex', justifyContent: 'center'}}>
+                    <Checkbox size="large"
+                              onChange={(e) => handleSelect(info.row.original.memberId, 'membershipFee', e.currentTarget.checked)}
+                              selected={transformBoolean(info.getValue())}>{""}</Checkbox>
+                </div>
             ),
             size: 139,
-        }),
+        })] : []),
         ...((state === '비액티브' || state === '졸업') ? [columnHelper.accessor('activePeriod', {
             header: '활동 기간',
             cell: info => {
@@ -144,8 +161,8 @@ const MemberTable = ({state, search}: MemberTableProps) => {
     })
 
     return <Table>
-        <Table.Header headerGroups={table.getHeaderGroups()} />
-        <Table.Body rows={table.getRowModel().rows} />
+        <Table.Header headerGroups={table.getHeaderGroups()}/>
+        <Table.Body rows={table.getRowModel().rows}/>
     </Table>
 };
 

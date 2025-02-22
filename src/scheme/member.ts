@@ -51,11 +51,50 @@ const WithdrawnMemberSchema = BaseMemberSchema.extend({
     state: z.literal('탈퇴'),
 });
 
+const PatchActiveMemberSchema = ActiveMemberSchema
+    .omit({memberId: true})
+    .extend({
+        partIds: z.array(z.number()),
+    })
+    .omit({parts: true})
+    .partial();
+
+const PatchInactiveMemberSchema = InactiveMemberSchema
+    .omit({memberId: true})
+    .extend({
+        partIds: z.array(z.number()),
+    })
+    .omit({parts: true})
+    .partial();
+
+const PatchGraduatedMemberSchema = GraduatedMemberSchema
+    .omit({memberId: true})
+    .extend({
+        partIds: z.array(z.number()),
+    })
+    .omit({parts: true})
+    .partial();
+
+const PatchWithdrawnMemberSchema = WithdrawnMemberSchema
+    .omit({memberId: true})
+    .extend({
+        partIds: z.array(z.number()),
+    })
+    .omit({parts: true})
+    .partial();
+
 const MemberSchema = z.discriminatedUnion('state', [
     ActiveMemberSchema,
     InactiveMemberSchema,
     GraduatedMemberSchema,
     WithdrawnMemberSchema
+]);
+
+export const PatchMemberSchema = z.union([
+    PatchActiveMemberSchema,
+    PatchInactiveMemberSchema,
+    PatchGraduatedMemberSchema,
+    PatchWithdrawnMemberSchema
 ]);
 
 export const MemberRoleArraySchema = z.array(MemberRoleSchema);
@@ -64,6 +103,8 @@ export const MemberArraySchema = z.array(MemberSchema);
 
 export const MemberStateArraySchema = z.array(MemberStateSchema);
 
-export type MemberState = z.infer<typeof MemberStateSchema>
+export type MemberState = z.infer<typeof MemberStateSchema>;
 
-export type Member = z.infer<typeof MemberSchema>
+export type Member = z.infer<typeof MemberSchema>;
+
+export type PatchMember = z.infer<typeof PatchMemberSchema>;

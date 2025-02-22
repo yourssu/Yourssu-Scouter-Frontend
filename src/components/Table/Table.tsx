@@ -1,16 +1,13 @@
-import { flexRender,  HeaderGroup, Row} from "@tanstack/react-table";
+import {flexRender, HeaderGroup, Row} from "@tanstack/react-table";
 import {
     StyledBorder,
     StyledBasis, StyledBodyCell, StyledBodyCellData, StyledCell,
-    StyledEditIcon, StyledList,
+    StyledList,
     StyledTable, StyledTableContainer, StyledTableContainerContainer, StyledThead, StyledBorderBox, StyledOuterBorder
 } from "@/components/Table/Table.style.ts";
-import {IcEditLine} from "@yourssu/design-system-react";
 import {ReactNode} from "react";
 
-const specialCols = ['role', 'state', 'department', 'membershipFee'];
-
-const Header = ({ headerGroups }: {headerGroups: HeaderGroup<unknown>[]}) => (
+const Header = ({headerGroups}: { headerGroups: HeaderGroup<unknown>[] }) => (
     <StyledThead>
         {headerGroups.map(headerGroup => (
             <StyledBasis key={headerGroup.id}>
@@ -29,22 +26,16 @@ const Header = ({ headerGroups }: {headerGroups: HeaderGroup<unknown>[]}) => (
     </StyledThead>
 );
 
-const Body = ({ rows }: {rows: Row<unknown>[]}) => (
+const Body = ({rows}: { rows: Row<unknown>[] }) => (
     <tbody>
     {rows.map(row => (
         <StyledList key={row.id}>
             {row.getVisibleCells().map(cell => (
-                <StyledBodyCell key={cell.id}>
+                <StyledBodyCell $special={false} key={cell.id}>
                     <StyledBodyCellData
-                        $special={specialCols.includes(cell.column.id)}
                         style={{minWidth: `${cell.column.getSize()}px`}}
                     >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        {!specialCols.includes(cell.column.id) && (
-                            <StyledEditIcon>
-                                <IcEditLine width={20} height={20}/>
-                            </StyledEditIcon>
-                        )}
                     </StyledBodyCellData>
                 </StyledBodyCell>
             ))}
@@ -53,7 +44,7 @@ const Body = ({ rows }: {rows: Row<unknown>[]}) => (
     </tbody>
 );
 
-const Table = ({ children }: {children: ReactNode}) => (
+const Table = ({children}: { children: ReactNode }) => (
     <StyledTableContainerContainer>
         <StyledTableContainer>
             <StyledTable>
@@ -62,7 +53,7 @@ const Table = ({ children }: {children: ReactNode}) => (
         </StyledTableContainer>
         <StyledBorder/>
         <StyledBorderBox>
-            <StyledOuterBorder />
+            <StyledOuterBorder/>
         </StyledBorderBox>
     </StyledTableContainerContainer>
 );

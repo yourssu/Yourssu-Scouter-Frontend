@@ -64,7 +64,6 @@ export const StyledBasis = styled.tr`
 `;
 
 export const StyledList = styled.tr`
-    height: 64px;
     border-bottom: 1px solid ${({theme}) => theme.semantic.color.lineBasicLight};
     background: ${({theme}) => theme.semantic.color.bgBasicDefault};
 `;
@@ -76,52 +75,26 @@ export const StyledCell = styled.th<{$minWidth: number}>`
     min-width: ${({$minWidth}) => $minWidth}px;
 `;
 
-export const StyledEditIcon = styled.span`
-    display: flex;
-    width: 24px;
-    height: 24px;
-    padding: 2px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    color: ${({theme}) => theme.semantic.color.iconBrandPrimary};
-    margin-left: 24px;
-    
-    &:hover {
-        border-radius: 4px;
-        background: ${({theme}) => theme.primitive.color.effect050};
-        cursor: pointer;
-    }
-`;
-
-export const StyledBodyCell = styled.td`
+export const StyledBodyCell = styled.td<{$special: boolean}>`
     white-space: nowrap;
-`;
 
-export const StyledBodyCellData = styled.span<{$special: boolean}>`
-    ${({theme}) => theme.typo.B1_Rg_16};
-    
     ${({$special, theme}) => !$special && `
         &:hover {
             background: ${theme.semantic.color.bgBasicLight};
         }
     `}
-    
-    &:hover ${StyledEditIcon} {
-        visibility: visible;
-    }
-    
-    & ${StyledEditIcon} {
-        visibility: hidden;
-    }
+`;
+
+export const StyledBodyCellData = styled.span`
+    ${({theme}) => theme.typo.B1_Rg_16};
     
     display: flex;
-    height: 64px;
-    padding: 24px 16px;
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
     width: 100%;
+    height: 64px;
+    padding: 24px 16px;
 `;
 
 export const StyledBorder = styled.div`

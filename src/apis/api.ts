@@ -33,6 +33,7 @@ const setAuthHeader = (request: Request) => {
   const accessToken = tokenService.getAccessToken();
   if (accessToken) {
     request.headers.set("Authorization", `${accessToken}`);
+    request.headers.set("Content-Type", "application/json");
   }
 };
 
