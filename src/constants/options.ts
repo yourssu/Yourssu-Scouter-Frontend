@@ -1,22 +1,9 @@
-export const MEMBER_STATE_OPTIONS = [
-  { label: "액티브" },
-  { label: "비액티브" },
-  { label: "졸업" },
-  { label: "탈퇴" },
-];
-
 export const APPLICANT_STATE_OPTIONS = [
   { label: "심사 진행 중" },
   { label: "서류 불합" },
   { label: "면접 불합" },
   { label: "인큐베이팅 불합" },
   { label: "최종 합격" },
-];
-
-export const ROLE_STATE_OPTIONS = [
-  { label: "Lead" },
-  { label: "Vice Lead" },
-  { label: "Member" },
 ];
 
 export const PARTS_OPTIONS = [

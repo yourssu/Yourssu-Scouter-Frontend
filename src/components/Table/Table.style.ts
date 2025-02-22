@@ -1,11 +1,5 @@
 import styled from "styled-components";
 
-export const StyledContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 0 40px 48px 40px;
-`;
-
 export const StyledTableContainerContainer = styled.div`
     position: relative;
 `;
@@ -34,11 +28,6 @@ export const StyledTableContainer = styled.div`
     }
     
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
-`;
-
-export const StyledSearchBarContainer = styled.div`
-    width: 432px;
-    margin: 16px 0;
 `;
 
 export const StyledTable = styled.table`
