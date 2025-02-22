@@ -13,6 +13,8 @@ export const usePatchMember = (state: MemberState) => {
 
     return useMutation({
         mutationFn: async ({memberId, params}: PatchMemberParams) => {
+            const data = PatchMemberSchema.safeParse(params);
+            console.log(data.data, data.success, data.error);
             await api.patch(`members/${MEMBER_URI[state]}/${memberId}`, {body: JSON.stringify(PatchMemberSchema.parse(params))});
         },
         onSuccess: async () => {

@@ -7,7 +7,7 @@ import {
 } from "@/components/Table/Table.style.ts";
 import {ReactNode} from "react";
 
-const specialCols = ['division', 'role', 'state', 'membershipFee'];
+const specialCols = ['division', 'role', 'state', 'membershipFee', 'activePeriod', 'expectedReturnSemester', 'inactivePeriod'];
 
 const Header = ({headerGroups}: { headerGroups: HeaderGroup<unknown>[] }) => (
     <StyledThead>

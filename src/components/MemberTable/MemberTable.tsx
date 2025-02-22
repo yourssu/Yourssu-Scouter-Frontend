@@ -8,6 +8,9 @@ import Table from "@/components/Table/Table.tsx";
 import {usePatchMember} from "@/hooks/usePatchMember.ts";
 import PartsCell from "@/components/Cell/PartsCell.tsx";
 import InputCell from "@/components/Cell/InputCell.tsx";
+import DepartmentCell from "@/components/Cell/DepartmentCell.tsx";
+import {ActivePeriod, InactivePeriod} from "@/components/MemberTable/MemberTable.style.ts";
+import {SemesterStateButton} from "@/components/StateButton/SemesterStateButton.tsx";
 
 interface MemberTableProps {
     state: MemberState;
@@ -132,10 +135,28 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         }),
         columnHelper.accessor('department', {
             header: "전공",
+            cell: info => (
+                <DepartmentCell
+                    onSelect={() => {
+                    }}
+                >
+                    {info.getValue()}
+                </DepartmentCell>
+            ),
             size: 260,
         }),
         columnHelper.accessor('studentId', {
             header: "학번",
+            cell: info => (
+                <InputCell
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'studentId', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
             size: 136,
         }),
         columnHelper.accessor('birthDate', {
@@ -183,7 +204,15 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             cell: info => {
                 const member = info.row.original;
                 if (member.state === '비액티브' || member.state === '졸업') {
-                    return `${member.activePeriod.startSemester} ~ ${member.activePeriod.endSemester}`;
+                    return <div style={{display: 'flex', alignItems: 'center', gap: 4}}>
+                        <ActivePeriod size='small' variant='filledSecondary'>
+                            {member.activePeriod.startSemester}
+                        </ActivePeriod>
+                        ~
+                        <ActivePeriod style={{pointerEvents: 'none'}} size='small' variant='filledSecondary'>
+                            {member.activePeriod.endSemester}
+                        </ActivePeriod>
+                    </div>;
                 }
             },
             size: 185,
@@ -193,7 +222,11 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             cell: info => {
                 const member = info.row.original;
                 if (member.state === '비액티브') {
-                    return `${member.expectedReturnSemester}`;
+                    return <SemesterStateButton selectedValue={member.expectedReturnSemester}
+                                                onStateChange={(value) => {
+                                                    handleSelect(member.memberId, 'expectedReturnSemester', value)
+                                                }}
+                    />
                 }
             },
             size: 137,
@@ -203,7 +236,15 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             cell: info => {
                 const member = info.row.original;
                 if (member.state === '비액티브') {
-                    return `${member.inactivePeriod.startSemester} ~ ${member.inactivePeriod.endSemester}`;
+                    return <div style={{display: 'flex', alignItems: 'center', gap: 4}}>
+                        <InactivePeriod size='small' disabled variant='filledSecondary'>
+                            {member.inactivePeriod.startSemester}
+                        </InactivePeriod>
+                        ~
+                        <InactivePeriod style={{pointerEvents: 'none'}} size='small' disabled variant='filledSecondary'>
+                            {member.inactivePeriod.endSemester}
+                        </InactivePeriod>
+                    </div>;
                 }
             },
             size: 185,

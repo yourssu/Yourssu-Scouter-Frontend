@@ -62,37 +62,6 @@ const WithdrawnMemberSchema = BaseMemberSchema.extend({
     state: z.literal('탈퇴'),
 });
 
-const PatchActiveMemberSchema = ActiveMemberSchema
-    .omit({memberId: true})
-    .extend({
-        partIds: z.array(z.number()),
-    })
-    .omit({parts: true})
-    .partial();
-
-const PatchInactiveMemberSchema = InactiveMemberSchema
-    .omit({memberId: true})
-    .extend({
-        partIds: z.array(z.number()),
-    })
-    .omit({parts: true})
-    .partial();
-
-const PatchGraduatedMemberSchema = GraduatedMemberSchema
-    .omit({memberId: true})
-    .extend({
-        partIds: z.array(z.number()),
-    })
-    .omit({parts: true})
-    .partial();
-
-const PatchWithdrawnMemberSchema = WithdrawnMemberSchema
-    .omit({memberId: true})
-    .extend({
-        partIds: z.array(z.number()),
-    })
-    .omit({parts: true})
-    .partial();
 
 const MemberSchema = z.discriminatedUnion('state', [
     ActiveMemberSchema,
@@ -101,12 +70,17 @@ const MemberSchema = z.discriminatedUnion('state', [
     WithdrawnMemberSchema
 ]);
 
-export const PatchMemberSchema = z.union([
-    PatchActiveMemberSchema,
-    PatchInactiveMemberSchema,
-    PatchGraduatedMemberSchema,
-    PatchWithdrawnMemberSchema
-]);
+export const PatchMemberSchema = z.object({}).merge(ActiveMemberSchema)
+    .merge(InactiveMemberSchema)
+    .merge(GraduatedMemberSchema)
+    .merge(WithdrawnMemberSchema)
+    .omit({memberId: true, state: true})
+    .extend({
+        partIds: z.array(z.number()),
+        state: MemberStateSchema,
+    })
+    .omit({parts: true})
+    .partial();
 
 export const MemberRoleArraySchema = z.array(MemberRoleSchema);
 
