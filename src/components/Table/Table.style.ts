@@ -93,8 +93,9 @@ export const StyledBodyCellData = styled.span`
     align-items: center;
     flex-wrap: nowrap;
     width: 100%;
-    height: 64px;
     padding: 24px 16px;
+
+    height: 64px;
 `;
 
 export const StyledBorder = styled.div`

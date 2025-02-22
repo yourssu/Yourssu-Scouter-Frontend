@@ -7,6 +7,7 @@ import {MemberStateButton, RoleStateButton} from "@/components/StateButton";
 import Table from "@/components/Table/Table.tsx";
 import {usePatchMember} from "@/hooks/usePatchMember.ts";
 import PartsCell from "@/components/Cell/PartsCell.tsx";
+import InputCell from "@/components/Cell/InputCell.tsx";
 
 interface MemberTableProps {
     state: MemberState;
@@ -30,9 +31,8 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             id: 'division',
             cell: info => {
                 const parts = info.getValue();
-                if (!Array.isArray(parts)) return '-';
                 return <div style={{display: "flex", flexDirection: "column"}}>
-                    {parts.map(p => <div key={p.division}>{p.division}</div>)}
+                    {parts.map(p => <div key={`${p.division} ${p.part}`}>{p.division}</div>)}
                 </div>
             },
             header: "구분",
@@ -42,11 +42,10 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             id: 'part',
             cell: info => {
                 const parts = info.getValue();
-                if (!Array.isArray(parts)) return '-';
                 return <PartsCell onSelect={() => {
                 }}>
                     <div style={{display: "flex", flexDirection: "column"}}>
-                        {parts.map(p => <div key={p.part}>{p.part}</div>)}
+                        {parts.map(p => <div key={`${p.division} ${p.part}`}>{p.part}</div>)}
                     </div>
                 </PartsCell>
             },
@@ -66,10 +65,31 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         }),
         columnHelper.accessor('name', {
             header: "이름",
+            cell: info => (
+                <InputCell
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'name', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
             size: 115,
         }),
         columnHelper.accessor('nickname', {
             header: "닉네임(발음)",
+            cell: info => (
+                <InputCell
+                    bold={true}
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'nickname', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
             size: 192,
         }),
         columnHelper.accessor('state', {
@@ -84,10 +104,30 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         }),
         columnHelper.accessor('email', {
             header: "유어슈 이메일",
+            cell: info => (
+                <InputCell
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'email', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
             size: 235,
         }),
         columnHelper.accessor('phoneNumber', {
             header: "연락처",
+            cell: info => (
+                <InputCell
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'phoneNumber', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
             size: 175,
         }),
         columnHelper.accessor('department', {
@@ -100,10 +140,30 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         }),
         columnHelper.accessor('birthDate', {
             header: "생년월일",
+            cell: info => (
+                <InputCell
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'birthDate', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
             size: 142,
         }),
         columnHelper.accessor('joinDate', {
             header: "가입일",
+            cell: info => (
+                <InputCell
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'joinDate', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
             size: 142,
         }),
         ...(state === '액티브' ? [columnHelper.accessor('membershipFee', {
@@ -150,6 +210,16 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         })] : []),
         columnHelper.accessor('note', {
             header: "비고",
+            cell: info => (
+                <InputCell
+                    defaultValue={info.getValue()}
+                    handleSubmit={(value) => {
+                        handleSelect(info.row.original.memberId, 'note', value);
+                    }}
+                >
+                    {info.getValue()}
+                </InputCell>
+            ),
         }),
     ];
 

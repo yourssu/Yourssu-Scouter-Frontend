@@ -7,6 +7,8 @@ import {
 } from "@/components/Table/Table.style.ts";
 import {ReactNode} from "react";
 
+const specialCols = ['division', 'role', 'state', 'membershipFee'];
+
 const Header = ({headerGroups}: { headerGroups: HeaderGroup<unknown>[] }) => (
     <StyledThead>
         {headerGroups.map(headerGroup => (
@@ -31,7 +33,7 @@ const Body = ({rows}: { rows: Row<unknown>[] }) => (
     {rows.map(row => (
         <StyledList key={row.id}>
             {row.getVisibleCells().map(cell => (
-                <StyledBodyCell $special={false} key={cell.id}>
+                <StyledBodyCell $special={specialCols.includes(cell.column.id)} key={cell.id}>
                     <StyledBodyCellData
                         style={{minWidth: `${cell.column.getSize()}px`}}
                     >

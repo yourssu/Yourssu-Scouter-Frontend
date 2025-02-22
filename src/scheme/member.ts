@@ -10,6 +10,17 @@ const PeriodSchema = z.object({
     endSemester: z.string(),
 })
 
+const NicknameSchema = z.string().regex(/^[a-zA-Z]+\([가-힣]+\)$/, "영어(한글) 형식으로 입력해주세요");
+
+const EmailSchema = z.string().regex(/^[a-zA-Z0-9._-]+\.urssu@gmail\.com$/, "~.urssu@gmail.com 형식으로 입력해주세요");
+
+const PhoneNumberSchema = z.string().regex(/^010-\d{4}-\d{4}$/, "연락처는 010-0000-0000 형식으로 입력해주세요");
+
+const DateSchema = z.string().regex(
+    /^(19|20)\d{2}\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01])$/,
+    "날짜는 yyyy.mm.dd 형식으로 입력해주세요"
+)
+
 const MemberRoleSchema = z.enum(['Lead', 'ViceLead', 'Member']);
 
 const MemberStateSchema = z.enum(['액티브', '비액티브', '졸업', '탈퇴']);
@@ -19,13 +30,13 @@ const BaseMemberSchema = z.object({
     parts: z.array(PartSchema),
     role: MemberRoleSchema,
     name: z.string(),
-    nickname: z.string(),
-    email: z.string(),
-    phoneNumber: z.string(),
+    nickname: NicknameSchema,
+    email: EmailSchema,
+    phoneNumber: PhoneNumberSchema,
     department: z.string(),
     studentId: z.string(),
-    birthDate: z.string(),
-    joinDate: z.string(),
+    birthDate: DateSchema,
+    joinDate: DateSchema,
     note: z.string(),
 });
 

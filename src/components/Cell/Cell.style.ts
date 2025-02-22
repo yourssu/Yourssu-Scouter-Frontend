@@ -18,10 +18,12 @@ export const StyledEditIcon = styled.span`
     }
 `;
 
-export const StyledContainer = styled.span`
+export const StyledContainer = styled.span<{$bold: boolean}>`
     display: flex;
     justify-content: space-between;
+    font-weight: ${({$bold}) => $bold ? 600 : 400};
     align-items: center;
+    width: 100%;
     
     &:hover ${StyledEditIcon} {
         visibility: visible;
@@ -30,4 +32,19 @@ export const StyledContainer = styled.span`
     & ${StyledEditIcon} {
         visibility: hidden;
     }
+`;
+
+export const StyledInput = styled.input<{$bold: boolean}>`
+    width: 100%;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 24px; /* 150% */
+    letter-spacing: -0.32px;
+    font-weight: ${({$bold}) => $bold ? 600 : 400};
+
+    border: none;
+    background: none;
+    
+    color: ${({theme}) => theme.semantic.color.textBasicPrimary};
+    caret-color: ${({theme}) => theme.semantic.color.lineStatusPositive};
 `;
