@@ -23,7 +23,10 @@ const PartsCell = ({children, onSelect}: PartsCellProps) => {
 
     return <GenericDialog width={width} options={options} onSelect={onSelect}>
         {(triggerProps) => (
-            <StyledContainer ref={ref}>
+            <StyledContainer
+                $bold={false}
+                ref={ref}
+            >
                 {children}
                 <StyledEditIcon
                     {...triggerProps}
