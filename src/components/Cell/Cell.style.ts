@@ -9,7 +9,6 @@ export const StyledEditIcon = styled.span`
     align-items: center;
     flex-shrink: 0;
     color: ${({theme}) => theme.semantic.color.iconBrandPrimary};
-    margin-left: 24px;
     
     &:hover {
         border-radius: 4px;

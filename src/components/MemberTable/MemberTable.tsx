@@ -39,7 +39,7 @@ const MemberTable = ({state, search}: MemberTableProps) => {
                 </div>
             },
             header: "구분",
-            size: 101,
+            size: 125,
         }),
         columnHelper.accessor('parts', {
             id: 'part',
@@ -249,6 +249,17 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             },
             size: 185,
         })] : []),
+        ...(state === '졸업' ? [columnHelper.accessor('isAdvisorDesired', {
+            header: '어드바이저 희망',
+            cell: info => (
+                <div style={{paddingLeft: 8, width: '100%', display: 'flex', justifyContent: 'center'}}>
+                    <Checkbox size="large"
+                              onChange={(e) => handleSelect(info.row.original.memberId, 'isAdvisorDesired', e.currentTarget.checked)}
+                              selected={transformBoolean(info.getValue())}>{""}</Checkbox>
+                </div>
+            ),
+            size: 131,
+        })] : []),
         columnHelper.accessor('note', {
             header: "비고",
             cell: info => (
@@ -261,6 +272,7 @@ const MemberTable = ({state, search}: MemberTableProps) => {
                     {info.getValue()}
                 </InputCell>
             ),
+            size: 216,
         }),
     ];
 

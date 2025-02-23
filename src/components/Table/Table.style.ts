@@ -35,7 +35,7 @@ export const StyledTable = styled.table`
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
     border-style: hidden;
     table-layout: fixed;
-    
+    min-width: 101%;
     
     & th:first-child {
         padding-left: 40px;
