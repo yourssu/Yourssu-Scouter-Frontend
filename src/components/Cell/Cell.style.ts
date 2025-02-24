@@ -9,6 +9,7 @@ export const StyledEditIcon = styled.span`
     align-items: center;
     flex-shrink: 0;
     color: ${({theme}) => theme.semantic.color.iconBrandPrimary};
+    margin-left: 8px;
     
     &:hover {
         border-radius: 4px;
@@ -17,12 +18,20 @@ export const StyledEditIcon = styled.span`
     }
 `;
 
-export const StyledContainer = styled.span<{$bold: boolean}>`
+export const StyledContainer = styled.span<{$editable: boolean, $bold: boolean}>`
     display: flex;
     justify-content: space-between;
     font-weight: ${({$bold}) => $bold ? 600 : 400};
     align-items: center;
     width: 100%;
+    padding: 24px 16px;
+    height: 64px;
+    
+    ${({$editable, theme}) => $editable && `
+        &:hover {
+            background: ${theme.semantic.color.bgBasicLight};
+        }
+    `}
     
     &:hover ${StyledEditIcon} {
         visibility: visible;

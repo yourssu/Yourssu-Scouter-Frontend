@@ -77,25 +77,6 @@ export const StyledCell = styled.th<{$minWidth: number}>`
 
 export const StyledBodyCell = styled.td<{$special: boolean}>`
     white-space: nowrap;
-
-    ${({$special, theme}) => !$special && `
-        &:hover {
-            background: ${theme.semantic.color.bgBasicLight};
-        }
-    `}
-`;
-
-export const StyledBodyCellData = styled.span`
-    ${({theme}) => theme.typo.B1_Rg_16};
-    
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap;
-    width: 100%;
-    padding: 24px 16px;
-
-    height: 64px;
 `;
 
 export const StyledBorder = styled.div`

@@ -1,7 +1,7 @@
 import {flexRender, HeaderGroup, Row} from "@tanstack/react-table";
 import {
     StyledBorder,
-    StyledBasis, StyledBodyCell, StyledBodyCellData, StyledCell,
+    StyledBasis, StyledBodyCell, StyledCell,
     StyledList,
     StyledTable, StyledTableContainer, StyledTableContainerContainer, StyledThead, StyledBorderBox, StyledOuterBorder
 } from "@/components/Table/Table.style.ts";
@@ -33,12 +33,11 @@ const Body = ({rows}: { rows: Row<unknown>[] }) => (
     {rows.map(row => (
         <StyledList key={row.id}>
             {row.getVisibleCells().map(cell => (
-                <StyledBodyCell $special={specialCols.includes(cell.column.id)} key={cell.id}>
-                    <StyledBodyCellData
-                        style={{minWidth: `${cell.column.getSize()}px`}}
-                    >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </StyledBodyCellData>
+                <StyledBodyCell
+                    $special={specialCols.includes(cell.column.id)} key={cell.id}
+                    style={{minWidth: `${cell.column.getSize()}px`}}
+                >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </StyledBodyCell>
             ))}
         </StyledList>

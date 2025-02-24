@@ -11,6 +11,8 @@ import InputCell from "@/components/Cell/InputCell.tsx";
 import DepartmentCell from "@/components/Cell/DepartmentCell.tsx";
 import {ActivePeriod, InactivePeriod} from "@/components/MemberTable/MemberTable.style.ts";
 import {SemesterStateButton} from "@/components/StateButton/SemesterStateButton.tsx";
+import Cell from "@/components/Cell/Cell.tsx";
+import {useGetParts} from "@/hooks/useGetParts.ts";
 
 interface MemberTableProps {
     state: MemberState;
@@ -27,6 +29,7 @@ const MemberTable = ({state, search}: MemberTableProps) => {
     }
 
     const {data} = useGetMembers(state, search);
+    const {data: partWithIds} = useGetParts();
 
 
     const columns = [
@@ -34,18 +37,30 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             id: 'division',
             cell: info => {
                 const parts = info.getValue();
-                return <div style={{display: "flex", flexDirection: "column"}}>
-                    {parts.map(p => <div key={`${p.division} ${p.part}`}>{p.division}</div>)}
-                </div>
+                return <Cell>
+                    <div style={{display: "flex", flexDirection: "column"}}>
+                        {parts.map(p => <div key={`${p.division} ${p.part}`}>{p.division}</div>)}
+                    </div>
+                </Cell>
             },
             header: "구분",
-            size: 125,
+            size: 101,
         }),
         columnHelper.accessor('parts', {
             id: 'part',
             cell: info => {
                 const parts = info.getValue();
-                return <PartsCell onSelect={() => {
+                return <PartsCell onSelect={(value) => {
+                    const included = parts.some(p => p.part === value);
+                    handleSelect(
+                        info.row.original.memberId,
+                        'partIds',
+                        partWithIds.filter(partWithId => {
+                            const baseCondition = parts.some(part => part.part === partWithId.partName);
+                            if (included) return baseCondition && partWithId.partName !== value;
+                            return baseCondition || partWithId.partName === value
+                        }).map(p => p.partId)
+                    );
                 }}>
                     <div style={{display: "flex", flexDirection: "column"}}>
                         {parts.map(p => <div key={`${p.division} ${p.part}`}>{p.part}</div>)}
@@ -53,15 +68,17 @@ const MemberTable = ({state, search}: MemberTableProps) => {
                 </PartsCell>
             },
             header: "파트",
-            size: 196,
+            size: 214,
         }),
         columnHelper.accessor('role', {
             header: "역할",
             cell: info => {
                 return (
-                    <RoleStateButton selectedValue={info.getValue()} onStateChange={(value) => {
-                        handleSelect(info.row.original.memberId, 'role', value);
-                    }}/>
+                    <Cell>
+                        <RoleStateButton selectedValue={info.getValue()} onStateChange={(value) => {
+                            handleSelect(info.row.original.memberId, 'role', value);
+                        }}/>
+                    </Cell>
                 )
             },
             size: 146,
@@ -98,10 +115,12 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         columnHelper.accessor('state', {
             header: "상태",
             cell: info => (
-                <MemberStateButton
-                    selectedValue={info.getValue()}
-                    onStateChange={(value) => handleSelect(info.row.original.memberId, "state", value)}
-                />
+                <Cell>
+                    <MemberStateButton
+                        selectedValue={info.getValue()}
+                        onStateChange={(value) => handleSelect(info.row.original.memberId, "state", value)}
+                    />
+                </Cell>
             ),
             size: 144,
         }),
@@ -191,11 +210,13 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             header: () => <div style={{width: '100%', display: 'flex', justifyContent: 'center', paddingRight: 16}}>회비
                 납부</div>,
             cell: info => (
-                <div style={{paddingLeft: 8, width: '100%', display: 'flex', justifyContent: 'center'}}>
-                    <Checkbox size="large"
-                              onChange={(e) => handleSelect(info.row.original.memberId, 'membershipFee', e.currentTarget.checked)}
-                              selected={transformBoolean(info.getValue())}>{""}</Checkbox>
-                </div>
+                <Cell>
+                    <div style={{paddingLeft: 8, width: '100%', display: 'flex', justifyContent: 'center'}}>
+                        <Checkbox size="large"
+                                  onChange={(e) => handleSelect(info.row.original.memberId, 'membershipFee', e.currentTarget.checked)}
+                                  selected={transformBoolean(info.getValue())}>{""}</Checkbox>
+                    </div>
+                </Cell>
             ),
             size: 139,
         })] : []),
@@ -204,15 +225,17 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             cell: info => {
                 const member = info.row.original;
                 if (member.state === '비액티브' || member.state === '졸업') {
-                    return <div style={{display: 'flex', alignItems: 'center', gap: 4}}>
-                        <ActivePeriod size='small' variant='filledSecondary'>
-                            {member.activePeriod.startSemester}
-                        </ActivePeriod>
-                        ~
-                        <ActivePeriod style={{pointerEvents: 'none'}} size='small' variant='filledSecondary'>
-                            {member.activePeriod.endSemester}
-                        </ActivePeriod>
-                    </div>;
+                    return <Cell>
+                        <div style={{display: 'flex', alignItems: 'center', gap: 4}}>
+                            <ActivePeriod size='small' variant='filledSecondary'>
+                                {member.activePeriod.startSemester}
+                            </ActivePeriod>
+                            ~
+                            <ActivePeriod style={{pointerEvents: 'none'}} size='small' variant='filledSecondary'>
+                                {member.activePeriod.endSemester}
+                            </ActivePeriod>
+                        </div>
+                    </Cell>
                 }
             },
             size: 185,
@@ -222,11 +245,13 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             cell: info => {
                 const member = info.row.original;
                 if (member.state === '비액티브') {
-                    return <SemesterStateButton selectedValue={member.expectedReturnSemester}
-                                                onStateChange={(value) => {
-                                                    handleSelect(member.memberId, 'expectedReturnSemester', value)
-                                                }}
-                    />
+                    return <Cell>
+                        <SemesterStateButton selectedValue={member.expectedReturnSemester}
+                                             onStateChange={(value) => {
+                                                 handleSelect(member.memberId, 'expectedReturnSemester', value)
+                                             }}
+                        />
+                    </Cell>
                 }
             },
             size: 137,
@@ -236,15 +261,18 @@ const MemberTable = ({state, search}: MemberTableProps) => {
             cell: info => {
                 const member = info.row.original;
                 if (member.state === '비액티브') {
-                    return <div style={{display: 'flex', alignItems: 'center', gap: 4}}>
-                        <InactivePeriod size='small' disabled variant='filledSecondary'>
-                            {member.inactivePeriod.startSemester}
-                        </InactivePeriod>
-                        ~
-                        <InactivePeriod style={{pointerEvents: 'none'}} size='small' disabled variant='filledSecondary'>
-                            {member.inactivePeriod.endSemester}
-                        </InactivePeriod>
-                    </div>;
+                    return <Cell>
+                        <div style={{display: 'flex', alignItems: 'center', gap: 4}}>
+                            <InactivePeriod size='small' disabled variant='filledSecondary'>
+                                {member.inactivePeriod.startSemester}
+                            </InactivePeriod>
+                            ~
+                            <InactivePeriod style={{pointerEvents: 'none'}} size='small' disabled
+                                            variant='filledSecondary'>
+                                {member.inactivePeriod.endSemester}
+                            </InactivePeriod>
+                        </div>
+                    </Cell>
                 }
             },
             size: 185,
@@ -252,11 +280,13 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         ...(state === '졸업' ? [columnHelper.accessor('isAdvisorDesired', {
             header: '어드바이저 희망',
             cell: info => (
-                <div style={{paddingLeft: 8, width: '100%', display: 'flex', justifyContent: 'center'}}>
-                    <Checkbox size="large"
-                              onChange={(e) => handleSelect(info.row.original.memberId, 'isAdvisorDesired', e.currentTarget.checked)}
-                              selected={transformBoolean(info.getValue())}>{""}</Checkbox>
-                </div>
+                <Cell>
+                    <div style={{paddingLeft: 8, width: '100%', display: 'flex', justifyContent: 'center'}}>
+                        <Checkbox size="large"
+                                  onChange={(e) => handleSelect(info.row.original.memberId, 'isAdvisorDesired', e.currentTarget.checked)}
+                                  selected={transformBoolean(info.getValue())}>{""}</Checkbox>
+                    </div>
+                </Cell>
             ),
             size: 131,
         })] : []),

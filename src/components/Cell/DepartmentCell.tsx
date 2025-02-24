@@ -24,6 +24,7 @@ const DepartmentCell = ({onSelect, children}: DepartmentCellProps) => {
     return <GenericDialog onSelect={onSelect} options={options} width={width}>
         {(triggerProps) => (
             <StyledContainer
+                $editable={false}
                 $bold={false}
                 ref={ref}
             >

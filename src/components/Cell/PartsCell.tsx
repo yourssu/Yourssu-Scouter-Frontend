@@ -25,6 +25,7 @@ const PartsCell = ({children, onSelect}: PartsCellProps) => {
         {(triggerProps) => (
             <StyledContainer
                 $bold={false}
+                $editable={true}
                 ref={ref}
             >
                 {children}

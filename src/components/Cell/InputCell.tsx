@@ -1,7 +1,8 @@
-import {StyledContainer, StyledEditIcon, StyledInput} from "@/components/Cell/Cell.style.ts";
+import {StyledEditIcon, StyledInput} from "@/components/Cell/Cell.style.ts";
 import {IcEditLine} from "@yourssu/design-system-react";
 import {ReactNode, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
+import Cell from "@/components/Cell/Cell.tsx";
 
 interface InputCellProps {
     children: ReactNode;
@@ -27,7 +28,7 @@ const InputCell = ({children, defaultValue, handleSubmit, bold = false }: InputC
         setEditing(false);
     }
 
-    return <StyledContainer $bold={bold}>
+    return <Cell editable={true} bold={bold}>
         {editing ?
             <StyledInput
                 {...register('value')}
@@ -50,7 +51,7 @@ const InputCell = ({children, defaultValue, handleSubmit, bold = false }: InputC
                 </StyledEditIcon>
             </>
         }
-    </StyledContainer>
+    </Cell>
 }
 
 export default InputCell;
