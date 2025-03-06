@@ -8,6 +8,7 @@ import PartsCell from "@/components/Cell/PartsCell.tsx";
 import InputCell from "@/components/Cell/InputCell.tsx";
 import {usePatchApplicant} from "@/hooks/usePatchApplicant.ts";
 import {useGetParts} from "@/hooks/useGetParts.ts";
+import DepartmentCell from "@/components/Cell/DepartmentCell.tsx";
 
 const columnHelper = createColumnHelper<Applicant>();
 
@@ -92,9 +93,9 @@ const ApplicantTable = ({state, semesterId, search}: ApplicantTableProps) => {
             header: "학과",
             size: 260,
             cell: info =>
-                <InputCell defaultValue={info.getValue()} handleSubmit={(value) => {
-                    patchApplicant(info.row.original.applicantId, 'departmentId', value);
-                }}>{info.getValue()}</InputCell>
+                <DepartmentCell onSelect={(value) => patchApplicant(info.row.original.applicantId, 'departmentId', value)}>
+                    {info.getValue()}
+                </DepartmentCell>
         }),
         columnHelper.accessor('studentId', {
             header: "학번",

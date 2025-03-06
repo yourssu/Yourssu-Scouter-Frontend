@@ -8,6 +8,7 @@ import ApplicantTable from "@/pages/Applicants/ApplicantTable/ApplicantTable.tsx
 import {SemesterStateButton} from "@/components/StateButton/SemesterStateButton.tsx";
 import {useSearchParams} from "react-router";
 import {useGetSemesters} from "@/hooks/useGetSemesters.ts";
+import {useQueryClient} from "@tanstack/react-query";
 
 interface ApplicantTabProps {
     state: ApplicantState;
@@ -22,17 +23,20 @@ const ApplicantTab = ({state}: ApplicantTabProps) => {
 
     const {data: semesters} = useGetSemesters();
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams({semesterId: "1"});
 
     const semesterId = Number(searchParams.get('semesterId') ?? "1");
 
-    const onSemesterChange = (semester: string) => {
+    const queryClient = useQueryClient();
+
+    const onSemesterChange = async (semester: string) => {
         const semesterId = semesters
             .find(s => s.semester === semester)
             ?.semesterId
             .toString() ?? "0";
 
         setSearchParams({semesterId});
+        await queryClient.invalidateQueries({queryKey: ['applicants']});
     }
 
     return <FormProvider {...methods}>

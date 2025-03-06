@@ -8,7 +8,7 @@ export const StyledContent = styled(Popover.Content)<{$gap: boolean}>`
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-start;
-    width: 260px;
+    width: 100%;
     gap: ${({$gap}) => $gap ? 10 : 0}px;
 
     &[data-side="bottom"] {

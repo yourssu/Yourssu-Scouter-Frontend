@@ -50,10 +50,20 @@ const Table = ({children}: { children: ReactNode }) => {
 
     const [hasScroll, setHasScroll] = useState(true);
 
-    useEffect(() => {
+    const checkForScroll = () => {
         if (containerRef.current) {
             setHasScroll(containerRef.current.scrollWidth > containerRef.current.clientWidth);
         }
+    };
+
+    useEffect(() => {
+        checkForScroll();
+
+        window.addEventListener('resize', checkForScroll);
+
+        return () => {
+            window.removeEventListener('resize', checkForScroll);
+        };
     }, []);
 
     return (
