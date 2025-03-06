@@ -44,6 +44,7 @@ const ApplicantTab = ({state}: ApplicantTabProps) => {
             <StyledTopContainer>
                 <TableSearchBar placeholder="이름으로 검색"/>
                 <SemesterStateButton
+                    size="medium"
                     selectedValue={semesters.find(s => semesterId === s.semesterId)?.semester ?? "24-1학기"}
                     onStateChange={onSemesterChange}
                 />
