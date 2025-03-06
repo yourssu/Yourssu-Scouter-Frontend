@@ -3,6 +3,7 @@ import Main from "@/components/Main/Main.tsx";
 import { Members } from "@/pages/Members/Members.tsx";
 import { Route, Routes } from "react-router";
 import ScouterErrorBoundary from "@/components/ScouterErrorBoundary.tsx";
+import {Applicants} from "@/pages/Applicants/Applicants.tsx";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
               <Route path="*" element={<Main />}>
                   <Route index element={<>응애</>} />
                   <Route path="members" element={<Members />} />
+                  <Route path="recruiting" element={<Applicants />} />
               </Route>
           </Routes>
       </ScouterErrorBoundary>

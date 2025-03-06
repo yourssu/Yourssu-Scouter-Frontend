@@ -5,7 +5,7 @@ import {
     StyledList,
     StyledTable, StyledTableContainer, StyledTableContainerContainer, StyledThead, StyledBorderBox, StyledOuterBorder
 } from "@/components/Table/Table.style.ts";
-import {ReactNode} from "react";
+import {ReactNode, useEffect, useRef, useState} from "react";
 
 const specialCols = ['division', 'role', 'state', 'membershipFee', 'activePeriod', 'expectedReturnSemester', 'inactivePeriod'];
 
@@ -45,19 +45,33 @@ const Body = ({rows}: { rows: Row<unknown>[] }) => (
     </tbody>
 );
 
-const Table = ({children}: { children: ReactNode }) => (
-    <StyledTableContainerContainer>
-        <StyledTableContainer>
-            <StyledTable>
-                {children}
-            </StyledTable>
-        </StyledTableContainer>
-        <StyledBorder/>
-        <StyledBorderBox>
-            <StyledOuterBorder/>
-        </StyledBorderBox>
-    </StyledTableContainerContainer>
-);
+const Table = ({children}: { children: ReactNode }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const [hasScroll, setHasScroll] = useState(true);
+
+    useEffect(() => {
+        if (containerRef.current) {
+            setHasScroll(containerRef.current.scrollWidth > containerRef.current.clientWidth);
+        }
+    }, []);
+
+    return (
+        <StyledTableContainerContainer>
+            <StyledTableContainer ref={containerRef}>
+                <StyledTable>
+                    {children}
+                </StyledTable>
+            </StyledTableContainer>
+            <StyledBorder $hasScroll={hasScroll}/>
+            {
+                hasScroll && <StyledBorderBox>
+                    <StyledOuterBorder/>
+                </StyledBorderBox>
+            }
+        </StyledTableContainerContainer>
+    );
+}
 
 Table.Header = Header;
 Table.Body = Body;

@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import {DateSchema, PhoneNumberSchema} from "@/scheme/common.ts";
 
 const PartSchema = z.object({
     division: z.string(),
@@ -13,13 +14,6 @@ const PeriodSchema = z.object({
 const NicknameSchema = z.string().regex(/^[a-zA-Z]+\([가-힣]+\)$/, "영어(한글) 형식으로 입력해주세요");
 
 const EmailSchema = z.string().regex(/^[a-zA-Z0-9._-]+\.urssu@gmail\.com$/, "~.urssu@gmail.com 형식으로 입력해주세요");
-
-const PhoneNumberSchema = z.string().regex(/^010-\d{4}-\d{4}$/, "연락처는 010-0000-0000 형식으로 입력해주세요");
-
-const DateSchema = z.string().regex(
-    /^(19|20)\d{2}\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01])$/,
-    "날짜는 yyyy.mm.dd 형식으로 입력해주세요"
-)
 
 const MemberRoleSchema = z.enum(['Lead', 'ViceLead', 'Member']);
 
@@ -74,10 +68,17 @@ export const PatchMemberSchema = z.object({}).merge(ActiveMemberSchema)
     .merge(InactiveMemberSchema)
     .merge(GraduatedMemberSchema)
     .merge(WithdrawnMemberSchema)
-    .omit({memberId: true, state: true})
+    .omit({
+        memberId: true,
+        state: true,
+        department: true,
+        expectedReturnSemester: true
+    })
     .extend({
         partIds: z.array(z.number()),
         state: MemberStateSchema,
+        departmentId: z.number(),
+        expectedReturnSemesterId: z.number(),
     })
     .omit({parts: true})
     .partial();

@@ -1,4 +1,4 @@
-import {Member, MemberState} from "@/scheme/member.ts";
+import {Member, MemberState, PatchMember} from "@/scheme/member.ts";
 import {createColumnHelper, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import {useGetMembers} from "@/hooks/useGetMembers.ts";
 import {Checkbox} from "@yourssu/design-system-react";
@@ -9,10 +9,11 @@ import {usePatchMember} from "@/hooks/usePatchMember.ts";
 import PartsCell from "@/components/Cell/PartsCell.tsx";
 import InputCell from "@/components/Cell/InputCell.tsx";
 import DepartmentCell from "@/components/Cell/DepartmentCell.tsx";
-import {ActivePeriod, InactivePeriod} from "@/components/MemberTable/MemberTable.style.ts";
+import {ActivePeriod, InactivePeriod} from "@/pages/Members/MemberTable/MemberTable.style.ts";
 import {SemesterStateButton} from "@/components/StateButton/SemesterStateButton.tsx";
 import Cell from "@/components/Cell/Cell.tsx";
 import {useGetParts} from "@/hooks/useGetParts.ts";
+import {useGetSemesters} from "@/hooks/useGetSemesters.ts";
 
 interface MemberTableProps {
     state: MemberState;
@@ -24,13 +25,13 @@ const columnHelper = createColumnHelper<Member>();
 const MemberTable = ({state, search}: MemberTableProps) => {
     const patchMemberMutation = usePatchMember(state);
 
-    const handleSelect = (memberId: number, field: string, value: unknown) => {
+    const handleSelect = (memberId: number, field: keyof PatchMember, value: unknown) => {
         patchMemberMutation.mutate({memberId, params: {[field]: value}});
     }
 
     const {data} = useGetMembers(state, search);
     const {data: partWithIds} = useGetParts();
-
+    const {data: semesters} = useGetSemesters();
 
     const columns = [
         columnHelper.accessor('parts', {
@@ -155,10 +156,7 @@ const MemberTable = ({state, search}: MemberTableProps) => {
         columnHelper.accessor('department', {
             header: "전공",
             cell: info => (
-                <DepartmentCell
-                    onSelect={() => {
-                    }}
-                >
+                <DepartmentCell onSelect={(value) => {handleSelect(info.row.original.memberId, 'departmentId', value)}}>
                     {info.getValue()}
                 </DepartmentCell>
             ),
@@ -248,7 +246,8 @@ const MemberTable = ({state, search}: MemberTableProps) => {
                     return <Cell>
                         <SemesterStateButton selectedValue={member.expectedReturnSemester}
                                              onStateChange={(value) => {
-                                                 handleSelect(member.memberId, 'expectedReturnSemester', value)
+                                                 const semesterId = semesters.find(s => s.semester === value)?.semesterId;
+                                                 if (semesterId) handleSelect(member.memberId, 'expectedReturnSemesterId', semesterId);
                                              }}
                         />
                     </Cell>

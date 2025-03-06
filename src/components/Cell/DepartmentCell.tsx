@@ -1,42 +1,32 @@
-import {StyledContainer, StyledEditIcon} from "@/components/Cell/Cell.style.ts";
 import {IcEditLine} from "@yourssu/design-system-react";
-import {GenericDialog} from "@/components/dialog/GenericDialog.tsx";
-import {ReactNode, useEffect, useRef, useState} from "react";
-import {useGetParts} from "@/hooks/useGetParts.ts";
+import {StyledContainer, StyledEditIcon} from "@/components/Cell/Cell.style.ts";
+import {ReactNode} from "react";
+import DepartmentSearchDialog from "@/components/DepartmentSearchDialog/DepartmentSearchDialog.tsx";
+import {Popover} from "radix-ui";
 
 interface DepartmentCellProps {
-    onSelect: (value: string) => void;
+    onSelect: (value: number) => void;
     children: ReactNode;
 }
 
-const DepartmentCell = ({onSelect, children}: DepartmentCellProps) => {
-    const {data: parts} = useGetParts();
-    const options = parts.map(part => ({label: part.partName}));
-    const ref = useRef<HTMLSpanElement | null>(null);
-    const [width, setWidth] = useState<number | undefined>(undefined);
-
-    useEffect(() => {
-        if (ref.current) {
-            setWidth(ref.current.clientWidth);
-        }
-    }, []);
-
-    return <GenericDialog onSelect={onSelect} options={options} width={width}>
-        {(triggerProps) => (
+const DepartmentCell = ({children, onSelect}: DepartmentCellProps) => {
+    return <Popover.Root>
+        <Popover.Anchor>
             <StyledContainer
-                $editable={false}
                 $bold={false}
-                ref={ref}
+                $editable={true}
             >
                 {children}
-                <StyledEditIcon
-                    {...triggerProps}
-                >
-                    <IcEditLine width={20} height={20}/>
-                </StyledEditIcon>
+                <Popover.Trigger asChild>
+                    <StyledEditIcon>
+                        <IcEditLine width={20} height={20}/>
+                    </StyledEditIcon>
+                </Popover.Trigger>
             </StyledContainer>
-        )}
-    </GenericDialog>
+        </Popover.Anchor>
+        <DepartmentSearchDialog onSelect={onSelect}/>
+    </Popover.Root>
+
 }
 
 export default DepartmentCell;

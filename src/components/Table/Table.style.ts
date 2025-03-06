@@ -2,11 +2,13 @@ import styled from "styled-components";
 
 export const StyledTableContainerContainer = styled.div`
     position: relative;
+    max-width: 100%;
+    width: 100%;
 `;
 
 export const StyledTableContainer = styled.div`
-    width: 100%;
     overflow: auto;
+    width: 100%;
 
     &::-webkit-scrollbar-thumb {
         background-color: transparent;
@@ -35,7 +37,7 @@ export const StyledTable = styled.table`
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
     border-style: hidden;
     table-layout: fixed;
-    min-width: 101%;
+    min-width: 100%;
     
     & th:first-child {
         padding-left: 40px;
@@ -79,12 +81,12 @@ export const StyledBodyCell = styled.td<{$special: boolean}>`
     white-space: nowrap;
 `;
 
-export const StyledBorder = styled.div`
+export const StyledBorder = styled.div<{$hasScroll: boolean}>`
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 8px);
+    height: ${({$hasScroll}) => $hasScroll ? 'calc(100% - 8px)' : '100%'};
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
     border: 1px solid ${({theme}) => theme.semantic.color.lineBasicMedium};
     pointer-events: none;
