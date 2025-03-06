@@ -11,6 +11,7 @@ import {MemberState} from "@/scheme/member.ts";
 import {Suspense} from "react";
 import ScouterErrorBoundary from "@/components/ScouterErrorBoundary.tsx";
 import {BoxButton, IcRetryRefreshLine} from "@yourssu/design-system-react";
+import {usePostMembersFromApplicants} from "@/hooks/usePostMembersFromApplicants.tsx";
 
 interface MemberTabProps {
     state: MemberState;
@@ -22,6 +23,13 @@ const MemberTab = ({state}: MemberTabProps) => {
             search: '',
         }
     });
+
+    const postMembersFromApplicantsMutation = usePostMembersFromApplicants();
+
+    const postMembersFromApplicants = () => {
+        postMembersFromApplicantsMutation.mutate();
+    }
+
 
     return <FormProvider {...methods}>
         <StyledContainer>
@@ -36,7 +44,9 @@ const MemberTab = ({state}: MemberTabProps) => {
                     <BoxButton
                         leftIcon={<IcRetryRefreshLine />}
                         variant='outlined'
-                        size='small'
+                        size='medium'
+                        onClick={postMembersFromApplicants}
+                        disabled={postMembersFromApplicantsMutation.isPending}
                     >
                         업데이트
                     </BoxButton>

@@ -43,6 +43,7 @@ export const StyledContainer = styled.span<{$editable: boolean, $bold: boolean}>
 `;
 
 export const StyledInput = styled.input<{$bold: boolean}>`
+    display: inline-block;
     width: 100%;
     font-size: 16px;
     font-style: normal;

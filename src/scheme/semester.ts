@@ -1,7 +1,11 @@
 import {z} from "zod";
 
-export const SemesterArraySchema =  z.array(z.object({
+export const SemesterSchema = z.object({
     semesterId: z.number(),
     semester: z.string(),
-}));
+})
+
+export const SemesterArraySchema =  z.array(SemesterSchema);
+
+export type Semester = z.infer<typeof SemesterSchema>;
 
