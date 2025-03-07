@@ -6,7 +6,7 @@ export const usePostMembersFromApplicants = () => {
 
     return useMutation({
         mutationFn: async () => {
-            await api.post('members/include-from-applicants');
+            await api.post('members/include-from-applicants', {timeout: false});
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({queryKey: ['members']});

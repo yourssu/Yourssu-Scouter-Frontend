@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Popover} from "radix-ui";
+import {DropdownMenu, Popover} from "radix-ui";
 
 export const StyledContent = styled(Popover.Content)`
     display: flex;
@@ -45,7 +45,7 @@ export const StyledSupportingText = styled.p`
     ${({theme}) => theme.typo.B1_Rg_16}
 `;
 
-export const StyledCloseIcon = styled.span`
+export const StyledIconButton = styled.span`
     display: flex;
     width: 24px;
     height: 24px;
@@ -73,10 +73,30 @@ export const StyledBodyContainer = styled.div`
     margin-top: 24px;
 `;
 
-export const StyledFieldList = styled.div`
+export const StyledFieldList = styled.form`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
     align-self: stretch;
+`;
+
+export const StyledFieldContainer = styled.div`
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    align-items: center;
+`;
+
+export const StyledOptionContent = styled(DropdownMenu.Content)`
+    display: flex;
+    width: 128px;
+    padding: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+
+    border-radius: ${({theme}) => theme.semantic.radius.m}px;
+    border: 1px solid ${({theme}) => theme.semantic.color.lineBasicLight};
+    background: ${({theme}) => theme.semantic.color.bgBasicDefault};
+    box-shadow: 0 0 10px 0 rgba(110, 118, 135, 0.25);
 `;

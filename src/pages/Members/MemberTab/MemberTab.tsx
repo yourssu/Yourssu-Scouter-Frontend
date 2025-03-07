@@ -11,7 +11,7 @@ import {MemberState} from "@/scheme/member.ts";
 import {Suspense} from "react";
 import ScouterErrorBoundary from "@/components/ScouterErrorBoundary.tsx";
 import {BoxButton, IcRetryRefreshLine} from "@yourssu/design-system-react";
-import {usePostMembersFromApplicants} from "@/hooks/usePostMembersFromApplicants.tsx";
+import {usePostMembersFromApplicants} from "@/hooks/usePostMembersFromApplicants.ts";
 
 interface MemberTabProps {
     state: MemberState;

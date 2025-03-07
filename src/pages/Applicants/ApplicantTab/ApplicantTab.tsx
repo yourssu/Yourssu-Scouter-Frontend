@@ -16,7 +16,7 @@ import {useSearchParams} from "react-router";
 import {useGetSemesters} from "@/hooks/useGetSemesters.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {BoxButton, IcRetryRefreshLine} from "@yourssu/design-system-react";
-import ApplicationDialog from "@/components/ApplicationDialog/ApplicationDialog.tsx";
+import {usePostApplicantsFromForms} from "@/hooks/usePostApplicantsFromForms.ts";
 
 interface ApplicantTabProps {
     state: ApplicantState;
@@ -35,8 +35,6 @@ const ApplicantTab = ({state}: ApplicantTabProps) => {
 
     const semesterId = Number(searchParams.get('semesterId') ?? "1");
 
-    const selectedSemester = semesters.find(s => s.semesterId === semesterId);
-
     const queryClient = useQueryClient();
 
     const onSemesterChange = async (semester: string) => {
@@ -48,6 +46,8 @@ const ApplicantTab = ({state}: ApplicantTabProps) => {
         setSearchParams({semesterId});
         await queryClient.invalidateQueries({queryKey: ['applicants']});
     }
+
+    const postApplicantsFromFormMutation = usePostApplicantsFromForms();
 
     return <FormProvider {...methods}>
         <StyledContainer>
@@ -68,15 +68,14 @@ const ApplicantTab = ({state}: ApplicantTabProps) => {
                         <span>2024. 07. 21</span>
                         <span>23:00</span>
                     </StyledLastUpdateTime>
-                    {selectedSemester && <ApplicationDialog semester={selectedSemester}>
-                        <BoxButton
-                            leftIcon={<IcRetryRefreshLine />}
-                            variant='outlined'
-                            size='medium'
-                        >
-                            지원자 정보 불러오기
-                        </BoxButton>
-                    </ApplicationDialog>}
+                    <BoxButton
+                        leftIcon={<IcRetryRefreshLine />}
+                        variant='outlined'
+                        size='medium'
+                        onClick={() => postApplicantsFromFormMutation.mutate()}
+                    >
+                        지원자 정보 불러오기
+                    </BoxButton>
 
                 </StyledLastUpdate>
             </StyledTopContainer>

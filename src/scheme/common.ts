@@ -5,7 +5,7 @@ export const DateSchema = z.string().regex(
     "날짜는 yyyy.mm.dd 형식으로 입력해주세요"
 );
 
-export const PhoneNumberSchema = z.string().regex(/^010-\d{4}-\d{4}$/, "연락처는 010-0000-0000 형식으로 입력해주세요");
+export const PhoneNumberSchema = z.string();
 
 export const EmailSchema = z.string().refine(
     (email) => {
