@@ -1,18 +1,14 @@
 import styled from "styled-components";
 
-export const StyledContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 0 40px 48px 40px;
-`;
-
 export const StyledTableContainerContainer = styled.div`
     position: relative;
+    max-width: 100%;
+    width: 100%;
 `;
 
 export const StyledTableContainer = styled.div`
-    width: 100%;
     overflow: auto;
+    width: 100%;
 
     &::-webkit-scrollbar-thumb {
         background-color: transparent;
@@ -36,17 +32,12 @@ export const StyledTableContainer = styled.div`
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
 `;
 
-export const StyledSearchBarContainer = styled.div`
-    width: 432px;
-    margin: 16px 0;
-`;
-
 export const StyledTable = styled.table`
     border-collapse: collapse;
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
     border-style: hidden;
     table-layout: fixed;
-    
+    min-width: 100%;
     
     & th:first-child {
         padding-left: 40px;
@@ -75,7 +66,6 @@ export const StyledBasis = styled.tr`
 `;
 
 export const StyledList = styled.tr`
-    height: 64px;
     border-bottom: 1px solid ${({theme}) => theme.semantic.color.lineBasicLight};
     background: ${({theme}) => theme.semantic.color.bgBasicDefault};
 `;
@@ -87,60 +77,16 @@ export const StyledCell = styled.th<{$minWidth: number}>`
     min-width: ${({$minWidth}) => $minWidth}px;
 `;
 
-export const StyledEditIcon = styled.span`
-    display: flex;
-    width: 24px;
-    height: 24px;
-    padding: 2px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    color: ${({theme}) => theme.semantic.color.iconBrandPrimary};
-    margin-left: 24px;
-    
-    &:hover {
-        border-radius: 4px;
-        background: ${({theme}) => theme.primitive.color.effect050};
-        cursor: pointer;
-    }
-`;
-
-export const StyledBodyCell = styled.td`
+export const StyledBodyCell = styled.td<{$special: boolean}>`
     white-space: nowrap;
 `;
 
-export const StyledBodyCellData = styled.span<{$special: boolean}>`
-    ${({theme}) => theme.typo.B1_Rg_16};
-    
-    ${({$special, theme}) => !$special && `
-        &:hover {
-            background: ${theme.semantic.color.bgBasicLight};
-        }
-    `}
-    
-    &:hover ${StyledEditIcon} {
-        visibility: visible;
-    }
-    
-    & ${StyledEditIcon} {
-        visibility: hidden;
-    }
-    
-    display: flex;
-    height: 64px;
-    padding: 24px 16px;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap;
-    width: 100%;
-`;
-
-export const StyledBorder = styled.div`
+export const StyledBorder = styled.div<{$hasScroll: boolean}>`
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 8px);
+    height: ${({$hasScroll}) => $hasScroll ? 'calc(100% - 8px)' : '100%'};
     border-radius: ${({theme}) => theme.semantic.radius.l}px;
     border: 1px solid ${({theme}) => theme.semantic.color.lineBasicMedium};
     pointer-events: none;

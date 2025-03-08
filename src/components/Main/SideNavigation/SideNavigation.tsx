@@ -49,7 +49,7 @@ const SideNavigation = () => {
     return <StyledContainer>
         <StyledLogo>
             <img src={Logo} alt="Yourssu Logo"/>
-            <StyledLogoText>YOURSSU HR</StyledLogoText>
+            <StyledLogoText>SCOUTER</StyledLogoText>
         </StyledLogo>
         <StyledLinks>
             {navItems.flatMap(({title, links}, index) => [

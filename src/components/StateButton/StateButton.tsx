@@ -1,4 +1,5 @@
 import { IcArrowsChevronUpLine } from "@yourssu/design-system-react";
+import { ReactNode } from "react";
 import { GenericDialog } from "../dialog/GenericDialog";
 import { StyledBoxButton } from "./StateButton.style";
 
@@ -12,6 +13,8 @@ interface StateButtonProps {
   selectedValue: string;
   onSelect: (value: string) => void;
   variant?: "filledPrimary" | "filledSecondary" | "outlined";
+  size?: "small" | "medium";
+  icon?: ReactNode;
 }
 
 export const StateButton = ({
@@ -19,14 +22,16 @@ export const StateButton = ({
   selectedValue,
   onSelect,
   variant = "filledSecondary",
+  size = "small",
+  icon = <IcArrowsChevronUpLine />,
 }: StateButtonProps) => {
   return (
     <GenericDialog options={options} onSelect={onSelect}>
       {(triggerProps) => (
         <StyledBoxButton
-          size="small"
+          size={size}
           variant={variant}
-          rightIcon={<IcArrowsChevronUpLine />}
+          rightIcon={icon}
           $selectedValue={selectedValue}
           {...triggerProps}
         >

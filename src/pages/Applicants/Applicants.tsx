@@ -4,16 +4,16 @@ import {
     StyledTitle
 } from "@/styles/pages/table.ts";
 import {useTabs} from "@yourssu/design-system-react";
-import {MemberState} from "@/scheme/member.ts";
-import {useGetMemberStates} from "@/hooks/useGetMemberStates.ts";
-import MemberTab from "@/pages/Members/MemberTab/MemberTab.tsx";
+import ApplicantTab from "@/pages/Applicants/ApplicantTab/ApplicantTab.tsx";
+import {useGetApplicantStates} from "@/hooks/useGetApplicantStates.ts";
+import {ApplicantState} from "@/scheme/applicant.ts";
 
-export const Members = () => {
-    const Tabs = useTabs<MemberState>({defaultTab: '액티브', scrollable: true});
-    const {data: memberStates} = useGetMemberStates();
+export const Applicants = () => {
+    const Tabs = useTabs<ApplicantState>({defaultTab: '심사 진행 중', scrollable: true});
+    const {data: memberStates} = useGetApplicantStates();
 
     return <StyledContainer>
-        <StyledTitle>유어슈 멤버</StyledTitle>
+        <StyledTitle>리쿠르팅 지원자</StyledTitle>
         <Tabs>
             <StyledTabsListContainer>
                 <Tabs.List size="large">
@@ -27,7 +27,7 @@ export const Members = () => {
             {
                 memberStates.map((state) =>
                     <Tabs.Panel key={state} value={state}>
-                        <MemberTab state={state}/>
+                        <ApplicantTab state={state}/>
                     </Tabs.Panel>
                 )
             }

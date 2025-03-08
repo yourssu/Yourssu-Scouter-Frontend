@@ -24,7 +24,7 @@ export const GenericDialog = ({
   const anchorRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div ref={anchorRef}>
+    <div style={{width: '100%'}} ref={anchorRef}>
       {children({
         onClick: () => setIsOpen((prev) => !prev),
         onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),

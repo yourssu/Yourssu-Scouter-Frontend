@@ -14,6 +14,8 @@ export const DialogContainer = styled.div<{
   box-shadow: 0px 0px 10px 0px rgba(110, 118, 135, 0.25);
   padding: 8px;
   z-index: 1;
+  max-height: 300px;
+  overflow-y: auto;
 `;
 
 export const StyledTextButton = styled(TextButton)`
