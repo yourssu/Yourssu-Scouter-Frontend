@@ -1,32 +1,34 @@
-import {QueryErrorResetBoundary} from "@tanstack/react-query";
-import {ErrorBoundary} from "react-error-boundary";
-import {ReactNode} from "react";
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ReactNode } from 'react';
 
 interface ScouterErrorBoundaryProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
-const ScouterErrorBoundary = ({children}: ScouterErrorBoundaryProps) => {
-    return <QueryErrorResetBoundary>
-        {({reset}) => (
-            <ErrorBoundary
-                fallbackRender={({resetErrorBoundary}) => {
-                    const handleClick = () => {
-                        resetErrorBoundary();
-                        reset();
-                    }
+const ScouterErrorBoundary = ({ children }: ScouterErrorBoundaryProps) => {
+  return (
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary
+          fallbackRender={({ resetErrorBoundary }) => {
+            const handleClick = () => {
+              resetErrorBoundary();
+              reset();
+            };
 
-                    return (
-                        <div>
-                            <button onClick={handleClick}>Try again</button>
-                        </div>
-                    )
-                }}
-            >
-                {children}
-            </ErrorBoundary>
-        )}
+            return (
+              <div>
+                <button onClick={handleClick}>Try again</button>
+              </div>
+            );
+          }}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
     </QueryErrorResetBoundary>
-}
+  );
+};
 
 export default ScouterErrorBoundary;

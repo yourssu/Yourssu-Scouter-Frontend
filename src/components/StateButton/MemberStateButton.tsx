@@ -1,5 +1,5 @@
-import { StateButton } from "./StateButton";
-import {useGetMemberStates} from "@/hooks/useGetMemberStates.ts";
+import { StateButton } from './StateButton';
+import { useGetMemberStates } from '@/hooks/useGetMemberStates.ts';
 
 export const MemberStateButton = ({
   selectedValue,
@@ -8,8 +8,8 @@ export const MemberStateButton = ({
   selectedValue: string;
   onStateChange: (value: string) => void;
 }) => {
-  const {data: states} = useGetMemberStates();
-  const options = states.map(state => ({ label: state }));
+  const { data: states } = useGetMemberStates();
+  const options = states.map((state) => ({ label: state }));
 
   return (
     <StateButton

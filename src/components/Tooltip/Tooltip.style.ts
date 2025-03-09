@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
 export const TooltipWrapper = styled.div`
   position: relative;
@@ -8,7 +8,7 @@ export const TooltipWrapper = styled.div`
 `;
 
 interface TooltipContentProps {
-  $position?: "top" | "bottom" | "left" | "right";
+  $position?: 'top' | 'bottom' | 'left' | 'right';
   $offset?: number;
 }
 
@@ -23,13 +23,13 @@ export const TooltipContent = styled.div<TooltipContentProps>`
   ${({ theme }) => theme.typo.C1_Rg_13};
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
   }
 
-  ${({ $position = "top", $offset = 10 }) => {
+  ${({ $position = 'top', $offset = 10 }) => {
     switch ($position) {
-      case "bottom":
+      case 'bottom':
         return css`
           top: calc(100% + ${$offset}px);
           left: 50%;
@@ -44,7 +44,7 @@ export const TooltipContent = styled.div<TooltipContentProps>`
             border-bottom: 8px solid #373a43;
           }
         `;
-      case "left":
+      case 'left':
         return css`
           right: calc(100% + ${$offset}px);
           top: 50%;
@@ -60,7 +60,7 @@ export const TooltipContent = styled.div<TooltipContentProps>`
             border-bottom: 8px solid transparent;
           }
         `;
-      case "right":
+      case 'right':
         return css`
           left: calc(100% + ${$offset}px);
           top: 50%;

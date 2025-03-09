@@ -1,5 +1,5 @@
-import { StateButton } from "./StateButton";
-import {useGetApplicantStates} from "@/hooks/useGetApplicantStates.ts";
+import { StateButton } from './StateButton';
+import { useGetApplicantStates } from '@/hooks/useGetApplicantStates.ts';
 
 export const ApplicantStateButton = ({
   selectedValue,
@@ -8,8 +8,8 @@ export const ApplicantStateButton = ({
   selectedValue: string;
   onStateChange: (value: string) => void;
 }) => {
-  const {data: states} = useGetApplicantStates();
-  const options = states.map(state => ({ label: state }));
+  const { data: states } = useGetApplicantStates();
+  const options = states.map((state) => ({ label: state }));
 
   return (
     <StateButton

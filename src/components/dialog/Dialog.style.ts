@@ -1,12 +1,12 @@
-import { TextButton } from "@yourssu/design-system-react";
-import styled from "styled-components";
+import { TextButton } from '@yourssu/design-system-react';
+import styled from 'styled-components';
 
 export const DialogContainer = styled.div<{
   $isOpen: boolean;
-  $position: "top" | "bottom";
+  $position: 'top' | 'bottom';
   $width: number;
 }>`
-  display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   width: ${({ $width }) => `${$width}px`};
   background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
   border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
