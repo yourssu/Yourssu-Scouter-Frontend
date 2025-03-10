@@ -30,7 +30,10 @@ interface MemberTableProps {
 const columnHelper = createColumnHelper<Member>();
 
 const MemberTable = ({ state, search }: MemberTableProps) => {
-  const patchMemberMutation = usePatchMember(state);
+  const patchMemberMutation = usePatchMember({
+    state,
+    refetchAfterPatch: true,
+  });
 
   const handleSelect = (
     memberId: number,

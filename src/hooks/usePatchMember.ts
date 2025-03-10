@@ -12,7 +12,15 @@ interface PatchMemberParams {
   params: PatchMember;
 }
 
-export const usePatchMember = (state: MemberState) => {
+interface UsePatchMemberProps {
+  state: MemberState;
+  refetchAfterPatch: boolean;
+}
+
+export const usePatchMember = ({
+  state,
+  refetchAfterPatch,
+}: UsePatchMemberProps) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -22,7 +30,8 @@ export const usePatchMember = (state: MemberState) => {
       });
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['members', state] });
+      if (refetchAfterPatch)
+        await queryClient.invalidateQueries({ queryKey: ['members', state] });
     },
   });
 };
