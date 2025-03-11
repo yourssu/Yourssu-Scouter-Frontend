@@ -33,10 +33,17 @@ export const StyledContainer = styled.span<{
   ${({ $editable, theme }) =>
     $editable &&
     `
+        border: 1px solid transparent;
+        
+        &:focus-within {
+            border: 1px solid ${theme.semantic.color.lineStatusPositive};
+        }
+        
         &:hover {
             background: ${theme.semantic.color.bgBasicLight};
         }
     `}
+
   &:hover ${StyledEditIcon} {
     visibility: visible;
   }
