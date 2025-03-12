@@ -6,13 +6,15 @@ import {
   StyledContainer,
   StyledEditIcon,
 } from '@/components/Cell/Cell.style.ts';
+import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
 interface PartsCellProps {
   onSelect: (value: string) => void;
   children: ReactNode;
+  tooltipContent: string;
 }
 
-const PartsCell = ({ children, onSelect }: PartsCellProps) => {
+const PartsCell = ({ tooltipContent, children, onSelect }: PartsCellProps) => {
   const { data: parts } = useGetParts();
   const options = parts.map((part) => ({ label: part.partName }));
   const ref = useRef<HTMLSpanElement | null>(null);
@@ -30,7 +32,9 @@ const PartsCell = ({ children, onSelect }: PartsCellProps) => {
         <StyledContainer $bold={false} $editable={true} ref={ref}>
           {children}
           <StyledEditIcon {...triggerProps}>
-            <IcEditLine width={20} height={20} />
+            <Tooltip content={tooltipContent}>
+              <IcEditLine width={20} height={20} />
+            </Tooltip>
           </StyledEditIcon>
         </StyledContainer>
       )}

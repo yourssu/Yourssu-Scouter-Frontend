@@ -3,15 +3,18 @@ import { IcEditLine } from '@yourssu/design-system-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Cell from '@/components/Cell/Cell.tsx';
+import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
 interface InputCellProps {
   children: ReactNode;
   defaultValue: string;
   handleSubmit: (value: string) => void;
   bold?: boolean;
+  tooltipContent: string;
 }
 
 const InputCell = ({
+  tooltipContent,
   children,
   defaultValue,
   handleSubmit,
@@ -49,7 +52,9 @@ const InputCell = ({
         <>
           <span>{children}</span>
           <StyledEditIcon onClick={() => setEditing(true)}>
-            <IcEditLine width={20} height={20} />
+            <Tooltip content={tooltipContent}>
+              <IcEditLine width={20} height={20} />
+            </Tooltip>
           </StyledEditIcon>
         </>
       )}

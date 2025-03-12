@@ -6,13 +6,19 @@ import {
 import { ReactNode } from 'react';
 import DepartmentSearchDialog from '@/components/DepartmentSearchDialog/DepartmentSearchDialog.tsx';
 import { Popover } from 'radix-ui';
+import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
 interface DepartmentCellProps {
   onSelect: (value: number) => void;
   children: ReactNode;
+  tooltipContent: string;
 }
 
-const DepartmentCell = ({ children, onSelect }: DepartmentCellProps) => {
+const DepartmentCell = ({
+  tooltipContent,
+  children,
+  onSelect,
+}: DepartmentCellProps) => {
   return (
     <Popover.Root>
       <Popover.Anchor>
@@ -20,7 +26,9 @@ const DepartmentCell = ({ children, onSelect }: DepartmentCellProps) => {
           {children}
           <Popover.Trigger asChild>
             <StyledEditIcon>
-              <IcEditLine width={20} height={20} />
+              <Tooltip content={tooltipContent}>
+                <IcEditLine width={20} height={20} />
+              </Tooltip>
             </StyledEditIcon>
           </Popover.Trigger>
         </StyledContainer>

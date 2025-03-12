@@ -71,6 +71,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         const parts = info.getValue();
         return (
           <PartsCell
+            tooltipContent={`${info.row.original.name} 정보 수정`}
             onSelect={(value) => {
               const included = parts.some((p) => p.part === value);
               handleSelect(
@@ -120,6 +121,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '이름',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             handleSelect(info.row.original.memberId, 'name', value);
@@ -134,6 +136,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '닉네임(발음)',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           bold={true}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
@@ -163,6 +166,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '유어슈 이메일',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             handleSelect(info.row.original.memberId, 'email', value);
@@ -177,6 +181,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '연락처',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             handleSelect(info.row.original.memberId, 'phoneNumber', value);
@@ -191,6 +196,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '전공',
       cell: (info) => (
         <DepartmentCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           onSelect={(value) => {
             handleSelect(info.row.original.memberId, 'departmentId', value);
           }}
@@ -204,6 +210,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '학번',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             handleSelect(info.row.original.memberId, 'studentId', value);
@@ -218,6 +225,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '생년월일',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             handleSelect(info.row.original.memberId, 'birthDate', value);
@@ -232,6 +240,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '가입일',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             handleSelect(info.row.original.memberId, 'joinDate', value);
@@ -425,6 +434,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       header: '비고',
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             handleSelect(info.row.original.memberId, 'note', value);

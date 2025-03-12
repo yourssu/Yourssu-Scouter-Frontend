@@ -52,6 +52,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 196,
       cell: (info) => (
         <PartsCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           onSelect={(value) => {
             const partId = partWithIds.find(
               (p) => p.partName === value,
@@ -70,6 +71,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 111,
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             patchApplicant(info.row.original.applicantId, 'name', value);
@@ -98,6 +100,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 138,
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             patchApplicant(
@@ -116,6 +119,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 284,
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             patchApplicant(info.row.original.applicantId, 'email', value);
@@ -130,6 +134,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 171,
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             patchApplicant(info.row.original.applicantId, 'phoneNumber', value);
@@ -144,6 +149,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 260,
       cell: (info) => (
         <DepartmentCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           onSelect={(value) =>
             patchApplicant(info.row.original.applicantId, 'departmentId', value)
           }
@@ -157,6 +163,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 132,
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             patchApplicant(info.row.original.applicantId, 'studentId', value);
@@ -171,6 +178,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 99,
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             patchApplicant(
@@ -189,6 +197,7 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       size: 106,
       cell: (info) => (
         <InputCell
+          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
             patchApplicant(info.row.original.applicantId, 'age', value);
