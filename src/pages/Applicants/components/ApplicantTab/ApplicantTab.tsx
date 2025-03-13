@@ -16,6 +16,7 @@ import { useGetSemesters } from '@/data/semester/hooks/useGetSemesters.ts';
 import { useSearchParams } from '@/hooks/useSearchParams.ts';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
 import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';
+import { useInvalidateApplicants } from '@/data/applicants/hooks/useInvalidateApplicants.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -42,7 +43,13 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
     setSearchParams({ semesterId });
   };
 
+  const invalidateApplicants = useInvalidateApplicants();
   const postApplicantsFromFormMutation = usePostApplicantsFromForms();
+
+  const postApplicantsFromForms = async () => {
+    await postApplicantsFromFormMutation.mutateAsync();
+    await invalidateApplicants();
+  };
 
   return (
     <FormProvider {...methods}>
@@ -71,7 +78,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
               leftIcon={<IcRetryRefreshLine />}
               variant="outlined"
               size="medium"
-              onClick={() => postApplicantsFromFormMutation.mutate()}
+              onClick={postApplicantsFromForms}
             >
               지원자 정보 불러오기
             </BoxButton>

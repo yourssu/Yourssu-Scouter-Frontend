@@ -12,6 +12,7 @@ import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
 import { usePostMembersFromApplicants } from '@/data/members/hooks/usePostMembersFromApplicants.ts';
+import { useInvalidateMembers } from '@/data/members/hooks/useInvalidateMembers.ts';
 
 interface MemberTabProps {
   state: MemberState;
@@ -25,9 +26,11 @@ const MemberTab = ({ state }: MemberTabProps) => {
   });
 
   const postMembersFromApplicantsMutation = usePostMembersFromApplicants();
+  const invalidateMembers = useInvalidateMembers(state);
 
-  const postMembersFromApplicants = () => {
-    postMembersFromApplicantsMutation.mutate();
+  const postMembersFromApplicants = async () => {
+    await postMembersFromApplicantsMutation.mutateAsync();
+    await invalidateMembers();
   };
 
   return (
