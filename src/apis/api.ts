@@ -1,7 +1,7 @@
-import { API_CONFIG } from "@/constants/config";
-import ky, { type BeforeRetryHook, HTTPError } from "ky";
-import { authService } from "./auth.service";
-import { tokenService } from "./token.service";
+import { API_CONFIG } from '@/constants/config';
+import ky, { type BeforeRetryHook, HTTPError } from 'ky';
+import { authService } from './auth.service';
+import { tokenService } from './token.service';
 
 const DEFAULT_API_RETRY_LIMIT = 2;
 
@@ -25,14 +25,15 @@ const handleTokenRefresh: BeforeRetryHook = async ({ error }) => {
   try {
     await authService.refreshToken(refreshToken);
   } catch (error) {
-    console.error("Token refresh 실패, 로그아웃", error);
+    console.error('Token refresh 실패, 로그아웃', error);
     return stopWithLogout();
   }
 };
 const setAuthHeader = (request: Request) => {
   const accessToken = tokenService.getAccessToken();
   if (accessToken) {
-    request.headers.set("Authorization", `${accessToken}`);
+    request.headers.set('Authorization', `${accessToken}`);
+    request.headers.set('Content-Type', 'application/json');
   }
 };
 

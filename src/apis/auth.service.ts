@@ -1,32 +1,32 @@
-import { api } from "@/apis/api";
-import { API_CONFIG } from "@/constants/config";
-import { GoogleLoginResponse, TokenResponse } from "@/types/auth.types";
-import { tokenService } from "./token.service";
+import { api } from '@/apis/api';
+import { API_CONFIG } from '@/constants/config';
+import { GoogleLoginResponse, TokenResponse } from '@/types/auth.types';
+import { tokenService } from './token.service';
 
 export const authService = {
   googleLogin: async (code: string): Promise<GoogleLoginResponse> => {
     try {
       const response = await api
-        .post("oauth2/login/google", {
+        .post(API_CONFIG.GOOGLE_OAUTH_LOGIN_URI, {
           json: { authorizationCode: code },
           throwHttpErrors: false,
         })
         .json<GoogleLoginResponse>();
 
       if (!response) {
-        throw new Error("Login failed");
+        throw new Error('Login failed');
       }
 
       tokenService.setTokens(response.accessToken, response.refreshToken);
       return response;
     } catch (error) {
-      console.error("Google login error:", error);
+      console.error('Google login error:', error);
       throw error;
     }
   },
 
   initiateGoogleLogin: () => {
-    const redirectUrl = `${API_CONFIG.BASE_URL}/oauth2/google?redirect_uri=${API_CONFIG.GOOGLE_REDIRECT_URI}`;
+    const redirectUrl = `${API_CONFIG.BASE_URL}/${API_CONFIG.GOOGLE_OAUTH_URI}?redirect_uri=${API_CONFIG.GOOGLE_REDIRECT_URI}`;
     window.location.href = redirectUrl;
   },
 
@@ -43,7 +43,7 @@ export const authService = {
 
   refreshToken: async (refreshToken: string): Promise<TokenResponse> => {
     const response = await api
-      .post("refresh-token", {
+      .post('refresh-token', {
         json: { refreshToken: `${refreshToken}` },
       })
       .json<TokenResponse>();
@@ -54,14 +54,14 @@ export const authService = {
 
   logout: async () => {
     try {
-      await api.post("logout", {
+      await api.post('logout', {
         json: { refreshToken: `${tokenService.getAccessToken()}` },
       });
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     } finally {
       tokenService.clearTokens();
-      window.location.href = "/";
+      window.location.href = '/';
     }
   },
 };

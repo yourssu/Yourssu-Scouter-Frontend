@@ -1,6 +1,6 @@
-import { authService } from "@/apis/auth.service";
-import { tokenService } from "@/apis/token.service";
-import { StyledContainer, StyledProfileImage } from "./Navigation.style";
+import { authService } from '@/apis/auth.service';
+import { tokenService } from '@/apis/token.service';
+import { StyledContainer, StyledProfileImage } from './Navigation.style';
 
 const Navigation = () => {
   const handleClick = () => {
@@ -14,7 +14,7 @@ const Navigation = () => {
   return (
     <StyledContainer>
       <StyledProfileImage onClick={handleClick}>
-        <p>{tokenService.hasTokens() ? "로그인됨" : "로그인필요"}</p>
+        <p>{tokenService.hasTokens() ? '로그인됨' : '로그인필요'}</p>
       </StyledProfileImage>
     </StyledContainer>
   );

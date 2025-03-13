@@ -1,38 +1,36 @@
-import {StyledContainer, StyledTabsListContainer, StyledTitle} from "@/pages/Members/Members.style.ts";
-import {useTabs} from "@yourssu/design-system-react";
-import Table from "@/components/Table/Table.tsx";
-
-type TabType = 'active' | 'inactive' | 'graduation' | 'withdrawal';
-
-const tabItems: Record<TabType, '액티브' | '비액티브' | '졸업' | '탈퇴'> = {
-    'active': '액티브',
-    'inactive': '비액티브',
-    'graduation': '졸업',
-    'withdrawal': '탈퇴'
-}
+import {
+  StyledContainer,
+  StyledTabsListContainer,
+  StyledTitle,
+} from '@/styles/pages/table.ts';
+import { useTabs } from '@yourssu/design-system-react';
+import { MemberState } from '@/data/members/schema.ts';
+import { useGetMemberStates } from '@/data/members/hooks/useGetMemberStates.ts';
+import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
 
 export const Members = () => {
-    const Tabs = useTabs<TabType>({defaultTab: 'active', scrollable: true});
+  const Tabs = useTabs<MemberState>({ defaultTab: '액티브', scrollable: true });
+  const { data: memberStates } = useGetMemberStates();
 
-    return <StyledContainer>
-        <StyledTitle>유어슈 멤버</StyledTitle>
-        <Tabs>
-            <StyledTabsListContainer>
-                <Tabs.List size="large">
-                    {
-                        (Object.keys(tabItems) as TabType[]).map((key) =>
-                            <Tabs.Tab key={key} id={key}>{tabItems[key]}</Tabs.Tab>
-                        )
-                    }
-                </Tabs.List>
-            </StyledTabsListContainer>
-            {
-                (Object.keys(tabItems) as TabType[]).map((key) =>
-                    <Tabs.Panel key={key} value={key}>
-                        <Table tabType={tabItems[key]}/>
-                    </Tabs.Panel>
-                )
-            }
-        </Tabs>
+  return (
+    <StyledContainer>
+      <StyledTitle>유어슈 멤버</StyledTitle>
+      <Tabs>
+        <StyledTabsListContainer>
+          <Tabs.List size="large">
+            {memberStates.map((state) => (
+              <Tabs.Tab key={state} id={state}>
+                {state}
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+        </StyledTabsListContainer>
+        {memberStates.map((state) => (
+          <Tabs.Panel key={state} value={state}>
+            <MemberTab state={state} />
+          </Tabs.Panel>
+        ))}
+      </Tabs>
     </StyledContainer>
-}
+  );
+};

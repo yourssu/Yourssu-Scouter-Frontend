@@ -1,17 +1,16 @@
-import { useState } from "react";
-import { TooltipContent, TooltipWrapper } from "./Tooltip.style";
+import { PropsWithChildren, useState } from 'react';
+import { TooltipContent, TooltipWrapper } from './Tooltip.style';
 
-interface TooltipProps {
+interface TooltipProps extends PropsWithChildren {
   content: string;
-  children: React.ReactNode;
-  position?: "top" | "bottom" | "left" | "right";
+  position?: 'top' | 'bottom' | 'left' | 'right';
   offset?: number;
 }
 
 export const Tooltip = ({
   content,
   children,
-  position = "top",
+  position = 'top',
   offset = 10,
 }: TooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);

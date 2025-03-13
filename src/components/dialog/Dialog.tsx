@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { DialogContainer, StyledTextButton } from "./Dialog.style";
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { DialogContainer, StyledTextButton } from './Dialog.style';
 
 interface DialogOption {
   label: string;
@@ -12,7 +12,7 @@ interface DialogProps {
   onClose: () => void;
   options: DialogOption[];
   onSelect: (value: string) => void;
-  position: "top" | "bottom";
+  position: 'top' | 'bottom';
   width: number;
   anchorEl: HTMLElement | null;
 }
@@ -38,8 +38,8 @@ export const Dialog = ({
       }
     };
 
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, [onClose]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export const Dialog = ({
         const bottomSpace = window.innerHeight - buttonRect.bottom;
         const shouldShowOnTop = bottomSpace < dialogHeight + 10;
 
-        setPosition(shouldShowOnTop ? "top" : "bottom");
+        setPosition(shouldShowOnTop ? 'top' : 'bottom');
 
         setCoordinates({
           left: buttonRect.left,
@@ -67,14 +67,14 @@ export const Dialog = ({
         requestAnimationFrame(updatePosition);
       };
 
-      window.addEventListener("scroll", handleScroll, true);
-      document.addEventListener("scroll", handleScroll, true);
-      window.addEventListener("resize", handleScroll);
+      window.addEventListener('scroll', handleScroll, true);
+      document.addEventListener('scroll', handleScroll, true);
+      window.addEventListener('resize', handleScroll);
 
       return () => {
-        window.removeEventListener("scroll", handleScroll, true);
-        document.removeEventListener("scroll", handleScroll, true);
-        window.removeEventListener("resize", handleScroll);
+        window.removeEventListener('scroll', handleScroll, true);
+        document.removeEventListener('scroll', handleScroll, true);
+        window.removeEventListener('resize', handleScroll);
       };
     }
   }, [isOpen, anchorEl]);
@@ -86,7 +86,7 @@ export const Dialog = ({
       $position={position}
       $width={width}
       style={{
-        position: "fixed",
+        position: 'fixed',
         top: coordinates.top,
         left: coordinates.left,
       }}
