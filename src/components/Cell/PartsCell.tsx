@@ -1,6 +1,6 @@
 import { IcEditLine } from '@yourssu/design-system-react';
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
-import { useGetParts } from '@/hooks/useGetParts.ts';
+import { useGetParts } from '@/data/part/useGetParts.ts';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   StyledContainer,

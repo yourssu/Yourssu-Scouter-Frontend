@@ -13,7 +13,7 @@ import { ApplicantState } from '@/data/applicants/schema.ts';
 import ApplicantTable from '@/pages/Applicants/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import { useSearchParams } from 'react-router';
-import { useGetSemesters } from '@/hooks/useGetSemesters.ts';
+import { useGetSemesters } from '@/data/semester/useGetSemesters.ts';
 import { useQueryClient } from '@tanstack/react-query';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
 import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';

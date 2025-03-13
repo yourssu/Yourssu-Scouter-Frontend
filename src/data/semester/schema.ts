@@ -7,4 +7,4 @@ export const SemesterSchema = z.object({
 
 export const SemesterArraySchema = z.array(SemesterSchema);
 
-export type Semester = z.infer<typeof SemesterSchema>;
+export type Schema = z.infer<typeof SemesterSchema>;

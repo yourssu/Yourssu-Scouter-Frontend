@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '@/apis/api.ts';
-import { DepartmentArraySchema } from '@/scheme/department.ts';
+import { DepartmentArraySchema } from '@/data/department/schema.ts';
 
 export const useGetDepartments = () => {
   return useSuspenseQuery({

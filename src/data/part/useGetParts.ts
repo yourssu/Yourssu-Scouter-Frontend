@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '@/apis/api.ts';
-import { PartArraySchema } from '@/scheme/part.ts';
+import { PartArraySchema } from '@/data/part/schema.ts';
 
 export const useGetParts = () => {
   return useSuspenseQuery({

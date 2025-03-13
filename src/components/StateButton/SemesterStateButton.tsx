@@ -1,4 +1,4 @@
-import { useGetSemesters } from '@/hooks/useGetSemesters.ts';
+import { useGetSemesters } from '@/data/semester/useGetSemesters.ts';
 import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
 import { StateButton } from './StateButton';
 
