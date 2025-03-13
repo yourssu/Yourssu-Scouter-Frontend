@@ -12,9 +12,8 @@ import { Suspense } from 'react';
 import { ApplicantState } from '@/data/applicants/schema.ts';
 import ApplicantTable from '@/pages/Applicants/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
-import { useSearchParams } from 'react-router';
 import { useGetSemesters } from '@/data/semester/hooks/useGetSemesters.ts';
-import { useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from '@/hooks/useSearchParams.ts';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
 import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';
 
@@ -31,11 +30,9 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
 
   const { data: semesters } = useGetSemesters();
 
-  const [searchParams, setSearchParams] = useSearchParams({ semesterId: '1' });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const semesterId = Number(searchParams.get('semesterId') ?? '1');
-
-  const queryClient = useQueryClient();
 
   const onSemesterChange = async (semester: string) => {
     const semesterId =
@@ -43,7 +40,6 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
       '0';
 
     setSearchParams({ semesterId });
-    await queryClient.invalidateQueries({ queryKey: ['applicants'] });
   };
 
   const postApplicantsFromFormMutation = usePostApplicantsFromForms();
