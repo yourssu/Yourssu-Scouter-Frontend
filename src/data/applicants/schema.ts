@@ -46,6 +46,6 @@ export const ApplicantArraySchema = z.array(ApplicantSchema);
 
 export type ApplicantState = z.infer<typeof ApplicantStateSchema>;
 
-export type Applicant = z.infer<typeof ApplicantSchema>;
+export type Schema = z.infer<typeof ApplicantSchema>;
 
 export type PatchApplicant = z.infer<typeof PatchApplicantSchema>;

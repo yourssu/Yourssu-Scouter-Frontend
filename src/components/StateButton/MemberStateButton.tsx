@@ -1,5 +1,5 @@
 import { StateButton } from './StateButton';
-import { useGetMemberStates } from '@/hooks/members/useGetMemberStates.ts';
+import { useGetMemberStates } from '@/data/members/hooks/useGetMemberStates.ts';
 
 export const MemberStateButton = ({
   selectedValue,

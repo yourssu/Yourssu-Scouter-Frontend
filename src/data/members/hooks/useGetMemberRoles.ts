@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '@/apis/api.ts';
-import { MemberRoleArraySchema } from '@/scheme/member.ts';
+import { MemberRoleArraySchema } from '@/data/members/schema.ts';
 
 export const useGetMemberRoles = () => {
   return useSuspenseQuery({

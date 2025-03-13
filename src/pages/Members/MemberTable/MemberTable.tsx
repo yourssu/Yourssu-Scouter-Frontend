@@ -1,15 +1,15 @@
-import { Member, MemberState, PatchMember } from '@/scheme/member.ts';
+import { Schema, MemberState, PatchMember } from '@/data/members/schema.ts';
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useGetMembers } from '@/hooks/members/useGetMembers.ts';
+import { useGetMembers } from '@/data/members/hooks/useGetMembers.ts';
 import { Checkbox } from '@yourssu/design-system-react';
 import { transformBoolean } from '@/utils/common.ts';
 import { MemberStateButton, RoleStateButton } from '@/components/StateButton';
 import Table from '@/components/Table/Table.tsx';
-import { usePatchMember } from '@/hooks/members/usePatchMember.ts';
+import { usePatchMember } from '@/data/members/hooks/usePatchMember.ts';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import InputCell from '@/components/Cell/InputCell.tsx';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
@@ -21,14 +21,14 @@ import { SemesterStateButton } from '@/components/StateButton/SemesterStateButto
 import Cell from '@/components/Cell/Cell.tsx';
 import { useGetParts } from '@/hooks/useGetParts.ts';
 import { useGetSemesters } from '@/hooks/useGetSemesters.ts';
-import { useInvalidateMembers } from '@/hooks/members/useInvalidateMembers.ts';
+import { useInvalidateMembers } from '@/data/members/hooks/useInvalidateMembers.ts';
 
 interface MemberTableProps {
   state: MemberState;
   search: string;
 }
 
-const columnHelper = createColumnHelper<Member>();
+const columnHelper = createColumnHelper<Schema>();
 
 const MemberTable = ({ state, search }: MemberTableProps) => {
   const patchMemberMutation = usePatchMember(state);

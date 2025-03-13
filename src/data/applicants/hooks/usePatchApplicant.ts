@@ -1,6 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { api } from '@/apis/api.ts';
-import { PatchApplicant, PatchApplicantSchema } from '@/scheme/applicant.ts';
+import {
+  PatchApplicant,
+  PatchApplicantSchema,
+} from '@/data/applicants/schema.ts';
 
 interface PatchApplicantParams {
   applicantId: number;

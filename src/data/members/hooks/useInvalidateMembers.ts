@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { MemberState } from '@/scheme/member.ts';
+import { MemberState } from '@/data/members/schema.ts';
 
 export const useInvalidateMembers = (state: MemberState) => {
   const queryClient = useQueryClient();

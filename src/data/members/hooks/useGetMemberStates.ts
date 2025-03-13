@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '@/apis/api.ts';
-import { MemberStateArraySchema } from '@/scheme/member.ts';
+import { MemberStateArraySchema } from '@/data/members/schema.ts';
 
 export const useGetMemberStates = () => {
   return useSuspenseQuery({

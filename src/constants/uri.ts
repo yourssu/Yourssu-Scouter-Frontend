@@ -1,4 +1,4 @@
-import { MemberState } from '@/scheme/member.ts';
+import { MemberState } from '@/data/members/schema.ts';
 
 export const MEMBER_URI: Record<MemberState, string> = {
   액티브: 'active',

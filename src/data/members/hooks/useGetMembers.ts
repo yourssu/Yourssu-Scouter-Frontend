@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { MemberArraySchema, MemberState } from '@/scheme/member.ts';
+import { MemberArraySchema, MemberState } from '@/data/members/schema.ts';
 import { api } from '@/apis/api.ts';
 import { MEMBER_URI } from '@/constants/uri.ts';
 

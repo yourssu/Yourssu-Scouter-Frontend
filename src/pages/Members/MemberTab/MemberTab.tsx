@@ -7,11 +7,11 @@ import {
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar.tsx';
 import { FormProvider, useForm } from 'react-hook-form';
 import MemberTable from '@/pages/Members/MemberTable/MemberTable.tsx';
-import { MemberState } from '@/scheme/member.ts';
+import { MemberState } from '@/data/members/schema.ts';
 import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
-import { usePostMembersFromApplicants } from '@/hooks/members/usePostMembersFromApplicants.ts';
+import { usePostMembersFromApplicants } from '@/data/members/hooks/usePostMembersFromApplicants.ts';
 
 interface MemberTabProps {
   state: MemberState;

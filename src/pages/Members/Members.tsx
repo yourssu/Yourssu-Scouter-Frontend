@@ -4,8 +4,8 @@ import {
   StyledTitle,
 } from '@/styles/pages/table.ts';
 import { useTabs } from '@yourssu/design-system-react';
-import { MemberState } from '@/scheme/member.ts';
-import { useGetMemberStates } from '@/hooks/members/useGetMemberStates.ts';
+import { MemberState } from '@/data/members/schema.ts';
+import { useGetMemberStates } from '@/data/members/hooks/useGetMemberStates.ts';
 import MemberTab from '@/pages/Members/MemberTab/MemberTab.tsx';
 
 export const Members = () => {
