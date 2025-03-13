@@ -14,16 +14,6 @@ import {
 } from '@/components/Table/Table.style.ts';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 
-const specialCols = [
-  'division',
-  'role',
-  'state',
-  'membershipFee',
-  'activePeriod',
-  'expectedReturnSemester',
-  'inactivePeriod',
-];
-
 const Header = ({ headerGroups }: { headerGroups: HeaderGroup<unknown>[] }) => (
   <StyledThead>
     {headerGroups.map((headerGroup) => (
@@ -46,7 +36,6 @@ const Body = ({ rows }: { rows: Row<unknown>[] }) => (
       <StyledList key={row.id}>
         {row.getVisibleCells().map((cell) => (
           <StyledBodyCell
-            $special={specialCols.includes(cell.column.id)}
             key={cell.id}
             style={{ minWidth: `${cell.column.getSize()}px` }}
           >

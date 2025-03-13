@@ -79,7 +79,7 @@ export const StyledCell = styled.th<{ $minWidth: number }>`
   min-width: ${({ $minWidth }) => $minWidth}px;
 `;
 
-export const StyledBodyCell = styled.td<{ $special: boolean }>`
+export const StyledBodyCell = styled.td`
   white-space: nowrap;
 `;
 
