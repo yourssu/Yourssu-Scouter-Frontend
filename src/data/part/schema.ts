@@ -7,4 +7,4 @@ const PartSchema = z.object({
 
 export const PartArraySchema = z.array(PartSchema);
 
-export type Schema = z.infer<typeof PartSchema>;
+export type Part = z.infer<typeof PartSchema>;

@@ -1,4 +1,4 @@
-import { Schema, MemberState, PatchMember } from '@/data/members/schema.ts';
+import { Member, MemberState, PatchMember } from '@/data/members/schema.ts';
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -28,7 +28,7 @@ interface MemberTableProps {
   search: string;
 }
 
-const columnHelper = createColumnHelper<Schema>();
+const columnHelper = createColumnHelper<Member>();
 
 const MemberTable = ({ state, search }: MemberTableProps) => {
   const patchMemberMutation = usePatchMember(state);

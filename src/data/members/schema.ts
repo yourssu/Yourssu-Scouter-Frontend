@@ -99,6 +99,6 @@ export const MemberStateArraySchema = z.array(MemberStateSchema);
 
 export type MemberState = z.infer<typeof MemberStateSchema>;
 
-export type Schema = z.infer<typeof MemberSchema>;
+export type Member = z.infer<typeof MemberSchema>;
 
 export type PatchMember = z.infer<typeof PatchMemberSchema>;

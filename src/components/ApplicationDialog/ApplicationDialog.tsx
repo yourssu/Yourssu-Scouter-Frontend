@@ -25,19 +25,19 @@ import {
 } from '@yourssu/design-system-react';
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
 import { useGetParts } from '@/data/part/useGetParts.ts';
-import { Schema } from '@/data/semester/schema.ts';
-import { Schema } from '@/data/part/schema.ts';
+import { Semester } from '@/data/semester/schema.ts';
+import { Part } from '@/data/part/schema.ts';
 import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';
 
 interface ApplicationDialogProps {
   children: ReactNode;
-  semester: Schema;
+  semester: Semester;
 }
 
 const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
   const { data: parts } = useGetParts();
   const options = parts.map((p) => ({ label: p.partName }));
-  const [selectedParts, setSelectedParts] = useState<Schema[]>([]);
+  const [selectedParts, setSelectedParts] = useState<Part[]>([]);
   const postApplicantsFromFormMutation = usePostApplicantsFromForms();
 
   const selectPart = (partName: string) => {

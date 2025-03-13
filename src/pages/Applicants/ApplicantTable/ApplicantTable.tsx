@@ -4,7 +4,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import {
-  Schema,
+  Applicant,
   ApplicantState,
   PatchApplicant,
 } from '@/data/applicants/schema.ts';
@@ -19,7 +19,7 @@ import { useGetParts } from '@/data/part/useGetParts.ts';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
 import { useInvalidateApplicants } from '@/data/applicants/hooks/useInvalidateApplicants.ts';
 
-const columnHelper = createColumnHelper<Schema>();
+const columnHelper = createColumnHelper<Applicant>();
 
 interface ApplicantTableProps {
   state: ApplicantState;
