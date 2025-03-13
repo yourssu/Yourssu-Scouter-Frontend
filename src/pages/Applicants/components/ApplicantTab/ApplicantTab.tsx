@@ -35,12 +35,12 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
 
   const semesterId = Number(searchParams.get('semesterId') ?? '1');
 
-  const onSemesterChange = async (semester: string) => {
-    const semesterId =
-      semesters.find((s) => s.semester === semester)?.semesterId.toString() ??
-      '0';
+  const onSemesterChange = (semester: string) => {
+    const semesterId = semesters
+      .find((s) => s.semester === semester)
+      ?.semesterId.toString();
 
-    setSearchParams({ semesterId });
+    if (semesterId) setSearchParams({ semesterId });
   };
 
   const invalidateApplicants = useInvalidateApplicants();
