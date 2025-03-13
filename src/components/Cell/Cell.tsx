@@ -1,11 +1,10 @@
 import { StyledContainer } from '@/components/Cell/Cell.style.ts';
 
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 
-interface CellProps {
+interface CellProps extends PropsWithChildren {
   bold?: boolean;
   editable?: boolean;
-  children: ReactNode;
 }
 
 const Cell = ({ bold = false, editable = false, children }: CellProps) => {

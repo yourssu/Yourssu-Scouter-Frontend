@@ -1,16 +1,15 @@
 import { IcEditLine } from '@yourssu/design-system-react';
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
 import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import {
   StyledContainer,
   StyledEditIcon,
 } from '@/components/Cell/Cell.style.ts';
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
-interface PartsCellProps {
+interface PartsCellProps extends PropsWithChildren {
   onSelect: (value: string) => void;
-  children: ReactNode;
   tooltipContent: string;
 }
 

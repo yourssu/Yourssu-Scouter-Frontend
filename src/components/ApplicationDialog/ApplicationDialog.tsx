@@ -1,5 +1,5 @@
 import { DropdownMenu, Popover } from 'radix-ui';
-import { ReactNode, useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import {
   StyledContent,
   StyledTitleContainer,
@@ -29,8 +29,7 @@ import { Semester } from '@/data/semester/schema.ts';
 import { Part } from '@/data/part/schema.ts';
 import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';
 
-interface ApplicationDialogProps {
-  children: ReactNode;
+interface ApplicationDialogProps extends PropsWithChildren {
   semester: Semester;
 }
 

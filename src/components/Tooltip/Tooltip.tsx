@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { TooltipContent, TooltipWrapper } from './Tooltip.style';
 
-interface TooltipProps {
+interface TooltipProps extends PropsWithChildren {
   content: string;
-  children: React.ReactNode;
   position?: 'top' | 'bottom' | 'left' | 'right';
   offset?: number;
 }

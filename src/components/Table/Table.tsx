@@ -12,7 +12,7 @@ import {
   StyledBorderBox,
   StyledOuterBorder,
 } from '@/components/Table/Table.style.ts';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 const Header = ({ headerGroups }: { headerGroups: HeaderGroup<unknown>[] }) => (
   <StyledThead>
@@ -47,7 +47,7 @@ const Body = ({ rows }: { rows: Row<unknown>[] }) => (
   </tbody>
 );
 
-const Table = ({ children }: { children: ReactNode }) => {
+const Table = ({ children }: PropsWithChildren) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [hasScroll, setHasScroll] = useState(true);

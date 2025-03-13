@@ -1,12 +1,11 @@
 import { StyledEditIcon, StyledInput } from '@/components/Cell/Cell.style.ts';
 import { IcEditLine } from '@yourssu/design-system-react';
-import { ReactNode, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Cell from '@/components/Cell/Cell.tsx';
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
-interface InputCellProps {
-  children: ReactNode;
+interface InputCellProps extends PropsWithChildren {
   defaultValue: string;
   handleSubmit: (value: string) => void;
   bold?: boolean;

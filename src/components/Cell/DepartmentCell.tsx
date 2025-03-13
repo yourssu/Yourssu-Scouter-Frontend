@@ -3,14 +3,13 @@ import {
   StyledContainer,
   StyledEditIcon,
 } from '@/components/Cell/Cell.style.ts';
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import DepartmentSearchDialog from '@/components/DepartmentSearchDialog/DepartmentSearchDialog.tsx';
 import { Popover } from 'radix-ui';
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
-interface DepartmentCellProps {
+interface DepartmentCellProps extends PropsWithChildren {
   onSelect: (value: number) => void;
-  children: ReactNode;
   tooltipContent: string;
 }
 

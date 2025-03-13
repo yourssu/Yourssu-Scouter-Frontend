@@ -1,12 +1,8 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 
-interface ScouterErrorBoundaryProps {
-  children: ReactNode;
-}
-
-const ScouterErrorBoundary = ({ children }: ScouterErrorBoundaryProps) => {
+const ScouterErrorBoundary = ({ children }: PropsWithChildren) => {
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
