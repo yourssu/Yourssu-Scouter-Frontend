@@ -24,11 +24,11 @@ const columnHelper = createColumnHelper<Applicant>();
 interface ApplicantTableProps {
   state: ApplicantState;
   semesterId: number;
-  search: string;
+  name: string;
 }
 
-const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
-  const { data } = useGetApplicants(state, semesterId, search);
+const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
+  const { data } = useGetApplicants(state, semesterId, name);
 
   const patchApplicantMutation = usePatchApplicant();
   const invalidateApplicants = useInvalidateApplicants();

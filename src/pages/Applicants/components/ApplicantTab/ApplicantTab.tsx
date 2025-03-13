@@ -89,7 +89,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
             <ApplicantTable
               state={state}
               semesterId={semesterId}
-              search={methods.watch('search')}
+              name={methods.watch('search')}
             />
           </Suspense>
         </ScouterErrorBoundary>
