@@ -74,9 +74,9 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         return (
           <PartsCell
             tooltipContent={`${info.row.original.name} 정보 수정`}
-            onSelect={(value) => {
+            onSelect={async (value) => {
               const included = parts.some((p) => p.part === value);
-              handleSelect(
+              await handleSelect(
                 info.row.original.memberId,
                 'partIds',
                 partWithIds
@@ -110,8 +110,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
           <Cell>
             <RoleStateButton
               selectedValue={info.getValue()}
-              onStateChange={(state) => {
-                handleSelect(info.row.original.memberId, 'role', state);
+              onStateChange={async (state) => {
+                await handleSelect(info.row.original.memberId, 'role', state);
               }}
             />
           </Cell>
@@ -125,8 +125,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'name', value);
+          handleSubmit={async (value) => {
+            await handleSelect(info.row.original.memberId, 'name', value);
           }}
         >
           {info.getValue()}
@@ -141,8 +141,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
           tooltipContent={`${info.row.original.name} 정보 수정`}
           bold={true}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'nickname', value);
+          handleSubmit={async (value) => {
+            await handleSelect(info.row.original.memberId, 'nickname', value);
           }}
         >
           {info.getValue()}
@@ -170,8 +170,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'email', value);
+          handleSubmit={async (value) => {
+            await handleSelect(info.row.original.memberId, 'email', value);
           }}
         >
           {info.getValue()}
@@ -185,8 +185,12 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'phoneNumber', value);
+          handleSubmit={async (value) => {
+            await handleSelect(
+              info.row.original.memberId,
+              'phoneNumber',
+              value,
+            );
           }}
         >
           {info.getValue()}
@@ -199,8 +203,12 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
       cell: (info) => (
         <DepartmentCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
-          onSelect={(value) => {
-            handleSelect(info.row.original.memberId, 'departmentId', value);
+          onSelect={async (value) => {
+            await handleSelect(
+              info.row.original.memberId,
+              'departmentId',
+              value,
+            );
           }}
         >
           {info.getValue()}
@@ -214,8 +222,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'studentId', value);
+          handleSubmit={async (value) => {
+            await handleSelect(info.row.original.memberId, 'studentId', value);
           }}
         >
           {info.getValue()}
@@ -229,8 +237,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'birthDate', value);
+          handleSubmit={async (value) => {
+            await handleSelect(info.row.original.memberId, 'birthDate', value);
           }}
         >
           {info.getValue()}
@@ -244,8 +252,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'joinDate', value);
+          handleSubmit={async (value) => {
+            await handleSelect(info.row.original.memberId, 'joinDate', value);
           }}
         >
           {info.getValue()}
@@ -341,12 +349,12 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
                   <Cell>
                     <SemesterStateButton
                       selectedValue={member.expectedReturnSemester}
-                      onStateChange={(value) => {
+                      onStateChange={async (value) => {
                         const semesterId = semesters.find(
                           (s) => s.semester === value,
                         )?.semesterId;
                         if (semesterId)
-                          handleSelect(
+                          await handleSelect(
                             member.memberId,
                             'expectedReturnSemesterId',
                             semesterId,
@@ -438,8 +446,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            handleSelect(info.row.original.memberId, 'note', value);
+          handleSubmit={async (value) => {
+            await handleSelect(info.row.original.memberId, 'note', value);
           }}
         >
           {info.getValue()}

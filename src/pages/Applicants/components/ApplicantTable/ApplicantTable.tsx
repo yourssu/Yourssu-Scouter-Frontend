@@ -59,12 +59,16 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
       cell: (info) => (
         <PartsCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
-          onSelect={(value) => {
+          onSelect={async (value) => {
             const partId = partWithIds.find(
               (p) => p.partName === value,
             )?.partId;
             if (partId) {
-              patchApplicant(info.row.original.applicantId, 'partId', partId);
+              await patchApplicant(
+                info.row.original.applicantId,
+                'partId',
+                partId,
+              );
             }
           }}
         >
@@ -79,8 +83,8 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            patchApplicant(info.row.original.applicantId, 'name', value);
+          handleSubmit={async (value) => {
+            await patchApplicant(info.row.original.applicantId, 'name', value);
           }}
         >
           {info.getValue()}
@@ -94,8 +98,12 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <Cell>
           <ApplicantStateButton
             selectedValue={info.getValue()}
-            onStateChange={(state) => {
-              patchApplicant(info.row.original.applicantId, 'state', state);
+            onStateChange={async (state) => {
+              await patchApplicant(
+                info.row.original.applicantId,
+                'state',
+                state,
+              );
             }}
           />
         </Cell>
@@ -108,8 +116,8 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            patchApplicant(
+          handleSubmit={async (value) => {
+            await patchApplicant(
               info.row.original.applicantId,
               'applicationDate',
               value,
@@ -127,8 +135,8 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            patchApplicant(info.row.original.applicantId, 'email', value);
+          handleSubmit={async (value) => {
+            await patchApplicant(info.row.original.applicantId, 'email', value);
           }}
         >
           {info.getValue()}
@@ -142,8 +150,12 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            patchApplicant(info.row.original.applicantId, 'phoneNumber', value);
+          handleSubmit={async (value) => {
+            await patchApplicant(
+              info.row.original.applicantId,
+              'phoneNumber',
+              value,
+            );
           }}
         >
           {info.getValue()}
@@ -171,8 +183,12 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            patchApplicant(info.row.original.applicantId, 'studentId', value);
+          handleSubmit={async (value) => {
+            await patchApplicant(
+              info.row.original.applicantId,
+              'studentId',
+              value,
+            );
           }}
         >
           {info.getValue()}
@@ -186,8 +202,8 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            patchApplicant(
+          handleSubmit={async (value) => {
+            await patchApplicant(
               info.row.original.applicantId,
               'academicSemester',
               value,
@@ -205,8 +221,8 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
         <InputCell
           tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            patchApplicant(info.row.original.applicantId, 'age', value);
+          handleSubmit={async (value) => {
+            await patchApplicant(info.row.original.applicantId, 'age', value);
           }}
         >
           {info.getValue()}
