@@ -12,8 +12,8 @@ interface PatchApplicantParams {
 
 export const usePatchApplicant = () => {
   return useMutation({
-    mutationFn: async ({ applicantId, params }: PatchApplicantParams) => {
-      await api.patch(`applicants/${applicantId}`, {
+    mutationFn: ({ applicantId, params }: PatchApplicantParams) => {
+      return api.patch(`applicants/${applicantId}`, {
         body: JSON.stringify(PatchApplicantSchema.parse(params)),
       });
     },

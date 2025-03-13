@@ -14,8 +14,8 @@ interface PatchMemberParams {
 
 export const usePatchMember = (state: MemberState) => {
   return useMutation({
-    mutationFn: async ({ memberId, params }: PatchMemberParams) => {
-      await api.patch(`members/${MEMBER_URI[state]}/${memberId}`, {
+    mutationFn: ({ memberId, params }: PatchMemberParams) => {
+      return api.patch(`members/${MEMBER_URI[state]}/${memberId}`, {
         body: JSON.stringify(PatchMemberSchema.parse(params)),
       });
     },
