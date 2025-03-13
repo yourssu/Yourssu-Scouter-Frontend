@@ -6,7 +6,6 @@ import {
 } from '@tanstack/react-table';
 import { useGetMembers } from '@/data/members/hooks/useGetMembers.ts';
 import { Checkbox } from '@yourssu/design-system-react';
-import { transformBoolean } from '@/utils/common.ts';
 import { MemberStateButton, RoleStateButton } from '@/components/StateButton';
 import Table from '@/components/Table/Table.tsx';
 import { usePatchMember } from '@/data/members/hooks/usePatchMember.ts';
@@ -288,7 +287,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
                         e.currentTarget.checked,
                       )
                     }
-                    selected={transformBoolean(info.getValue())}
+                    selected={Boolean(info.getValue())}
                   >
                     {''}
                   </Checkbox>
@@ -422,7 +421,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
                         e.currentTarget.checked,
                       )
                     }
-                    selected={transformBoolean(info.getValue())}
+                    selected={Boolean(info.getValue())}
                   >
                     {''}
                   </Checkbox>
