@@ -5,7 +5,7 @@ import {
   StyledGroup,
   StyledItem,
 } from '@/components/DepartmentSearchDialog/DepartmentSearchDialog.style.ts';
-import { useGetDepartments } from '@/data/department/useGetDepartments.ts';
+import { useGetDepartments } from '@/data/department/hooks/useGetDepartments.ts';
 import { SearchBar } from '@yourssu/design-system-react';
 import { useForm } from 'react-hook-form';
 import { useMemo } from 'react';

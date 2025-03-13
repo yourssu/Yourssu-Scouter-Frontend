@@ -4,6 +4,7 @@ import {
   ApplicantArraySchema,
   ApplicantState,
 } from '@/data/applicants/schema.ts';
+import { getApplicantsQueryKey } from '@/data/applicants/key.ts';
 
 export const useGetApplicants = (
   state: ApplicantState,
@@ -11,7 +12,7 @@ export const useGetApplicants = (
   search = '',
 ) => {
   return useSuspenseQuery({
-    queryKey: ['applicants', state, search],
+    queryKey: getApplicantsQueryKey(semesterId, state, search),
     queryFn: async () => {
       const res = await api.get('applicants', {
         searchParams: {

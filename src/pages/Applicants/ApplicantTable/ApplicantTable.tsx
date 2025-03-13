@@ -15,7 +15,7 @@ import { ApplicantStateButton } from '@/components/StateButton';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import InputCell from '@/components/Cell/InputCell.tsx';
 import { usePatchApplicant } from '@/data/applicants/hooks/usePatchApplicant.ts';
-import { useGetParts } from '@/data/part/useGetParts.ts';
+import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
 import { useInvalidateApplicants } from '@/data/applicants/hooks/useInvalidateApplicants.ts';
 

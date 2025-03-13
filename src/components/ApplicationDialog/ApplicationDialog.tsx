@@ -24,7 +24,7 @@ import {
   TextField,
 } from '@yourssu/design-system-react';
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
-import { useGetParts } from '@/data/part/useGetParts.ts';
+import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
 import { Semester } from '@/data/semester/schema.ts';
 import { Part } from '@/data/part/schema.ts';
 import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';

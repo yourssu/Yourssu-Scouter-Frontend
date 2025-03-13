@@ -19,8 +19,8 @@ import {
 } from '@/pages/Members/MemberTable/MemberTable.style.ts';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import Cell from '@/components/Cell/Cell.tsx';
-import { useGetParts } from '@/data/part/useGetParts.ts';
-import { useGetSemesters } from '@/data/semester/useGetSemesters.ts';
+import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
+import { useGetSemesters } from '@/data/semester/hooks/useGetSemesters.ts';
 import { useInvalidateMembers } from '@/data/members/hooks/useInvalidateMembers.ts';
 
 interface MemberTableProps {
