@@ -1,12 +1,13 @@
 import { IcEditLine } from '@yourssu/design-system-react';
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
 import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren } from 'react';
 import {
   StyledContainer,
   StyledEditIcon,
 } from '@/components/Cell/Cell.style.ts';
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
+import { useElementWidth } from '@/hooks/useElementWidth.ts';
 
 interface PartsCellProps extends PropsWithChildren {
   onSelect: (value: string) => void;
@@ -16,14 +17,7 @@ interface PartsCellProps extends PropsWithChildren {
 const PartsCell = ({ tooltipContent, children, onSelect }: PartsCellProps) => {
   const { data: parts } = useGetParts();
   const options = parts.map((part) => ({ label: part.partName }));
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const [width, setWidth] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    if (ref.current) {
-      setWidth(ref.current.clientWidth);
-    }
-  }, []);
+  const { width, ref } = useElementWidth();
 
   return (
     <GenericDialog width={width} options={options} onSelect={onSelect}>

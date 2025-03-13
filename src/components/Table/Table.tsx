@@ -12,7 +12,8 @@ import {
   StyledBorderBox,
   StyledOuterBorder,
 } from '@/components/Table/Table.style.ts';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren } from 'react';
+import { useHasScrollElement } from '@/hooks/useHasScrollElement.ts';
 
 const Header = ({ headerGroups }: { headerGroups: HeaderGroup<unknown>[] }) => (
   <StyledThead>
@@ -48,31 +49,11 @@ const Body = ({ rows }: { rows: Row<unknown>[] }) => (
 );
 
 const Table = ({ children }: PropsWithChildren) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const [hasScroll, setHasScroll] = useState(true);
-
-  const checkForScroll = () => {
-    if (containerRef.current) {
-      setHasScroll(
-        containerRef.current.scrollWidth > containerRef.current.clientWidth,
-      );
-    }
-  };
-
-  useEffect(() => {
-    checkForScroll();
-
-    window.addEventListener('resize', checkForScroll);
-
-    return () => {
-      window.removeEventListener('resize', checkForScroll);
-    };
-  }, []);
+  const { hasScroll, ref } = useHasScrollElement();
 
   return (
     <StyledTableContainerContainer>
-      <StyledTableContainer ref={containerRef}>
+      <StyledTableContainer ref={ref}>
         <StyledTable>{children}</StyledTable>
       </StyledTableContainer>
       <StyledBorder $hasScroll={hasScroll} />
