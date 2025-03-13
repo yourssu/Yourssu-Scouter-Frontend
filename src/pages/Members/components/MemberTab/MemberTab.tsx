@@ -3,10 +3,10 @@ import {
   StyledLastUpdate,
   StyledLastUpdateTime,
   StyledTopContainer,
-} from '@/pages/Members/MemberTab/MemberTab.style.ts';
+} from '@/pages/Members/components/MemberTab/MemberTab.style.ts';
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar.tsx';
 import { FormProvider, useForm } from 'react-hook-form';
-import MemberTable from '@/pages/Members/MemberTable/MemberTable.tsx';
+import MemberTable from '@/pages/Members/components/MemberTable/MemberTable.tsx';
 import { MemberState } from '@/data/members/schema.ts';
 import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';

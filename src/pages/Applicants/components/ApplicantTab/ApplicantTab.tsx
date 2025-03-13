@@ -6,11 +6,11 @@ import {
   StyledLastUpdate,
   StyledLastUpdateTime,
   StyledTopLeftContainer,
-} from '@/pages/Applicants/ApplicantTab/ApplicantTab.style.ts';
+} from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.style.ts';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Suspense } from 'react';
 import { ApplicantState } from '@/data/applicants/schema.ts';
-import ApplicantTable from '@/pages/Applicants/ApplicantTable/ApplicantTable.tsx';
+import ApplicantTable from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import { useGetSemesters } from '@/data/semester/hooks/useGetSemesters.ts';
 import { useSearchParams } from '@/hooks/useSearchParams.ts';

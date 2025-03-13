@@ -15,7 +15,7 @@ const NicknameSchema = z
   .string()
   .regex(/^[a-zA-Z]+\([가-힣]+\)$/, '영어(한글) 형식으로 입력해주세요');
 
-const EmailSchema = z
+const YourssuEmailSchema = z
   .string()
   .regex(
     /^[a-zA-Z0-9._-]+\.urssu@gmail\.com$/,
@@ -32,7 +32,7 @@ const BaseMemberSchema = z.object({
   role: MemberRoleSchema,
   name: z.string(),
   nickname: NicknameSchema,
-  email: EmailSchema,
+  email: YourssuEmailSchema,
   phoneNumber: PhoneNumberSchema,
   department: z.string(),
   studentId: z.string(),

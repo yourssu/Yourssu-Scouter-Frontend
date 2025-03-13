@@ -15,7 +15,7 @@ import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
 import {
   ActivePeriod,
   InactivePeriod,
-} from '@/pages/Members/MemberTable/MemberTable.style.ts';
+} from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import Cell from '@/components/Cell/Cell.tsx';
 import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
