@@ -5,7 +5,7 @@ import {
 } from '@/styles/pages/table.ts';
 import { useTabs } from '@yourssu/design-system-react';
 import { MemberState } from '@/scheme/member.ts';
-import { useGetMemberStates } from '@/hooks/useGetMemberStates.ts';
+import { useGetMemberStates } from '@/hooks/members/useGetMemberStates.ts';
 import MemberTab from '@/pages/Members/MemberTab/MemberTab.tsx';
 
 export const Members = () => {

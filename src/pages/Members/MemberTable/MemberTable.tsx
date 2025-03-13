@@ -4,12 +4,12 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useGetMembers } from '@/hooks/useGetMembers.ts';
+import { useGetMembers } from '@/hooks/members/useGetMembers.ts';
 import { Checkbox } from '@yourssu/design-system-react';
 import { transformBoolean } from '@/utils/common.ts';
 import { MemberStateButton, RoleStateButton } from '@/components/StateButton';
 import Table from '@/components/Table/Table.tsx';
-import { usePatchMember } from '@/hooks/usePatchMember.ts';
+import { usePatchMember } from '@/hooks/members/usePatchMember.ts';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import InputCell from '@/components/Cell/InputCell.tsx';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
@@ -21,6 +21,7 @@ import { SemesterStateButton } from '@/components/StateButton/SemesterStateButto
 import Cell from '@/components/Cell/Cell.tsx';
 import { useGetParts } from '@/hooks/useGetParts.ts';
 import { useGetSemesters } from '@/hooks/useGetSemesters.ts';
+import { useInvalidateMembers } from '@/hooks/members/useInvalidateMembers.ts';
 
 interface MemberTableProps {
   state: MemberState;
@@ -30,17 +31,19 @@ interface MemberTableProps {
 const columnHelper = createColumnHelper<Member>();
 
 const MemberTable = ({ state, search }: MemberTableProps) => {
-  const patchMemberMutation = usePatchMember({
-    state,
-    refetchAfterPatch: true,
-  });
+  const patchMemberMutation = usePatchMember(state);
+  const invalidateMembers = useInvalidateMembers(state);
 
-  const handleSelect = (
+  const handleSelect = async (
     memberId: number,
     field: keyof PatchMember,
     value: unknown,
   ) => {
-    patchMemberMutation.mutate({ memberId, params: { [field]: value } });
+    await patchMemberMutation.mutateAsync({
+      memberId,
+      params: { [field]: value },
+    });
+    await invalidateMembers();
   };
 
   const { data } = useGetMembers(state, search);

@@ -27,7 +27,7 @@ import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
 import { useGetParts } from '@/hooks/useGetParts.ts';
 import { Semester } from '@/scheme/semester.ts';
 import { Part } from '@/scheme/part.ts';
-import { usePostApplicantsFromForms } from '@/hooks/usePostApplicantsFromForms.ts';
+import { usePostApplicantsFromForms } from '@/hooks/applicants/usePostApplicantsFromForms.ts';
 
 interface ApplicationDialogProps {
   children: ReactNode;

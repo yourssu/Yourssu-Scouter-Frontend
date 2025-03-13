@@ -5,7 +5,7 @@ import {
 } from '@/styles/pages/table.ts';
 import { useTabs } from '@yourssu/design-system-react';
 import ApplicantTab from '@/pages/Applicants/ApplicantTab/ApplicantTab.tsx';
-import { useGetApplicantStates } from '@/hooks/useGetApplicantStates.ts';
+import { useGetApplicantStates } from '@/hooks/applicants/useGetApplicantStates.ts';
 import { ApplicantState } from '@/scheme/applicant.ts';
 
 export const Applicants = () => {

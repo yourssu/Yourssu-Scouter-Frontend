@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { api } from '@/apis/api.ts';
 import { MEMBER_URI } from '@/constants/uri.ts';
 import {
@@ -12,26 +12,12 @@ interface PatchMemberParams {
   params: PatchMember;
 }
 
-interface UsePatchMemberProps {
-  state: MemberState;
-  refetchAfterPatch: boolean;
-}
-
-export const usePatchMember = ({
-  state,
-  refetchAfterPatch,
-}: UsePatchMemberProps) => {
-  const queryClient = useQueryClient();
-
+export const usePatchMember = (state: MemberState) => {
   return useMutation({
     mutationFn: async ({ memberId, params }: PatchMemberParams) => {
       await api.patch(`members/${MEMBER_URI[state]}/${memberId}`, {
         body: JSON.stringify(PatchMemberSchema.parse(params)),
       });
-    },
-    onSuccess: async () => {
-      if (refetchAfterPatch)
-        await queryClient.invalidateQueries({ queryKey: ['members', state] });
     },
   });
 };

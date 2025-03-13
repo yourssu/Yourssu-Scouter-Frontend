@@ -16,7 +16,7 @@ import { useSearchParams } from 'react-router';
 import { useGetSemesters } from '@/hooks/useGetSemesters.ts';
 import { useQueryClient } from '@tanstack/react-query';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
-import { usePostApplicantsFromForms } from '@/hooks/usePostApplicantsFromForms.ts';
+import { usePostApplicantsFromForms } from '@/hooks/applicants/usePostApplicantsFromForms.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;

@@ -9,14 +9,15 @@ import {
   PatchApplicant,
 } from '@/scheme/applicant.ts';
 import Table from '@/components/Table/Table.tsx';
-import { useGetApplicants } from '@/hooks/useGetApplicants.ts';
+import { useGetApplicants } from '@/hooks/applicants/useGetApplicants.ts';
 import Cell from '@/components/Cell/Cell.tsx';
 import { ApplicantStateButton } from '@/components/StateButton';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import InputCell from '@/components/Cell/InputCell.tsx';
-import { usePatchApplicant } from '@/hooks/usePatchApplicant.ts';
+import { usePatchApplicant } from '@/hooks/applicants/usePatchApplicant.ts';
 import { useGetParts } from '@/hooks/useGetParts.ts';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
+import { useInvalidateApplicants } from '@/hooks/applicants/useInvalidateApplicants.ts';
 
 const columnHelper = createColumnHelper<Applicant>();
 
@@ -30,13 +31,18 @@ const ApplicantTable = ({ state, semesterId, search }: ApplicantTableProps) => {
   const { data } = useGetApplicants(state, semesterId, search);
 
   const patchApplicantMutation = usePatchApplicant();
+  const invalidateApplicants = useInvalidateApplicants();
 
-  const patchApplicant = (
+  const patchApplicant = async (
     applicantId: number,
     field: keyof PatchApplicant,
     value: unknown,
   ) => {
-    patchApplicantMutation.mutate({ applicantId, params: { [field]: value } });
+    await patchApplicantMutation.mutateAsync({
+      applicantId,
+      params: { [field]: value },
+    });
+    await invalidateApplicants();
   };
 
   const { data: partWithIds } = useGetParts();

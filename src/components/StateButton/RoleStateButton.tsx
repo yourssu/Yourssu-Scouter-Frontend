@@ -1,5 +1,5 @@
 import { StateButton } from './StateButton';
-import { useGetMemberRoles } from '@/hooks/useGetMemberRoles.ts';
+import { useGetMemberRoles } from '@/hooks/members/useGetMemberRoles.ts';
 
 export const RoleStateButton = ({
   selectedValue,

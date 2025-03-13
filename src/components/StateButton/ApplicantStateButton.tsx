@@ -1,5 +1,5 @@
 import { StateButton } from './StateButton';
-import { useGetApplicantStates } from '@/hooks/useGetApplicantStates.ts';
+import { useGetApplicantStates } from '@/hooks/applicants/useGetApplicantStates.ts';
 
 export const ApplicantStateButton = ({
   selectedValue,
