@@ -110,8 +110,8 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
           <Cell>
             <RoleStateButton
               selectedValue={info.getValue()}
-              onStateChange={(value) => {
-                handleSelect(info.row.original.memberId, 'role', value);
+              onStateChange={(state) => {
+                handleSelect(info.row.original.memberId, 'role', state);
               }}
             />
           </Cell>
