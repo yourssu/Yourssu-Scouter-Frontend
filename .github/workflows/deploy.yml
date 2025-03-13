@@ -1,0 +1,31 @@
+name: Auto-Sync and Deploy to Personal Repo
+on:
+  push:
+    branches: [ 'main' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Create and copy files
+        run: |
+          mkdir -p output
+          cp -R ./* ./.[^.]* output/ 2>/dev/null || :
+          rm -rf output/output
+      - name: Pushes to another repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+        with:
+          source-directory: 'output'
+          destination-github-username: owl1753
+          destination-repository-name: Yourssu-Scouter-Frontend
+          user-email: ${{ secrets.EMAIL }}
+          user-name: owl1753
+          commit-message: ${{ github.event.commits[0].message }}
+          target-branch: main
