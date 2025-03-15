@@ -9,7 +9,7 @@ import { useGetApplicantStates } from '@/data/applicants/hooks/useGetApplicantSt
 import { ApplicantState } from '@/data/applicants/schema.ts';
 
 export const Applicants = () => {
-  const Tabs = useTabs<ApplicantState>({
+  const [Tabs] = useTabs<ApplicantState>({
     defaultTab: '심사 진행 중',
     scrollable: true,
   });

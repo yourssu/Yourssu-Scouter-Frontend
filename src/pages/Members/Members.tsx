@@ -9,7 +9,10 @@ import { useGetMemberStates } from '@/data/members/hooks/useGetMemberStates.ts';
 import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
 
 export const Members = () => {
-  const Tabs = useTabs<MemberState>({ defaultTab: '액티브', scrollable: true });
+  const [Tabs] = useTabs<MemberState>({
+    defaultTab: '액티브',
+    scrollable: true,
+  });
   const { data: memberStates } = useGetMemberStates();
 
   return (
