@@ -1,13 +1,13 @@
 import { useTabs } from '@yourssu/design-system-react';
-import { ReactNode } from 'react';
-import { HeaderType, Recipient, RecipientId } from '../mock';
+import { ReactNode, useState } from 'react';
+import { HeaderType, Recipient, RecipientId } from '../mail.type';
 import {
   HeaderContainer,
   HeaderLabel,
   TabsContainer,
   VariableAddButton,
   VariableChip,
-} from './MailEditor.style';
+} from './MailHeader.style';
 
 interface MailHeaderProps {
   type: HeaderType;
@@ -19,21 +19,22 @@ interface MailHeaderProps {
 export const MailHeader = ({
   type = 'normal',
   recipients = [],
+  onTabChange,
   children,
 }: MailHeaderProps) => {
-  const Tabs = useTabs<RecipientId>({
-    defaultTab: recipients.length > 0 ? recipients[0].id : 'recipient-0',
+  const [activeTabId, setActiveTabId] = useState<RecipientId>('recipient-0');
+
+  const Tabs = useTabs({
+    defaultTab: activeTabId,
     scrollable: true,
   });
 
-  if (type === 'empty') {
-    return (
-      <>
-        <HeaderContainer />
-        {children}
-      </>
-    );
-  }
+  const handleTabClick = (id: RecipientId) => {
+    setActiveTabId(id);
+    if (onTabChange) {
+      onTabChange(id);
+    }
+  };
 
   if (type === 'normal') {
     return (
@@ -52,7 +53,11 @@ export const MailHeader = ({
         <Tabs>
           <Tabs.List>
             {recipients.map((recipient) => (
-              <Tabs.Tab key={recipient.id} id={recipient.id}>
+              <Tabs.Tab
+                key={recipient.id}
+                id={recipient.id}
+                onClick={() => handleTabClick(recipient.id)}
+              >
                 {recipient.name}
               </Tabs.Tab>
             ))}

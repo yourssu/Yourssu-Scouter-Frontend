@@ -9,14 +9,23 @@ import Underline from '@tiptap/extension-underline';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { MailToolbar } from '../MailToolbar/MailToolbar';
-import { EditorWrapper, StyledEditorContent } from './MailEditor.style';
+import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
 
-interface Recipient {
-  recipientName: string;
-  active: boolean;
+interface MailEditorContentProps {
+  recipientName?: string;
+  initialContent?: string;
+  onContentChange?: (html: string) => void;
 }
 
-export const MailEditorContent = ({ recipientName, active }: Recipient) => {
+export const MailEditorContent = ({
+  recipientName,
+  initialContent,
+  onContentChange,
+}: MailEditorContentProps) => {
+  const defaultContent = recipientName
+    ? `<p>${recipientName}님에게 보낼 내용</p>`
+    : '<p>내용을 입력하세요</p>';
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -41,16 +50,17 @@ export const MailEditorContent = ({ recipientName, active }: Recipient) => {
         },
       }),
     ],
-    content: `<p>${recipientName}님에게 보낼 내용</p>`,
+    content: initialContent || defaultContent,
     editable: true,
+    onUpdate: ({ editor }) => {
+      if (onContentChange) {
+        onContentChange(editor.getHTML());
+      }
+    },
   });
 
   if (!editor) {
     return <div>에디터 불러오는 중</div>;
-  }
-
-  if (!active) {
-    return null;
   }
 
   return (
