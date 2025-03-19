@@ -1,5 +1,5 @@
 import { API_CONFIG } from '@/constants/config';
-import ky, { AfterResponseHook } from 'ky';
+import ky, { AfterResponseHook, BeforeRequestHook } from 'ky';
 import { authService } from './auth.service';
 import { tokenService } from './token.service';
 
@@ -41,7 +41,7 @@ const handleTokenRefresh: AfterResponseHook = async (
   }
 };
 
-const setAuthHeader = (request: Request) => {
+const setAuthHeader: BeforeRequestHook = (request) => {
   const accessToken = tokenService.getAccessToken();
   if (accessToken) {
     request.headers.set('Authorization', `${accessToken}`);
