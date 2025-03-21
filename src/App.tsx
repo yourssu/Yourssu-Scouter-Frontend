@@ -1,10 +1,11 @@
 import { GoogleCallback } from '@/components/Auth/GoogleCallback';
 import Main from '@/components/Main/Main.tsx';
-import { Members } from '@/pages/Members/Members.tsx';
-import { Route, Routes } from 'react-router';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Applicants } from '@/pages/Applicants/Applicants.tsx';
+import { Members } from '@/pages/Members/Members.tsx';
 import { Suspense } from 'react';
+import { Route, Routes } from 'react-router';
+import { SendMail } from './pages/SendMail/SendMail';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route index element={<>응애</>} />
             <Route path="members" element={<Members />} />
             <Route path="recruiting" element={<Applicants />} />
+            <Route path="send-mail" element={<SendMail />} />
           </Route>
         </Routes>
       </Suspense>
