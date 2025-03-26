@@ -24,17 +24,18 @@ import {
   TextField,
 } from '@yourssu/design-system-react';
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
-import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
-import { Semester } from '@/data/semester/schema.ts';
-import { Part } from '@/data/part/schema.ts';
-import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';
+import { Semester } from '@/query/semester/schema.ts';
+import { Part } from '@/query/part/schema.ts';
+import { usePostApplicantsFromForms } from '@/hooks/query/applicant/usePostApplicantsFromForms.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { partOptions } from '@/query/part/options.ts';
 
 interface ApplicationDialogProps extends PropsWithChildren {
   semester: Semester;
 }
 
 const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
-  const { data: parts } = useGetParts();
+  const { data: parts } = useSuspenseQuery(partOptions());
   const options = parts.map((p) => ({ label: p.partName }));
   const [selectedParts, setSelectedParts] = useState<Part[]>([]);
   const postApplicantsFromFormMutation = usePostApplicantsFromForms();

@@ -1,14 +1,13 @@
-import { Member, MemberState, PatchMember } from '@/data/members/schema.ts';
+import { Member, MemberState, PatchMember } from '@/query/member/schema.ts';
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useGetMembers } from '@/data/members/hooks/useGetMembers.ts';
 import { Checkbox } from '@yourssu/design-system-react';
 import { MemberStateButton, RoleStateButton } from '@/components/StateButton';
 import Table from '@/components/Table/Table.tsx';
-import { usePatchMember } from '@/data/members/hooks/usePatchMember.ts';
+import { usePatchMember } from '@/hooks/query/member/usePatchMember.ts';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import InputCell from '@/components/Cell/InputCell.tsx';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
@@ -18,9 +17,11 @@ import {
 } from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import Cell from '@/components/Cell/Cell.tsx';
-import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
-import { useGetSemesters } from '@/data/semester/hooks/useGetSemesters.ts';
-import { useInvalidateMembers } from '@/data/members/hooks/useInvalidateMembers.ts';
+import { useInvalidateMembers } from '@/hooks/query/member/useInvalidateMembers.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { semesterOptions } from '@/query/semester/options.ts';
+import { partOptions } from '@/query/part/options.ts';
+import { memberOptions } from '@/query/member/options.ts';
 
 interface MemberTableProps {
   state: MemberState;
@@ -45,9 +46,9 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
     await invalidateMembers();
   };
 
-  const { data } = useGetMembers(state, search);
-  const { data: partWithIds } = useGetParts();
-  const { data: semesters } = useGetSemesters();
+  const { data } = useSuspenseQuery(memberOptions(state, { search }));
+  const { data: partWithIds } = useSuspenseQuery(partOptions());
+  const { data: semesters } = useSuspenseQuery(semesterOptions());
 
   const columns = [
     columnHelper.accessor('parts', {

@@ -7,17 +7,18 @@ import {
   Applicant,
   ApplicantState,
   PatchApplicant,
-} from '@/data/applicants/schema.ts';
+} from '@/query/applicant/schema.ts';
 import Table from '@/components/Table/Table.tsx';
-import { useGetApplicants } from '@/data/applicants/hooks/useGetApplicants.ts';
 import Cell from '@/components/Cell/Cell.tsx';
 import { ApplicantStateButton } from '@/components/StateButton';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import InputCell from '@/components/Cell/InputCell.tsx';
-import { usePatchApplicant } from '@/data/applicants/hooks/usePatchApplicant.ts';
-import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
+import { usePatchApplicant } from '@/hooks/query/applicant/usePatchApplicant.ts';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
-import { useInvalidateApplicants } from '@/data/applicants/hooks/useInvalidateApplicants.ts';
+import { useInvalidateApplicants } from '@/hooks/query/applicant/useInvalidateApplicants.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { partOptions } from '@/query/part/options.ts';
+import { applicantOptions } from '@/query/applicant/options.ts';
 
 const columnHelper = createColumnHelper<Applicant>();
 
@@ -28,7 +29,9 @@ interface ApplicantTableProps {
 }
 
 const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
-  const { data } = useGetApplicants(state, semesterId, name);
+  const { data } = useSuspenseQuery(
+    applicantOptions({ state, semesterId, name }),
+  );
 
   const patchApplicantMutation = usePatchApplicant();
   const invalidateApplicants = useInvalidateApplicants();
@@ -45,7 +48,7 @@ const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
     await invalidateApplicants();
   };
 
-  const { data: partWithIds } = useGetParts();
+  const { data: partWithIds } = useSuspenseQuery(partOptions());
 
   const columns = [
     columnHelper.accessor('division', {

@@ -3,7 +3,7 @@ import { api } from '@/apis/api.ts';
 import {
   PatchApplicant,
   PatchApplicantSchema,
-} from '@/data/applicants/schema.ts';
+} from '@/query/applicant/schema.ts';
 
 interface PatchApplicantParams {
   applicantId: number;

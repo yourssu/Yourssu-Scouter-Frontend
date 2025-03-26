@@ -9,14 +9,15 @@ import {
 } from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.style.ts';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Suspense } from 'react';
-import { ApplicantState } from '@/data/applicants/schema.ts';
+import { ApplicantState } from '@/query/applicant/schema.ts';
 import ApplicantTable from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
-import { useGetSemesters } from '@/data/semester/hooks/useGetSemesters.ts';
 import { useSearchParams } from '@/hooks/useSearchParams.ts';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
-import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';
-import { useInvalidateApplicants } from '@/data/applicants/hooks/useInvalidateApplicants.ts';
+import { usePostApplicantsFromForms } from '@/hooks/query/applicant/usePostApplicantsFromForms.ts';
+import { useInvalidateApplicants } from '@/hooks/query/applicant/useInvalidateApplicants.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { semesterOptions } from '@/query/semester/options.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -29,7 +30,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
     },
   });
 
-  const { data: semesters } = useGetSemesters();
+  const { data: semesters } = useSuspenseQuery(semesterOptions());
 
   const [searchParams, setSearchParams] = useSearchParams();
 

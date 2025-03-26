@@ -5,7 +5,7 @@ import {
   MemberState,
   PatchMember,
   PatchMemberSchema,
-} from '@/data/members/schema.ts';
+} from '@/query/member/schema.ts';
 
 interface PatchMemberParams {
   memberId: number;
