@@ -1,1 +1,3 @@
-export const semestersQueryKey = ['semesters'] as const;
+export const semesterKeys = {
+  all: ['semesters'] as const,
+};

@@ -1,1 +1,3 @@
-export const departmentsQueryKey = ['departments'] as const;
+export const departmentKeys = {
+  all: ['departments'] as const,
+};

@@ -1,15 +1,17 @@
 import { ApplicantState } from '@/data/applicants/schema.ts';
 
-export const getApplicantsQueryKey = (
-  semesterId?: number,
-  state?: ApplicantState,
-  name?: string,
-) => {
-  const baseKey = 'applicants';
-  if (!semesterId) return [baseKey] as const;
-  if (!state) return [baseKey, semesterId] as const;
-  if (!name) return [baseKey, semesterId, state] as const;
-  return [baseKey, semesterId, state, name] as const;
+type ApplicantFilter = {
+  state?: ApplicantState;
+  semesterId?: number;
+  name?: string;
 };
 
-export const applicantStatesQueryKey = ['applicantStates'] as const;
+export const applicantKeys = {
+  all: ['applicants'] as const,
+  filter: (filters: ApplicantFilter) =>
+    [...applicantKeys.all, filters] as const,
+};
+
+export const applicantStateKeys = {
+  all: ['applicantStates'] as const,
+};
