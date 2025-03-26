@@ -1,1 +1,3 @@
-export const partsQueryKey = ['parts'] as const;
+export const partKeys = {
+  all: ['parts'] as const,
+};
