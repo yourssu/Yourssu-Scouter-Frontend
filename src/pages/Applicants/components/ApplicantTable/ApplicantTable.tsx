@@ -34,7 +34,11 @@ const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
   );
 
   const patchApplicantMutation = usePatchApplicant();
-  const invalidateApplicants = useInvalidateApplicants();
+  const invalidateApplicants = useInvalidateApplicants({
+    state,
+    name,
+    semesterId,
+  });
 
   const patchApplicant = async (
     applicantId: number,

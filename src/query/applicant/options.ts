@@ -5,7 +5,7 @@ import {
   ApplicantState,
 } from '@/query/applicant/schema.ts';
 
-type ApplicantQueryParams = {
+export type ApplicantQueryParams = {
   state: ApplicantState;
   semesterId: number;
   name: string;
