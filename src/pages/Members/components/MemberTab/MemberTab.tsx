@@ -11,8 +11,9 @@ import { MemberState } from '@/query/member/schema.ts';
 import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
-import { usePostMembersFromApplicants } from '@/hooks/query/member/usePostMembersFromApplicants.ts';
-import { useInvalidateMembers } from '@/hooks/query/member/useInvalidateMembers.ts';
+import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
+import { useMutation } from '@tanstack/react-query';
+import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
 
 interface MemberTabProps {
   state: MemberState;
@@ -25,12 +26,14 @@ const MemberTab = ({ state }: MemberTabProps) => {
     },
   });
 
-  const postMembersFromApplicantsMutation = usePostMembersFromApplicants();
   const invalidateMembers = useInvalidateMembers(state);
+  const postMembersFromApplicantsMutation = useMutation({
+    mutationFn: postMembersFromApplicants,
+    onSuccess: invalidateMembers,
+  });
 
-  const postMembersFromApplicants = async () => {
-    await postMembersFromApplicantsMutation.mutateAsync();
-    await invalidateMembers();
+  const handleClick = () => {
+    postMembersFromApplicantsMutation.mutate();
   };
 
   return (
@@ -48,7 +51,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
               leftIcon={<IcRetryRefreshLine />}
               variant="outlined"
               size="medium"
-              onClick={postMembersFromApplicants}
+              onClick={handleClick}
               disabled={postMembersFromApplicantsMutation.isPending}
             >
               업데이트

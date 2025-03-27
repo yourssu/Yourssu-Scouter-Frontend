@@ -26,9 +26,9 @@ import {
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
 import { Semester } from '@/query/semester/schema.ts';
 import { Part } from '@/query/part/schema.ts';
-import { usePostApplicantsFromForms } from '@/hooks/query/applicant/usePostApplicantsFromForms.ts';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { partOptions } from '@/query/part/options.ts';
+import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
 
 interface ApplicationDialogProps extends PropsWithChildren {
   semester: Semester;
@@ -38,7 +38,9 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
   const { data: parts } = useSuspenseQuery(partOptions());
   const options = parts.map((p) => ({ label: p.partName }));
   const [selectedParts, setSelectedParts] = useState<Part[]>([]);
-  const postApplicantsFromFormMutation = usePostApplicantsFromForms();
+  const postApplicantsFromFormMutation = useMutation({
+    mutationFn: postApplicantsFromForms,
+  });
 
   const selectPart = (partName: string) => {
     if (selectedParts.some((p) => p.partName === partName)) return;
