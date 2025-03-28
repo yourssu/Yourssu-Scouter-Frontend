@@ -1,5 +1,6 @@
 import { StateButton } from './StateButton';
-import { useGetApplicantStates } from '@/data/applicants/hooks/useGetApplicantStates.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { applicantStateOptions } from '@/query/applicant/applicantState/options.ts';
 
 export const ApplicantStateButton = ({
   selectedValue,
@@ -8,7 +9,7 @@ export const ApplicantStateButton = ({
   selectedValue: string;
   onStateChange: (value: string) => void;
 }) => {
-  const { data: states } = useGetApplicantStates();
+  const { data: states } = useSuspenseQuery(applicantStateOptions());
   const options = states.map((state) => ({ label: state }));
 
   return (

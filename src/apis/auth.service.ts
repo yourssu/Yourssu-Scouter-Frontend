@@ -7,7 +7,7 @@ export const authService = {
   googleLogin: async (code: string): Promise<GoogleLoginResponse> => {
     try {
       const response = await api
-        .post(API_CONFIG.GOOGLE_OAUTH_LOGIN_URI, {
+        .post('oauth2/login/google', {
           json: { authorizationCode: code },
           throwHttpErrors: false,
         })
@@ -26,7 +26,7 @@ export const authService = {
   },
 
   initiateGoogleLogin: () => {
-    const redirectUrl = `${API_CONFIG.BASE_URL}/${API_CONFIG.GOOGLE_OAUTH_URI}?redirect_uri=${API_CONFIG.GOOGLE_REDIRECT_URI}`;
+    const redirectUrl = `${API_CONFIG.BASE_URL}/oauth2/google?redirect_uri=${API_CONFIG.GOOGLE_REDIRECT_URI}`;
     window.location.href = redirectUrl;
   },
 

@@ -4,16 +4,17 @@ import {
   StyledTitle,
 } from '@/styles/pages/table.ts';
 import { useTabs } from '@yourssu/design-system-react';
-import { MemberState } from '@/data/members/schema.ts';
-import { useGetMemberStates } from '@/data/members/hooks/useGetMemberStates.ts';
+import { MemberState } from '@/query/member/schema.ts';
 import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { memberStateOptions } from '@/query/member/memberState/options.ts';
 
 export const Members = () => {
   const [Tabs] = useTabs<MemberState>({
     defaultTab: '액티브',
     scrollable: true,
   });
-  const { data: memberStates } = useGetMemberStates();
+  const { data: memberStates } = useSuspenseQuery(memberStateOptions());
 
   return (
     <StyledContainer>
