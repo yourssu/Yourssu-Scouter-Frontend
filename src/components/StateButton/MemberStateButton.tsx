@@ -1,5 +1,6 @@
 import { StateButton } from './StateButton';
-import { useGetMemberStates } from '@/data/members/hooks/useGetMemberStates.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { memberStateOptions } from '@/query/member/memberState/options.ts';
 
 export const MemberStateButton = ({
   selectedValue,
@@ -8,7 +9,7 @@ export const MemberStateButton = ({
   selectedValue: string;
   onStateChange: (value: string) => void;
 }) => {
-  const { data: states } = useGetMemberStates();
+  const { data: states } = useSuspenseQuery(memberStateOptions());
   const options = states.map((state) => ({ label: state }));
 
   return (
