@@ -5,17 +5,18 @@ import {
   StyledGroup,
   StyledItem,
 } from '@/components/DepartmentSearchDialog/DepartmentSearchDialog.style.ts';
-import { useGetDepartments } from '@/data/department/hooks/useGetDepartments.ts';
 import { SearchBar } from '@yourssu/design-system-react';
 import { useForm } from 'react-hook-form';
 import { useMemo } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { departmentOptions } from '@/query/department/options.ts';
 
 interface DepartmentSearchDialogProps {
   onSelect: (value: number) => void;
 }
 
 const DepartmentSearchDialog = ({ onSelect }: DepartmentSearchDialogProps) => {
-  const { data: departments } = useGetDepartments();
+  const { data: departments } = useSuspenseQuery(departmentOptions());
   const { register, watch } = useForm({
     defaultValues: {
       department: '',

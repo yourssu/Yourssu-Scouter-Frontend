@@ -9,14 +9,15 @@ import {
 } from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.style.ts';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Suspense } from 'react';
-import { ApplicantState } from '@/data/applicants/schema.ts';
+import { ApplicantState } from '@/query/applicant/schema.ts';
 import ApplicantTable from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
-import { useGetSemesters } from '@/data/semester/hooks/useGetSemesters.ts';
 import { useSearchParams } from '@/hooks/useSearchParams.ts';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
-import { usePostApplicantsFromForms } from '@/data/applicants/hooks/usePostApplicantsFromForms.ts';
-import { useInvalidateApplicants } from '@/data/applicants/hooks/useInvalidateApplicants.ts';
+import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { semesterOptions } from '@/query/semester/options.ts';
+import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -29,7 +30,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
     },
   });
 
-  const { data: semesters } = useGetSemesters();
+  const { data: semesters } = useSuspenseQuery(semesterOptions());
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -44,11 +45,13 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
   };
 
   const invalidateApplicants = useInvalidateApplicants();
-  const postApplicantsFromFormMutation = usePostApplicantsFromForms();
+  const postApplicantsFromFormMutation = useMutation({
+    mutationFn: postApplicantsFromForms,
+    onSuccess: invalidateApplicants,
+  });
 
-  const postApplicantsFromForms = async () => {
-    await postApplicantsFromFormMutation.mutateAsync();
-    await invalidateApplicants();
+  const handleClick = () => {
+    postApplicantsFromFormMutation.mutate();
   };
 
   return (
@@ -78,7 +81,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
               leftIcon={<IcRetryRefreshLine />}
               variant="outlined"
               size="medium"
-              onClick={postApplicantsFromForms}
+              onClick={handleClick}
             >
               지원자 정보 불러오기
             </BoxButton>
