@@ -9,5 +9,6 @@ export const departmentOptions = () => {
       const data = await api.get('departments').json();
       return DepartmentArraySchema.parse(data);
     },
+    staleTime: Infinity,
   });
 };

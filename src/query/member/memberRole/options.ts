@@ -9,5 +9,6 @@ export const memberRoleOptions = () => {
       const data = await api.get('members/roles').json();
       return MemberRoleArraySchema.parse(data);
     },
+    staleTime: Infinity,
   });
 };

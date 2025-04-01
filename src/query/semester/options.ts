@@ -9,5 +9,6 @@ export const semesterOptions = () => {
       const data = await api.get('semesters').json();
       return SemesterArraySchema.parse(data);
     },
+    staleTime: Infinity,
   });
 };

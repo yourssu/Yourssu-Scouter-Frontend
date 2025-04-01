@@ -18,6 +18,7 @@ import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateAp
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { semesterOptions } from '@/query/semester/options.ts';
 import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
+import ApplicantTableFallback from '@/pages/Applicants/components/ApplicantTableFallback/ApplicantTableFallback.tsx';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -88,7 +89,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
           </StyledLastUpdate>
         </StyledTopContainer>
         <ScouterErrorBoundary>
-          <Suspense>
+          <Suspense fallback={<ApplicantTableFallback />}>
             <ApplicantTable
               state={state}
               semesterId={semesterId}
