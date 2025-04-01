@@ -5,16 +5,8 @@ import { Route, Routes } from 'react-router';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Applicants } from '@/pages/Applicants/Applicants.tsx';
 import { Suspense } from 'react';
-import { usePrefetchQuery } from '@tanstack/react-query';
-import { semesterOptions } from '@/query/semester/options.ts';
-import { partOptions } from '@/query/part/options.ts';
-import { departmentOptions } from '@/query/department/options.ts';
 
 function App() {
-  usePrefetchQuery(semesterOptions());
-  usePrefetchQuery(partOptions());
-  usePrefetchQuery(departmentOptions());
-
   return (
     <ScouterErrorBoundary>
       <Suspense>
