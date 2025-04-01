@@ -12,9 +12,10 @@ import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
 import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, usePrefetchQuery } from '@tanstack/react-query';
 import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
 import MemberTableFallback from '@/pages/Members/components/MemberTableFallback/MemberTableFallback.tsx';
+import { memberRoleOptions } from '@/query/member/memberRole/options.ts';
 
 interface MemberTabProps {
   state: MemberState;
@@ -36,6 +37,8 @@ const MemberTab = ({ state }: MemberTabProps) => {
   const handleClick = () => {
     postMembersFromApplicantsMutation.mutate();
   };
+
+  usePrefetchQuery(memberRoleOptions());
 
   return (
     <FormProvider {...methods}>
