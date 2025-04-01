@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.64.2",
+    "@tanstack/react-query-devtools": "^5.71.1",
     "@tanstack/react-table": "^8.20.6",
     "@yourssu/design-system-react": "^2.3.4",
     "ky": "^1.7.4",
