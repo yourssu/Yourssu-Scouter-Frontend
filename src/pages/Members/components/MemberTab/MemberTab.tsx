@@ -14,6 +14,7 @@ import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
 import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
 import { useMutation } from '@tanstack/react-query';
 import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
+import MemberTableFallback from '@/pages/Members/components/MemberTableFallback/MemberTableFallback.tsx';
 
 interface MemberTabProps {
   state: MemberState;
@@ -59,7 +60,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
           </StyledLastUpdate>
         </StyledTopContainer>
         <ScouterErrorBoundary>
-          <Suspense>
+          <Suspense fallback={<MemberTableFallback state={state} />}>
             <MemberTable state={state} search={methods.watch('search')} />
           </Suspense>
         </ScouterErrorBoundary>
