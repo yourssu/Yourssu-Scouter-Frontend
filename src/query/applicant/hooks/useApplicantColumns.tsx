@@ -11,12 +11,14 @@ import { useMemo } from 'react';
 
 const columnHelper = createColumnHelper<Applicant>();
 
+export type PatchApplicantHandler = (
+  applicantId: number,
+  field: keyof PatchApplicant,
+  value: unknown,
+) => void;
+
 export const useApplicantColumns = (
-  handleClick?: (
-    applicantId: number,
-    field: keyof PatchApplicant,
-    value: unknown,
-  ) => void,
+  handlePatchApplicant?: PatchApplicantHandler,
 ) => {
   const { data: partWithIds } = useSuspenseQuery(partOptions());
 
@@ -37,8 +39,12 @@ export const useApplicantColumns = (
               const partId = partWithIds.find(
                 (p) => p.partName === value,
               )?.partId;
-              if (partId && handleClick)
-                handleClick(info.row.original.applicantId, 'partId', partId);
+              if (partId && handlePatchApplicant)
+                handlePatchApplicant(
+                  info.row.original.applicantId,
+                  'partId',
+                  partId,
+                );
             }}
           >
             {info.getValue()}
@@ -53,8 +59,12 @@ export const useApplicantColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.applicantId, 'name', value);
+              if (handlePatchApplicant)
+                handlePatchApplicant(
+                  info.row.original.applicantId,
+                  'name',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -69,8 +79,12 @@ export const useApplicantColumns = (
             <ApplicantStateButton
               selectedValue={info.getValue()}
               onStateChange={(state) => {
-                if (handleClick)
-                  handleClick(info.row.original.applicantId, 'state', state);
+                if (handlePatchApplicant)
+                  handlePatchApplicant(
+                    info.row.original.applicantId,
+                    'state',
+                    state,
+                  );
               }}
             />
           </Cell>
@@ -84,8 +98,8 @@ export const useApplicantColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(
+              if (handlePatchApplicant)
+                handlePatchApplicant(
                   info.row.original.applicantId,
                   'applicationDate',
                   value,
@@ -104,8 +118,12 @@ export const useApplicantColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.applicantId, 'email', value);
+              if (handlePatchApplicant)
+                handlePatchApplicant(
+                  info.row.original.applicantId,
+                  'email',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -120,8 +138,8 @@ export const useApplicantColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(
+              if (handlePatchApplicant)
+                handlePatchApplicant(
                   info.row.original.applicantId,
                   'phoneNumber',
                   value,
@@ -139,8 +157,8 @@ export const useApplicantColumns = (
           <DepartmentCell
             tooltipContent={`${info.row.original.name} 정보 수정`}
             onSelect={(value) => {
-              if (handleClick)
-                handleClick(
+              if (handlePatchApplicant)
+                handlePatchApplicant(
                   info.row.original.applicantId,
                   'departmentId',
                   value,
@@ -159,8 +177,12 @@ export const useApplicantColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.applicantId, 'studentId', value);
+              if (handlePatchApplicant)
+                handlePatchApplicant(
+                  info.row.original.applicantId,
+                  'studentId',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -175,8 +197,8 @@ export const useApplicantColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(
+              if (handlePatchApplicant)
+                handlePatchApplicant(
                   info.row.original.applicantId,
                   'academicSemester',
                   value,
@@ -195,8 +217,12 @@ export const useApplicantColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.applicantId, 'age', value);
+              if (handlePatchApplicant)
+                handlePatchApplicant(
+                  info.row.original.applicantId,
+                  'age',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -204,6 +230,6 @@ export const useApplicantColumns = (
         ),
       }),
     ],
-    [handleClick, partWithIds],
+    [handlePatchApplicant, partWithIds],
   );
 };

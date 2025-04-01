@@ -18,7 +18,7 @@ import { useMemo } from 'react';
 
 const columnHelper = createColumnHelper<Member>();
 
-type PatchMemberHandler = (
+export type PatchMemberHandler = (
   memberId: number,
   field: keyof PatchMember,
   value: unknown,
@@ -26,7 +26,7 @@ type PatchMemberHandler = (
 
 export const useMemberColumns = (
   state: MemberState,
-  handleClick?: PatchMemberHandler,
+  handlePatchMember?: PatchMemberHandler,
 ) => {
   const [{ data: partWithIds }, { data: semesters }] = useSuspenseQueries({
     queries: [partOptions(), semesterOptions()],
@@ -60,8 +60,8 @@ export const useMemberColumns = (
               tooltipContent={`${info.row.original.name} 정보 수정`}
               onSelect={(value) => {
                 const included = parts.some((p) => p.part === value);
-                if (handleClick)
-                  handleClick(
+                if (handlePatchMember)
+                  handlePatchMember(
                     info.row.original.memberId,
                     'partIds',
                     partWithIds
@@ -96,8 +96,12 @@ export const useMemberColumns = (
               <RoleStateButton
                 selectedValue={info.getValue()}
                 onStateChange={(state) => {
-                  if (handleClick)
-                    handleClick(info.row.original.memberId, 'role', state);
+                  if (handlePatchMember)
+                    handlePatchMember(
+                      info.row.original.memberId,
+                      'role',
+                      state,
+                    );
                 }}
               />
             </Cell>
@@ -112,8 +116,8 @@ export const useMemberColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'name', value);
+              if (handlePatchMember)
+                handlePatchMember(info.row.original.memberId, 'name', value);
             }}
           >
             {info.getValue()}
@@ -129,8 +133,12 @@ export const useMemberColumns = (
             bold={true}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'nickname', value);
+              if (handlePatchMember)
+                handlePatchMember(
+                  info.row.original.memberId,
+                  'nickname',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -145,8 +153,8 @@ export const useMemberColumns = (
             <MemberStateButton
               selectedValue={info.getValue()}
               onStateChange={(value) => {
-                if (handleClick)
-                  handleClick(info.row.original.memberId, 'state', value);
+                if (handlePatchMember)
+                  handlePatchMember(info.row.original.memberId, 'state', value);
               }}
             />
           </Cell>
@@ -160,8 +168,8 @@ export const useMemberColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'email', value);
+              if (handlePatchMember)
+                handlePatchMember(info.row.original.memberId, 'email', value);
             }}
           >
             {info.getValue()}
@@ -176,8 +184,12 @@ export const useMemberColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'phoneNumber', value);
+              if (handlePatchMember)
+                handlePatchMember(
+                  info.row.original.memberId,
+                  'phoneNumber',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -191,8 +203,12 @@ export const useMemberColumns = (
           <DepartmentCell
             tooltipContent={`${info.row.original.name} 정보 수정`}
             onSelect={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'departmentId', value);
+              if (handlePatchMember)
+                handlePatchMember(
+                  info.row.original.memberId,
+                  'departmentId',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -207,8 +223,12 @@ export const useMemberColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'studentId', value);
+              if (handlePatchMember)
+                handlePatchMember(
+                  info.row.original.memberId,
+                  'studentId',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -223,8 +243,12 @@ export const useMemberColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'birthDate', value);
+              if (handlePatchMember)
+                handlePatchMember(
+                  info.row.original.memberId,
+                  'birthDate',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -239,8 +263,12 @@ export const useMemberColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'joinDate', value);
+              if (handlePatchMember)
+                handlePatchMember(
+                  info.row.original.memberId,
+                  'joinDate',
+                  value,
+                );
             }}
           >
             {info.getValue()}
@@ -276,8 +304,8 @@ export const useMemberColumns = (
                     <Checkbox
                       size="large"
                       onChange={(e) => {
-                        if (handleClick)
-                          handleClick(
+                        if (handlePatchMember)
+                          handlePatchMember(
                             info.row.original.memberId,
                             'membershipFee',
                             e.currentTarget.checked,
@@ -345,8 +373,8 @@ export const useMemberColumns = (
                           const semesterId = semesters.find(
                             (s) => s.semester === value,
                           )?.semesterId;
-                          if (semesterId && handleClick)
-                            handleClick(
+                          if (semesterId && handlePatchMember)
+                            handlePatchMember(
                               member.memberId,
                               'expectedReturnSemesterId',
                               semesterId,
@@ -419,8 +447,8 @@ export const useMemberColumns = (
                     <Checkbox
                       size="large"
                       onChange={(e) => {
-                        if (handleClick)
-                          handleClick(
+                        if (handlePatchMember)
+                          handlePatchMember(
                             info.row.original.memberId,
                             'isAdvisorDesired',
                             e.currentTarget.checked,
@@ -444,8 +472,8 @@ export const useMemberColumns = (
             tooltipContent={`${info.row.original.name} 정보 수정`}
             defaultValue={info.getValue()}
             handleSubmit={(value) => {
-              if (handleClick)
-                handleClick(info.row.original.memberId, 'note', value);
+              if (handlePatchMember)
+                handlePatchMember(info.row.original.memberId, 'note', value);
             }}
           >
             {info.getValue()}
@@ -454,6 +482,6 @@ export const useMemberColumns = (
         size: 216,
       }),
     ],
-    [handleClick, partWithIds, semesters, state],
+    [handlePatchMember, partWithIds, semesters, state],
   );
 };
