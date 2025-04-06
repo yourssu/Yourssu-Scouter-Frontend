@@ -9,7 +9,6 @@ import {
   PatchApplicantHandler,
   useApplicantColumns,
 } from '@/query/applicant/hooks/useApplicantColumns.tsx';
-import { useCallback } from 'react';
 
 interface ApplicantTableProps {
   state: ApplicantState;
@@ -33,15 +32,15 @@ const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
     onSuccess: invalidateApplicants,
   });
 
-  const handlePatchApplicant: PatchApplicantHandler = useCallback(
-    (applicantId, field, value) => {
-      patchApplicantMutate({
-        applicantId,
-        params: { [field]: value },
-      });
-    },
-    [patchApplicantMutate],
-  );
+  const handlePatchApplicant: PatchApplicantHandler = (
+    applicantId,
+    field,
+    value,
+  ) =>
+    patchApplicantMutate({
+      applicantId,
+      params: { [field]: value },
+    });
 
   const columns = useApplicantColumns(handlePatchApplicant);
 

@@ -9,7 +9,6 @@ import {
   PatchMemberHandler,
   useMemberColumns,
 } from '@/query/member/hooks/useMemberColumns.tsx';
-import { useCallback } from 'react';
 
 interface MemberTableProps {
   state: MemberState;
@@ -25,15 +24,12 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
 
   const { data } = useSuspenseQuery(memberOptions(state, { search }));
 
-  const handlePatchMember: PatchMemberHandler = useCallback(
-    (memberId, field, value) =>
-      patchMemberMutate({
-        memberId,
-        params: { [field]: value },
-        state,
-      }),
-    [patchMemberMutate, state],
-  );
+  const handlePatchMember: PatchMemberHandler = (memberId, field, value) =>
+    patchMemberMutate({
+      memberId,
+      params: { [field]: value },
+      state,
+    });
 
   const columns = useMemberColumns(state, handlePatchMember);
 
