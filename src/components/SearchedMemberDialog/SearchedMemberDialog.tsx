@@ -12,7 +12,7 @@ import {
 } from './SearchedMemberDialog.style';
 
 interface SearchedMemberDialogProps {
-  onSelect: (memberId: number, nickname: string) => void;
+  onSelect: (nickname: string) => void;
   trigger: React.ReactNode;
 }
 
@@ -44,8 +44,8 @@ export const SearchedMemberDialog = ({
     return () => clearTimeout(timer);
   }, [searchText]);
 
-  const handleSelectMember = (memberId: number, nickname: string) => {
-    onSelect(memberId, nickname);
+  const handleSelectMember = (nickname: string) => {
+    onSelect(nickname);
     setOpen(false);
     reset({ searchText: '' });
   };
@@ -69,9 +69,7 @@ export const SearchedMemberDialog = ({
               {members.map((member) => (
                 <StyledItem key={member.memberId}>
                   <StyledButton
-                    onClick={() =>
-                      handleSelectMember(member.memberId, member.nickname)
-                    }
+                    onClick={() => handleSelectMember(member.nickname)}
                     size="medium"
                     variant="textSecondary"
                   >
