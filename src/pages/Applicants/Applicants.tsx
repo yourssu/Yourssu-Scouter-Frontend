@@ -10,7 +10,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { applicantStateOptions } from '@/query/applicant/applicantState/options.ts';
 
 export const Applicants = () => {
-  const Tabs = useTabs<ApplicantState>({
+  const [Tabs] = useTabs<ApplicantState>({
     defaultTab: '심사 진행 중',
     scrollable: true,
   });
