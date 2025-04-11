@@ -6,7 +6,11 @@ import {
 import { ApplicantState } from '@/query/applicant/schema.ts';
 import Table from '@/components/Table/Table.tsx';
 import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { applicantOptions } from '@/query/applicant/options.ts';
 import { patchApplicant } from '@/query/applicant/mutations/patchApplicant.ts';
 import {
@@ -42,10 +46,22 @@ const ApplicantTable = ({
     partId,
   });
 
+  const queryClient = useQueryClient();
+
   const { mutate: patchApplicantMutate } = useMutation({
     mutationFn: patchApplicant,
-    onSuccess: async (_, { applicantId }) => {
+    onSuccess: async (_, { applicantId, params }) => {
       await invalidateApplicants();
+
+      if (params.state)
+        await queryClient.prefetchQuery(
+          applicantOptions({
+            state: params.state,
+            semesterId,
+            name: '',
+            partId: null,
+          }),
+        );
 
       const applicant = data.find((d) => d.applicantId === applicantId);
 

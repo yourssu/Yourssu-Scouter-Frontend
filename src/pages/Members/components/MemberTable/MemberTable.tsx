@@ -6,7 +6,11 @@ import {
 } from '@tanstack/react-table';
 import Table from '@/components/Table/Table.tsx';
 import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { memberOptions } from '@/query/member/options.ts';
 import { patchMember } from '@/query/member/mutations/patchMember.ts';
 import { Pagination, useSnackbar } from '@yourssu/design-system-react';
@@ -26,10 +30,17 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
   const invalidateMembers = useInvalidateMembers(state);
   const { snackbar } = useSnackbar();
 
+  const queryClient = useQueryClient();
+
   const { mutate: patchMemberMutate } = useMutation({
     mutationFn: patchMember,
-    onSuccess: async (_, { memberId }) => {
+    onSuccess: async (_, { memberId, params }) => {
       await invalidateMembers();
+
+      if (params.state)
+        await queryClient.prefetchQuery(
+          memberOptions(params.state, { partId: null, search: '' }),
+        );
 
       const member = data.find((d) => d.memberId === memberId);
 

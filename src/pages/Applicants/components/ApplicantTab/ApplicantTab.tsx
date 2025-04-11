@@ -13,7 +13,11 @@ import { ApplicantState } from '@/query/applicant/schema.ts';
 import ApplicantTable from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import { useSearchParams } from '@/hooks/useSearchParams.ts';
-import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
+import {
+  BoxButton,
+  IcRetryRefreshLine,
+  useSnackbar,
+} from '@yourssu/design-system-react';
 import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { semesterOptions } from '@/query/semester/options.ts';
@@ -59,10 +63,21 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
     if (semesterId) setSearchParams({ semesterId });
   };
 
+  const { snackbar } = useSnackbar();
+
   const invalidateApplicants = useInvalidateApplicants();
   const postApplicantsFromFormMutation = useMutation({
     mutationFn: postApplicantsFromForms,
     onSuccess: invalidateApplicants,
+    onError: () => {
+      snackbar({
+        type: 'error',
+        width: '400px',
+        message: '에러가 발생했습니다.',
+        duration: 3000,
+        position: 'center',
+      });
+    },
   });
 
   const handleClick = () => {
@@ -110,6 +125,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
               variant="outlined"
               size="medium"
               onClick={handleClick}
+              disabled={postApplicantsFromFormMutation.isPending}
             >
               지원자 정보 불러오기
             </BoxButton>

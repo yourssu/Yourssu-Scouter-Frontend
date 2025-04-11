@@ -11,7 +11,11 @@ import MemberTable from '@/pages/Members/components/MemberTable/MemberTable.tsx'
 import { MemberState } from '@/query/member/schema.ts';
 import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
-import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
+import {
+  BoxButton,
+  IcRetryRefreshLine,
+  useSnackbar,
+} from '@yourssu/design-system-react';
 import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
 import {
   useMutation,
@@ -36,10 +40,21 @@ const MemberTab = ({ state }: MemberTabProps) => {
     },
   });
 
+  const { snackbar } = useSnackbar();
+
   const invalidateMembers = useInvalidateMembers(state);
   const postMembersFromApplicantsMutation = useMutation({
     mutationFn: postMembersFromApplicants,
     onSuccess: invalidateMembers,
+    onError: () => {
+      snackbar({
+        type: 'error',
+        width: '400px',
+        message: '에러가 발생했습니다.',
+        duration: 3000,
+        position: 'center',
+      });
+    },
   });
 
   const handleClick = () => {

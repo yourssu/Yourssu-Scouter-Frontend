@@ -16,7 +16,7 @@ export const ApplicantSchema = z.object({
   division: DivisionSchema,
   part: z.string(),
   name: z.string(),
-  state: z.string(),
+  state: ApplicantStateSchema,
   applicationDate: DateSchema,
   email: EmailSchema,
   phoneNumber: PhoneNumberSchema,
