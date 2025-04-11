@@ -9,3 +9,7 @@ export const InactivePeriod = styled(BoxButton)`
   pointer-events: none;
   color: ${({ theme }) => theme.semantic.color.textBasicTertiary} !important;
 `;
+
+export const StyledPaginationWrapper = styled.div`
+  margin-top: 16px;
+`;

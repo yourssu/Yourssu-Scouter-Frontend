@@ -1,4 +1,8 @@
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { ApplicantState } from '@/query/applicant/schema.ts';
 import Table from '@/components/Table/Table.tsx';
 import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
@@ -9,7 +13,8 @@ import {
   PatchApplicantHandler,
   useApplicantColumns,
 } from '@/query/applicant/hooks/useApplicantColumns.tsx';
-import { useSnackbar } from '@yourssu/design-system-react';
+import { Pagination, useSnackbar } from '@yourssu/design-system-react';
+import { StyledPaginationWrapper } from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.style.ts';
 
 interface ApplicantTableProps {
   state: ApplicantState;
@@ -82,13 +87,34 @@ const ApplicantTable = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
     enableColumnResizing: true,
+    getPaginationRowModel: getPaginationRowModel(),
+    manualFiltering: true,
+    initialState: {
+      pagination: {
+        pageIndex: 0, //custom initial page index
+        pageSize: 10, //custom default page size
+      },
+    },
   });
 
+  const onPageChange = (page: number) => {
+    table.setPageIndex(page - 1);
+  };
+
+  const totalPage = table.getPageCount();
+
   return (
-    <Table>
-      <Table.Header headerGroups={table.getHeaderGroups()} />
-      <Table.Body rows={table.getRowModel().rows} />
-    </Table>
+    <>
+      <Table>
+        <Table.Header headerGroups={table.getHeaderGroups()} />
+        <Table.Body rows={table.getRowModel().rows} />
+      </Table>
+      {totalPage >= 2 && (
+        <StyledPaginationWrapper>
+          <Pagination totalPage={totalPage} onPageChange={onPageChange} />
+        </StyledPaginationWrapper>
+      )}
+    </>
   );
 };
 

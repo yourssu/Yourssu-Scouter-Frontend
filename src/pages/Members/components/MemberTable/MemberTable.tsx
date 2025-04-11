@@ -1,15 +1,20 @@
 import { MemberState } from '@/query/member/schema.ts';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import Table from '@/components/Table/Table.tsx';
 import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { memberOptions } from '@/query/member/options.ts';
 import { patchMember } from '@/query/member/mutations/patchMember.ts';
-import { useSnackbar } from '@yourssu/design-system-react';
+import { Pagination, useSnackbar } from '@yourssu/design-system-react';
 import {
   PatchMemberHandler,
   useMemberColumns,
 } from '@/query/member/hooks/useMemberColumns.tsx';
+import { StyledPaginationWrapper } from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
 
 interface MemberTableProps {
   state: MemberState;
@@ -64,15 +69,35 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     enableColumnResizing: true,
     manualFiltering: true,
+    initialState: {
+      pagination: {
+        pageIndex: 0, //custom initial page index
+        pageSize: 10, //custom default page size
+      },
+    },
   });
 
+  const onPageChange = (page: number) => {
+    table.setPageIndex(page - 1);
+  };
+
+  const totalPage = table.getPageCount();
+
   return (
-    <Table>
-      <Table.Header headerGroups={table.getHeaderGroups()} />
-      <Table.Body rows={table.getRowModel().rows} />
-    </Table>
+    <>
+      <Table>
+        <Table.Header headerGroups={table.getHeaderGroups()} />
+        <Table.Body rows={table.getRowModel().rows} />
+      </Table>
+      {totalPage >= 2 && (
+        <StyledPaginationWrapper>
+          <Pagination totalPage={totalPage} onPageChange={onPageChange} />
+        </StyledPaginationWrapper>
+      )}
+    </>
   );
 };
 
