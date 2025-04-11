@@ -46,8 +46,10 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
   );
 
   useEffect(() => {
-    setSemesterId(semesterNow.semesterId);
-  }, [semesterNow]);
+    setSemesterId(
+      Number(searchParams.get('semesterId') ?? semesterNow.semesterId),
+    );
+  }, [searchParams, semesterNow]);
 
   const onSemesterChange = (semester: string) => {
     const semesterId = semesters
