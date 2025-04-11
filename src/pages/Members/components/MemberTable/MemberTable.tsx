@@ -14,7 +14,7 @@ import {
 interface MemberTableProps {
   state: MemberState;
   search: string;
-  partId: number;
+  partId: number | null;
 }
 
 const MemberTable = ({ state, search, partId }: MemberTableProps) => {

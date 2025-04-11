@@ -14,7 +14,7 @@ import { useSnackbar } from '@yourssu/design-system-react';
 interface ApplicantTableProps {
   state: ApplicantState;
   semesterId: number;
-  partId: number;
+  partId: number | null;
   name: string;
 }
 

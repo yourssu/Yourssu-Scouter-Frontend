@@ -5,7 +5,7 @@ import { MemberArraySchema, MemberState } from '@/query/member/schema.ts';
 
 type MemberQueryParams = {
   search: string;
-  partId: number;
+  partId: number | null;
 };
 
 export const memberOptions = (
@@ -18,7 +18,12 @@ export const memberOptions = (
     queryKey: params ? [...baseKey, params] : baseKey,
     queryFn: async () => {
       const res = await api.get(`members/${MEMBER_URI[state]}`, {
-        searchParams: params,
+        searchParams: params && {
+          search: params.search,
+          ...(params.partId && {
+            partId: params.partId,
+          }),
+        },
       });
       const data = await res.json();
       return MemberArraySchema.parse(data);

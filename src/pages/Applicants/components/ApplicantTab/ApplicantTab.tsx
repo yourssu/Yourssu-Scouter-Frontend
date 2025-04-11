@@ -21,7 +21,7 @@ import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplica
 import ApplicantTableFallback from '@/pages/Applicants/components/ApplicantTableFallback/ApplicantTableFallback.tsx';
 import { semesterNowOptions } from '@/query/semester/now/options.ts';
 import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
-import { partOptions } from '@/query/part/options.ts';
+import { usePartFilter } from '@/hooks/usePartFilter.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -37,10 +37,6 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
   const { data: semesters } = useSuspenseQuery(semesterOptions());
 
   const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
-
-  const { data: parts } = useSuspenseQuery(partOptions());
-
-  const [partId, setPartId] = useState(1);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -60,11 +56,6 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
     if (semesterId) setSearchParams({ semesterId });
   };
 
-  const onPartChange = (partName: string) => {
-    const partId = parts.find((p) => p.partName === partName)?.partId;
-    if (partId) setPartId(partId);
-  };
-
   const invalidateApplicants = useInvalidateApplicants();
   const postApplicantsFromFormMutation = useMutation({
     mutationFn: postApplicantsFromForms,
@@ -74,6 +65,8 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
   const handleClick = () => {
     postApplicantsFromFormMutation.mutate();
   };
+
+  const { partId, partName, onPartChange } = usePartFilter();
 
   return (
     <FormProvider {...methods}>
@@ -93,9 +86,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
             </div>
             <div>
               <PartStateButton
-                selectedValue={
-                  parts.find((p) => p.partId === partId)?.partName || ''
-                }
+                selectedValue={partName}
                 onStateChange={onPartChange}
               />
             </div>
