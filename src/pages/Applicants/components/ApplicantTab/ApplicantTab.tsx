@@ -20,6 +20,8 @@ import { semesterOptions } from '@/query/semester/options.ts';
 import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
 import ApplicantTableFallback from '@/pages/Applicants/components/ApplicantTableFallback/ApplicantTableFallback.tsx';
 import { semesterNowOptions } from '@/query/semester/now/options.ts';
+import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
+import { partOptions } from '@/query/part/options.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -35,6 +37,10 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
   const { data: semesters } = useSuspenseQuery(semesterOptions());
 
   const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
+
+  const { data: parts } = useSuspenseQuery(partOptions());
+
+  const [partId, setPartId] = useState(1);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -52,6 +58,11 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
       ?.semesterId.toString();
 
     if (semesterId) setSearchParams({ semesterId });
+  };
+
+  const onPartChange = (partName: string) => {
+    const partId = parts.find((p) => p.partName === partName)?.partId;
+    if (partId) setPartId(partId);
   };
 
   const invalidateApplicants = useInvalidateApplicants();
@@ -80,6 +91,14 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
                 onStateChange={onSemesterChange}
               />
             </div>
+            <div>
+              <PartStateButton
+                selectedValue={
+                  parts.find((p) => p.partId === partId)?.partName || ''
+                }
+                onStateChange={onPartChange}
+              />
+            </div>
           </StyledTopLeftContainer>
           <StyledLastUpdate>
             <StyledLastUpdateTime>
@@ -100,6 +119,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
         <ScouterErrorBoundary>
           <Suspense fallback={<ApplicantTableFallback />}>
             <ApplicantTable
+              partId={partId}
               state={state}
               semesterId={semesterId}
               name={methods.watch('search')}

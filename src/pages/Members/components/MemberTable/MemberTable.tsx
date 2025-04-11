@@ -64,6 +64,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     enableColumnResizing: true,
+    manualFiltering: true,
   });
 
   return (

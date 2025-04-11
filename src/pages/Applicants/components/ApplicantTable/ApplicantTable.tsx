@@ -14,12 +14,18 @@ import { useSnackbar } from '@yourssu/design-system-react';
 interface ApplicantTableProps {
   state: ApplicantState;
   semesterId: number;
+  partId: number;
   name: string;
 }
 
-const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
+const ApplicantTable = ({
+  state,
+  semesterId,
+  name,
+  partId,
+}: ApplicantTableProps) => {
   const { data } = useSuspenseQuery(
-    applicantOptions({ state, semesterId, name }),
+    applicantOptions({ state, semesterId, name, partId }),
   );
 
   const { snackbar } = useSnackbar();
@@ -28,6 +34,7 @@ const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
     state,
     name,
     semesterId,
+    partId,
   });
 
   const { mutate: patchApplicantMutate } = useMutation({

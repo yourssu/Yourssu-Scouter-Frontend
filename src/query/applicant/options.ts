@@ -9,6 +9,7 @@ export type ApplicantQueryParams = {
   state: ApplicantState;
   semesterId: number;
   name: string;
+  partId: number;
 };
 
 export const applicantOptions = (params?: ApplicantQueryParams) => {

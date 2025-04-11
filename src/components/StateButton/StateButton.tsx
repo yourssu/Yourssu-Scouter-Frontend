@@ -14,7 +14,8 @@ interface StateButtonProps {
   onSelect: (value: string) => void;
   variant?: 'filledPrimary' | 'filledSecondary' | 'outlined';
   size?: 'small' | 'medium';
-  icon?: ReactNode;
+  rightIcon?: ReactNode;
+  leftIcon?: ReactNode;
 }
 
 export const StateButton = ({
@@ -23,7 +24,8 @@ export const StateButton = ({
   onSelect,
   variant = 'filledSecondary',
   size = 'small',
-  icon = <IcArrowsChevronUpLine />,
+  rightIcon = <IcArrowsChevronUpLine />,
+  leftIcon,
 }: StateButtonProps) => {
   return (
     <GenericDialog options={options} onSelect={onSelect}>
@@ -31,7 +33,8 @@ export const StateButton = ({
         <StyledBoxButton
           size={size}
           variant={variant}
-          rightIcon={icon}
+          rightIcon={rightIcon}
+          leftIcon={leftIcon}
           $selectedValue={selectedValue}
           {...triggerProps}
         >
