@@ -22,6 +22,7 @@ import ApplicantTableFallback from '@/pages/Applicants/components/ApplicantTable
 import { semesterNowOptions } from '@/query/semester/now/options.ts';
 import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
 import { usePartFilter } from '@/hooks/usePartFilter.ts';
+import { applicantLastUpdatedTimeOptions } from '@/query/applicant/lastUpdatedTime.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -68,6 +69,10 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
 
   const { partId, partName, onPartChange } = usePartFilter();
 
+  const { data: lastUpdatedTime } = useSuspenseQuery(
+    applicantLastUpdatedTimeOptions(),
+  );
+
   return (
     <FormProvider {...methods}>
       <StyledContainer>
@@ -92,11 +97,12 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
             </div>
           </StyledTopLeftContainer>
           <StyledLastUpdate>
-            <StyledLastUpdateTime>
-              <span>마지막 업데이트</span>
-              <span>2024. 07. 21</span>
-              <span>23:00</span>
-            </StyledLastUpdateTime>
+            {lastUpdatedTime && (
+              <StyledLastUpdateTime>
+                <span>마지막 업데이트</span>
+                <span>{lastUpdatedTime}</span>
+              </StyledLastUpdateTime>
+            )}
             <BoxButton
               leftIcon={<IcRetryRefreshLine />}
               variant="outlined"

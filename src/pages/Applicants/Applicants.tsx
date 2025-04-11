@@ -8,6 +8,8 @@ import ApplicantTab from '@/pages/Applicants/components/ApplicantTab/ApplicantTa
 import { ApplicantState } from '@/query/applicant/schema.ts';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { applicantStateOptions } from '@/query/applicant/applicantState/options.ts';
+import { Suspense } from 'react';
+import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 
 export const Applicants = () => {
   const [Tabs] = useTabs<ApplicantState>({
@@ -31,7 +33,11 @@ export const Applicants = () => {
         </StyledTabsListContainer>
         {memberStates.map((state) => (
           <Tabs.Panel key={state} value={state}>
-            <ApplicantTab state={state} />
+            <ScouterErrorBoundary>
+              <Suspense>
+                <ApplicantTab state={state} />
+              </Suspense>
+            </ScouterErrorBoundary>
           </Tabs.Panel>
         ))}
       </Tabs>

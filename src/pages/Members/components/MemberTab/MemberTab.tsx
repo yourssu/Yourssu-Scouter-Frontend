@@ -13,12 +13,17 @@ import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
 import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
-import { useMutation, usePrefetchQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  usePrefetchQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
 import MemberTableFallback from '@/pages/Members/components/MemberTableFallback/MemberTableFallback.tsx';
 import { memberRoleOptions } from '@/query/member/memberRole/options.ts';
 import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
 import { usePartFilter } from '@/hooks/usePartFilter.ts';
+import { memberLastUpdatedTimeOptions } from '@/query/member/lastUpdatedTime/options.ts';
 
 interface MemberTabProps {
   state: MemberState;
@@ -43,6 +48,10 @@ const MemberTab = ({ state }: MemberTabProps) => {
 
   const { partId, partName, onPartChange } = usePartFilter();
 
+  const { data: lastUpdatedTime } = useSuspenseQuery(
+    memberLastUpdatedTimeOptions(),
+  );
+
   usePrefetchQuery(memberRoleOptions());
 
   return (
@@ -59,11 +68,12 @@ const MemberTab = ({ state }: MemberTabProps) => {
             </div>
           </StyledTopLeftContainer>
           <StyledLastUpdate>
-            <StyledLastUpdateTime>
-              <span>마지막 업데이트</span>
-              <span>2024. 07. 21</span>
-              <span>23:00</span>
-            </StyledLastUpdateTime>
+            {lastUpdatedTime && (
+              <StyledLastUpdateTime>
+                <span>마지막 업데이트</span>
+                <span>{lastUpdatedTime}</span>
+              </StyledLastUpdateTime>
+            )}
             <BoxButton
               leftIcon={<IcRetryRefreshLine />}
               variant="outlined"

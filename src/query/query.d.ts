@@ -9,7 +9,9 @@ type BaseKey =
   | 'parts'
   | 'semesters'
   | 'departments'
-  | 'semesterNow';
+  | 'semesterNow'
+  | 'memberLastUpdatedTime'
+  | 'applicantLastUpdatedTime';
 
 type QueryKey = readonly [BaseKey, ...ReadonlyArray<unknown>];
 
