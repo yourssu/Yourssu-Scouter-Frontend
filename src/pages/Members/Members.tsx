@@ -10,7 +10,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { memberStateOptions } from '@/query/member/memberState/options.ts';
 
 export const Members = () => {
-  const Tabs = useTabs<MemberState>({ defaultTab: '액티브', scrollable: true });
+  const [Tabs] = useTabs<MemberState>({
+    defaultTab: '액티브',
+    scrollable: true,
+  });
   const { data: memberStates } = useSuspenseQuery(memberStateOptions());
 
   return (

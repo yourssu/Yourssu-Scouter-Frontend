@@ -9,5 +9,6 @@ export const partOptions = () => {
       const data = await api.get('parts').json();
       return PartArraySchema.parse(data);
     },
+    staleTime: Infinity,
   });
 };

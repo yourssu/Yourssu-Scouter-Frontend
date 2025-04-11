@@ -9,5 +9,6 @@ export const applicantStateOptions = () => {
       const data = await api.get('applicants/states').json();
       return ApplicantStateArraySchema.parse(data);
     },
+    staleTime: Infinity,
   });
 };

@@ -9,5 +9,6 @@ export const memberStateOptions = () => {
       const data = await api.get('members/states').json();
       return MemberStateArraySchema.parse(data);
     },
+    staleTime: Infinity,
   });
 };
