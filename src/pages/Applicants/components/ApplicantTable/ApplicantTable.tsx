@@ -9,6 +9,7 @@ import {
   PatchApplicantHandler,
   useApplicantColumns,
 } from '@/query/applicant/hooks/useApplicantColumns.tsx';
+import { useSnackbar } from '@yourssu/design-system-react';
 
 interface ApplicantTableProps {
   state: ApplicantState;
@@ -21,6 +22,8 @@ const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
     applicantOptions({ state, semesterId, name }),
   );
 
+  const { snackbar } = useSnackbar();
+
   const invalidateApplicants = useInvalidateApplicants({
     state,
     name,
@@ -29,7 +32,30 @@ const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
 
   const { mutate: patchApplicantMutate } = useMutation({
     mutationFn: patchApplicant,
-    onSuccess: invalidateApplicants,
+    onSuccess: async (_, { applicantId }) => {
+      await invalidateApplicants();
+
+      const applicant = data.find((d) => d.applicantId === applicantId);
+
+      if (!applicant) return;
+
+      snackbar({
+        type: 'info',
+        width: '400px',
+        message: `지원자 ${applicant.name}님의 정보가 변경되었습니다.`,
+        duration: 3000,
+        position: 'center',
+      });
+    },
+    onError: () => {
+      snackbar({
+        type: 'error',
+        width: '400px',
+        message: '입력 형식이 올바르지 않습니다.',
+        duration: 3000,
+        position: 'center',
+      });
+    },
   });
 
   const handlePatchApplicant: PatchApplicantHandler = (
