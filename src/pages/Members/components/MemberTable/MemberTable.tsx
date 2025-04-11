@@ -14,9 +14,10 @@ import {
 interface MemberTableProps {
   state: MemberState;
   search: string;
+  partId: number;
 }
 
-const MemberTable = ({ state, search }: MemberTableProps) => {
+const MemberTable = ({ state, search, partId }: MemberTableProps) => {
   const invalidateMembers = useInvalidateMembers(state);
   const { snackbar } = useSnackbar();
 
@@ -48,7 +49,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
     },
   });
 
-  const { data } = useSuspenseQuery(memberOptions(state, { search }));
+  const { data } = useSuspenseQuery(memberOptions(state, { search, partId }));
 
   const handlePatchMember: PatchMemberHandler = (memberId, field, value) =>
     patchMemberMutate({

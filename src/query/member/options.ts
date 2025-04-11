@@ -5,6 +5,7 @@ import { MemberArraySchema, MemberState } from '@/query/member/schema.ts';
 
 type MemberQueryParams = {
   search: string;
+  partId: number;
 };
 
 export const memberOptions = (
