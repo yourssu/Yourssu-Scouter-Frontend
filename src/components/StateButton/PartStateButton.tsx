@@ -18,6 +18,7 @@ export const PartStateButton = ({
 
   return (
     <StateButton
+      width={160}
       options={options}
       selectedValue={selectedValue}
       onSelect={onStateChange}
