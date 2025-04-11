@@ -8,7 +8,8 @@ type BaseKey =
   | 'applicantStates'
   | 'parts'
   | 'semesters'
-  | 'departments';
+  | 'departments'
+  | 'semesterNow';
 
 type QueryKey = readonly [BaseKey, ...ReadonlyArray<unknown>];
 

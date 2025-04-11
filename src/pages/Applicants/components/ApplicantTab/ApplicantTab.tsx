@@ -8,7 +8,7 @@ import {
   StyledTopLeftContainer,
 } from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.style.ts';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { ApplicantState } from '@/query/applicant/schema.ts';
 import ApplicantTable from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
@@ -19,6 +19,7 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { semesterOptions } from '@/query/semester/options.ts';
 import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
 import ApplicantTableFallback from '@/pages/Applicants/components/ApplicantTableFallback/ApplicantTableFallback.tsx';
+import { semesterNowOptions } from '@/query/semester/now/options.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -33,9 +34,17 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
 
   const { data: semesters } = useSuspenseQuery(semesterOptions());
 
+  const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
+
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const semesterId = Number(searchParams.get('semesterId') ?? '1');
+  const [semesterId, setSemesterId] = useState(
+    Number(searchParams.get('semesterId') ?? semesterNow.semesterId),
+  );
+
+  useEffect(() => {
+    setSemesterId(semesterNow.semesterId);
+  }, [semesterNow]);
 
   const onSemesterChange = (semester: string) => {
     const semesterId = semesters
@@ -66,7 +75,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
                 size="medium"
                 selectedValue={
                   semesters.find((s) => semesterId === s.semesterId)
-                    ?.semester ?? '24-1학기'
+                    ?.semester ?? ''
                 }
                 onStateChange={onSemesterChange}
               />
