@@ -30,3 +30,24 @@ export const NameTagsContainer = styled.div`
   gap: 8px;
   margin-bottom: 8px;
 `;
+
+export const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+`;
+
+export const TextFieldContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  width: 100%;
+`;
+
+export const IconWrapper = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+`;

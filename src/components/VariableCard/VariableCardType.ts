@@ -16,3 +16,8 @@ export interface NameVariableCardProps extends BaseVariableCardProps {
   onAddName?: (name: string) => void;
   onRemoveName?: (name: string) => void;
 }
+
+export interface DateVariableCardProps extends BaseVariableCardProps {
+  dates: VariableItem[];
+  onDateChange?: (index: number, value: string) => void;
+}
