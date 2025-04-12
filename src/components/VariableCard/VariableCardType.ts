@@ -21,3 +21,8 @@ export interface DateVariableCardProps extends BaseVariableCardProps {
   dates: VariableItem[];
   onDateChange?: (index: number, value: string) => void;
 }
+
+export interface TextVariableCardProps extends BaseVariableCardProps {
+  texts: VariableItem[];
+  onValueChange?: (index: number, value: string) => void;
+}
