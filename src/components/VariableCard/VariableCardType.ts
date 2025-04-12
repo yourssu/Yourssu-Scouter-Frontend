@@ -26,3 +26,8 @@ export interface TextVariableCardProps extends BaseVariableCardProps {
   texts: VariableItem[];
   onValueChange?: (index: number, value: string) => void;
 }
+
+export interface LinkVariableCardProps extends BaseVariableCardProps {
+  links: VariableItem[];
+  onValueChange?: (index: number, value: string) => void;
+}
