@@ -1,7 +1,8 @@
-import { useGetMembers } from '@/data/members/hooks/useGetMembers';
+import { memberOptions } from '@/query/member/options.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { SearchBar } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   StyledButton,
@@ -25,7 +26,6 @@ export const SearchedMemberDialog = ({
   trigger,
 }: SearchedMemberDialogProps) => {
   const [open, setOpen] = useState(false);
-  const [debouncedSearchText, setDebouncedSearchText] = useState('');
 
   const methods = useForm<FormValues>({
     defaultValues: {
@@ -35,14 +35,13 @@ export const SearchedMemberDialog = ({
 
   const { register, watch, reset } = methods;
   const searchText = watch('searchText');
-  const { data: members = [] } = useGetMembers('액티브', debouncedSearchText);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchText(searchText);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchText]);
+  const { data: allMembers } = useSuspenseQuery(memberOptions('액티브'));
+
+  const members = useMemo(() => {
+    if (!searchText) return allMembers;
+    return allMembers.filter((member) => member.nickname.includes(searchText));
+  }, [allMembers, searchText]);
 
   const handleSelectMember = (nickname: string) => {
     onSelect(nickname);

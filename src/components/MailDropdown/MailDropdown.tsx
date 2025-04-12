@@ -1,5 +1,6 @@
-import { useGetParts } from '@/data/part/hooks/useGetParts';
-import { Part } from '@/data/part/schema';
+import { partOptions } from '@/query/part/options.ts';
+import { Part } from '@/query/part/schema';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
 import { DropdownMenu } from 'radix-ui';
 import { PropsWithChildren, useState } from 'react';
@@ -22,7 +23,7 @@ export const PartDropdown = ({ children, onSelectPart }: PartDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPart, setSelectedPart] = useState<Part | null>(null);
 
-  const { data: parts = [] } = useGetParts();
+  const { data: parts = [] } = useSuspenseQuery(partOptions());
 
   const handleSelect = (part: Part) => {
     setSelectedPart(part);
