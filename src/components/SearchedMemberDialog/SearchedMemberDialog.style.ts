@@ -5,6 +5,7 @@ import styled from 'styled-components';
 export const StyledWrapper = styled.div`
   position: relative;
   display: inline-block;
+  z-index: 1;
 `;
 
 export const StyledContent = styled(Popover.Content)`
