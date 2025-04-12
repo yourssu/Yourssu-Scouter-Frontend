@@ -1,3 +1,4 @@
+import { BoxButton } from '@yourssu/design-system-react';
 import styled from 'styled-components';
 
 export const CardContainer = styled.div`
@@ -17,4 +18,15 @@ export const CardTitle = styled.h3`
 export const Count = styled.span`
   margin-left: 4px;
   color: ${({ theme }) => theme.semantic.color.textBrandPrimary};
+`;
+
+export const StyledBoxButton = styled(BoxButton)`
+  cursor: pointer;
+`;
+
+export const NameTagsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
 `;
