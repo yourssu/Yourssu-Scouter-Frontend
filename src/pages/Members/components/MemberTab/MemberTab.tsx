@@ -70,47 +70,47 @@ const MemberTab = ({ state }: MemberTabProps) => {
   usePrefetchQuery(memberRoleOptions());
 
   return (
-    <FormProvider {...methods}>
-      <StyledContainer>
-        <StyledTopContainer>
-          <StyledTopLeftContainer>
+    <StyledContainer>
+      <StyledTopContainer>
+        <StyledTopLeftContainer>
+          <FormProvider {...methods}>
             <TableSearchBar placeholder="이름 혹은 닉네임으로 검색" />
-            <div>
-              <PartStateButton
-                selectedValue={partName}
-                onStateChange={onPartChange}
-              />
-            </div>
-          </StyledTopLeftContainer>
-          <StyledLastUpdate>
-            {lastUpdatedTime && (
-              <StyledLastUpdateTime>
-                <span>마지막 업데이트</span>
-                <span>{lastUpdatedTime}</span>
-              </StyledLastUpdateTime>
-            )}
-            <BoxButton
-              leftIcon={<IcRetryRefreshLine />}
-              variant="outlined"
-              size="medium"
-              onClick={handleClick}
-              disabled={postMembersFromApplicantsMutation.isPending}
-            >
-              업데이트
-            </BoxButton>
-          </StyledLastUpdate>
-        </StyledTopContainer>
-        <ScouterErrorBoundary>
-          <Suspense fallback={<MemberTableFallback state={state} />}>
-            <MemberTable
-              partId={partId}
-              state={state}
-              search={methods.watch('search')}
+          </FormProvider>
+          <div>
+            <PartStateButton
+              selectedValue={partName}
+              onStateChange={onPartChange}
             />
-          </Suspense>
-        </ScouterErrorBoundary>
-      </StyledContainer>
-    </FormProvider>
+          </div>
+        </StyledTopLeftContainer>
+        <StyledLastUpdate>
+          {lastUpdatedTime && (
+            <StyledLastUpdateTime>
+              <span>마지막 업데이트</span>
+              <span>{lastUpdatedTime}</span>
+            </StyledLastUpdateTime>
+          )}
+          <BoxButton
+            leftIcon={<IcRetryRefreshLine />}
+            variant="outlined"
+            size="medium"
+            onClick={handleClick}
+            disabled={postMembersFromApplicantsMutation.isPending}
+          >
+            업데이트
+          </BoxButton>
+        </StyledLastUpdate>
+      </StyledTopContainer>
+      <ScouterErrorBoundary>
+        <Suspense fallback={<MemberTableFallback state={state} />}>
+          <MemberTable
+            partId={partId}
+            state={state}
+            search={methods.watch('search')}
+          />
+        </Suspense>
+      </ScouterErrorBoundary>
+    </StyledContainer>
   );
 };
 
