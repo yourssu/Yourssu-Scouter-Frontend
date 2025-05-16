@@ -9,6 +9,7 @@ import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 import { useElementWidth } from '@/hooks/useElementWidth.ts';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { partOptions } from '@/query/part/options.ts';
+import { Popover } from 'radix-ui';
 
 interface PartsCellProps extends PropsWithChildren {
   onSelect: (value: string) => void;
@@ -22,16 +23,16 @@ const PartsCell = ({ tooltipContent, children, onSelect }: PartsCellProps) => {
 
   return (
     <GenericDialog width={width} options={options} onSelect={onSelect}>
-      {(triggerProps) => (
-        <StyledContainer $bold={false} $editable={true} ref={ref}>
-          {children}
-          <StyledEditIcon {...triggerProps}>
+      <StyledContainer $bold={false} $editable={true} ref={ref}>
+        {children}
+        <Popover.Trigger asChild>
+          <StyledEditIcon>
             <Tooltip content={tooltipContent}>
               <IcEditLine width={20} height={20} />
             </Tooltip>
           </StyledEditIcon>
-        </StyledContainer>
-      )}
+        </Popover.Trigger>
+      </StyledContainer>
     </GenericDialog>
   );
 };

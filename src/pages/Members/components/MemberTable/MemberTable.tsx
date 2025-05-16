@@ -1,29 +1,46 @@
 import { MemberState } from '@/query/member/schema.ts';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import Table from '@/components/Table/Table.tsx';
 import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { memberOptions } from '@/query/member/options.ts';
 import { patchMember } from '@/query/member/mutations/patchMember.ts';
-import { useSnackbar } from '@yourssu/design-system-react';
+import { Pagination, useSnackbar } from '@yourssu/design-system-react';
 import {
   PatchMemberHandler,
   useMemberColumns,
 } from '@/query/member/hooks/useMemberColumns.tsx';
+import { StyledPaginationWrapper } from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
 
 interface MemberTableProps {
   state: MemberState;
   search: string;
+  partId: number | null;
 }
 
-const MemberTable = ({ state, search }: MemberTableProps) => {
+const MemberTable = ({ state, search, partId }: MemberTableProps) => {
   const invalidateMembers = useInvalidateMembers(state);
   const { snackbar } = useSnackbar();
 
+  const queryClient = useQueryClient();
+
   const { mutate: patchMemberMutate } = useMutation({
     mutationFn: patchMember,
-    onSuccess: async (_, { memberId }) => {
+    onSuccess: async (_, { memberId, params }) => {
       await invalidateMembers();
+
+      if (params.state)
+        await queryClient.prefetchQuery(
+          memberOptions(params.state, { partId: null, search: '' }),
+        );
 
       const member = data.find((d) => d.memberId === memberId);
 
@@ -48,7 +65,7 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
     },
   });
 
-  const { data } = useSuspenseQuery(memberOptions(state, { search }));
+  const { data } = useSuspenseQuery(memberOptions(state, { search, partId }));
 
   const handlePatchMember: PatchMemberHandler = (memberId, field, value) =>
     patchMemberMutate({
@@ -63,14 +80,35 @@ const MemberTable = ({ state, search }: MemberTableProps) => {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     enableColumnResizing: true,
+    manualFiltering: true,
+    initialState: {
+      pagination: {
+        pageIndex: 0, //custom initial page index
+        pageSize: 10, //custom default page size
+      },
+    },
   });
 
+  const onPageChange = (page: number) => {
+    table.setPageIndex(page - 1);
+  };
+
+  const totalPage = table.getPageCount();
+
   return (
-    <Table>
-      <Table.Header headerGroups={table.getHeaderGroups()} />
-      <Table.Body rows={table.getRowModel().rows} />
-    </Table>
+    <>
+      <Table>
+        <Table.Header headerGroups={table.getHeaderGroups()} />
+        <Table.Body rows={table.getRowModel().rows} />
+      </Table>
+      {totalPage >= 2 && (
+        <StyledPaginationWrapper>
+          <Pagination totalPage={totalPage} onPageChange={onPageChange} />
+        </StyledPaginationWrapper>
+      )}
+    </>
   );
 };
 

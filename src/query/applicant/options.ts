@@ -9,6 +9,7 @@ export type ApplicantQueryParams = {
   state: ApplicantState;
   semesterId: number;
   name: string;
+  partId: number | null;
 };
 
 export const applicantOptions = (params?: ApplicantQueryParams) => {
@@ -18,7 +19,14 @@ export const applicantOptions = (params?: ApplicantQueryParams) => {
     queryKey: params ? [...baseKey, params] : baseKey,
     queryFn: async () => {
       const res = await api.get('applicants', {
-        searchParams: params,
+        searchParams: params && {
+          state: params.state,
+          semesterId: params.semesterId,
+          name: params.name,
+          ...(params.partId && {
+            partId: params.partId,
+          }),
+        },
       });
       const data = await res.json();
       return ApplicantArraySchema.parse(data);

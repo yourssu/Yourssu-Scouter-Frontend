@@ -119,17 +119,16 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
                 </StyledFieldContainer>
               ))}
             </StyledFieldList>
-            <GenericDialog width={160} options={options} onSelect={selectPart}>
-              {(triggerProps) => (
+            <GenericDialog options={options} onSelect={selectPart}>
+              <Popover.Trigger>
                 <BoxButton
-                  {...triggerProps}
                   variant="filledSecondary"
                   size="xsmall"
                   rightIcon={<IcPlusLine />}
                 >
                   파트 추가하기
                 </BoxButton>
-              )}
+              </Popover.Trigger>
             </GenericDialog>
           </StyledBodyContainer>
           <StyledBottomContainer>

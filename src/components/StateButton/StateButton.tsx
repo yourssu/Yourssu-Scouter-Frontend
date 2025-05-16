@@ -2,6 +2,7 @@ import { IcArrowsChevronUpLine } from '@yourssu/design-system-react';
 import { ReactNode } from 'react';
 import { GenericDialog } from '../dialog/GenericDialog';
 import { StyledBoxButton } from './StateButton.style';
+import { Popover } from 'radix-ui';
 
 export type DialogOption = {
   label: string;
@@ -14,7 +15,9 @@ interface StateButtonProps {
   onSelect: (value: string) => void;
   variant?: 'filledPrimary' | 'filledSecondary' | 'outlined';
   size?: 'small' | 'medium';
-  icon?: ReactNode;
+  rightIcon?: ReactNode;
+  leftIcon?: ReactNode;
+  width?: number;
 }
 
 export const StateButton = ({
@@ -23,21 +26,23 @@ export const StateButton = ({
   onSelect,
   variant = 'filledSecondary',
   size = 'small',
-  icon = <IcArrowsChevronUpLine />,
+  rightIcon = <IcArrowsChevronUpLine />,
+  leftIcon,
+  width,
 }: StateButtonProps) => {
   return (
-    <GenericDialog options={options} onSelect={onSelect}>
-      {(triggerProps) => (
+    <GenericDialog width={width} options={options} onSelect={onSelect}>
+      <Popover.Trigger asChild>
         <StyledBoxButton
           size={size}
           variant={variant}
-          rightIcon={icon}
+          rightIcon={rightIcon}
+          leftIcon={leftIcon}
           $selectedValue={selectedValue}
-          {...triggerProps}
         >
           {selectedValue}
         </StyledBoxButton>
-      )}
+      </Popover.Trigger>
     </GenericDialog>
   );
 };
