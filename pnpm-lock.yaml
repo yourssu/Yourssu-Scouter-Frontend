@@ -17,9 +17,6 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.20.6
         version: 8.21.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@yourssu/design-system-react':
-        specifier: ^2.3.4
-        version: 2.3.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@tiptap/extension-color':
         specifier: ^2.11.5
         version: 2.11.5(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/extension-text-style@2.11.5(@tiptap/core@2.11.5(@tiptap/pm@2.11.5)))
@@ -53,7 +50,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^2.11.5
         version: 2.11.5
-
+      '@yourssu/design-system-react':
+        specifier: ^2.3.4
+        version: 2.3.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       ky:
         specifier: ^1.7.4
         version: 1.8.0
@@ -1219,6 +1218,8 @@ packages:
   '@tanstack/query-devtools@5.72.2':
     resolution: {integrity: sha512-mMKnGb+iOhVBcj6jaerCFRpg8pACStdG8hmUBHPtToeZzs4ctjBUL1FajqpVn2WaMxnq8Wya+P3Q5tPFNM9jQw==}
 
+  '@tanstack/react-query-devtools@5.72.2':
+    resolution: {integrity: sha512-n53qr9JdHCJTCUba6OvMhwiV2CcsckngOswKEE7nM5pQBa/fW9c43qw8omw1RPT2s+aC7MuwS8fHsWT8g+j6IQ==}
     peerDependencies:
       '@tanstack/react-query': ^5.72.2
       react: ^18 || ^19
@@ -1495,7 +1496,6 @@ packages:
     resolution: {integrity: sha512-aEUPCckHDcFyxpwFm0AIkbtv6PpUp3xTb9wYGFjtABynXjCYKkWoxX0AOK9NT9XCrdk6mBBUOeHQS+RKdcNO1A==}
     peerDependencies:
       vite: ^4 || ^5 || ^6
-
 
   '@yourssu/design-system-react@2.3.5':
     resolution: {integrity: sha512-q8lFjOrJe/nHzjo0rkHrvPaNSL5UL/SteVxs4B6MYydhp+s/5ciLQ/gpUmXunEY3iv9DcO9bUBoXW1i9ynmyYw==}
@@ -3155,10 +3155,10 @@ snapshots:
 
   '@radix-ui/rect@1.1.1': {}
 
+  '@remirror/core-constants@3.0.0': {}
+
   '@rollup/rollup-android-arm-eabi@4.39.0':
     optional: true
-
-  '@remirror/core-constants@3.0.0': {}
 
   '@rollup/rollup-android-arm64@4.39.0':
     optional: true
@@ -3272,7 +3272,6 @@ snapshots:
   '@tanstack/query-core@5.72.2': {}
 
   '@tanstack/query-devtools@5.72.2': {}
-
 
   '@tanstack/react-query-devtools@5.72.2(@tanstack/react-query@5.72.2(react@18.3.1))(react@18.3.1)':
     dependencies:
@@ -3511,7 +3510,6 @@ snapshots:
   '@types/use-sync-external-store@0.0.6': {}
 
   '@typescript-eslint/eslint-plugin@8.29.1(@typescript-eslint/parser@8.29.1(eslint@9.24.0)(typescript@5.6.3))(eslint@9.24.0)(typescript@5.6.3)':
-
     dependencies:
       '@eslint-community/regexpp': 4.12.1
       '@typescript-eslint/parser': 8.29.1(eslint@9.24.0)(typescript@5.6.3)
@@ -3595,9 +3593,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-
   '@yourssu/design-system-react@2.3.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
-
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -3685,6 +3681,8 @@ snapshots:
   deep-is@0.1.4: {}
 
   detect-node-es@1.1.0: {}
+
+  entities@4.5.0: {}
 
   esbuild@0.25.2:
     optionalDependencies:
