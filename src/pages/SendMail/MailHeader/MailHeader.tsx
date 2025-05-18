@@ -24,7 +24,7 @@ export const MailHeader = ({
 }: MailHeaderProps) => {
   const [activeTabId, setActiveTabId] = useState<RecipientId>('recipient-0');
 
-  const Tabs = useTabs({
+  const [Tabs] = useTabs<RecipientId>({
     defaultTab: activeTabId,
     scrollable: true,
   });
