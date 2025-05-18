@@ -7,12 +7,15 @@ import {
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar.tsx';
 import { FormProvider, useForm } from 'react-hook-form';
 import MemberTable from '@/pages/Members/components/MemberTable/MemberTable.tsx';
-import { MemberState } from '@/data/members/schema.ts';
+import { MemberState } from '@/query/member/schema.ts';
 import { Suspense } from 'react';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
-import { usePostMembersFromApplicants } from '@/data/members/hooks/usePostMembersFromApplicants.ts';
-import { useInvalidateMembers } from '@/data/members/hooks/useInvalidateMembers.ts';
+import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
+import { useMutation, usePrefetchQuery } from '@tanstack/react-query';
+import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
+import MemberTableFallback from '@/pages/Members/components/MemberTableFallback/MemberTableFallback.tsx';
+import { memberRoleOptions } from '@/query/member/memberRole/options.ts';
 
 interface MemberTabProps {
   state: MemberState;
@@ -25,13 +28,17 @@ const MemberTab = ({ state }: MemberTabProps) => {
     },
   });
 
-  const postMembersFromApplicantsMutation = usePostMembersFromApplicants();
   const invalidateMembers = useInvalidateMembers(state);
+  const postMembersFromApplicantsMutation = useMutation({
+    mutationFn: postMembersFromApplicants,
+    onSuccess: invalidateMembers,
+  });
 
-  const postMembersFromApplicants = async () => {
-    await postMembersFromApplicantsMutation.mutateAsync();
-    await invalidateMembers();
+  const handleClick = () => {
+    postMembersFromApplicantsMutation.mutate();
   };
+
+  usePrefetchQuery(memberRoleOptions());
 
   return (
     <FormProvider {...methods}>
@@ -48,7 +55,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
               leftIcon={<IcRetryRefreshLine />}
               variant="outlined"
               size="medium"
-              onClick={postMembersFromApplicants}
+              onClick={handleClick}
               disabled={postMembersFromApplicantsMutation.isPending}
             >
               업데이트
@@ -56,7 +63,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
           </StyledLastUpdate>
         </StyledTopContainer>
         <ScouterErrorBoundary>
-          <Suspense>
+          <Suspense fallback={<MemberTableFallback state={state} />}>
             <MemberTable state={state} search={methods.watch('search')} />
           </Suspense>
         </ScouterErrorBoundary>

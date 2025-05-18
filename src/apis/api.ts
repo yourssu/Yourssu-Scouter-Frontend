@@ -1,35 +1,47 @@
 import { API_CONFIG } from '@/constants/config';
-import ky, { type BeforeRetryHook, HTTPError } from 'ky';
+import ky, { AfterResponseHook, BeforeRequestHook } from 'ky';
 import { authService } from './auth.service';
 import { tokenService } from './token.service';
 
 const DEFAULT_API_RETRY_LIMIT = 2;
 
-const stopWithLogout = (): typeof ky.stop => {
-  authService.logout();
-  return ky.stop;
-};
+const handleTokenRefresh: AfterResponseHook = async (
+  request,
+  _options,
+  response,
+) => {
+  if (response.status !== 401) {
+    return response;
+  }
 
-const handleTokenRefresh: BeforeRetryHook = async ({ error }) => {
-  const httpError = error as HTTPError;
+  const errorResponse = await response.json().catch(() => null);
+  const errorCode = (errorResponse as { errorCode?: string })?.errorCode;
 
-  if (httpError.response.status !== 401) {
-    return ky.stop;
+  if (errorCode === 'Auth-004') {
+    authService.logout();
+    authService.initiateGoogleLogin();
+    return response;
   }
 
   const refreshToken = tokenService.getRefreshToken();
   if (!refreshToken) {
-    return stopWithLogout();
+    authService.initiateGoogleLogin();
+    return response;
   }
 
   try {
     await authService.refreshToken(refreshToken);
+    const newAccessToken = tokenService.getAccessToken();
+    request.headers.set('Authorization', `${newAccessToken}`);
+    return ky(request);
   } catch (error) {
-    console.error('Token refresh 실패, 로그아웃', error);
-    return stopWithLogout();
+    authService.logout();
+    authService.initiateGoogleLogin();
+    throw error;
   }
 };
-const setAuthHeader = (request: Request) => {
+
+const setAuthHeader: BeforeRequestHook = (request) => {
   const accessToken = tokenService.getAccessToken();
   if (accessToken) {
     request.headers.set('Authorization', `${accessToken}`);
@@ -44,6 +56,6 @@ export const api = ky.create({
   },
   hooks: {
     beforeRequest: [setAuthHeader],
-    beforeRetry: [handleTokenRefresh],
+    afterResponse: [handleTokenRefresh],
   },
 });

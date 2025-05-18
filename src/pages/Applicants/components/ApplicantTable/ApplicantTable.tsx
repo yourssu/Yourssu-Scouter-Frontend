@@ -1,25 +1,15 @@
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import {
-  Applicant,
-  ApplicantState,
-  PatchApplicant,
-} from '@/data/applicants/schema.ts';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { ApplicantState } from '@/query/applicant/schema.ts';
 import Table from '@/components/Table/Table.tsx';
-import { useGetApplicants } from '@/data/applicants/hooks/useGetApplicants.ts';
-import Cell from '@/components/Cell/Cell.tsx';
-import { ApplicantStateButton } from '@/components/StateButton';
-import PartsCell from '@/components/Cell/PartsCell.tsx';
-import InputCell from '@/components/Cell/InputCell.tsx';
-import { usePatchApplicant } from '@/data/applicants/hooks/usePatchApplicant.ts';
-import { useGetParts } from '@/data/part/hooks/useGetParts.ts';
-import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
-import { useInvalidateApplicants } from '@/data/applicants/hooks/useInvalidateApplicants.ts';
-
-const columnHelper = createColumnHelper<Applicant>();
+import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { applicantOptions } from '@/query/applicant/options.ts';
+import { patchApplicant } from '@/query/applicant/mutations/patchApplicant.ts';
+import {
+  PatchApplicantHandler,
+  useApplicantColumns,
+} from '@/query/applicant/hooks/useApplicantColumns.tsx';
+import { useSnackbar } from '@yourssu/design-system-react';
 
 interface ApplicantTableProps {
   state: ApplicantState;
@@ -28,208 +18,57 @@ interface ApplicantTableProps {
 }
 
 const ApplicantTable = ({ state, semesterId, name }: ApplicantTableProps) => {
-  const { data } = useGetApplicants(state, semesterId, name);
+  const { data } = useSuspenseQuery(
+    applicantOptions({ state, semesterId, name }),
+  );
 
-  const patchApplicantMutation = usePatchApplicant();
-  const invalidateApplicants = useInvalidateApplicants();
+  const { snackbar } = useSnackbar();
 
-  const patchApplicant = async (
-    applicantId: number,
-    field: keyof PatchApplicant,
-    value: unknown,
-  ) => {
-    await patchApplicantMutation.mutateAsync({
+  const invalidateApplicants = useInvalidateApplicants({
+    state,
+    name,
+    semesterId,
+  });
+
+  const { mutate: patchApplicantMutate } = useMutation({
+    mutationFn: patchApplicant,
+    onSuccess: async (_, { applicantId }) => {
+      await invalidateApplicants();
+
+      const applicant = data.find((d) => d.applicantId === applicantId);
+
+      if (!applicant) return;
+
+      snackbar({
+        type: 'info',
+        width: '400px',
+        message: `지원자 ${applicant.name}님의 정보가 변경되었습니다.`,
+        duration: 3000,
+        position: 'center',
+      });
+    },
+    onError: () => {
+      snackbar({
+        type: 'error',
+        width: '400px',
+        message: '입력 형식이 올바르지 않습니다.',
+        duration: 3000,
+        position: 'center',
+      });
+    },
+  });
+
+  const handlePatchApplicant: PatchApplicantHandler = (
+    applicantId,
+    field,
+    value,
+  ) =>
+    patchApplicantMutate({
       applicantId,
       params: { [field]: value },
     });
-    await invalidateApplicants();
-  };
 
-  const { data: partWithIds } = useGetParts();
-
-  const columns = [
-    columnHelper.accessor('division', {
-      header: '구분',
-      size: 97,
-      cell: (info) => <Cell>{info.getValue()}</Cell>,
-    }),
-    columnHelper.accessor('part', {
-      header: '파트',
-      size: 196,
-      cell: (info) => (
-        <PartsCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          onSelect={async (value) => {
-            const partId = partWithIds.find(
-              (p) => p.partName === value,
-            )?.partId;
-            if (partId) {
-              await patchApplicant(
-                info.row.original.applicantId,
-                'partId',
-                partId,
-              );
-            }
-          }}
-        >
-          {info.getValue()}
-        </PartsCell>
-      ),
-    }),
-    columnHelper.accessor('name', {
-      header: '이름',
-      size: 111,
-      cell: (info) => (
-        <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          defaultValue={info.getValue()}
-          handleSubmit={async (value) => {
-            await patchApplicant(info.row.original.applicantId, 'name', value);
-          }}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-    }),
-    columnHelper.accessor('state', {
-      header: '상태',
-      size: 171,
-      cell: (info) => (
-        <Cell>
-          <ApplicantStateButton
-            selectedValue={info.getValue()}
-            onStateChange={async (state) => {
-              await patchApplicant(
-                info.row.original.applicantId,
-                'state',
-                state,
-              );
-            }}
-          />
-        </Cell>
-      ),
-    }),
-    columnHelper.accessor('applicationDate', {
-      header: '지원일',
-      size: 138,
-      cell: (info) => (
-        <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          defaultValue={info.getValue()}
-          handleSubmit={async (value) => {
-            await patchApplicant(
-              info.row.original.applicantId,
-              'applicationDate',
-              value,
-            );
-          }}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-    }),
-    columnHelper.accessor('email', {
-      header: '이메일',
-      size: 284,
-      cell: (info) => (
-        <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          defaultValue={info.getValue()}
-          handleSubmit={async (value) => {
-            await patchApplicant(info.row.original.applicantId, 'email', value);
-          }}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-    }),
-    columnHelper.accessor('phoneNumber', {
-      header: '연락처',
-      size: 171,
-      cell: (info) => (
-        <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          defaultValue={info.getValue()}
-          handleSubmit={async (value) => {
-            await patchApplicant(
-              info.row.original.applicantId,
-              'phoneNumber',
-              value,
-            );
-          }}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-    }),
-    columnHelper.accessor('department', {
-      header: '학과',
-      size: 260,
-      cell: (info) => (
-        <DepartmentCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          onSelect={(value) =>
-            patchApplicant(info.row.original.applicantId, 'departmentId', value)
-          }
-        >
-          {info.getValue()}
-        </DepartmentCell>
-      ),
-    }),
-    columnHelper.accessor('studentId', {
-      header: '학번',
-      size: 132,
-      cell: (info) => (
-        <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          defaultValue={info.getValue()}
-          handleSubmit={async (value) => {
-            await patchApplicant(
-              info.row.original.applicantId,
-              'studentId',
-              value,
-            );
-          }}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-    }),
-    columnHelper.accessor('semester', {
-      header: '재학 학기',
-      size: 99,
-      cell: (info) => (
-        <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          defaultValue={info.getValue()}
-          handleSubmit={async (value) => {
-            await patchApplicant(
-              info.row.original.applicantId,
-              'academicSemester',
-              value,
-            );
-          }}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-    }),
-    columnHelper.accessor('age', {
-      header: '나이',
-      size: 106,
-      cell: (info) => (
-        <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-          defaultValue={info.getValue()}
-          handleSubmit={async (value) => {
-            await patchApplicant(info.row.original.applicantId, 'age', value);
-          }}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-    }),
-  ];
+  const columns = useApplicantColumns(handlePatchApplicant);
 
   const table = useReactTable({
     data,

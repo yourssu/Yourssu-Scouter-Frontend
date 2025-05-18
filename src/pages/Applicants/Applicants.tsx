@@ -5,15 +5,16 @@ import {
 } from '@/styles/pages/table.ts';
 import { useTabs } from '@yourssu/design-system-react';
 import ApplicantTab from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.tsx';
-import { useGetApplicantStates } from '@/data/applicants/hooks/useGetApplicantStates.ts';
-import { ApplicantState } from '@/data/applicants/schema.ts';
+import { ApplicantState } from '@/query/applicant/schema.ts';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { applicantStateOptions } from '@/query/applicant/applicantState/options.ts';
 
 export const Applicants = () => {
-  const Tabs = useTabs<ApplicantState>({
+  const [Tabs] = useTabs<ApplicantState>({
     defaultTab: '심사 진행 중',
     scrollable: true,
   });
-  const { data: memberStates } = useGetApplicantStates();
+  const { data: memberStates } = useSuspenseQuery(applicantStateOptions());
 
   return (
     <StyledContainer>
