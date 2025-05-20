@@ -1,8 +1,8 @@
-import { IcArrowsChevronUpLine } from '@yourssu/design-system-react';
+import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
+import { Popover } from 'radix-ui';
 import { ReactNode } from 'react';
 import { GenericDialog } from '../dialog/GenericDialog';
 import { StyledBoxButton } from './StateButton.style';
-import { Popover } from 'radix-ui';
 
 export type DialogOption = {
   label: string;
@@ -26,7 +26,7 @@ export const StateButton = ({
   onSelect,
   variant = 'filledSecondary',
   size = 'small',
-  rightIcon = <IcArrowsChevronUpLine />,
+  rightIcon = <IcArrowsChevronDownLine />,
   leftIcon,
   width,
 }: StateButtonProps) => {
