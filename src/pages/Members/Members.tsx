@@ -8,6 +8,8 @@ import { MemberState } from '@/query/member/schema.ts';
 import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { memberStateOptions } from '@/query/member/memberState/options.ts';
+import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
+import { Suspense } from 'react';
 
 export const Members = () => {
   const [Tabs] = useTabs<MemberState>({
@@ -31,7 +33,11 @@ export const Members = () => {
         </StyledTabsListContainer>
         {memberStates.map((state) => (
           <Tabs.Panel key={state} value={state}>
-            <MemberTab state={state} />
+            <ScouterErrorBoundary>
+              <Suspense>
+                <MemberTab state={state} />
+              </Suspense>
+            </ScouterErrorBoundary>
           </Tabs.Panel>
         ))}
       </Tabs>

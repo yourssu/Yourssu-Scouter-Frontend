@@ -8,17 +8,25 @@ import {
   StyledTopLeftContainer,
 } from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.style.ts';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { ApplicantState } from '@/query/applicant/schema.ts';
 import ApplicantTable from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import { useSearchParams } from '@/hooks/useSearchParams.ts';
-import { BoxButton, IcRetryRefreshLine } from '@yourssu/design-system-react';
+import {
+  BoxButton,
+  IcRetryRefreshLine,
+  useSnackbar,
+} from '@yourssu/design-system-react';
 import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { semesterOptions } from '@/query/semester/options.ts';
 import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
 import ApplicantTableFallback from '@/pages/Applicants/components/ApplicantTableFallback/ApplicantTableFallback.tsx';
+import { semesterNowOptions } from '@/query/semester/now/options.ts';
+import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
+import { usePartFilter } from '@/hooks/usePartFilter.ts';
+import { applicantLastUpdatedTimeOptions } from '@/query/applicant/lastUpdatedTime.ts';
 
 interface ApplicantTabProps {
   state: ApplicantState;
@@ -33,9 +41,19 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
 
   const { data: semesters } = useSuspenseQuery(semesterOptions());
 
+  const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
+
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const semesterId = Number(searchParams.get('semesterId') ?? '1');
+  const [semesterId, setSemesterId] = useState(
+    Number(searchParams.get('semesterId') ?? semesterNow.semesterId),
+  );
+
+  useEffect(() => {
+    setSemesterId(
+      Number(searchParams.get('semesterId') ?? semesterNow.semesterId),
+    );
+  }, [searchParams, semesterNow]);
 
   const onSemesterChange = (semester: string) => {
     const semesterId = semesters
@@ -45,15 +63,32 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
     if (semesterId) setSearchParams({ semesterId });
   };
 
+  const { snackbar } = useSnackbar();
+
   const invalidateApplicants = useInvalidateApplicants();
   const postApplicantsFromFormMutation = useMutation({
     mutationFn: postApplicantsFromForms,
     onSuccess: invalidateApplicants,
+    onError: () => {
+      snackbar({
+        type: 'error',
+        width: '400px',
+        message: '에러가 발생했습니다.',
+        duration: 3000,
+        position: 'center',
+      });
+    },
   });
 
   const handleClick = () => {
     postApplicantsFromFormMutation.mutate();
   };
+
+  const { partId, partName, onPartChange } = usePartFilter();
+
+  const { data: lastUpdatedTime } = useSuspenseQuery(
+    applicantLastUpdatedTimeOptions(),
+  );
 
   return (
     <FormProvider {...methods}>
@@ -66,23 +101,31 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
                 size="medium"
                 selectedValue={
                   semesters.find((s) => semesterId === s.semesterId)
-                    ?.semester ?? '24-1학기'
+                    ?.semester ?? ''
                 }
                 onStateChange={onSemesterChange}
               />
             </div>
+            <div>
+              <PartStateButton
+                selectedValue={partName}
+                onStateChange={onPartChange}
+              />
+            </div>
           </StyledTopLeftContainer>
           <StyledLastUpdate>
-            <StyledLastUpdateTime>
-              <span>마지막 업데이트</span>
-              <span>2024. 07. 21</span>
-              <span>23:00</span>
-            </StyledLastUpdateTime>
+            {lastUpdatedTime && (
+              <StyledLastUpdateTime>
+                <span>마지막 업데이트</span>
+                <span>{lastUpdatedTime}</span>
+              </StyledLastUpdateTime>
+            )}
             <BoxButton
               leftIcon={<IcRetryRefreshLine />}
               variant="outlined"
               size="medium"
               onClick={handleClick}
+              disabled={postApplicantsFromFormMutation.isPending}
             >
               지원자 정보 불러오기
             </BoxButton>
@@ -91,6 +134,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
         <ScouterErrorBoundary>
           <Suspense fallback={<ApplicantTableFallback />}>
             <ApplicantTable
+              partId={partId}
               state={state}
               semesterId={semesterId}
               name={methods.watch('search')}

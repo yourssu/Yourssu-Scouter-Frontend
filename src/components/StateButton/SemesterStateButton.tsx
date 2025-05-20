@@ -22,7 +22,7 @@ export const SemesterStateButton = ({
       onSelect={onStateChange}
       variant="outlined"
       size={size}
-      icon={<IcArrowsChevronDownLine />}
+      rightIcon={<IcArrowsChevronDownLine />}
     />
   );
 };
