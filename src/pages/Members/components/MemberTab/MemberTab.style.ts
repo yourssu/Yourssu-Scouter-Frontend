@@ -6,6 +6,11 @@ export const StyledContainer = styled.div`
   padding: 0 40px 48px 40px;
 `;
 
+export const StyledTopLeftContainer = styled.div`
+  display: flex;
+  gap: 12px;
+`;
+
 export const StyledTopContainer = styled.div`
   display: flex;
   justify-content: space-between;

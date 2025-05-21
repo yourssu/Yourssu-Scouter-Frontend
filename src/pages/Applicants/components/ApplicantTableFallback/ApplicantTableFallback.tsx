@@ -15,7 +15,6 @@ const ApplicantTableFallback = () => {
   return (
     <Table>
       <Table.Header headerGroups={table.getHeaderGroups()} />
-      <Table.Body rows={table.getRowModel().rows} />
     </Table>
   );
 };
