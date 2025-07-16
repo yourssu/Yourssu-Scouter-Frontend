@@ -4,7 +4,7 @@ import { DateState } from './DateCell';
 export const StyledDateCell = styled.div<{
     $state: DateState;
 }>`
-    min-width: 36px;
+    width: 36px;
     height: 36px;
     display: flex;
     align-items: center;

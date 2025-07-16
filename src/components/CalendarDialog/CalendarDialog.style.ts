@@ -68,7 +68,6 @@ export const DatesWrapper = styled.div`
 
 export const StyledWrapper = styled.div`
   display: inline-block;
-  width: 100%;
 `;
 
 export const StyledContent = styled(Popover.Content)`
