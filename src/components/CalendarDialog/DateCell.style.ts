@@ -9,6 +9,8 @@ export const StyledDateCell = styled.div<{
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 8px;
+    gap: 10px;
     cursor: default;
     user-select: none;
     ${({ theme }) => theme.typo.B2_Rg_15}
