@@ -2,7 +2,7 @@ import { CalendarDialog } from '@/components/CalendarDialog/CalendarDialog';
 import { DateField } from '@/components/CalendarDialog/DateField';
 import { useState } from 'react';
 
-const TestPage = () => {
+const CalendarTestPage = () => {
   const [selectedDate, setSelectedDate] = useState('');
 
   return (
@@ -22,4 +22,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default CalendarTestPage;

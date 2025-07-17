@@ -6,7 +6,7 @@ import { Members } from '@/pages/Members/Members.tsx';
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 import { SendMail } from './pages/SendMail/SendMail';
-import TestPage from './pages/testPage';
+import CalendarTestPage from './pages/CalendarTestPage';
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Route path="/oauth/callback/google" element={<GoogleCallback />} />
           <Route path="*" element={<Main />}>
             <Route index element={<>응애</>} />
-            <Route path="test" element={<TestPage />} />
+            <Route path="test" element={<CalendarTestPage />} />
             <Route path="members" element={<Members />} />
             <Route path="recruiting" element={<Applicants />} />
             <Route path="send-mail" element={<SendMail />} />
