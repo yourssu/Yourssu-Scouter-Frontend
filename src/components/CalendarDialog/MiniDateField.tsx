@@ -21,10 +21,10 @@ export const MiniDateField = ({
         const [hours, minutes] = date.split(':');
         let hoursNum = parseInt(hours, 10);
         if (hoursNum < 12) {
-            hoursNum += 12;
+            hoursNum = hoursNum === 0 ? 12 : hoursNum;
             date = `오전 ${hoursNum}:${minutes}`;
         } else {
-            hoursNum -= 12;
+            hoursNum = hoursNum === 12 ? 12 : hoursNum - 12;
             date = `오후 ${hoursNum}:${minutes}`;
         }
     }
