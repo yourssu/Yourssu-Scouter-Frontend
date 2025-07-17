@@ -55,18 +55,6 @@ export const DayCell = styled.div`
   width: 36px;
 `;
 
-export const DateCell = styled.div`
-  color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
-  ${({ theme }) => theme.typo.B2_Rg_15}
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 8px;
-  gap: 10px;
-`;
-
 export const WeekRow = styled.div`
   width: 300px;
   display: flex;

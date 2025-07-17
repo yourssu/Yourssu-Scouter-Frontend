@@ -2,6 +2,7 @@ import { BoxButton } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
 import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
+import { DateCell } from './DateCell';
 import {
   CalendarDialogContainer,
   CalendarContainer, 
@@ -9,14 +10,13 @@ import {
   CalendarHeaderText, 
   DayRow,
   DayCell,
-  DateCell,
   WeekRow,
   StyledWrapper, 
   StyledContent, 
   StyledTitle, 
   ButtonGroup,
   CalendarBody,
-} from '../VariableCard/CalendarDialog.style';
+} from './CalendarDialog.style';
 
 interface CalendarDialogProps {
   onSelect: (date: string) => void;
@@ -115,16 +115,22 @@ export const CalendarDialog = ({
                 </DayCell>
               ))}
               </DayRow>
+              {/* <DateWrapper> */}
               {weeks.map((week, index) => (
                   <WeekRow key={index}>
-                    {week.map((date, idx) => (
-                      <DateCell 
-                        key={idx}
+                    {week.map((date) => (
+                      <DateCell
+                        key={date.toLocaleDateString()}
+                        date={date}
+                        firstDayOfMonth={firstDayOfMonth}
+                        lastDayOfMonth={lastDayOfMonth}
+                        selectedDate={selectedDate}
                         onClick={() => handleSelectDate(date.toLocaleDateString())}
-                        >{date.getDate()}</DateCell>
+                      />
                     ))}
                   </WeekRow>
               ))}
+              {/* </DateWrapper> */}
             </CalendarBody>
           </CalendarContainer>
           </CalendarDialogContainer>
