@@ -26,3 +26,21 @@ export const DateFieldContainer = styled.div<{
         left: 16px;
     }
 `;
+
+export const MiniDateFieldContainer = styled(DateFieldContainer)`
+    width: 166px;
+    height: 56px;
+    background: ${({ theme }) => theme.semantic.color.buttonOutlinedEnabled};
+    border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
+    border-radius: ${({ theme }) => theme.semantic.radius.m}px;
+    padding: 0 20px;
+    gap: 8px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
+    ${({ theme }) => theme.typo.B1_Rg_16}
+    span {
+        
+    }
+`;
