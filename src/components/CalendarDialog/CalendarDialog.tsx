@@ -20,7 +20,6 @@ import {
   ButtonGroup,
   CalendarBody,
 } from './CalendarDialog.style';
-import { DateField } from './DateField';
 
 interface CalendarDialogProps {
   onSelect: (date: string) => void;
@@ -123,9 +122,10 @@ export const CalendarDialog = ({
                   {dates.map((date) => (
                     <DateCell
                       key={date.toLocaleDateString()}
-                      date={date}
-                      firstDayOfMonth={firstDayOfMonth}
-                      lastDayOfMonth={lastDayOfMonth}
+                      date={getFormattedDate(date)}
+                      today={getFormattedDate(today)}
+                      firstDayOfMonth={getFormattedDate(firstDayOfMonth)}
+                      lastDayOfMonth={getFormattedDate(lastDayOfMonth)}
                       selectedDate={selectedDate}
                       onClick={() => handleSelectDate(getFormattedDate(date))}
                     />
