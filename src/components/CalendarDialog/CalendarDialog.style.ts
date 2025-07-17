@@ -9,6 +9,7 @@ export const CalendarDialogContainer = styled.div<{
     border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
     border-radius: ${({ theme }) => theme.semantic.radius.m}px;
     box-shadow: 0px 0px 10px 0px rgba(110, 118, 135, 0.25);
+    display: grid;
     padding: 12px;
     justify-items: center;
     z-index: 1;
@@ -24,7 +25,6 @@ export const CalendarContainer = styled.div`
 `;
 
 export const CalendarHeader = styled.div`
-  width: 300px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -37,7 +37,6 @@ export const CalendarHeaderText = styled.p`
 `;
 
 export const CalendarBody = styled.div`
-  width: 300px;
   display: grid;
   gap: 8px;
 `;
@@ -55,11 +54,10 @@ export const DayCell = styled.div`
   width: 36px;
 `;
 
-export const WeekRow = styled.div`
-  width: 300px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+export const DatesWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
 `;
 
 export const StyledWrapper = styled.div`

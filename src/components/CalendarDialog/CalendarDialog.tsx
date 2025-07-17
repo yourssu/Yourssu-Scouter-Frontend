@@ -3,6 +3,7 @@ import { Popover } from 'radix-ui';
 import { useState } from 'react';
 import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
 import { DateCell } from './DateCell';
+
 import {
   CalendarDialogContainer,
   CalendarContainer, 
@@ -10,7 +11,7 @@ import {
   CalendarHeaderText, 
   DayRow,
   DayCell,
-  WeekRow,
+  DatesWrapper,
   StyledWrapper, 
   StyledContent, 
   StyledTitle, 
@@ -74,11 +75,6 @@ export const CalendarDialog = ({
   for (let d = firstDayOfView; d <= lastDayOfView; d.setDate(d.getDate() + 1)) {
     dates.push(new Date(d));
   }
-  // 주 단위로 묶기
-  const weeks = [];
-  for (let i = 0; i < dates.length; i += 7) {
-    weeks.push(dates.slice(i, i + 7));
-  }
 
   return (
     <StyledWrapper>
@@ -87,9 +83,9 @@ export const CalendarDialog = ({
           <div onClick={() => setOpen(true)}>{trigger}</div>
         </Popover.Anchor>
         <StyledContent>
-          <StyledTitle>날짜 선택</StyledTitle>
           <p>선택된 날짜: {selectedDate || '없음'}</p>
-
+          <StyledTitle>날짜 선택</StyledTitle>
+          
           <CalendarDialogContainer $width={366}>
           <CalendarContainer>
             <CalendarHeader>
@@ -115,11 +111,9 @@ export const CalendarDialog = ({
                 </DayCell>
               ))}
               </DayRow>
-              {/* <DateWrapper> */}
-              {weeks.map((week, index) => (
-                  <WeekRow key={index}>
-                    {week.map((date) => (
-                      <DateCell
+              <DatesWrapper>
+              {dates.map((date) => (
+                <DateCell
                         key={date.toLocaleDateString()}
                         date={date}
                         firstDayOfMonth={firstDayOfMonth}
@@ -128,9 +122,7 @@ export const CalendarDialog = ({
                         onClick={() => handleSelectDate(date.toLocaleDateString())}
                       />
                     ))}
-                  </WeekRow>
-              ))}
-              {/* </DateWrapper> */}
+              </DatesWrapper>
             </CalendarBody>
           </CalendarContainer>
           </CalendarDialogContainer>
