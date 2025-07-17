@@ -54,6 +54,12 @@ export const DayCell = styled.div`
   width: 36px;
 `;
 
+export const DateFieldWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
 export const DatesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);

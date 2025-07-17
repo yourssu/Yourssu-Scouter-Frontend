@@ -6,6 +6,7 @@ interface CalendarDateProps {
     firstDayOfMonth: Date;
     lastDayOfMonth: Date;
     selectedDate?: string;
+    // selectedDate?: Date;
     onClick: () => void;
 }
 
@@ -15,7 +16,8 @@ export const DateCell = ({
     date,
     firstDayOfMonth,
     lastDayOfMonth,
-    selectedDate,
+    // selectedDate = new Date(),
+    selectedDate = '',
     onClick: handleDateClick,
 }: CalendarDateProps) => {
     const [isHoverd, setIsHovered] = useState(false);
@@ -23,7 +25,7 @@ export const DateCell = ({
 
     if (date < firstDayOfMonth || date > lastDayOfMonth) {
         state = 'disabled';
-    } else if (selectedDate && date.toLocaleDateString() === selectedDate) {
+    } else if (selectedDate && date.toLocaleDateString() === selectedDate){
         state = 'selected';
     } else if (date.toLocaleDateString() === new Date().toLocaleDateString()) {
         state = 'today';

@@ -1,23 +1,26 @@
 import { BoxButton } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
 import { DateCell } from './DateCell';
+import { MiniDateField } from './MiniDateField';
 
 import {
   CalendarDialogContainer,
-  CalendarContainer, 
-  CalendarHeader, 
-  CalendarHeaderText, 
+  CalendarContainer,
+  CalendarHeader,
+  CalendarHeaderText,
   DayRow,
   DayCell,
   DatesWrapper,
-  StyledWrapper, 
-  StyledContent, 
-  StyledTitle, 
+  DateFieldWrapper,
+  StyledWrapper,
+  StyledContent,
+  StyledTitle,
   ButtonGroup,
   CalendarBody,
 } from './CalendarDialog.style';
+import { DateField } from './DateField';
 
 interface CalendarDialogProps {
   onSelect: (date: string) => void;
@@ -32,20 +35,25 @@ export const CalendarDialog = ({
 }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
 
+  // 다이얼로그가 열릴 때 현재 날짜로 초기화
+  useEffect(() => {
+    if (open) {
+      setCurrentDate(new Date());
+    }
+  }, [open]);
+
   const handleSelectDate = (date: string) => {
     onSelect(date);
     setOpen(false);
   };
 
-  // 오늘 날짜를 MM/DD(요일) HH:MM 형식으로 반환
-  const getTodayFormatted = () => {
-    const now = new Date();
+  const getFormattedDate = (target: Date): string => {
     const days = ['일', '월', '화', '수', '목', '금', '토'];
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const date = String(now.getDate()).padStart(2, '0');
-    const day = days[now.getDay()];
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const month = String(target.getMonth() + 1).padStart(2, '0');
+    const date = String(target.getDate()).padStart(2, '0');
+    const day = days[target.getDay()];
+    const hours = String(target.getHours()).padStart(2, '0');
+    const minutes = String(target.getMinutes()).padStart(2, '0');
 
     return `${month}/${date}(${day}) ${hours}:${minutes}`;
   };
@@ -60,7 +68,7 @@ export const CalendarDialog = ({
   // 달력 뷰의 첫 날
   const firstDayOfView = new Date(firstDayOfMonth);
   firstDayOfView.setDate(firstDayOfView.getDate() - firstDayOfMonth.getDay());
-    
+
   // 현재 달의 마지막 날
   const lastDayOfMonth = new Date(currentDate.getFullYear(), month + 1, 0);
   // 달력 뷰의 마지막 날
@@ -85,53 +93,57 @@ export const CalendarDialog = ({
         <StyledContent>
           <p>선택된 날짜: {selectedDate || '없음'}</p>
           <StyledTitle>날짜 선택</StyledTitle>
-          
+
           <CalendarDialogContainer $width={366}>
-          <CalendarContainer>
-            <CalendarHeader>
-              <IcArrowsChevronLeftLine
-                width={20}
-                height={20}
-                onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
-              />
-              <CalendarHeaderText>
-                {year}년 {(month + 1).toString().padStart(2, '0')}월
-              </CalendarHeaderText>
-              <IcArrowsChevronRightLine 
-                width={20}
-                height={20}
-                onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
-              />
-            </CalendarHeader>
-            <CalendarBody>
-              <DayRow>
-              {weekdays.map((day) => (
-                <DayCell key={day}>
-                  {day}
-                </DayCell>
-              ))}
-              </DayRow>
-              <DatesWrapper>
-              {dates.map((date) => (
-                <DateCell
-                        key={date.toLocaleDateString()}
-                        date={date}
-                        firstDayOfMonth={firstDayOfMonth}
-                        lastDayOfMonth={lastDayOfMonth}
-                        selectedDate={selectedDate}
-                        onClick={() => handleSelectDate(date.toLocaleDateString())}
-                      />
-                    ))}
-              </DatesWrapper>
-            </CalendarBody>
-          </CalendarContainer>
+            <CalendarContainer>
+              <CalendarHeader>
+                <IcArrowsChevronLeftLine
+                  width={20}
+                  height={20}
+                  onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
+                />
+                <CalendarHeaderText>
+                  {year}년 {(month + 1).toString().padStart(2, '0')}월
+                </CalendarHeaderText>
+                <IcArrowsChevronRightLine
+                  width={20}
+                  height={20}
+                  onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
+                />
+              </CalendarHeader>
+              <CalendarBody>
+                <DayRow>
+                  {weekdays.map((day) => (
+                    <DayCell key={day}>
+                      {day}
+                    </DayCell>
+                  ))}
+                </DayRow>
+                <DatesWrapper>
+                  {dates.map((date) => (
+                    <DateCell
+                      key={date.toLocaleDateString()}
+                      date={date}
+                      firstDayOfMonth={firstDayOfMonth}
+                      lastDayOfMonth={lastDayOfMonth}
+                      selectedDate={selectedDate}
+                      onClick={() => handleSelectDate(getFormattedDate(date))}
+                    />
+                  ))}
+                </DatesWrapper>
+              </CalendarBody>
+            </CalendarContainer>
+            <DateFieldWrapper>
+              <MiniDateField date={selectedDate.slice(0,9)} icon='IcCalendarLine' />
+              <MiniDateField date={selectedDate.slice(9)} icon='IcClockLine' />
+            </DateFieldWrapper>
           </CalendarDialogContainer>
 
           <ButtonGroup>
             <BoxButton
               size="small"
               variant="filledPrimary"
-              onClick={() => handleSelectDate(getTodayFormatted())}
+              onClick={() => handleSelectDate(getFormattedDate(today))}
             >
               오늘 날짜 선택
             </BoxButton>
