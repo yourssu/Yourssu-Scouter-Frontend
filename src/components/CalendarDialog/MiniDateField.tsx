@@ -1,5 +1,7 @@
-import { MiniDateFieldContainer } from "./DateField.style"
 import { IcCalenderLine, IcClockLine } from "@yourssu/design-system-react";
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { MiniDateFieldContainer } from "./DateField.style";
 
 const iconMap = {
   IcCalendarLine: IcCalenderLine,
@@ -7,37 +9,30 @@ const iconMap = {
 };
 
 interface DateFieldProps {
-    date: string;
+    date: Date;
     icon: keyof typeof iconMap;
 }
 
 export const MiniDateField = ({
-    date = '',
+    date,
     icon = 'IcCalendarLine',
 }: DateFieldProps ) => {
     const IconComponent = iconMap[icon];
 
-    if (icon == 'IcClockLine' && date) {
-        const [hours, minutes] = date.split(':');
-        let hoursNum = parseInt(hours, 10);
-        if (hoursNum < 12) {
-            hoursNum = hoursNum === 0 ? 12 : hoursNum;
-            date = `오전 ${hoursNum}:${minutes}`;
-        } else {
-            hoursNum = hoursNum === 12 ? 12 : hoursNum - 12;
-            date = `오후 ${hoursNum}:${minutes}`;
-        }
-    }
-    else if (icon == 'IcClockLine' && !date)
-        date = '오전 12:00';
-    else if (icon == 'IcCalendarLine' && !date)
-        date = '날짜 선택 안됨';
+    const getDateFieldString = () => {
+        if (icon == 'IcClockLine' && date) {
+            return format(date, 'hh:mm a', { locale: ko });
+        } else if (icon == 'IcClockLine' && !date) {
+            return '오전 12:00';
+        } else
+            return format(date, 'MM/dd(E)', { locale: ko });
+    };
 
     return (
         <MiniDateFieldContainer>
             {/* 아이콘 색깔 바꾸기 */}
             <IconComponent width={24} height={24} color="#6E7687"/>
-            <span>{date}</span>
+            <span>{getDateFieldString()}</span>
         </MiniDateFieldContainer>
     );
 }

@@ -1,12 +1,13 @@
+import { isSameDay } from 'date-fns';
 import { useState } from 'react';
 import { StyledDateCell } from './DateCell.style';
 
 interface CalendarDateProps {
-    date: string;
-    today: string;
-    firstDayOfMonth: string;
-    lastDayOfMonth: string;
-    selectedDate?: string;
+    date: Date;
+    today: Date;
+    firstDayOfMonth: Date;
+    lastDayOfMonth: Date;
+    selectedDate?: Date;
     onClick: () => void;
 }
 
@@ -17,7 +18,7 @@ export const DateCell = ({
     today,
     firstDayOfMonth,
     lastDayOfMonth,
-    selectedDate = '',
+    selectedDate = undefined,
     onClick: handleDateClick,
 }: CalendarDateProps) => {
     const [isHoverd, setIsHovered] = useState(false);
@@ -25,9 +26,9 @@ export const DateCell = ({
 
     if (date < firstDayOfMonth || date > lastDayOfMonth) {
         state = 'disabled';
-    } else if (selectedDate && date.slice(0,9) === selectedDate.slice(0,9)) {
+    } else if (selectedDate && isSameDay(date, selectedDate)) {
         state = 'selected';
-    } else if (date.slice(0,9) === today.slice(0,9)) {
+    } else if (isSameDay(date, today)) {
         state = 'today';
     } else if (isHoverd) {
         state = 'hovered';
@@ -41,7 +42,7 @@ export const DateCell = ({
         }
     };
 
-    const dateNum = parseInt(date.slice(3, 5), 10);
+    const dateNum = date.getDate();
 
     return (
         <StyledDateCell

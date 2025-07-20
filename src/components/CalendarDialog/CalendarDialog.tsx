@@ -1,38 +1,52 @@
-import { BoxButton } from '@yourssu/design-system-react';
+import { BoxButton, IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
-import { useState, useEffect } from 'react';
-import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
+import { useEffect, useState } from 'react';
 import { DateCell } from './DateCell';
 import { MiniDateField } from './MiniDateField';
 
 import {
-  CalendarDialogContainer,
-  CalendarContainer,
-  CalendarHeader,
-  CalendarHeaderText,
-  DayRow,
-  DayCell,
-  DatesWrapper,
-  DateFieldWrapper,
-  StyledWrapper,
-  StyledContent,
-  StyledTitle,
+  addDays,
+  addMonths,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfMonth,
+  startOfWeek,
+  subMonths
+} from 'date-fns';
+import { ko } from 'date-fns/locale';
+
+import {
   ButtonGroup,
   CalendarBody,
+  CalendarContainer,
+  CalendarDialogContainer,
+  CalendarHeader,
+  CalendarHeaderText,
+  DateFieldWrapper,
+  DatesWrapper,
+  DayCell,
+  DayRow,
+  StyledContent,
+  StyledTitle,
+  StyledWrapper,
 } from './CalendarDialog.style';
 
 export const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+export const formatDate = (date: Date): string => {
+  return format(date, 'MMM do(E) HH:mm', { locale: ko });
+}
 
 interface CalendarDialogProps {
-  onSelect: (date: string) => void;
+  onSelect: (date: Date) => void;
   trigger: React.ReactNode;
-  selectedDate?: string;
+  selectedDate?: Date;
 }
 
 export const CalendarDialog = ({
   onSelect,
   trigger,
-  selectedDate = '',
+  selectedDate = undefined,
 }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
 
@@ -43,20 +57,9 @@ export const CalendarDialog = ({
     }
   }, [open]);
 
-  const handleSelectDate = (date: string) => {
+  const handleSelectDate = (date: Date) => {
     onSelect(date);
     setOpen(false);
-  };
-
-  const getFormattedDate = (target: Date): string => {
-    const days = ['일', '월', '화', '수', '목', '금', '토'];
-    const month = String(target.getMonth() + 1).padStart(2, '0');
-    const date = String(target.getDate()).padStart(2, '0');
-    const day = days[target.getDay()];
-    const hours = String(target.getHours()).padStart(2, '0');
-    const minutes = String(target.getMinutes()).padStart(2, '0');
-
-    return `${month}/${date}(${day}) ${hours}:${minutes}`;
   };
 
   const today = new Date();
@@ -65,22 +68,21 @@ export const CalendarDialog = ({
   const month = currentDate.getMonth();
 
   // 현재 달의 첫 날
-  const firstDayOfMonth = new Date(currentDate.getFullYear(), month, 1);
+  const firstDayOfMonth = startOfMonth(currentDate);
   // 달력 뷰의 첫 날
-  const firstDayOfView = new Date(firstDayOfMonth);
-  firstDayOfView.setDate(firstDayOfView.getDate() - firstDayOfMonth.getDay());
+  const firstDayOfView = startOfWeek(firstDayOfMonth);
 
   // 현재 달의 마지막 날
-  const lastDayOfMonth = new Date(currentDate.getFullYear(), month + 1, 0);
+  const lastDayOfMonth = endOfMonth(currentDate);
   // 달력 뷰의 마지막 날
-  const lastDayOfView = new Date(lastDayOfMonth);
-  lastDayOfView.setDate(lastDayOfView.getDate() + (6 - lastDayOfMonth.getDay()));
-
+  const lastDayOfView = endOfWeek(lastDayOfMonth);
 
   // date 배열
-  const dates = [];
-  for (let d = firstDayOfView; d <= lastDayOfView; d.setDate(d.getDate() + 1)) {
-    dates.push(new Date(d));
+  let dates = [];
+  let tempDate = firstDayOfView;
+  while (tempDate <= lastDayOfView) {
+    dates.push(tempDate);
+    tempDate = addDays(tempDate, 1);
   }
 
   return (
@@ -90,7 +92,7 @@ export const CalendarDialog = ({
           <div onClick={() => setOpen(true)}>{trigger}</div>
         </Popover.Anchor>
         <StyledContent>
-          <p>선택된 날짜: {selectedDate || '없음'}</p>
+          <p>선택된 날짜: {selectedDate ? formatDate(selectedDate) : '없음'}</p>
           <StyledTitle>날짜 선택</StyledTitle>
 
           <CalendarDialogContainer>
@@ -99,7 +101,7 @@ export const CalendarDialog = ({
                 <IcArrowsChevronLeftLine
                   width={20}
                   height={20}
-                  onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
+                  onClick={() => setCurrentDate(subMonths(currentDate, 1))}
                 />
                 <CalendarHeaderText>
                   {year}년 {(month + 1).toString().padStart(2, '0')}월
@@ -107,7 +109,7 @@ export const CalendarDialog = ({
                 <IcArrowsChevronRightLine
                   width={20}
                   height={20}
-                  onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
+                  onClick={() => setCurrentDate(addMonths(currentDate, 1))}
                 />
               </CalendarHeader>
               <CalendarBody>
@@ -122,20 +124,20 @@ export const CalendarDialog = ({
                   {dates.map((date) => (
                     <DateCell
                       key={date.toLocaleDateString()}
-                      date={getFormattedDate(date)}
-                      today={getFormattedDate(today)}
-                      firstDayOfMonth={getFormattedDate(firstDayOfMonth)}
-                      lastDayOfMonth={getFormattedDate(lastDayOfMonth)}
+                      date={date}
+                      today={today}
+                      firstDayOfMonth={firstDayOfMonth}
+                      lastDayOfMonth={lastDayOfMonth}
                       selectedDate={selectedDate}
-                      onClick={() => handleSelectDate(getFormattedDate(date))}
+                      onClick={() => handleSelectDate(date)}
                     />
                   ))}
                 </DatesWrapper>
               </CalendarBody>
             </CalendarContainer>
             <DateFieldWrapper>
-              <MiniDateField date={selectedDate.slice(0,9)} icon='IcCalendarLine' />
-              <MiniDateField date={selectedDate.slice(9)} icon='IcClockLine' />
+              <MiniDateField date={selectedDate ?? today} icon='IcCalendarLine' />
+              <MiniDateField date={selectedDate ?? today} icon='IcClockLine' />
             </DateFieldWrapper>
           </CalendarDialogContainer>
 
@@ -143,7 +145,7 @@ export const CalendarDialog = ({
             <BoxButton
               size="small"
               variant="filledPrimary"
-              onClick={() => handleSelectDate(getFormattedDate(today))}
+              onClick={() => handleSelectDate(today)}
             >
               오늘 날짜 선택
             </BoxButton>
