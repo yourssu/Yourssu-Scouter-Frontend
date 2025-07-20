@@ -21,6 +21,8 @@ import {
   CalendarBody,
 } from './CalendarDialog.style';
 
+export const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+
 interface CalendarDialogProps {
   onSelect: (date: string) => void;
   trigger: React.ReactNode;
@@ -74,8 +76,6 @@ export const CalendarDialog = ({
   const lastDayOfView = new Date(lastDayOfMonth);
   lastDayOfView.setDate(lastDayOfView.getDate() + (6 - lastDayOfMonth.getDay()));
 
-  // day 배열
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 
   // date 배열
   const dates = [];
