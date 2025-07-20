@@ -1,11 +1,8 @@
 import styled from "styled-components";
 
-export const DateFieldContainer = styled.div<{
-    $width: number;
-    $height?: number;
-}>`
-    width: ${({ $width }) => `${$width}px`};
-    height: ${({ $height }) => ($height ? `${$height}px` : 'auto')};
+export const DateFieldContainer = styled.div`
+    width: 366px;
+    height: 48px;
     background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
     border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
     border-radius: ${({ theme }) => theme.semantic.radius.m}px;

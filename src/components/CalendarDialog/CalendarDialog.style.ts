@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 import { Popover } from 'radix-ui';
 
-export const CalendarDialogContainer = styled.div<{
-    $width: number;
-}>`
-    width: ${({ $width }) => `${$width}px`};
+export const CalendarDialogContainer = styled.div`
+    width: 366px;
     background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
     border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
     border-radius: ${({ theme }) => theme.semantic.radius.m}px;

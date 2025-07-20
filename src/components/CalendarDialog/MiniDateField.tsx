@@ -34,7 +34,7 @@ export const MiniDateField = ({
         date = '날짜 선택 안됨';
 
     return (
-        <MiniDateFieldContainer $width={366} $height={48}>
+        <MiniDateFieldContainer>
             {/* 아이콘 색깔 바꾸기 */}
             <IconComponent width={24} height={24} color="#6E7687"/>
             <span>{date}</span>

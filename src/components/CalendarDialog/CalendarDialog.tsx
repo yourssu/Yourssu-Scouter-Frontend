@@ -93,7 +93,7 @@ export const CalendarDialog = ({
           <p>선택된 날짜: {selectedDate || '없음'}</p>
           <StyledTitle>날짜 선택</StyledTitle>
 
-          <CalendarDialogContainer $width={366}>
+          <CalendarDialogContainer>
             <CalendarContainer>
               <CalendarHeader>
                 <IcArrowsChevronLeftLine

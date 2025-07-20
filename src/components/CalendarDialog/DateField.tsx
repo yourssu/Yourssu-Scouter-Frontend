@@ -21,7 +21,7 @@ export const DateField = ({
     };
 
     return (
-        <DateFieldContainer $width={366} $height={48}>
+        <DateFieldContainer>
             <p>{getFormattedDate(date)}</p>
             <IcCalenderLine width={20} height={20} />
         </DateFieldContainer>
