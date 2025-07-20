@@ -1,7 +1,6 @@
 import { IcCalenderLine, IcClockLine } from "@yourssu/design-system-react";
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import { MiniDateFieldContainer } from "./DateField.style";
+import { formatTemplates } from "./date";
 
 const iconMap = {
   IcCalendarLine: IcCalenderLine,
@@ -21,11 +20,11 @@ export const MiniDateField = ({
 
     const getDateFieldString = () => {
         if (icon == 'IcClockLine' && date) {
-            return format(date, 'hh:mm a', { locale: ko });
+            return formatTemplates['오전 12:00'](date);
         } else if (icon == 'IcClockLine' && !date) {
             return '오전 12:00';
         } else
-            return format(date, 'MM/dd(E)', { locale: ko });
+            return formatTemplates['01/01(월)'](date);
     };
 
     return (
