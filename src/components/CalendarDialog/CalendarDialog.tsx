@@ -1,6 +1,10 @@
-import { BoxButton, IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
+import {
+  BoxButton,
+  IcArrowsChevronLeftLine,
+  IcArrowsChevronRightLine,
+} from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DateCell } from './DateCell';
 import { MiniDateField } from './MiniDateField';
 import { formatTemplates } from './date';
@@ -12,7 +16,7 @@ import {
   endOfWeek,
   startOfMonth,
   startOfWeek,
-  subMonths
+  subMonths,
 } from 'date-fns';
 
 import {
@@ -31,7 +35,6 @@ import {
   StyledWrapper,
 } from './CalendarDialog.style';
 
-
 interface CalendarDialogProps {
   onSelect: (date: Date) => void;
   trigger: React.ReactNode;
@@ -44,28 +47,20 @@ export const CalendarDialog = ({
   selectedDate = undefined,
 }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
-  
-  // 다이얼로그가 열릴 때 현재 날짜로 초기화
-  useEffect(() => {
-    if (open) {
-      setCurrentDate(new Date());
-    }
-  }, [open]);
-  
+  const today = new Date();
+  const [currentDate, setCurrentDate] = useState(today);
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+
   const handleSelectDate = (date: Date) => {
     onSelect(date);
     setOpen(false);
   };
-  
-  const today = new Date();
-  const [currentDate, setCurrentDate] = useState(today);
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 
   // 현재 달의 첫 날
   const firstDayOfMonth = startOfMonth(currentDate);
   // 달력 뷰의 첫 날
   const firstDayOfView = startOfWeek(firstDayOfMonth);
-  
+
   // 현재 달의 마지막 날
   const lastDayOfMonth = endOfMonth(currentDate);
   // 달력 뷰의 마지막 날
@@ -86,7 +81,12 @@ export const CalendarDialog = ({
           <div onClick={() => setOpen(true)}>{trigger}</div>
         </Popover.Anchor>
         <StyledContent>
-          <p>선택된 날짜: {selectedDate ? formatTemplates['01/01(월) 00:00'](selectedDate) : '없음'}</p>
+          <p>
+            선택된 날짜:{' '}
+            {selectedDate
+              ? formatTemplates['01/01(월) 00:00'](selectedDate)
+              : '없음'}
+          </p>
           <StyledTitle>{'날짜 선택'}</StyledTitle>
 
           <CalendarDialogContainer>
@@ -109,9 +109,7 @@ export const CalendarDialog = ({
               <CalendarBody>
                 <DayRow>
                   {weekdays.map((day) => (
-                    <DayCell key={day}>
-                      {day}
-                    </DayCell>
+                    <DayCell key={day}>{day}</DayCell>
                   ))}
                 </DayRow>
                 <DatesWrapper>
@@ -130,8 +128,11 @@ export const CalendarDialog = ({
               </CalendarBody>
             </CalendarContainer>
             <DateFieldWrapper>
-              <MiniDateField date={selectedDate ?? today} icon='IcCalendarLine' />
-              <MiniDateField date={selectedDate ?? today} icon='IcClockLine' />
+              <MiniDateField
+                date={selectedDate ?? today}
+                icon="IcCalendarLine"
+              />
+              <MiniDateField date={selectedDate ?? today} icon="IcClockLine" />
             </DateFieldWrapper>
           </CalendarDialogContainer>
 
