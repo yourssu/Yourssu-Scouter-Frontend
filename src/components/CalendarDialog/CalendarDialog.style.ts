@@ -1,25 +1,25 @@
-import styled from 'styled-components';
 import { Popover } from 'radix-ui';
+import styled from 'styled-components';
 
 export const CalendarDialogContainer = styled.div`
-    width: 366px;
-    background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
-    border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
-    border-radius: ${({ theme }) => theme.semantic.radius.m}px;
-    box-shadow: 0px 0px 10px 0px rgba(110, 118, 135, 0.25);
-    display: grid;
-    padding: 12px;
-    justify-items: center;
-    z-index: 1;
-    max-height: 438px;
-    overflow-y: auto;
-    gap: 20px;
+  width: 366px;
+  background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
+  border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
+  border-radius: ${({ theme }) => theme.semantic.radius.m}px;
+  box-shadow: 0px 0px 10px 0px rgba(110, 118, 135, 0.25);
+  display: grid;
+  padding: 12px;
+  justify-items: center;
+  z-index: 1;
+  max-height: 438px;
+  overflow-y: auto;
+  gap: 20px;
 `;
 
 export const CalendarContainer = styled.div`
-    width: 300px;
-    display: grid;
-    gap: 8px;
+  width: 300px;
+  display: grid;
+  gap: 8px;
 `;
 
 export const CalendarHeader = styled.div`
