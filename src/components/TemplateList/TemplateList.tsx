@@ -10,18 +10,19 @@ import {
 
 export interface TemplateListProps {
   date: string;
+  onClick?: () => void;
   onDelete: () => void;
   title: string;
 }
 
-export const TemplateList = ({ title, date, onDelete }: TemplateListProps) => {
+export const TemplateList = ({ title, date, onDelete, onClick }: TemplateListProps) => {
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete();
   };
 
   return (
-    <TemplateItemContainer>
+    <TemplateItemContainer onClick={onClick}>
       <TemplateItemContent>
         <TemplateTitle>{title}</TemplateTitle>
         <TemplateDate>{date}</TemplateDate>
