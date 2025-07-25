@@ -6,6 +6,7 @@ import { Members } from '@/pages/Members/Members.tsx';
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 import { SendMail } from './pages/SendMail/SendMail';
+import { Templates } from './pages/Template/Templates';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route index element={<>응애</>} />
             <Route path="members" element={<Members />} />
             <Route path="recruiting" element={<Applicants />} />
+            <Route path="templates" element={<Templates />} />
             <Route path="send-mail" element={<SendMail />} />
           </Route>
         </Routes>
