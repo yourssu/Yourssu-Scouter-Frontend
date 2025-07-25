@@ -9,6 +9,7 @@ import CalendarTestPage from '@/pages/CalendarTestPage';
 import { InterviewPage } from '@/pages/Interview';
 import { Members } from '@/pages/Members/Members.tsx';
 import { SendMail } from '@/pages/SendMail/SendMail';
+import { Templates } from '@/pages/Template/Templates';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route element={<CalendarTestPage />} path="test" />
             <Route element={<Members />} path="members" />
             <Route element={<Applicants />} path="recruiting" />
+            <Route element={<Templates />} path="templates" />
             <Route element={<SendMail />} path="send-mail" />
           </Route>
         </Routes>
