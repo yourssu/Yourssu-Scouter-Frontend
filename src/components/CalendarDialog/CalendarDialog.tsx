@@ -6,18 +6,9 @@ import {
   IcArrowsChevronLeftLine,
   IcArrowsChevronRightLine,
 } from '@yourssu/design-system-react';
-import {
-  addDays,
-  addMonths,
-  endOfMonth,
-  endOfWeek,
-  startOfMonth,
-  startOfWeek,
-  subMonths,
-} from 'date-fns';
+import { addDays, endOfMonth, endOfWeek, startOfWeek } from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
-
 import {
   ButtonGroup,
   CalendarBody,
@@ -40,18 +31,15 @@ interface CalendarDialogProps {
   selectedDate?: Date | undefined;
 }
 
-export const generateCalendarDates = (currentDate: Date): Date[] => {
-  // 현재 달의 첫 날
-  const firstDayOfMonth = startOfMonth(currentDate);
-  // 달력 뷰의 첫 날
+export const generateCalendarDates = (currentDate: {
+  year: number;
+  month: number;
+}): Date[] => {
+  const firstDayOfMonth = new Date(currentDate.year, currentDate.month, 1);
+  const lastDayOfMonth = endOfMonth(firstDayOfMonth);
   const firstDayOfView = startOfWeek(firstDayOfMonth);
-
-  // 현재 달의 마지막 날
-  const lastDayOfMonth = endOfMonth(currentDate);
-  // 달력 뷰의 마지막 날
   const lastDayOfView = endOfWeek(lastDayOfMonth);
 
-  // date 배열
   const dates: Date[] = [];
   let tempDate = firstDayOfView;
   while (tempDate <= lastDayOfView) {
@@ -68,7 +56,13 @@ export const CalendarDialog = ({
 }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
   const today = new Date();
-  const [currentDate, setCurrentDate] = useState(today);
+  const [currentDate, setCurrentDate] = useState<{
+    year: number;
+    month: number;
+  }>({
+    year: today.getFullYear(),
+    month: today.getMonth(),
+  });
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
   const dates = generateCalendarDates(currentDate);
 
@@ -85,7 +79,7 @@ export const CalendarDialog = ({
         </Popover.Anchor>
         <StyledContent>
           <p>
-            선택된 날짜:{' '}
+            선택된 날짜:
             {selectedDate
               ? formatTemplates['01/01(월) 00:00'](selectedDate)
               : '없음'}
@@ -98,15 +92,25 @@ export const CalendarDialog = ({
                 <IcArrowsChevronLeftLine
                   width={20}
                   height={20}
-                  onClick={() => setCurrentDate(subMonths(currentDate, 1))}
+                  onClick={() =>
+                    setCurrentDate((currentDate) => ({
+                      year: currentDate.year,
+                      month: currentDate.month - 1,
+                    }))
+                  }
                 />
                 <CalendarHeaderText>
-                  {formatTemplates['2025년 1월'](currentDate)}
+                  {`${currentDate.year}년 ${currentDate.month + 1}월`}
                 </CalendarHeaderText>
                 <IcArrowsChevronRightLine
                   width={20}
                   height={20}
-                  onClick={() => setCurrentDate(addMonths(currentDate, 1))}
+                  onClick={() =>
+                    setCurrentDate((currentDate) => ({
+                      year: currentDate.year,
+                      month: currentDate.month + 1,
+                    }))
+                  }
                 />
               </CalendarHeader>
               <CalendarBody>
@@ -121,7 +125,7 @@ export const CalendarDialog = ({
                       key={date.toLocaleDateString()}
                       date={date}
                       today={today}
-                      currentMonth={currentDate.getMonth()}
+                      currentMonth={currentDate.month}
                       selectedDate={selectedDate}
                       onClick={() => handleSelectDate(date)}
                     />
