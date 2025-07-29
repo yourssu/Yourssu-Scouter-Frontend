@@ -1,6 +1,6 @@
+import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
+import { formatTemplates } from '@/components/CalendarDialog/date';
 import { IcCalenderLine, IcClockLine } from '@yourssu/design-system-react';
-import { MiniDateFieldContainer } from './DateField.style';
-import { formatTemplates } from './date';
 
 const iconMap = {
   IcCalendarLine: IcCalenderLine,
@@ -21,9 +21,9 @@ export const MiniDateField = ({
   const getDateFieldString = () => {
     if (icon == 'IcClockLine' && date) {
       return formatTemplates['오전 12:00'](date);
-    } else if (icon == 'IcClockLine' && !date) {
-      return '오전 12:00';
-    } else return formatTemplates['01/01(월)'](date);
+    } else {
+      return formatTemplates['01/01(월)'](date);
+    }
   };
 
   return (

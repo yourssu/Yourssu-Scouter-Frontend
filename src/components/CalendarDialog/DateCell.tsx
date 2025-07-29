@@ -1,5 +1,5 @@
+import { StyledDateCell } from '@/components/CalendarDialog/DateCell.style';
 import { isSameDay } from 'date-fns';
-import { StyledDateCell } from './DateCell.style';
 
 interface CalendarDateProps {
   date: Date;

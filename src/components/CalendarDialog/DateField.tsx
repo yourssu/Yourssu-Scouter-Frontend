@@ -1,6 +1,6 @@
+import { formatTemplates } from '@/components/CalendarDialog/date';
+import { DateFieldContainer } from '@/components/CalendarDialog/DateField.style';
 import { IcCalenderLine } from '@yourssu/design-system-react';
-import { formatTemplates } from './date';
-import { DateFieldContainer } from './DateField.style';
 
 interface DateFieldProps {
   date: Date;

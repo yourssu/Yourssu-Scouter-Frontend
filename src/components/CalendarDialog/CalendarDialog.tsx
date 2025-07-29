@@ -1,3 +1,6 @@
+import { DateCell } from '@/components/CalendarDialog/DateCell';
+import { MiniDateField } from '@/components/CalendarDialog/MiniDateField';
+import { formatTemplates } from '@/components/CalendarDialog/date';
 import {
   BoxButton,
   IcArrowsChevronLeftLine,
@@ -5,9 +8,6 @@ import {
 } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
-import { DateCell } from './DateCell';
-import { MiniDateField } from './MiniDateField';
-import { formatTemplates } from './date';
 
 import {
   addDays,
@@ -38,7 +38,7 @@ import {
 interface CalendarDialogProps {
   onSelect: (date: Date) => void;
   trigger: React.ReactNode;
-  selectedDate?: Date;
+  selectedDate?: Date | undefined;
 }
 
 export const CalendarDialog = ({

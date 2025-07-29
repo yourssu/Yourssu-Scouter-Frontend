@@ -2,11 +2,11 @@ import { GoogleCallback } from '@/components/Auth/GoogleCallback';
 import Main from '@/components/Main/Main.tsx';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Applicants } from '@/pages/Applicants/Applicants.tsx';
+import CalendarTestPage from '@/pages/CalendarTestPage';
 import { Members } from '@/pages/Members/Members.tsx';
+import { SendMail } from '@/pages/SendMail/SendMail';
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router';
-import { SendMail } from './pages/SendMail/SendMail';
-import CalendarTestPage from './pages/CalendarTestPage';
 
 function App() {
   return (
