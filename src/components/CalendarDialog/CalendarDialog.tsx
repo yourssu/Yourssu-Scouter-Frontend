@@ -134,11 +134,8 @@ export const CalendarDialog = ({
               </CalendarBody>
             </CalendarContainer>
             <DateFieldWrapper>
-              <MiniDateField
-                date={selectedDate ?? today}
-                icon="IcCalendarLine"
-              />
-              <MiniDateField date={selectedDate ?? today} icon="IcClockLine" />
+              <MiniDateField date={selectedDate ?? today} variant="date" />
+              <MiniDateField date={selectedDate ?? today} variant="time" />
             </DateFieldWrapper>
           </CalendarDialogContainer>
 
