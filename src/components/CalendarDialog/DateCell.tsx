@@ -4,8 +4,7 @@ import { isSameDay } from 'date-fns';
 interface CalendarDateProps {
   date: Date;
   today: Date;
-  firstDayOfMonth: Date;
-  lastDayOfMonth: Date;
+  currentMonth: number;
   selectedDate?: Date;
   onClick: () => void;
 }
@@ -13,8 +12,7 @@ interface CalendarDateProps {
 export const DateCell = ({
   date,
   today,
-  firstDayOfMonth,
-  lastDayOfMonth,
+  currentMonth,
   selectedDate = undefined,
   onClick: handleDateClick,
 }: CalendarDateProps) => {
@@ -25,7 +23,7 @@ export const DateCell = ({
   return (
     <StyledDateCell
       onClick={handleDateClick}
-      disabled={date < firstDayOfMonth || date > lastDayOfMonth}
+      disabled={date.getMonth() !== currentMonth}
       isSelected={isSelected}
       isToday={isToday}
     >

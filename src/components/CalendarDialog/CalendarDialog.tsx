@@ -6,9 +6,6 @@ import {
   IcArrowsChevronLeftLine,
   IcArrowsChevronRightLine,
 } from '@yourssu/design-system-react';
-import { Popover } from 'radix-ui';
-import { useState } from 'react';
-
 import {
   addDays,
   addMonths,
@@ -18,6 +15,8 @@ import {
   startOfWeek,
   subMonths,
 } from 'date-fns';
+import { Popover } from 'radix-ui';
+import { useState } from 'react';
 
 import {
   ButtonGroup,
@@ -41,21 +40,7 @@ interface CalendarDialogProps {
   selectedDate?: Date | undefined;
 }
 
-export const CalendarDialog = ({
-  onSelect,
-  trigger,
-  selectedDate = undefined,
-}: CalendarDialogProps) => {
-  const [open, setOpen] = useState(false);
-  const today = new Date();
-  const [currentDate, setCurrentDate] = useState(today);
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-
-  const handleSelectDate = (date: Date) => {
-    onSelect(date);
-    setOpen(false);
-  };
-
+export const generateCalendarDates = (currentDate: Date): Date[] => {
   // 현재 달의 첫 날
   const firstDayOfMonth = startOfMonth(currentDate);
   // 달력 뷰의 첫 날
@@ -67,12 +52,30 @@ export const CalendarDialog = ({
   const lastDayOfView = endOfWeek(lastDayOfMonth);
 
   // date 배열
-  let dates = [];
+  const dates: Date[] = [];
   let tempDate = firstDayOfView;
   while (tempDate <= lastDayOfView) {
     dates.push(tempDate);
     tempDate = addDays(tempDate, 1);
   }
+  return dates;
+};
+
+export const CalendarDialog = ({
+  onSelect,
+  trigger,
+  selectedDate = undefined,
+}: CalendarDialogProps) => {
+  const [open, setOpen] = useState(false);
+  const today = new Date();
+  const [currentDate, setCurrentDate] = useState(today);
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const dates = generateCalendarDates(currentDate);
+
+  const handleSelectDate = (date: Date) => {
+    onSelect(date);
+    setOpen(false);
+  };
 
   return (
     <StyledWrapper>
@@ -118,8 +121,7 @@ export const CalendarDialog = ({
                       key={date.toLocaleDateString()}
                       date={date}
                       today={today}
-                      firstDayOfMonth={firstDayOfMonth}
-                      lastDayOfMonth={lastDayOfMonth}
+                      currentMonth={currentDate.getMonth()}
                       selectedDate={selectedDate}
                       onClick={() => handleSelectDate(date)}
                     />
