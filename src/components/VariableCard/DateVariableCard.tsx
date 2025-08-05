@@ -1,5 +1,5 @@
 import { Chip, IcCalenderLine, TextField } from '@yourssu/design-system-react';
-import { CalendarDialog } from './CalendarDialog';
+import { CalendarDialog } from '../CalendarDialog/CalendarDialog';
 import { VariableCard } from './VariableCard';
 import {
   IconWrapper,

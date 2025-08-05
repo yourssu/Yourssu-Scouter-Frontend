@@ -41,7 +41,7 @@ export const InputContainer = styled.div`
 export const TextFieldContainer = styled.div`
   position: relative;
   display: inline-block;
-  width: 100%;
+  width: fit-content;
 `;
 
 export const IconWrapper = styled.div`
