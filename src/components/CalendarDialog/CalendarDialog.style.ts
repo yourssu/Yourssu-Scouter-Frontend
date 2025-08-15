@@ -1,4 +1,3 @@
-import { Popover } from 'radix-ui';
 import styled from 'styled-components';
 
 export const CalendarDialogContainer = styled.div`
@@ -66,24 +65,4 @@ export const DatesWrapper = styled.div`
 
 export const StyledWrapper = styled.div`
   display: inline-block;
-`;
-
-export const StyledContent = styled(Popover.Content)`
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  z-index: 1000;
-`;
-
-export const StyledTitle = styled.h3`
-  font-size: 16px;
-  margin-top: 0;
-  margin-bottom: 16px;
-`;
-
-export const ButtonGroup = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
 `;
