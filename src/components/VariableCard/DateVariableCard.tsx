@@ -1,5 +1,6 @@
+import { formatTemplates } from '@/components/CalendarDialog/date';
 import { Chip, IcCalenderLine, TextField } from '@yourssu/design-system-react';
-import { CalendarDialog } from './CalendarDialog';
+import { CalendarDialog } from '../CalendarDialog/CalendarDialog';
 import { VariableCard } from './VariableCard';
 import {
   IconWrapper,
@@ -38,9 +39,12 @@ export const DateVariableCard = ({
             </Chip>
           )}
           <CalendarDialog
-            selectedDate={date.value}
+            selectedDate={new Date(date.value)}
             onSelect={(selectedDate) =>
-              handleDateSelection(index, selectedDate)
+              handleDateSelection(
+                index,
+                formatTemplates['01/01(월) 00:00'](selectedDate),
+              )
             }
             trigger={
               <TextFieldContainer
