@@ -3,7 +3,7 @@ import { isSameDay } from 'date-fns';
 
 interface CalendarDateProps {
   date: Date;
-  today: Date;
+  isToday: boolean;
   currentMonth: number;
   selectedDate?: Date;
   onClick: () => void;
@@ -11,14 +11,13 @@ interface CalendarDateProps {
 
 export const DateCell = ({
   date,
-  today,
+  isToday,
   currentMonth,
   selectedDate = undefined,
   onClick: handleDateClick,
 }: CalendarDateProps) => {
   const dateNum = date.getDate();
   const isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
-  const isToday = isSameDay(date, today);
 
   return (
     <StyledDateCell

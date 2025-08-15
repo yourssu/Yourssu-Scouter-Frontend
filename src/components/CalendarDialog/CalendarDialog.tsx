@@ -4,7 +4,13 @@ import {
   IcArrowsChevronLeftLine,
   IcArrowsChevronRightLine,
 } from '@yourssu/design-system-react';
-import { addDays, endOfMonth, endOfWeek, startOfWeek } from 'date-fns';
+import {
+  addDays,
+  endOfMonth,
+  endOfWeek,
+  isSameDay,
+  startOfWeek,
+} from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
 import {
@@ -111,7 +117,7 @@ export const CalendarDialog = ({
                   <DateCell
                     key={date.toLocaleDateString()}
                     date={date}
-                    today={today}
+                    isToday={isSameDay(date, today)}
                     currentMonth={currentDate.month}
                     selectedDate={selectedDate}
                     onClick={() => handleSelectDate(date)}
