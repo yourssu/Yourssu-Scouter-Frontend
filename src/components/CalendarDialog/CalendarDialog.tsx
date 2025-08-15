@@ -47,7 +47,7 @@ export const generateCalendarDates = (currentDate: {
 export const CalendarDialog = ({
   onSelect,
   trigger,
-  selectedDate = undefined,
+  selectedDate = new Date(),
 }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
   const today = new Date();
@@ -121,8 +121,8 @@ export const CalendarDialog = ({
             </CalendarBody>
           </CalendarContainer>
           <DateFieldWrapper>
-            <MiniDateField date={selectedDate ?? today} variant="date" />
-            <MiniDateField date={selectedDate ?? today} variant="time" />
+            <MiniDateField date={selectedDate} variant="date" />
+            <MiniDateField date={selectedDate} variant="time" />
           </DateFieldWrapper>
         </CalendarDialogContainer>
       </Popover.Root>
