@@ -78,59 +78,60 @@ export const CalendarDialog = ({
         <Popover.Anchor asChild>
           <div onClick={() => setOpen(true)}>{trigger}</div>
         </Popover.Anchor>
-
-        <CalendarDialogContainer>
-          <CalendarContainer>
-            <CalendarHeader>
-              <IcArrowsChevronLeftLine
-                width={20}
-                height={20}
-                onClick={() =>
-                  setCurrentDate((currentDate) => ({
-                    year: currentDate.year,
-                    month: currentDate.month - 1,
-                  }))
-                }
-              />
-              <CalendarHeaderText>
-                {`${currentDate.year}년 ${currentDate.month + 1}월`}
-              </CalendarHeaderText>
-              <IcArrowsChevronRightLine
-                width={20}
-                height={20}
-                onClick={() =>
-                  setCurrentDate((currentDate) => ({
-                    year: currentDate.year,
-                    month: currentDate.month + 1,
-                  }))
-                }
-              />
-            </CalendarHeader>
-            <CalendarBody>
-              <DayRow>
-                {weekdays.map((day) => (
-                  <DayCell key={day}>{day}</DayCell>
-                ))}
-              </DayRow>
-              <DatesWrapper>
-                {dates.map((date) => (
-                  <DateCell
-                    key={date.toLocaleDateString()}
-                    date={date}
-                    isToday={isSameDay(date, today)}
-                    currentMonth={currentDate.month}
-                    selectedDate={selectedDate}
-                    onClick={() => handleSelectDate(date)}
-                  />
-                ))}
-              </DatesWrapper>
-            </CalendarBody>
-          </CalendarContainer>
-          <DateFieldWrapper>
-            <MiniDateField date={selectedDate} variant="date" />
-            <MiniDateField date={selectedDate} variant="time" />
-          </DateFieldWrapper>
-        </CalendarDialogContainer>
+        <Popover.Content>
+          <CalendarDialogContainer>
+            <CalendarContainer>
+              <CalendarHeader>
+                <IcArrowsChevronLeftLine
+                  width={20}
+                  height={20}
+                  onClick={() =>
+                    setCurrentDate((currentDate) => ({
+                      year: currentDate.year,
+                      month: currentDate.month - 1,
+                    }))
+                  }
+                />
+                <CalendarHeaderText>
+                  {`${currentDate.year}년 ${currentDate.month + 1}월`}
+                </CalendarHeaderText>
+                <IcArrowsChevronRightLine
+                  width={20}
+                  height={20}
+                  onClick={() =>
+                    setCurrentDate((currentDate) => ({
+                      year: currentDate.year,
+                      month: currentDate.month + 1,
+                    }))
+                  }
+                />
+              </CalendarHeader>
+              <CalendarBody>
+                <DayRow>
+                  {weekdays.map((day) => (
+                    <DayCell key={day}>{day}</DayCell>
+                  ))}
+                </DayRow>
+                <DatesWrapper>
+                  {dates.map((date) => (
+                    <DateCell
+                      key={date.toLocaleDateString()}
+                      date={date}
+                      isToday={isSameDay(date, today)}
+                      currentMonth={currentDate.month}
+                      selectedDate={selectedDate}
+                      onClick={() => handleSelectDate(date)}
+                    />
+                  ))}
+                </DatesWrapper>
+              </CalendarBody>
+            </CalendarContainer>
+            <DateFieldWrapper>
+              <MiniDateField date={selectedDate} variant="date" />
+              <MiniDateField date={selectedDate} variant="time" />
+            </DateFieldWrapper>
+          </CalendarDialogContainer>
+        </Popover.Content>
       </Popover.Root>
     </StyledWrapper>
   );
