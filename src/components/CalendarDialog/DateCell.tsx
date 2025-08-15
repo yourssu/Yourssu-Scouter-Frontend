@@ -13,7 +13,7 @@ export const DateCell = ({
   date,
   isToday,
   currentMonth,
-  selectedDate = undefined,
+  selectedDate,
   onClick: handleDateClick,
 }: CalendarDateProps) => {
   const dateNum = date.getDate();
