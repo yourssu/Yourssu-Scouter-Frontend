@@ -36,6 +36,11 @@ export const StyledDateCell = styled.button<{
     color: ${theme.semantic.color.textBasicWhite};
     background: ${theme.semantic.color.bgBrandPrimary};
     border-radius: 50%;
+
+    &:hover {
+      color: ${theme.semantic.color.textBasicWhite};
+      background: ${theme.semantic.color.bgBrandPrimary};
+    }
   `}
 
   ${({ isToday, theme }) =>

@@ -59,15 +59,14 @@ export const CalendarDialog = ({
 
   const handleSelectDate = (date: Date) => {
     onSelect(date);
-    setOpen(false);
   };
 
   return (
     <StyledWrapper>
       <Popover.Root onOpenChange={setOpen} open={open}>
-        <Popover.Anchor asChild>
-          <div onClick={() => setOpen(true)}>{trigger}</div>
-        </Popover.Anchor>
+        <Popover.Trigger asChild>
+          <div>{trigger}</div>
+        </Popover.Trigger>
         <Popover.Content>
           <CalendarDialogContainer>
             <CalendarContainer>

@@ -26,6 +26,7 @@ export const DateCell = ({
       isSelected={isSelected}
       isToday={isToday}
       onClick={handleDateClick}
+      onMouseDown={handleDateClick}
     >
       {dateNum}
     </StyledDateCell>
