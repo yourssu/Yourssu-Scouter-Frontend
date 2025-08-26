@@ -37,4 +37,14 @@ export const MiniDateFieldContainer = styled(DateFieldContainer)`
   align-items: center;
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
   ${({ theme }) => theme.typo.B1_Rg_16}
+
+  input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
+    ${({ theme }) => theme.typo.B1_Rg_16}
+    outline: none;
+  }
 `;
