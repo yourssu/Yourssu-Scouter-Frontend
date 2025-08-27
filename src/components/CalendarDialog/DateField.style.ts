@@ -24,11 +24,16 @@ export const DateFieldContainer = styled.div`
   }
 `;
 
-export const MiniDateFieldContainer = styled(DateFieldContainer)`
+export const MiniDateFieldContainer = styled(DateFieldContainer)<{
+  $isError?: boolean;
+}>`
   width: 166px;
   height: 56px;
-  background: ${({ theme }) => theme.semantic.color.buttonOutlinedEnabled};
+  background: ${({ $isError, theme }) =>
+    $isError ? theme.semantic.color.snackbarError : theme.semantic.color.buttonOutlinedEnabled};
   border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
+  border-color: ${({ $isError, theme }) =>
+    $isError ? theme.semantic.color.lineStatusNegative : theme.semantic.color.lineBasicMedium};
   border-radius: ${({ theme }) => theme.semantic.radius.m}px;
   padding: 0 20px;
   gap: 8px;

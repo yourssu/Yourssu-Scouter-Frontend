@@ -116,8 +116,8 @@ export const CalendarDialog = ({
               </CalendarBody>
             </CalendarContainer>
             <DateFieldWrapper>
-              <MiniDateField date={selectedDate} variant="date" />
-              <MiniDateField date={selectedDate} variant="time" />
+              <MiniDateField date={selectedDate} />
+              <MiniTimeField date={selectedDate} />
             </DateFieldWrapper>
           </CalendarDialogContainer>
         </Popover.Content>

@@ -4,14 +4,22 @@ interface TimeFormat {
 }
 
 const normalizeHour = (hour: number, isPm: boolean): number => {
-  if (isPm && hour < 12) {return hour + 12;}
-  if ((!isPm && hour === 12) || hour === 24) {return 0;}
-  if (hour > 24 && hour < 30) {return -1;}
+  if (isPm && hour < 12) {
+    return hour + 12;
+  }
+  if ((!isPm && hour === 12) || hour === 24) {
+    return 0;
+  }
+  if (hour > 24 && hour < 30) {
+    return -1;
+  }
   return hour;
 };
 
 const normalizeMinute = (minute: number): number => {
-  if (minute >= 60) {return 0;}
+  if (minute >= 60) {
+    return 0;
+  }
   return minute;
 };
 
@@ -33,7 +41,9 @@ export const parseTimeInput = (input: string): null | TimeFormat => {
     const hour = normalizeHour(parseInt(match[1], 10), isPm) ?? NaN;
     const minute = normalizeMinute(parseInt(match[2], 10));
 
-    if (hour < 0) {return null;}
+    if (hour < 0) {
+      return null;
+    }
 
     return { hour, minute };
   }
