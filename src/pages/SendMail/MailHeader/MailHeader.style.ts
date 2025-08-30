@@ -1,32 +1,31 @@
+import { BoxButton } from '@yourssu/design-system-react';
 import { styled } from 'styled-components';
 
 export const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 8px;
   min-height: 48px;
   border-bottom: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
 `;
 
 export const HeaderLabel = styled.span`
-  padding: 8px 12px;
+  margin-left: 8px;
   color: ${({ theme }) => theme.semantic.color.textBasicSecondary};
   ${({ theme }) => theme.typo.B1_Sb_16};
 `;
 
-// 변수 chip 추후에 만들어서 변경 예정
-export const VariableChip = styled.button`
+export const VariableSection = styled.div`
   display: flex;
   align-items: center;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 10px;
-  margin-right: 8px;
-  color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
-  ${({ theme }) => theme.typo.B3_Sb_14};
+  gap: 8px;
 `;
 
-export const VariableAddButton = styled.button``;
+export const VariableAddButton = styled(BoxButton)`
+  background-color: ${({ theme }) =>
+    theme.semantic.color.bgBasicBlack} !important;
+`;
 
 export const TabsContainer = styled.div`
   margin-left: 10px;
