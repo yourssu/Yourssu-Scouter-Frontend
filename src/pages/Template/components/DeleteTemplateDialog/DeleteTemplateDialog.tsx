@@ -1,13 +1,14 @@
-import { Dialog } from 'radix-ui';
-import {
-  StyledOverlay,
-  StyledContent,
-  StyledTitle,
-  StyledDescription,
-  ButtonContainer,
-  StyledHeader,
-} from './DeleteTemplateDialog.style';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
+import { Dialog } from 'radix-ui';
+
+import {
+  ButtonContainer,
+  StyledContent,
+  StyledDescription,
+  StyledHeader,
+  StyledOverlay,
+  StyledTitle,
+} from './DeleteTemplateDialog.style';
 
 interface DeleteTemplateDialogProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ export const DeleteTemplateDialog = ({
     onClose();
   };
   return (
-    <Dialog.Root open={isOpen} onOpenChange={onClose}>
+    <Dialog.Root onOpenChange={onClose} open={isOpen}>
       <Dialog.Portal>
         <StyledOverlay />
         <StyledContent>
@@ -38,13 +39,13 @@ export const DeleteTemplateDialog = ({
           <StyledDescription>{templateTitle}</StyledDescription>
 
           <ButtonContainer>
-            <BoxButton size="large" variant="filledSecondary" onClick={onClose}>
+            <BoxButton onClick={onClose} size="large" variant="filledSecondary">
               취소
             </BoxButton>
             <BoxButton
+              onClick={handleDelete}
               size="large"
               variant="filledPrimary"
-              onClick={handleDelete}
             >
               삭제하기
             </BoxButton>

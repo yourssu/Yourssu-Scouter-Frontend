@@ -1,29 +1,51 @@
-import { Dialog } from 'radix-ui';
-import { useState } from 'react';
-import {
-  StyledOverlay,
-  StyledContent,
-  StyledHeader,
-  StyledBody,
-  StyledFooter,
-  StyledTitleInput,
-} from './AddTemplateDialog.style';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
-import { MailEditorContent } from '@/pages/SendMail/MailEditorContent/MailEditorContent';
+import { Dialog } from 'radix-ui';
+import { useRef, useState } from 'react'; // useRef 추가
+
+import { VariableType } from '@/components/VariableDialog/VariableDialog'; // 추가
+import {
+  MailEditorContent,
+  MailEditorContentRef,
+} from '@/pages/SendMail/MailEditorContent/MailEditorContent'; // MailEditorContentRef 추가
 import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
 
+import {
+  StyledBody,
+  StyledContent,
+  StyledFooter,
+  StyledHeader,
+  StyledOverlay,
+  StyledTitleInput,
+} from './AddTemplateDialog.style';
+
 interface Template {
+  content?: string;
+  date: string;
   id: number;
   title: string;
-  date: string;
-  content?: string;
+}
+
+// 추가: Variable 인터페이스
+interface Variable {
+  differentForEachPerson: boolean;
+  id: string;
+  name: string;
+  type: VariableType;
 }
 
 interface AddTemplateDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (template: Omit<Template, 'id' | 'date'>) => void; // id, date 제외
+  onSave: (template: Omit<Template, 'date' | 'id'>) => void;
 }
+
+// 추가: VariableType을 ChipType으로 매핑
+const typeMapping: Record<VariableType, string> = {
+  사람: 'applicant',
+  날짜: 'date',
+  링크: 'link',
+  텍스트: 'part',
+};
 
 export const AddTemplateDialog = ({
   isOpen,
@@ -34,6 +56,8 @@ export const AddTemplateDialog = ({
     title: '',
     content: '',
   });
+
+  const editorRef = useRef<MailEditorContentRef>(null); // 추가
 
   const handleSave = () => {
     if (formData.title.trim()) {
@@ -46,7 +70,6 @@ export const AddTemplateDialog = ({
   };
 
   const handleClose = () => {
-    // 폼 데이터 초기화
     setFormData({
       title: '',
       content: '',
@@ -68,34 +91,45 @@ export const AddTemplateDialog = ({
     }));
   };
 
+  // 추가: MailHeader에서 변수 클릭 시 에디터에 삽입
+  const handleVariableClick = (variable: Variable) => {
+    if (editorRef.current) {
+      const chipType = typeMapping[variable.type];
+      editorRef.current.insertVariable(chipType, variable.name);
+      console.log('Variable inserted into editor:', variable);
+    }
+  };
+
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
+    <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
         <StyledOverlay />
         <StyledContent>
           <StyledHeader>
             <StyledTitleInput
-              value={formData.title}
               onChange={handleTitleChange}
               placeholder="제목을 입력하세요"
+              value={formData.title}
             />
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
-
           <StyledBody>
-            <MailHeader type="normal" />
+            <MailHeader
+              onVariableClick={handleVariableClick} // 추가
+              type="normal"
+            />
             <MailEditorContent
               initialContent={formData.content}
               onContentChange={handleContentChange}
+              ref={editorRef} // 추가
             />
           </StyledBody>
-
           <StyledFooter>
             <BoxButton
+              disabled={!formData.title.trim()}
+              onClick={handleSave}
               size="large"
               variant="filledPrimary"
-              onClick={handleSave}
-              disabled={!formData.title.trim()}
             >
               저장하기
             </BoxButton>
