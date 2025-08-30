@@ -14,6 +14,7 @@ type ChipType = 'applicant' | 'date' | 'link' | 'part' | 'person' | 'text';
 
 interface VariableChipProps {
   label: string;
+  onClick?: () => void; // 클릭 이벤트 추가
   size?: ChipSize;
   type: ChipType;
 }
@@ -27,9 +28,9 @@ const iconMap: Record<ChipType, React.ReactNode> = {
   applicant: <IcStarLine />,
 };
 
-export const VariableChip = ({ type, label, size = 'large' }: VariableChipProps) => {
+export const VariableChip = ({ type, label, size = 'large', onClick }: VariableChipProps) => {
   return (
-    <ChipWrapper size={size}>
+    <ChipWrapper onClick={onClick} size={size} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <IconWrapper>{iconMap[type]}</IconWrapper>
       <Label>{label}</Label>
     </ChipWrapper>

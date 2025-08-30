@@ -1,0 +1,97 @@
+import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
+import { Dialog } from 'radix-ui';
+import { useEffect, useState } from 'react';
+
+import { MailEditorContent } from '@/pages/SendMail/MailEditorContent/MailEditorContent';
+
+import {
+  StyledBody,
+  StyledContent,
+  StyledFooter,
+  StyledHeader,
+  StyledOverlay,
+  StyledTitle,
+} from './EditTemplateDialog.style';
+
+interface Template {
+  content?: string;
+  date: string;
+  id: number;
+  title: string;
+}
+
+interface EditTemplateDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (template: Template) => void;
+  template: null | Template;
+}
+
+export const EditTemplateDialog = ({
+  isOpen,
+  onClose,
+  onSave,
+  template,
+}: EditTemplateDialogProps) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+  });
+
+  // template이 변경될 때 폼 데이터 업데이트
+  useEffect(() => {
+    if (template) {
+      setFormData({
+        title: template.title,
+        content: template.content || '',
+      });
+    }
+  }, [template]);
+
+  const handleSave = () => {
+    if (template && formData.title.trim()) {
+      onSave({
+        ...template,
+        title: formData.title.trim(),
+        content: formData.content,
+      });
+      onClose();
+    }
+  };
+
+  const handleClose = () => {
+    onClose();
+    // 폼 데이터 리셋은 useEffect에서 다음 열릴 때 처리됨
+  };
+
+  if (!template) {return null;}
+
+  return (
+    <Dialog.Root onOpenChange={handleClose} open={isOpen}>
+      <Dialog.Portal>
+        <StyledOverlay />
+        <StyledContent>
+          <StyledHeader>
+            <StyledTitle>템플릿 편집</StyledTitle>
+            <IcCloseLine onClick={onClose} />
+          </StyledHeader>
+
+          <StyledBody>
+            <MailEditorContent />
+          </StyledBody>
+
+          <StyledFooter>
+            <BoxButton
+              disabled={!formData.title.trim()}
+              onClick={handleSave}
+              size="large"
+              variant="filledPrimary"
+            >
+              저장하기
+            </BoxButton>
+          </StyledFooter>
+        </StyledContent>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+};
