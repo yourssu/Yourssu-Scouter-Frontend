@@ -38,7 +38,7 @@ export const parseTimeInput = (input: string): null | TimeFormat => {
   // 콜론이 있는 경우
   let match = cleanedInput.match(/^(\d{1,2}):(\d{1,2})$/);
   if (match) {
-    const hour = normalizeHour(parseInt(match[1], 10), isPm) ?? NaN;
+    const hour = normalizeHour(parseInt(match[1], 10), isPm) ?? -1;
     const minute = normalizeMinute(parseInt(match[2], 10));
 
     if (hour < 0) {
@@ -55,14 +55,14 @@ export const parseTimeInput = (input: string): null | TimeFormat => {
     let minute = 0;
 
     if (cleanedInput.length <= 2) {
-      hour = normalizeHour(parseInt(cleanedInput, 10), isPm) ?? NaN;
+      hour = normalizeHour(parseInt(cleanedInput, 10), isPm) ?? -1;
       if (hour >= 30) {
         minute = Math.floor(hour % 10);
         hour = Math.floor(hour / 10);
       }
     } else if (cleanedInput.length === 3) {
       // 앞 2자리가 시간
-      hour = normalizeHour(parseInt(cleanedInput.slice(0, 2), 10), isPm) ?? NaN;
+      hour = normalizeHour(parseInt(cleanedInput.slice(0, 2), 10), isPm) ?? -1;
       minute = normalizeMinute(parseInt(cleanedInput.slice(2), 10));
       // 앞 2자리가 시간이 맞으면 바로 리턴
       if (hour <= 23 && minute <= 59) {
@@ -70,17 +70,22 @@ export const parseTimeInput = (input: string): null | TimeFormat => {
       }
 
       // 앞 1자리가 시간
-      hour = normalizeHour(parseInt(cleanedInput[0], 10), isPm) ?? NaN;
+      hour = normalizeHour(parseInt(cleanedInput[0], 10), isPm) ?? -1;
       minute = normalizeMinute(parseInt(cleanedInput.slice(1), 10));
     } else {
       // 앞 1-2자리로 시간(Hour) 결정
-      hour = normalizeHour(parseInt(cleanedInput.slice(0, 2), 10), isPm) ?? NaN;
-      if (hour >= 30) {
-        hour = Math.floor(hour / 10);
+      let hourStr = cleanedInput.slice(0, 2);
+      if (parseInt(hourStr, 10) >= 30) {
+        hourStr = cleanedInput[0];
       }
+      hour = normalizeHour(parseInt(hourStr, 10), isPm) ?? -1;
 
       // 마지막 2자리로 분(Minute) 결정
-      minute = normalizeMinute(parseInt(cleanedInput.slice(-2), 10));
+      // 앞 1-2자리(시간)과 끝 2자리(분) 사이 가운데 부분이 모두 0인지 확인
+      const middlePart = cleanedInput.slice(hourStr.length, -2);
+      if (/^0*$/.test(middlePart)) {
+        minute = normalizeMinute(parseInt(cleanedInput.slice(-2), 10));
+      }
     }
 
     if (hour < 0 || hour > 23) {

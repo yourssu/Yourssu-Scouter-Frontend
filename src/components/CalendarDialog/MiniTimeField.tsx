@@ -28,7 +28,7 @@ export const MiniTimeField = ({ date, onDateChange }: MiniTimeFieldProps) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const parsedTime = parseTimeInput(text);
-      if (!parsedTime || isNaN(parsedTime.hour) || isNaN(parsedTime.minute)) {
+      if (!parsedTime || parsedTime.hour < 0) {
         setIsError(true);
         return;
       }
