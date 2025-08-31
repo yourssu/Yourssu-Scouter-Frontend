@@ -8,9 +8,10 @@ import { parseTimeInput } from '@/components/CalendarDialog/time';
 
 interface MiniTimeFieldProps {
   date: Date;
+  onDateChange: (newDate: Date) => void;
 }
 
-export const MiniTimeField = ({ date }: MiniTimeFieldProps) => {
+export const MiniTimeField = ({ date, onDateChange }: MiniTimeFieldProps) => {
   const formatKey = '오전 12:00';
   const format = formatTemplates[formatKey](date);
   const [text, setText] = useState(format);
@@ -29,6 +30,7 @@ export const MiniTimeField = ({ date }: MiniTimeFieldProps) => {
       }
       const { hour, minute } = parsedTime;
       const newDate = setMinutes(setHours(date, hour), minute);
+      onDateChange(newDate);
       const newFormat = formatTemplates[formatKey](newDate);
       setIsError(false);
       setText(newFormat);

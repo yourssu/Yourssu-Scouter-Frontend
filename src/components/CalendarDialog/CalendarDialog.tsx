@@ -118,7 +118,10 @@ export const CalendarDialog = ({
             </CalendarContainer>
             <DateFieldWrapper>
               <MiniDateField date={selectedDate} />
-              <MiniTimeField date={selectedDate} />
+              <MiniTimeField
+                date={selectedDate}
+                onDateChange={handleSelectDate}
+              />
             </DateFieldWrapper>
           </CalendarDialogContainer>
         </Popover.Content>

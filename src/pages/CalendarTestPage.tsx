@@ -13,7 +13,7 @@ const CalendarTestPage = () => {
       <CalendarDialog
         onSelect={(date) => setSelectedDate(date)}
         selectedDate={selectedDate}
-        trigger={<DateField date={new Date()} />}
+        trigger={<DateField date={selectedDate ?? new Date()} />}
       />
       <p style={{ marginTop: '20px' }}>
         선택된 날짜:{' '}
