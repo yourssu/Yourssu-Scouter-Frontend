@@ -1,5 +1,14 @@
 import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
-import { addDays, endOfMonth, endOfWeek, isSameDay, startOfWeek } from 'date-fns';
+import {
+  addDays,
+  addHours,
+  endOfMonth,
+  endOfWeek,
+  isSameDay,
+  setHours,
+  startOfHour,
+  startOfWeek,
+} from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
 
@@ -62,6 +71,12 @@ export const CalendarDialog = ({
     onSelect(date);
   };
 
+  const getCloseHour = (date: Date) => {
+    const now = new Date();
+    const nextHour = startOfHour(addHours(now, 1));
+    return setHours(date, nextHour.getHours());
+  };
+
   return (
     <StyledWrapper>
       <Popover.Root onOpenChange={setOpen} open={open}>
@@ -108,8 +123,7 @@ export const CalendarDialog = ({
                       currentMonth={currentDate.month}
                       date={date}
                       isToday={isSameDay(date, today)}
-                      key={date.toLocaleDateString()}
-                      onClick={() => handleSelectDate(date)}
+                      onClick={() => handleSelectDate(getCloseHour(date))}
                       selectedDate={selectedDate}
                     />
                   ))}
@@ -118,10 +132,7 @@ export const CalendarDialog = ({
             </CalendarContainer>
             <DateFieldWrapper>
               <MiniDateField date={selectedDate} />
-              <MiniTimeField
-                date={selectedDate}
-                onDateChange={handleSelectDate}
-              />
+              <MiniTimeField date={selectedDate} onDateChange={handleSelectDate} />
             </DateFieldWrapper>
           </CalendarDialogContainer>
         </Popover.Content>
