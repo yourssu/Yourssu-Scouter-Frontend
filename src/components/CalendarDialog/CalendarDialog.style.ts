@@ -11,7 +11,6 @@ export const CalendarDialogContainer = styled.div`
   justify-items: center;
   z-index: 1;
   max-height: 438px;
-  overflow-y: auto;
   gap: 20px;
 `;
 

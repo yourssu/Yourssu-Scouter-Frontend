@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { DateCell } from '@/components/CalendarDialog/DateCell';
 import { MiniDateField } from '@/components/CalendarDialog/MiniDateField';
+import { MiniTimeField } from '@/components/CalendarDialog/MiniTimeField';
 
 import {
   CalendarBody,
