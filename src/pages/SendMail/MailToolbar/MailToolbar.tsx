@@ -11,6 +11,16 @@ import ChangeText_align_right from '@/assets/SendMail/ChangeText-align-right.svg
 import ChangeText_align from '@/assets/SendMail/ChangeText-align.svg';
 import ChangeUnderline from '@/assets/SendMail/ChangeUnderline.svg';
 import ChangeUnordered_list from '@/assets/SendMail/ChangeUnordered-list.svg';
+import { Editor } from '@tiptap/react';
+import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
+import {
+  ColorButton,
+  Divider,
+  FontSizeSelect,
+  ToolbarButton,
+  ToolbarContainer,
+  ToolbarGroup,
+} from './MailToolbar.style';
 
 import {
   ColorButton,
@@ -56,9 +66,19 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
             </option>
           ))}
         </FontSizeSelect>
+        <IcArrowsChevronDownFilled
+          color={'#98A2B3'}
+          width={16}
+          height={16}
+          style={{
+            position: 'absolute',
+            right: '8px',
+            pointerEvents: 'none',
+          }}
+        />
       </ToolbarGroup>
 
-      <ToolbarGroup>
+      {/* <ToolbarGroup>
         <FontFamilySelect onChange={handleFontFamilyChange} title="Font Family">
           <option value="">Font</option>
           {fontFamilies.map((font) => (
@@ -67,7 +87,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
             </option>
           ))}
         </FontFamilySelect>
-      </ToolbarGroup>
+      </ToolbarGroup> */}
 
       <Divider />
 
