@@ -10,6 +10,7 @@ const sizeStyles = {
     height: 24px;
     padding: 0 8px;
     ${({ theme }) => theme.typo.C1_Sb_13}
+    vertical-align: bottom;
   `,
 };
 

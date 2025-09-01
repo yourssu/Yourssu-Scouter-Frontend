@@ -1,3 +1,4 @@
+import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
 import Color from '@tiptap/extension-color';
 import FontFamily from '@tiptap/extension-font-family';
 import FontSize from '@tiptap/extension-font-size';
@@ -12,12 +13,11 @@ import { forwardRef, useImperativeHandle } from 'react';
 
 import { MailToolbar } from '../MailToolbar/MailToolbar';
 import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
-// import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
 
 interface MailEditorContentProps {
+  recipientName?: string;
   initialContent?: string;
   onContentChange?: (html: string) => void;
-  recipientName?: string;
 }
 
 export interface MailEditorContentRef {
@@ -33,7 +33,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
     const editor = useEditor({
       extensions: [
         StarterKit,
-        // VariableChipNode,
+        VariableChipNode,
         TextAlign.configure({
           types: ['heading', 'paragraph'],
         }),
@@ -69,10 +69,13 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
       () => ({
         insertVariable: (type: string, label: string) => {
           if (editor) {
-            // ReactNodeViewRenderer로 실제 VariableChip 컴포넌트 삽입
-            // editor.chain().focus().insertVariableChip({ type, label }).run();
-            console.log('Variable inserted:', { type, label });
-            console.log('Current editor content:', editor.getHTML());
+            editor
+              .chain()
+              .focus()
+              .insertContent({ type: 'variableChip', attrs: { type, label } })
+              .run();
+            // console.log('Variable inserted:', { type, label });
+            // console.log('Current editor content:', editor.getHTML());
           }
         },
       }),
