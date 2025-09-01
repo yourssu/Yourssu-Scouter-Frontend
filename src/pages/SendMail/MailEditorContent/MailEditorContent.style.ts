@@ -17,6 +17,9 @@ export const StyledEditorContent = styled(EditorContent)`
       color: #0066cc;
       text-decoration: underline;
     }
+    p + p {
+      margin-top: 4px;
+    }
     ul,
     ol {
       padding-left: 24px;
