@@ -80,7 +80,7 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(VariableChipNodeView);
+    return ReactNodeViewRenderer(VariableChipNodeView) as any;
   },
 
   addCommands() {

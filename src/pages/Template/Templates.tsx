@@ -1,5 +1,5 @@
 import { BoxButton, IcPlusLine, useTabs } from '@yourssu/design-system-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar';

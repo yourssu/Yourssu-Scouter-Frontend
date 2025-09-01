@@ -71,7 +71,6 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
           if (editor) {
             // ReactNodeViewRenderer로 실제 VariableChip 컴포넌트 삽입
             // editor.chain().focus().insertVariableChip({ type, label }).run();
-
             console.log('Variable inserted:', { type, label });
             console.log('Current editor content:', editor.getHTML());
           }
