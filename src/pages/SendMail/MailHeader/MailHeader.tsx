@@ -63,7 +63,7 @@ export const MailHeader = ({
       differentForEachPerson,
     };
     setVariables((prev) => [...prev, newVariable]);
-    console.log('Variable added to MailHeader:', newVariable); // 추가
+    // console.log('Variable added to MailHeader:', newVariable); // 추가
   };
 
   // 변수 타입을 VariableChip의 type으로 변환

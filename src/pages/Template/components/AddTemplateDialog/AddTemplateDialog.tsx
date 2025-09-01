@@ -47,11 +47,7 @@ const typeMapping: Record<VariableType, string> = {
   텍스트: 'part',
 };
 
-export const AddTemplateDialog = ({
-  isOpen,
-  onClose,
-  onSave,
-}: AddTemplateDialogProps) => {
+export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialogProps) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -96,7 +92,7 @@ export const AddTemplateDialog = ({
     if (editorRef.current) {
       const chipType = typeMapping[variable.type];
       editorRef.current.insertVariable(chipType, variable.name);
-      console.log('Variable inserted into editor:', variable);
+      // console.log('Variable inserted into editor:', variable);
     }
   };
 
