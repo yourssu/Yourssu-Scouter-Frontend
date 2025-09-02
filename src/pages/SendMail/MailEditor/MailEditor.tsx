@@ -1,9 +1,24 @@
-import { useState } from 'react';
-
+import { VariableType } from '@/components/VariableDialog/VariableDialog'; // 추가
+import { useRef, useState } from 'react';
 import { Recipient, RecipientId } from '../mail.type';
-import { MailEditorContent } from '../MailEditorContent/MailEditorContent';
+import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
+
+interface Variable {
+  id: string;
+  type: VariableType;
+  name: string;
+  differentForEachPerson: boolean;
+}
+
+// 추가: VariableType을 ChipType으로 매핑
+const typeMapping: Record<VariableType, string> = {
+  사람: 'applicant',
+  날짜: 'date',
+  링크: 'link',
+  텍스트: 'part',
+};
 
 export const MailEditor = () => {
   const [editorContents, setEditorContents] = useState<Record<RecipientId, string>>({
@@ -13,6 +28,8 @@ export const MailEditor = () => {
   });
 
   const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
+
+  const editorRef = useRef<MailEditorContentRef>(null);
 
   // 나중에 api로 데이터 받아옴
   const recipients: Recipient[] = [
@@ -34,11 +51,19 @@ export const MailEditor = () => {
     }));
   };
 
+  const handleVariableClick = (variable: Variable) => {
+    if (editorRef.current) {
+      const chipType = typeMapping[variable.type];
+      editorRef.current.insertVariable(chipType, variable.name);
+      console.log('Variable inserted into editor:', variable);
+    }
+  };
+
   return (
     <>
       <EditorContainer>
-        <MailHeader type="normal" />
-        <MailEditorContent />
+        <MailHeader type="normal" onVariableClick={handleVariableClick} />
+        <MailEditorContent ref={editorRef} />
       </EditorContainer>
 
       <EditorContainer>
