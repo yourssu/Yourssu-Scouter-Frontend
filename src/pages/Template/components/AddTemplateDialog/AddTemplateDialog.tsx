@@ -1,14 +1,12 @@
-import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
-import { Dialog } from 'radix-ui';
-import { useRef, useState } from 'react'; // useRef 추가
-
-import { VariableType } from '@/components/VariableDialog/VariableDialog'; // 추가
+import { VariableType } from '@/components/VariableDialog/VariableDialog';
 import {
   MailEditorContent,
   MailEditorContentRef,
-} from '@/pages/SendMail/MailEditorContent/MailEditorContent'; // MailEditorContentRef 추가
+} from '@/pages/SendMail/MailEditorContent/MailEditorContent';
 import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
-
+import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
+import { Dialog } from 'radix-ui';
+import { useRef, useState } from 'react';
 import {
   StyledBody,
   StyledContent,

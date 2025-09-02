@@ -32,7 +32,10 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
 
     const editor = useEditor({
       extensions: [
-        StarterKit,
+        StarterKit.configure({
+          link: false,
+          underline: false,
+        }),
         VariableChipNode,
         TextAlign.configure({
           types: ['heading', 'paragraph'],
@@ -74,8 +77,8 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
               .focus()
               .insertContent({ type: 'variableChip', attrs: { type, label } })
               .run();
-            // console.log('Variable inserted:', { type, label });
-            // console.log('Current editor content:', editor.getHTML());
+            console.log('Variable inserted:', { type, label });
+            console.log('Current editor content:', editor.getHTML());
           }
         },
       }),

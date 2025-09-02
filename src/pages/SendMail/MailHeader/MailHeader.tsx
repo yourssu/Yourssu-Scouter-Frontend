@@ -1,8 +1,7 @@
-import { IcArrowsChevronDownLine, useTabs } from '@yourssu/design-system-react';
-import { ReactNode, useState } from 'react';
-
 import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog, VariableType } from '@/components/VariableDialog/VariableDialog';
+import { IcArrowsChevronDownLine, useTabs } from '@yourssu/design-system-react';
+import { ReactNode, useState } from 'react';
 
 import { HeaderType, Recipient, RecipientId } from '../mail.type';
 import {
