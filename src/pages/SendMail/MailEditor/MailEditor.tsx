@@ -1,15 +1,17 @@
-import { VariableType } from '@/components/VariableDialog/VariableDialog'; // 추가
 import { useRef, useState } from 'react';
+
+import { VariableType } from '@/components/VariableDialog/VariableDialog'; // 추가
+
 import { Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
 
 interface Variable {
-  id: string;
-  type: VariableType;
-  name: string;
   differentForEachPerson: boolean;
+  id: string;
+  name: string;
+  type: VariableType;
 }
 
 // 추가: VariableType을 ChipType으로 매핑
@@ -62,7 +64,7 @@ export const MailEditor = () => {
   return (
     <>
       <EditorContainer>
-        <MailHeader type="normal" onVariableClick={handleVariableClick} />
+        <MailHeader onVariableClick={handleVariableClick} type="normal" />
         <MailEditorContent ref={editorRef} />
       </EditorContainer>
 

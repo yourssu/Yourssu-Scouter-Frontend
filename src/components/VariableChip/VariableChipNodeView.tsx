@@ -14,7 +14,7 @@ export const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
         display: 'inline-block',
       }}
     >
-      <VariableChip type={type as any} label={label} size="small" />
+      <VariableChip label={label} size="small" type={type as any} />
     </NodeViewWrapper>
   );
 };

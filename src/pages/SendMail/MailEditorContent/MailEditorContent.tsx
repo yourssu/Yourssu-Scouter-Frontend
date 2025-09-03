@@ -1,4 +1,3 @@
-import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
 import Color from '@tiptap/extension-color';
 import FontFamily from '@tiptap/extension-font-family';
 import FontSize from '@tiptap/extension-font-size';
@@ -11,13 +10,15 @@ import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { forwardRef, useImperativeHandle } from 'react';
 
+import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
+
 import { MailToolbar } from '../MailToolbar/MailToolbar';
 import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
 
 interface MailEditorContentProps {
-  recipientName?: string;
   initialContent?: string;
   onContentChange?: (html: string) => void;
+  recipientName?: string;
 }
 
 export interface MailEditorContentRef {

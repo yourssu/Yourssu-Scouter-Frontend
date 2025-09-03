@@ -35,6 +35,20 @@ export const StyledTitle = styled(Dialog.Title)`
   ${({ theme }) => theme.typo.T3_Sb_20};
 `;
 
+export const StyledTitleInput = styled.input`
+  flex: 1;
+  color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
+  ${({ theme }) => theme.typo.T3_Sb_20};
+
+  border: none;
+  outline: none;
+  background: none;
+
+  &::placeholder {
+    color: ${({ theme }) => theme.semantic.color.textBasicTertiary};
+  }
+`;
+
 export const StyledBody = styled.div`
   border-radius: ${({ theme }) => theme.semantic.radius.xl}px;
   border: 1px solid var(--line-basic-medium, rgba(227, 228, 232, 1));
