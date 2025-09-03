@@ -1,9 +1,7 @@
+import { MailEditorContent } from '@/pages/SendMail/MailEditorContent/MailEditorContent';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
-
-import { MailEditorContent } from '@/pages/SendMail/MailEditorContent/MailEditorContent';
-
 import {
   StyledBody,
   StyledContent,
@@ -64,15 +62,18 @@ export const EditTemplateDialog = ({
     // 폼 데이터 리셋은 useEffect에서 다음 열릴 때 처리됨
   };
 
-  if (!template) {return null;}
+  if (!template) {
+    return null;
+  }
 
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
         <StyledOverlay />
-        <StyledContent>
+        <StyledContent aria-describedby={undefined}>
           <StyledHeader>
             <StyledTitle>템플릿 편집</StyledTitle>
+            <Dialog.Description style={{ display: 'none' }} />
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
 

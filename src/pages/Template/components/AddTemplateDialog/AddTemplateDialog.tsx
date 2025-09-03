@@ -99,6 +99,8 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
       <Dialog.Portal>
         <StyledOverlay />
         <StyledContent>
+          <Dialog.Title style={{ display: 'none' }} />
+          <Dialog.Description style={{ display: 'none' }} />
           <StyledHeader>
             <StyledTitleInput
               onChange={handleTitleChange}
