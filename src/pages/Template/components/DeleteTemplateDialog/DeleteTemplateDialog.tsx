@@ -1,5 +1,6 @@
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
+
 import {
   ButtonContainer,
   StyledContent,
@@ -42,7 +43,7 @@ export const DeleteTemplateDialog = ({
             <BoxButton onClick={onClose} size="large" variant="filledSecondary">
               취소
             </BoxButton>
-            <BoxButton size="large" variant="filledPrimary" onClick={handleDelete}>
+            <BoxButton onClick={handleDelete} size="large" variant="filledPrimary">
               삭제하기
             </BoxButton>
           </ButtonContainer>

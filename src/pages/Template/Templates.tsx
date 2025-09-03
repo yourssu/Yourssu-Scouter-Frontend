@@ -30,12 +30,17 @@ interface Template {
   title: string;
 }
 
+const convertEnterToBr = (text: string) => {
+  return text.replace(/\n/g, '<br />');
+};
+
 const mock: Template[] = [
   {
     id: 1,
     title: '[1차 서류 합격 메일]',
     date: '2024.12.12에 수정됨',
-    content: `안녕하세요, 김솔미 님, 유어슈 Product Design 팀 리크루팅 담당자 🙋 파트 담당자 입니다😊
+    content:
+      convertEnterToBr(`안녕하세요, 김솔미 님, 유어슈 Product Design 팀 리크루팅 담당자 🙋 파트 담당자 입니다😊
    
    우선, 유어슈 Product Design 팀에 지원해주셔서 감사드립니다.
    
@@ -61,7 +66,7 @@ const mock: Template[] = [
    - 서류에 작성해주신 내용에 대한 질문
    - {{식시얼, -지식에 대한 질문 등}}
    
-   으로 구성이 될 예정이며, 상황에 따라 일부 가격이 있을 수 있음을 참고 바랍니다.`,
+   으로 구성이 될 예정이며, 상황에 따라 일부 가격이 있을 수 있음을 참고 바랍니다.`),
   },
   {
     id: 2,

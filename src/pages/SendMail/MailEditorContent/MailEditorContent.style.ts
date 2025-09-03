@@ -9,12 +9,15 @@ export const StyledEditorContent = styled(EditorContent)`
   height: 100%;
   outline: none;
   min-height: 280px;
+  max-height: 572px;
+  overflow-y: auto;
+  position: relative;
 
   .tiptap {
     font-synthesis: weight style small-caps;
 
     a {
-      color: #0066cc;
+      color: #525b64ff;
       text-decoration: underline;
     }
     p + p {

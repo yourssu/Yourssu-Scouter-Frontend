@@ -1,4 +1,5 @@
 import { Editor } from '@tiptap/react';
+import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
 
 import ChangeBold from '@/assets/SendMail/ChangeBold.svg';
 import ChangeItalic from '@/assets/SendMail/ChangeItalic.svg';
@@ -11,7 +12,7 @@ import ChangeText_align_right from '@/assets/SendMail/ChangeText-align-right.svg
 import ChangeText_align from '@/assets/SendMail/ChangeText-align.svg';
 import ChangeUnderline from '@/assets/SendMail/ChangeUnderline.svg';
 import ChangeUnordered_list from '@/assets/SendMail/ChangeUnordered-list.svg';
-import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
+
 import {
   ColorButton,
   Divider,
@@ -58,13 +59,13 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
         </FontSizeSelect>
         <IcArrowsChevronDownFilled
           color={'#98A2B3'}
-          width={16}
           height={16}
           style={{
             position: 'absolute',
             right: '8px',
             pointerEvents: 'none',
           }}
+          width={16}
         />
       </ToolbarGroup>
 
@@ -79,13 +80,13 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
         </FontFamilySelect>
         <IcArrowsChevronDownFilled
           color={'#98A2B3'}
-          width={16}
           height={16}
           style={{
             position: 'absolute',
             right: '8px',
             pointerEvents: 'none',
           }}
+          width={16}
         />
       </ToolbarGroup>
 

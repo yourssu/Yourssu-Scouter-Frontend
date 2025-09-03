@@ -1,14 +1,21 @@
-import { MailEditorContent } from '@/pages/SendMail/MailEditorContent/MailEditorContent';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import { VariableType } from '@/components/VariableDialog/VariableDialog';
+import {
+  MailEditorContent,
+  MailEditorContentRef,
+} from '@/pages/SendMail/MailEditorContent/MailEditorContent';
+import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
+
 import {
   StyledBody,
   StyledContent,
   StyledFooter,
   StyledHeader,
   StyledOverlay,
-  StyledTitle,
+  StyledTitleInput,
 } from './EditTemplateDialog.style';
 
 interface Template {
@@ -25,6 +32,20 @@ interface EditTemplateDialogProps {
   template: null | Template;
 }
 
+interface Variable {
+  differentForEachPerson: boolean;
+  id: string;
+  name: string;
+  type: VariableType;
+}
+
+const typeMapping: Record<VariableType, string> = {
+  사람: 'applicant',
+  날짜: 'date',
+  링크: 'link',
+  텍스트: 'part',
+};
+
 export const EditTemplateDialog = ({
   isOpen,
   onClose,
@@ -35,6 +56,7 @@ export const EditTemplateDialog = ({
     title: '',
     content: '',
   });
+  const editorRef = useRef<MailEditorContentRef>(null);
 
   // template이 변경될 때 폼 데이터 업데이트
   useEffect(() => {
@@ -62,23 +84,53 @@ export const EditTemplateDialog = ({
     // 폼 데이터 리셋은 useEffect에서 다음 열릴 때 처리됨
   };
 
-  if (!template) {
-    return null;
-  }
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      title: e.target.value,
+    }));
+  };
+
+  const handleContentChange = (content: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      content,
+    }));
+  };
+
+  const handleVariableClick = (variable: Variable) => {
+    if (editorRef.current) {
+      const chipType = typeMapping[variable.type];
+      editorRef.current.insertVariable(chipType, variable.name);
+      console.log('Variable inserted into editor:', variable);
+    }
+  };
+
+  if (!template) {return null;}
 
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
         <StyledOverlay />
-        <StyledContent aria-describedby={undefined}>
+        <StyledContent>
           <StyledHeader>
-            <StyledTitle>템플릿 편집</StyledTitle>
+            <Dialog.Title style={{ display: 'none' }} />
             <Dialog.Description style={{ display: 'none' }} />
+            <StyledTitleInput
+              onChange={handleTitleChange}
+              placeholder="제목을 입력하세요"
+              value={template.title}
+            />
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
 
           <StyledBody>
-            <MailEditorContent />
+            <MailHeader onVariableClick={handleVariableClick} type="normal" />
+            <MailEditorContent
+              initialContent={template.content}
+              onContentChange={handleContentChange}
+              ref={editorRef}
+            />
           </StyledBody>
 
           <StyledFooter>
