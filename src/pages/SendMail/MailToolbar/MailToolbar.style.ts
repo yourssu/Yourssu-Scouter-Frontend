@@ -54,6 +54,8 @@ export const FontSizeSelect = styled(SelectBase)`
 
 export const FontFamilySelect = styled(SelectBase)`
   width: 140px;
+  color: #334155;
+  appearance: none;
 `;
 
 export const ColorButton = styled.button`
