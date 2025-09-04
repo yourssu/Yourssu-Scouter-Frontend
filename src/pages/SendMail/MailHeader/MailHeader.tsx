@@ -67,16 +67,22 @@ export const MailHeader = ({
   };
 
   // 변수 타입을 VariableChip의 type으로 변환
-  const getChipType = (variableType: VariableType) => {
+  const getChipType = (variableType: VariableType, variableName: string) => {
     switch (variableType) {
       case '날짜':
         return 'date';
       case '링크':
         return 'link';
       case '사람':
-        return 'applicant'; // 수정: person -> applicant
+        if (variableName === '지원자') return 'applicant';
+        else return 'person';
       case '텍스트':
-        return 'part'; // 수정: text -> part
+        if (variableName === '파트명') return 'part';
+        else return 'text';
+      case '날짜':
+        return 'date';
+      case '링크':
+        return 'link';
       default:
         return 'part';
     }
@@ -89,6 +95,8 @@ export const MailHeader = ({
     }
   };
 
+  console.log(variables);
+
   if (type === 'normal') {
     return (
       <HeaderContainer>
@@ -97,9 +105,9 @@ export const MailHeader = ({
           {variables.map((variable) => (
             <VariableChip
               key={variable.id}
+              type={getChipType(variable.type, variable.name)}
               label={variable.name}
               onClick={() => handleVariableChipClick(variable)} // 추가
-              type={getChipType(variable.type)}
             />
           ))}
         </VariableSection>
