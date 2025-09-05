@@ -2,6 +2,7 @@ import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useRef, useState } from 'react';
 
+import { getChipType } from '@/components/VariableChip/VariableChip';
 import { VariableType } from '@/components/VariableDialog/VariableDialog';
 import {
   MailEditorContent,
@@ -38,13 +39,6 @@ interface Variable {
   name: string;
   type: VariableType;
 }
-
-const typeMapping: Record<VariableType, string> = {
-  사람: 'applicant',
-  날짜: 'date',
-  링크: 'link',
-  텍스트: 'part',
-};
 
 export const EditTemplateDialog = ({
   isOpen,
@@ -100,9 +94,8 @@ export const EditTemplateDialog = ({
 
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
-      const chipType = typeMapping[variable.type];
+      const chipType = getChipType(variable.type, variable.name);
       editorRef.current.insertVariable(chipType, variable.name);
-      console.log('Variable inserted into editor:', variable);
     }
   };
 
