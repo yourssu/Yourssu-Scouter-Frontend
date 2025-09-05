@@ -32,6 +32,15 @@ export const IconWrapper = styled.span`
   color: ${({ theme }) => theme.semantic.color.iconBrandSecondary};
 `;
 
+export const CloseIconWrapper = styled.span`
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.semantic.color.iconBasicTertiary};
+`;
+
 export const Label = styled.span`
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
 `;

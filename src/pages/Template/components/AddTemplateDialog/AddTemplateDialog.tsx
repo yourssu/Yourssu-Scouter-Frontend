@@ -2,6 +2,7 @@ import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useRef, useState } from 'react';
 
+import { getChipType } from '@/components/VariableChip/VariableChip';
 import { VariableType } from '@/components/VariableDialog/VariableDialog';
 import {
   MailEditorContent,
@@ -38,14 +39,6 @@ interface AddTemplateDialogProps {
   onClose: () => void;
   onSave: (template: Omit<Template, 'date' | 'id'>) => void;
 }
-
-// 추가: VariableType을 ChipType으로 매핑
-const typeMapping: Record<VariableType, string> = {
-  사람: 'applicant',
-  날짜: 'date',
-  링크: 'link',
-  텍스트: 'part',
-};
 
 export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialogProps) => {
   const [formData, setFormData] = useState({
@@ -90,9 +83,8 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
   // 추가: MailHeader에서 변수 클릭 시 에디터에 삽입
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
-      const chipType = typeMapping[variable.type];
+      const chipType = getChipType(variable.type, variable.name);
       editorRef.current.insertVariable(chipType, variable.name);
-      // console.log('Variable inserted into editor:', variable);
     }
   };
 
@@ -112,10 +104,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
           <StyledBody>
-            <MailHeader
-              onVariableClick={handleVariableClick} // 추가
-              type="normal"
-            />
+            <MailHeader onVariableClick={handleVariableClick} type="normal" />
             <MailEditorContent
               initialContent={formData.content}
               onContentChange={handleContentChange}

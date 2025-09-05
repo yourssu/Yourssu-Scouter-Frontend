@@ -5,16 +5,13 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import { VariableChipNodeView } from './VariableChipNodeView';
 
 export interface VariableChipOptions {
-  HTMLAttributes: Record<string, any>;
+  htmlAttributes: Record<string, any>;
 }
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     variableChip: {
-      insertVariableChip: (options: {
-        label: string;
-        type: string;
-      }) => ReturnType;
+      insertVariableChip: (options: { label: string; type: string }) => ReturnType;
     };
   }
 }
@@ -29,7 +26,7 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
 
   addOptions() {
     return {
-      HTMLAttributes: {},
+      htmlAttributes: {},
     };
   },
 
@@ -73,7 +70,7 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
   renderHTML({ HTMLAttributes }) {
     return [
       'span',
-      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+      mergeAttributes(this.options.htmlAttributes, HTMLAttributes, {
         'data-variable-chip': '',
       }),
     ];

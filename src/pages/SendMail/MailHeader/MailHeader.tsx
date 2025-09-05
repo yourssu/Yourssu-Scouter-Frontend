@@ -1,7 +1,7 @@
 import { IcArrowsChevronDownLine, useTabs } from '@yourssu/design-system-react';
 import { ReactNode, useState } from 'react';
 
-import { VariableChip } from '@/components/VariableChip/VariableChip';
+import { getChipType, VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog, VariableType } from '@/components/VariableDialog/VariableDialog';
 
 import { HeaderType, Recipient, RecipientId } from '../mail.type';
@@ -24,9 +24,12 @@ interface Variable {
 interface MailHeaderProps {
   children?: ReactNode;
   onTabChange?: (id: RecipientId) => void;
-  onVariableClick?: (variable: Variable) => void; // 추가
+  onVariableAdd?: (type: VariableType, name: string, differentForEachPerson: boolean) => void;
+  onVariableClick?: (variable: Variable) => void;
+  onVariableDelete?: (variable: Variable) => void;
   recipients?: Recipient[];
   type: HeaderType;
+  variables?: Variable[];
 }
 
 export const MailHeader = ({
@@ -34,13 +37,12 @@ export const MailHeader = ({
   recipients = [],
   onTabChange,
   children,
-  onVariableClick, // 추가
+  variables = [],
+  onVariableAdd,
+  onVariableClick,
+  onVariableDelete,
 }: MailHeaderProps) => {
   const [activeTabId, setActiveTabId] = useState<RecipientId>('recipient-0');
-  const [variables, setVariables] = useState<Variable[]>([
-    { id: '1', type: '텍스트', name: '파트명', differentForEachPerson: false },
-    { id: '2', type: '사람', name: '지원자', differentForEachPerson: true },
-  ]);
 
   const [Tabs] = useTabs<RecipientId>({
     defaultTab: activeTabId,
@@ -54,48 +56,28 @@ export const MailHeader = ({
     }
   };
 
-  // 변수 추가 핸들러
-  const handleAddVariable = (type: VariableType, name: string, differentForEachPerson: boolean) => {
-    const newVariable: Variable = {
-      id: Date.now().toString(),
-      type,
-      name,
-      differentForEachPerson,
-    };
-    setVariables((prev) => [...prev, newVariable]);
-    // console.log('Variable added to MailHeader:', newVariable); // 추가
-  };
-
-  // 변수 타입을 VariableChip의 type으로 변환
-  const getChipType = (variableType: VariableType, variableName: string) => {
-    switch (variableType) {
-      case '날짜':
-        return 'date';
-      case '링크':
-        return 'link';
-      case '사람':
-        if (variableName === '지원자') return 'applicant';
-        else return 'person';
-      case '텍스트':
-        if (variableName === '파트명') return 'part';
-        else return 'text';
-      case '날짜':
-        return 'date';
-      case '링크':
-        return 'link';
-      default:
-        return 'part';
+  const handleVariableChipAdd = (
+    type: VariableType,
+    name: string,
+    differentForEachPerson: boolean,
+  ) => {
+    // console.log('MailHeader를 거쳐 변수 추가:', { type, name });
+    if (onVariableAdd) {
+      onVariableAdd(type, name, differentForEachPerson);
     }
   };
 
-  // 추가: 변수 클릭 핸들러
   const handleVariableChipClick = (variable: Variable) => {
     if (onVariableClick) {
       onVariableClick(variable);
     }
   };
 
-  console.log(variables);
+  const handleVariableChipDelete = (variable: Variable) => {
+    if (onVariableDelete) {
+      onVariableDelete(variable);
+    }
+  };
 
   if (type === 'normal') {
     return (
@@ -105,14 +87,15 @@ export const MailHeader = ({
           {variables.map((variable) => (
             <VariableChip
               key={variable.id}
-              type={getChipType(variable.type, variable.name)}
               label={variable.name}
-              onClick={() => handleVariableChipClick(variable)} // 추가
+              onClick={() => handleVariableChipClick(variable)}
+              onDelete={() => handleVariableChipDelete(variable)}
+              type={getChipType(variable.type, variable.name)}
             />
           ))}
         </VariableSection>
         <VariableDialog
-          onSelect={handleAddVariable}
+          onSelect={handleVariableChipAdd}
           trigger={
             <VariableAddButton
               rightIcon={<IcArrowsChevronDownLine />}

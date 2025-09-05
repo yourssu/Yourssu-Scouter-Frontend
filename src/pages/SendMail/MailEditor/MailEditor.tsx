@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 
+import { getChipType } from '@/components/VariableChip/VariableChip';
 import { VariableType } from '@/components/VariableDialog/VariableDialog'; // 추가
 
 import { Recipient, RecipientId } from '../mail.type';
@@ -14,14 +15,6 @@ interface Variable {
   type: VariableType;
 }
 
-// 추가: VariableType을 ChipType으로 매핑
-const typeMapping: Record<VariableType, string> = {
-  사람: 'applicant',
-  날짜: 'date',
-  링크: 'link',
-  텍스트: 'part',
-};
-
 export const MailEditor = () => {
   const [editorContents, setEditorContents] = useState<Record<RecipientId, string>>({
     'recipient-0': '',
@@ -30,6 +23,11 @@ export const MailEditor = () => {
   });
 
   const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
+
+  const [variables, setVariables] = useState<Variable[]>([
+    { id: '1', type: '텍스트', name: '파트명', differentForEachPerson: false },
+    { id: '2', type: '사람', name: '지원자', differentForEachPerson: true },
+  ]);
 
   const editorRef = useRef<MailEditorContentRef>(null);
 
@@ -55,16 +53,46 @@ export const MailEditor = () => {
 
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
-      const chipType = typeMapping[variable.type];
+      const chipType = getChipType(variable.type, variable.name);
       editorRef.current.insertVariable(chipType, variable.name);
-      console.log('Variable inserted into editor:', variable);
+    }
+  };
+
+  const handleVariableAdd = (type: VariableType, name: string, differentForEachPerson: boolean) => {
+    const newVariable: Variable = {
+      id: Date.now().toString(),
+      type,
+      name,
+      differentForEachPerson,
+    };
+
+    setVariables((prev) => [...prev, newVariable]);
+
+    editorRef.current?.insertVariable(
+      getChipType(newVariable.type, newVariable.name),
+      newVariable.name,
+    );
+  };
+
+  const handleVariableDelete = (variable: Variable) => {
+    // console.log('Attempting to delete variable:', variable);
+    if (editorRef.current) {
+      setVariables((prev) => prev.filter((v) => v.id !== variable.id));
+      editorRef.current.deleteVariable(variable.name);
+      // console.log('Variable deleted from editor:', variable);
     }
   };
 
   return (
     <>
       <EditorContainer>
-        <MailHeader onVariableClick={handleVariableClick} type="normal" />
+        <MailHeader
+          onVariableAdd={handleVariableAdd}
+          onVariableClick={handleVariableClick}
+          onVariableDelete={handleVariableDelete}
+          type="normal"
+          variables={variables}
+        />
         <MailEditorContent ref={editorRef} />
       </EditorContainer>
 
