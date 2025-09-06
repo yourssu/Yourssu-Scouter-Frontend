@@ -2,6 +2,7 @@ import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/desi
 import {
   addDays,
   addHours,
+  addMonths,
   endOfMonth,
   endOfWeek,
   isSameDay,
@@ -50,13 +51,10 @@ export const generateCalendarDates = (currentDate: { month: number; year: number
   return dates;
 };
 
-export const CalendarDialog = ({
-  onSelect,
-  trigger,
-  selectedDate = new Date(),
-}: CalendarDialogProps) => {
+export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
   const today = new Date();
+  const displayDate = selectedDate ?? today;
   const [currentDate, setCurrentDate] = useState<{
     month: number;
     year: number;
@@ -69,6 +67,11 @@ export const CalendarDialog = ({
 
   const handleSelectDate = (date: Date) => {
     onSelect(date);
+  };
+
+  const handleMonthChange = (amount: number) => {
+    const newDate = addMonths(new Date(currentDate.year, currentDate.month, 1), amount);
+    setCurrentDate({ year: newDate.getFullYear(), month: newDate.getMonth() });
   };
 
   const getCloseHour = (date: Date) => {
@@ -87,29 +90,11 @@ export const CalendarDialog = ({
           <CalendarDialogContainer>
             <CalendarContainer>
               <CalendarHeader>
-                <IcArrowsChevronLeftLine
-                  height={20}
-                  onClick={() =>
-                    setCurrentDate((currentDate) => ({
-                      year: currentDate.year,
-                      month: currentDate.month - 1,
-                    }))
-                  }
-                  width={20}
-                />
+                <IcArrowsChevronLeftLine height={20} onClick={() => handleMonthChange(-1)} />
                 <CalendarHeaderText>
                   {`${currentDate.year}년 ${currentDate.month + 1}월`}
                 </CalendarHeaderText>
-                <IcArrowsChevronRightLine
-                  height={20}
-                  onClick={() =>
-                    setCurrentDate((currentDate) => ({
-                      year: currentDate.year,
-                      month: currentDate.month + 1,
-                    }))
-                  }
-                  width={20}
-                />
+                <IcArrowsChevronRightLine height={20} onClick={() => handleMonthChange(1)} />
               </CalendarHeader>
               <CalendarBody>
                 <DayRow>
@@ -131,8 +116,8 @@ export const CalendarDialog = ({
               </CalendarBody>
             </CalendarContainer>
             <DateFieldWrapper>
-              <MiniDateField date={selectedDate} />
-              <MiniTimeField date={selectedDate} onDateChange={handleSelectDate} />
+              <MiniDateField date={displayDate} />
+              <MiniTimeField date={displayDate} onDateChange={handleSelectDate} />
             </DateFieldWrapper>
           </CalendarDialogContainer>
         </Popover.Content>
