@@ -30,6 +30,14 @@ export const StyledDateCell = styled.button<{
     background: none;
   }
 
+  ${({ $isToday, theme }) =>
+    $isToday &&
+    `
+    color: ${theme.semantic.color.textBasicPrimary};
+    background: ${theme.semantic.color.bgBasicStrong};
+    border-radius: 50%;
+  `}
+
   ${({ $isSelected, theme }) =>
     $isSelected &&
     `
@@ -41,13 +49,5 @@ export const StyledDateCell = styled.button<{
       color: ${theme.semantic.color.textBasicWhite};
       background: ${theme.semantic.color.bgBrandPrimary};
     }
-  `}
-
-  ${({ $isToday, theme }) =>
-    $isToday &&
-    `
-    color: ${theme.semantic.color.textBasicPrimary};
-    background: ${theme.semantic.color.bgBasicStrong};
-    border-radius: 50%;
   `}
 `;

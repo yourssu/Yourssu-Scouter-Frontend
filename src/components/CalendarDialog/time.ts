@@ -27,7 +27,6 @@ export const parseTimeInput = (input: string): null | TimeFormat => {
   let cleanedInput = input.trim().toLowerCase();
   let isPm = false;
 
-  // 오전/오후 처리 -> 오전 222, 오후 222 이런거 처리해야 함(8/26/새벽)
   if (/^(pm|오후)/.test(cleanedInput)) {
     isPm = true;
     cleanedInput = cleanedInput.replace(/^(pm|오후)/, '').trim();
