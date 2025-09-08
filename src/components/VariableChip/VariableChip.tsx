@@ -6,15 +6,16 @@ import {
   IcStarLine,
   IcUserLine,
 } from '@yourssu/design-system-react';
+
 import { ChipWrapper, IconWrapper, Label } from './VariableChip.style';
 
 type ChipSize = 'large' | 'small';
-type ChipType = 'person' | 'date' | 'link' | 'text' | 'part' | 'applicant';
+type ChipType = 'applicant' | 'date' | 'link' | 'part' | 'person' | 'text';
 
 interface VariableChipProps {
-  type: ChipType;
   label: string;
   size?: ChipSize;
+  type: ChipType;
 }
 
 const iconMap: Record<ChipType, React.ReactNode> = {
@@ -26,11 +27,7 @@ const iconMap: Record<ChipType, React.ReactNode> = {
   applicant: <IcStarLine />,
 };
 
-export const VariableChip = ({
-  type,
-  label,
-  size = 'large',
-}: VariableChipProps) => {
+export const VariableChip = ({ type, label, size = 'large' }: VariableChipProps) => {
   return (
     <ChipWrapper size={size}>
       <IconWrapper>{iconMap[type]}</IconWrapper>

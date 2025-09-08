@@ -8,13 +8,14 @@ import TextStyle from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+
 import { MailToolbar } from '../MailToolbar/MailToolbar';
 import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
 
 interface MailEditorContentProps {
-  recipientName?: string;
   initialContent?: string;
   onContentChange?: (html: string) => void;
+  recipientName?: string;
 }
 
 export const MailEditorContent = ({

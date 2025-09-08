@@ -1,4 +1,5 @@
 import { IcTrashLine } from '@yourssu/design-system-react';
+
 import {
   TemplateDate,
   TemplateItemContainer,
@@ -8,9 +9,9 @@ import {
 } from './TemplateList.style';
 
 export interface TemplateListProps {
-  title: string;
   date: string;
   onDelete: () => void;
+  title: string;
 }
 
 export const TemplateList = ({ title, date, onDelete }: TemplateListProps) => {

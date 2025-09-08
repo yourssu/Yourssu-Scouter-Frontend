@@ -1,20 +1,18 @@
 import { useState } from 'react';
+
 import { Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
 
 export const MailEditor = () => {
-  const [editorContents, setEditorContents] = useState<
-    Record<RecipientId, string>
-  >({
+  const [editorContents, setEditorContents] = useState<Record<RecipientId, string>>({
     'recipient-0': '',
     'recipient-1': '',
     'recipient-2': '',
   });
 
-  const [activeRecipient, setActiveRecipient] =
-    useState<RecipientId>('recipient-0');
+  const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
 
   // 나중에 api로 데이터 받아옴
   const recipients: Recipient[] = [
@@ -27,9 +25,7 @@ export const MailEditor = () => {
     setActiveRecipient(id);
   };
 
-  const activeRecipientName = recipients.find(
-    (r) => r.id === activeRecipient,
-  )?.name;
+  const activeRecipientName = recipients.find((r) => r.id === activeRecipient)?.name;
 
   const handleContentChange = (html: string) => {
     setEditorContents((prev) => ({
@@ -46,16 +42,12 @@ export const MailEditor = () => {
       </EditorContainer>
 
       <EditorContainer>
-        <MailHeader
-          type="tabs"
-          recipients={recipients}
-          onTabChange={handleTabChange}
-        />
+        <MailHeader onTabChange={handleTabChange} recipients={recipients} type="tabs" />
         <MailEditorContent
-          key={activeRecipient}
-          recipientName={activeRecipientName}
           initialContent={editorContents[activeRecipient]}
+          key={activeRecipient}
           onContentChange={handleContentChange}
+          recipientName={activeRecipientName}
         />
       </EditorContainer>
     </>

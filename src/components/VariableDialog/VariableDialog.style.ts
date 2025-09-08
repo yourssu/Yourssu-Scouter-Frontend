@@ -33,8 +33,7 @@ export const StyledItem = styled(DropdownMenu.Item)`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) =>
-      theme.semantic.color.buttonTextSecondaryPressed};
+    background-color: ${({ theme }) => theme.semantic.color.buttonTextSecondaryPressed};
   }
 `;
 

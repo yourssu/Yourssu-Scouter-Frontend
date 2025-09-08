@@ -5,8 +5,7 @@ export const HeaderContainer = styled.div`
   align-items: center;
   padding: 8px;
   min-height: 48px;
-  border-bottom: 1px solid
-    ${({ theme }) => theme.semantic.color.lineBasicMedium};
+  border-bottom: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
 `;
 
 export const HeaderLabel = styled.span`
@@ -32,6 +31,5 @@ export const VariableAddButton = styled.button``;
 export const TabsContainer = styled.div`
   margin-left: 10px;
   width: 100%;
-  border-bottom: 1px solid
-    ${({ theme }) => theme.semantic.color.lineBasicMedium};
+  border-bottom: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
 `;

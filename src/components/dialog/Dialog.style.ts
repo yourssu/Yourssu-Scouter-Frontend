@@ -45,8 +45,7 @@ export const StyledTextButton = styled(TextButton)`
   white-space: nowrap;
 
   &:hover {
-    background: ${({ theme }) =>
-      theme.semantic.color.buttonTextSecondaryPressed};
+    background: ${({ theme }) => theme.semantic.color.buttonTextSecondaryPressed};
     color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
   }
 `;

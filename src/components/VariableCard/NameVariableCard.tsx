@@ -1,4 +1,5 @@
 import { Chip, IcPlusLine } from '@yourssu/design-system-react';
+
 import { SearchedMemberDialog } from '../SearchedMemberDialog/SearchedMemberDialog';
 import { VariableCard } from './VariableCard';
 import { NameTagsContainer, StyledBoxButton } from './VariableCard.style';
@@ -27,11 +28,9 @@ export const NameVariableCard = ({
       <NameTagsContainer>
         {names.map((name) => (
           <div key={name}>
-            <Chip size="medium" role="input" data-chip={name}>
+            <Chip data-chip={name} role="input" size="medium">
               <Chip.Content>{name}</Chip.Content>
-              {onRemoveName && (
-                <Chip.Remove onClick={() => handleRemoveName(name)} />
-              )}
+              {onRemoveName && <Chip.Remove onClick={() => handleRemoveName(name)} />}
             </Chip>
           </div>
         ))}
@@ -40,11 +39,7 @@ export const NameVariableCard = ({
       <SearchedMemberDialog
         onSelect={handleSelectMember}
         trigger={
-          <StyledBoxButton
-            size="xsmall"
-            variant="outlined"
-            rightIcon={<IcPlusLine width={12} />}
-          >
+          <StyledBoxButton rightIcon={<IcPlusLine width={12} />} size="xsmall" variant="outlined">
             사람 변수 추가
           </StyledBoxButton>
         }

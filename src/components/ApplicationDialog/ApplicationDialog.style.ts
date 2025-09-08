@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { DropdownMenu, Popover } from 'radix-ui';
+import styled from 'styled-components';
 
 export const StyledContent = styled(Popover.Content)`
   display: flex;

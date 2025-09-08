@@ -1,7 +1,8 @@
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
 import Table from '@/components/Table/Table.tsx';
-import { MemberState } from '@/query/member/schema.ts';
 import { useMemberColumns } from '@/query/member/hooks/useMemberColumns.tsx';
+import { MemberState } from '@/query/member/schema.ts';
 
 interface MemberTableFallbackProps {
   state: MemberState;

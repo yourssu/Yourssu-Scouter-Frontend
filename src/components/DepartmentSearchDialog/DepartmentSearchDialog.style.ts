@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { Popover } from 'radix-ui';
 import { TextButton } from '@yourssu/design-system-react';
+import { Popover } from 'radix-ui';
+import styled from 'styled-components';
 
 export const StyledContent = styled(Popover.Content)<{ $gap: boolean }>`
   display: flex;

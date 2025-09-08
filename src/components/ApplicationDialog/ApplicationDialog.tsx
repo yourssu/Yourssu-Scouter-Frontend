@@ -1,18 +1,4 @@
-import { DropdownMenu, Popover } from 'radix-ui';
-import { PropsWithChildren, useState } from 'react';
-import {
-  StyledContent,
-  StyledTitleContainer,
-  StyledTitle,
-  StyledTopContainer,
-  StyledSupportingText,
-  StyledBottomContainer,
-  StyledBodyContainer,
-  StyledFieldList,
-  StyledIconButton,
-  StyledFieldContainer,
-  StyledOptionContent,
-} from '@/components/ApplicationDialog/ApplicationDialog.style.ts';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import {
   BoxButton,
   IcCloseLine,
@@ -23,12 +9,27 @@ import {
   TextButton,
   TextField,
 } from '@yourssu/design-system-react';
+import { DropdownMenu, Popover } from 'radix-ui';
+import { PropsWithChildren, useState } from 'react';
+
+import {
+  StyledBodyContainer,
+  StyledBottomContainer,
+  StyledContent,
+  StyledFieldContainer,
+  StyledFieldList,
+  StyledIconButton,
+  StyledOptionContent,
+  StyledSupportingText,
+  StyledTitle,
+  StyledTitleContainer,
+  StyledTopContainer,
+} from '@/components/ApplicationDialog/ApplicationDialog.style.ts';
 import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
-import { Semester } from '@/query/semester/schema.ts';
-import { Part } from '@/query/part/schema.ts';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { partOptions } from '@/query/part/options.ts';
 import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
+import { partOptions } from '@/query/part/options.ts';
+import { Part } from '@/query/part/schema.ts';
+import { Semester } from '@/query/semester/schema.ts';
 
 interface ApplicationDialogProps extends PropsWithChildren {
   semester: Semester;
@@ -43,7 +44,9 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
   });
 
   const selectPart = (partName: string) => {
-    if (selectedParts.some((p) => p.partName === partName)) return;
+    if (selectedParts.some((p) => p.partName === partName)) {
+      return;
+    }
     const part = parts.find((p) => p.partName === partName);
     if (part) {
       setSelectedParts((prevState) => [...prevState, part]);
@@ -51,16 +54,14 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
   };
 
   const deletePart = (partId: number) => () => {
-    setSelectedParts((prevState) =>
-      prevState.filter((p) => p.partId !== partId),
-    );
+    setSelectedParts((prevState) => prevState.filter((p) => p.partId !== partId));
   };
 
   return (
     <Popover.Root>
       <Popover.Trigger asChild>{children}</Popover.Trigger>
       <Popover.Portal>
-        <StyledContent sideOffset={6} align="end">
+        <StyledContent align="end" sideOffset={6}>
           <StyledTopContainer>
             <StyledTitleContainer>
               <StyledTitle>파트별 지원서 입력</StyledTitle>
@@ -71,8 +72,7 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
               </Popover.Close>
             </StyledTitleContainer>
             <StyledSupportingText>
-              리크루팅을 진행 중인 파트를 추가하고 파트별 지원서 Google Form
-              링크를 입력하세요.
+              리크루팅을 진행 중인 파트를 추가하고 파트별 지원서 Google Form 링크를 입력하세요.
             </StyledSupportingText>
           </StyledTopContainer>
           <StyledBodyContainer>
@@ -95,9 +95,9 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
                         <DropdownMenu.Item asChild>
                           <TextButton
                             leftIcon={<IcCopyLine />}
-                            width="100%"
                             size="medium"
                             variant="textSecondary"
+                            width="100%"
                           >
                             URL 복사
                           </TextButton>
@@ -105,10 +105,10 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
                         <DropdownMenu.Item asChild>
                           <TextButton
                             leftIcon={<IcTrashLine />}
-                            width="100%"
+                            onClick={deletePart(part.partId)}
                             size="medium"
                             variant="textSecondary"
-                            onClick={deletePart(part.partId)}
+                            width="100%"
                           >
                             파트 삭제
                           </TextButton>
@@ -119,13 +119,9 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
                 </StyledFieldContainer>
               ))}
             </StyledFieldList>
-            <GenericDialog options={options} onSelect={selectPart}>
+            <GenericDialog onSelect={selectPart} options={options}>
               <Popover.Trigger>
-                <BoxButton
-                  variant="filledSecondary"
-                  size="xsmall"
-                  rightIcon={<IcPlusLine />}
-                >
+                <BoxButton rightIcon={<IcPlusLine />} size="xsmall" variant="filledSecondary">
                   파트 추가하기
                 </BoxButton>
               </Popover.Trigger>
@@ -134,8 +130,8 @@ const ApplicationDialog = ({ children, semester }: ApplicationDialogProps) => {
           <StyledBottomContainer>
             <BoxButton
               onClick={() => postApplicantsFromFormMutation.mutate()}
-              variant="filledPrimary"
               size="large"
+              variant="filledPrimary"
             >
               저장하고 불러오기
             </BoxButton>

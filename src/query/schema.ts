@@ -5,7 +5,9 @@ const DateTimeSchema = z.string().refine(
   (value) => {
     // "YYYY.MM.DD HH:MM" 형식에 대한 정규식 패턴
     const pattern = /^\d{4}\.\d{2}\.\d{2} \d{2}:\d{2}$/;
-    if (!pattern.test(value)) return false;
+    if (!pattern.test(value)) {
+      return false;
+    }
 
     // 날짜와 시간 구성요소 추출
     const [datePart, timePart] = value.split(' ');
@@ -38,13 +40,10 @@ const DateTimeSchema = z.string().refine(
     const isValidHour = hour >= 0 && hour <= 23;
     const isValidMinute = minute >= 0 && minute <= 59;
 
-    return (
-      isValidYear && isValidMonth && isValidDay && isValidHour && isValidMinute
-    );
+    return isValidYear && isValidMonth && isValidDay && isValidHour && isValidMinute;
   },
   {
-    message:
-      '잘못된 날짜-시간 형식입니다. 예상 형식: YYYY.MM.DD HH:MM (예: 2025.04.11 22:40)',
+    message: '잘못된 날짜-시간 형식입니다. 예상 형식: YYYY.MM.DD HH:MM (예: 2025.04.11 22:40)',
   },
 );
 

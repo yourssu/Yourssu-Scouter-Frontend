@@ -1,31 +1,29 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { IcArrowsChevronDownLine, IcFilterBarLine } from '@yourssu/design-system-react';
+
 import { StateButton } from '@/components/StateButton/StateButton.tsx';
 import { partOptions } from '@/query/part/options.ts';
-import {
-  IcArrowsChevronDownLine,
-  IcFilterBarLine,
-} from '@yourssu/design-system-react';
 
 export const PartStateButton = ({
   selectedValue,
   onStateChange,
 }: {
-  selectedValue: string;
   onStateChange: (value: string) => void;
+  selectedValue: string;
 }) => {
   const { data: states } = useSuspenseQuery(partOptions());
   const options = states.map((state) => ({ label: state.partName }));
 
   return (
     <StateButton
-      width={160}
-      options={options}
-      selectedValue={selectedValue}
+      leftIcon={<IcFilterBarLine />}
       onSelect={onStateChange}
+      options={options}
+      rightIcon={<IcArrowsChevronDownLine />}
+      selectedValue={selectedValue}
       size="medium"
       variant="outlined"
-      rightIcon={<IcArrowsChevronDownLine />}
-      leftIcon={<IcFilterBarLine />}
+      width={160}
     />
   );
 };

@@ -1,28 +1,30 @@
-import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
-import { StateButton } from './StateButton';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
+
 import { semesterOptions } from '@/query/semester/options.ts';
+
+import { StateButton } from './StateButton';
 
 export const SemesterStateButton = ({
   selectedValue,
   onStateChange,
   size = 'small',
 }: {
-  selectedValue: string;
   onStateChange: (value: string) => void;
-  size?: 'small' | 'medium';
+  selectedValue: string;
+  size?: 'medium' | 'small';
 }) => {
   const { data: semesters } = useSuspenseQuery(semesterOptions());
   const options = semesters.map((semester) => ({ label: semester.semester }));
 
   return (
     <StateButton
-      options={options}
-      selectedValue={selectedValue}
       onSelect={onStateChange}
-      variant="outlined"
-      size={size}
+      options={options}
       rightIcon={<IcArrowsChevronDownLine />}
+      selectedValue={selectedValue}
+      size={size}
+      variant="outlined"
     />
   );
 };

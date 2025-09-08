@@ -1,5 +1,6 @@
 import { authService } from '@/apis/auth.service';
 import { tokenService } from '@/apis/token.service';
+
 import { StyledContainer, StyledProfileImage } from './Navigation.style';
 
 const Navigation = () => {

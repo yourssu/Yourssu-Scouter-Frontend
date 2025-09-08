@@ -1,19 +1,13 @@
-import { formatTemplates } from '@/components/CalendarDialog/date';
 import { Chip, IcCalenderLine, TextField } from '@yourssu/design-system-react';
+
+import { formatTemplates } from '@/components/CalendarDialog/date';
+
 import { CalendarDialog } from '../CalendarDialog/CalendarDialog';
 import { VariableCard } from './VariableCard';
-import {
-  IconWrapper,
-  InputContainer,
-  TextFieldContainer,
-} from './VariableCard.style';
+import { IconWrapper, InputContainer, TextFieldContainer } from './VariableCard.style';
 import { DateVariableCardProps } from './VariableCardType';
 
-export const DateVariableCard = ({
-  title,
-  dates,
-  onDateChange,
-}: DateVariableCardProps) => {
+export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCardProps) => {
   const hasLabels = dates.some((date) => date.label);
   const count = hasLabels ? dates.length : undefined;
 
@@ -30,22 +24,19 @@ export const DateVariableCard = ({
   };
 
   return (
-    <VariableCard title={title} count={count}>
+    <VariableCard count={count} title={title}>
       {dates.map((date, index) => (
         <InputContainer key={index}>
           {date.label && (
-            <Chip size="medium" role="input" style={{ whiteSpace: 'nowrap' }}>
+            <Chip role="input" size="medium" style={{ whiteSpace: 'nowrap' }}>
               {date.label}
             </Chip>
           )}
           <CalendarDialog
-            selectedDate={new Date(date.value)}
             onSelect={(selectedDate) =>
-              handleDateSelection(
-                index,
-                formatTemplates['01/01(월) 00:00'](selectedDate),
-              )
+              handleDateSelection(index, formatTemplates['01/01(월) 00:00'](selectedDate))
             }
+            selectedDate={new Date(date.value)}
             trigger={
               <TextFieldContainer
                 onClick={(e) => {
@@ -55,12 +46,12 @@ export const DateVariableCard = ({
                 }}
               >
                 <TextField
-                  type="text"
                   key={`date-field-${index}-${date.value}`}
-                  value={date.value}
+                  onClearButtonClick={() => handleDateClear(index)}
                   placeholder="MM/DD(D) HH:MM"
                   readOnly
-                  onClearButtonClick={() => handleDateClear(index)}
+                  type="text"
+                  value={date.value}
                 />
                 {!date.value && (
                   <IconWrapper>

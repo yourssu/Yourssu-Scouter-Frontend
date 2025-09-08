@@ -14,8 +14,7 @@ export const StyledTrigger = styled(DropdownMenu.Trigger)`
   cursor: pointer;
 
   &:focus {
-    box-shadow: 0 0 0 2px
-      ${({ theme }) => theme.semantic.color.textBrandPrimary};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.semantic.color.textBrandPrimary};
   }
 `;
 
@@ -54,8 +53,7 @@ export const StyledItem = styled(DropdownMenu.Item)`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) =>
-      theme.semantic.color.buttonTextSecondaryPressed};
+    background-color: ${({ theme }) => theme.semantic.color.buttonTextSecondaryPressed};
   }
 `;
 

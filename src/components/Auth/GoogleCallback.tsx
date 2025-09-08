@@ -1,6 +1,7 @@
-import { authService } from '@/apis/auth.service';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
+
+import { authService } from '@/apis/auth.service';
 
 export const GoogleCallback = () => {
   const navigate = useNavigate();
@@ -15,8 +16,7 @@ export const GoogleCallback = () => {
         processedRef.current = true;
 
         try {
-          const { accessToken, refreshToken } =
-            await authService.googleLogin(code);
+          const { accessToken, refreshToken } = await authService.googleLogin(code);
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
           navigate('/');

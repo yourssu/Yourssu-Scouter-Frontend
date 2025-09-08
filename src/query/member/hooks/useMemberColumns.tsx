@@ -1,17 +1,18 @@
+import { useSuspenseQueries } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/react-table';
-import { Member, MemberState, PatchMember } from '@/query/member/schema.ts';
+import { Checkbox } from '@yourssu/design-system-react';
+
 import Cell from '@/components/Cell/Cell.tsx';
+import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
+import InputCell from '@/components/Cell/InputCell.tsx';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import { MemberStateButton, RoleStateButton } from '@/components/StateButton';
-import InputCell from '@/components/Cell/InputCell.tsx';
-import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
-import { Checkbox } from '@yourssu/design-system-react';
+import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import {
   ActivePeriod,
   InactivePeriod,
 } from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
-import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
-import { useSuspenseQueries } from '@tanstack/react-query';
+import { Member, MemberState, PatchMember } from '@/query/member/schema.ts';
 import { partOptions } from '@/query/part/options.ts';
 import { semesterOptions } from '@/query/semester/options.ts';
 
@@ -23,10 +24,7 @@ export type PatchMemberHandler = (
   value: unknown,
 ) => void;
 
-export const useMemberColumns = (
-  state: MemberState,
-  handlePatchMember?: PatchMemberHandler,
-) => {
+export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMemberHandler) => {
   const [{ data: partWithIds }, { data: semesters }] = useSuspenseQueries({
     queries: [partOptions(), semesterOptions()],
   });
@@ -55,25 +53,25 @@ export const useMemberColumns = (
         const parts = info.getValue();
         return (
           <PartsCell
-            tooltipContent={`${info.row.original.name} 정보 수정`}
             onSelect={(value) => {
               const included = parts.some((p) => p.part === value);
-              if (handlePatchMember)
+              if (handlePatchMember) {
                 handlePatchMember(
                   info.row.original.memberId,
                   'partIds',
                   partWithIds
                     .filter((partWithId) => {
-                      const baseCondition = parts.some(
-                        (part) => part.part === partWithId.partName,
-                      );
-                      if (included)
+                      const baseCondition = parts.some((part) => part.part === partWithId.partName);
+                      if (included) {
                         return baseCondition && partWithId.partName !== value;
+                      }
                       return baseCondition || partWithId.partName === value;
                     })
                     .map((p) => p.partId),
                 );
+              }
             }}
+            tooltipContent={`${info.row.original.name} 정보 수정`}
           >
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {parts.map((p) => (
@@ -92,11 +90,12 @@ export const useMemberColumns = (
         return (
           <Cell>
             <RoleStateButton
-              selectedValue={info.getValue()}
               onStateChange={(state) => {
-                if (handlePatchMember)
+                if (handlePatchMember) {
                   handlePatchMember(info.row.original.memberId, 'role', state);
+                }
               }}
+              selectedValue={info.getValue()}
             />
           </Cell>
         );
@@ -107,12 +106,13 @@ export const useMemberColumns = (
       header: '이름',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
+            if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'name', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -123,13 +123,14 @@ export const useMemberColumns = (
       header: '닉네임(발음)',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           bold={true}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
+            if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'nickname', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -141,11 +142,12 @@ export const useMemberColumns = (
       cell: (info) => (
         <Cell>
           <MemberStateButton
-            selectedValue={info.getValue()}
             onStateChange={(value) => {
-              if (handlePatchMember)
+              if (handlePatchMember) {
                 handlePatchMember(info.row.original.memberId, 'state', value);
+              }
             }}
+            selectedValue={info.getValue()}
           />
         </Cell>
       ),
@@ -155,12 +157,13 @@ export const useMemberColumns = (
       header: '유어슈 이메일',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
+            if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'email', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -171,16 +174,13 @@ export const useMemberColumns = (
       header: '연락처',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
-              handlePatchMember(
-                info.row.original.memberId,
-                'phoneNumber',
-                value,
-              );
+            if (handlePatchMember) {
+              handlePatchMember(info.row.original.memberId, 'phoneNumber', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -191,15 +191,12 @@ export const useMemberColumns = (
       header: '전공',
       cell: (info) => (
         <DepartmentCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           onSelect={(value) => {
-            if (handlePatchMember)
-              handlePatchMember(
-                info.row.original.memberId,
-                'departmentId',
-                value,
-              );
+            if (handlePatchMember) {
+              handlePatchMember(info.row.original.memberId, 'departmentId', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </DepartmentCell>
@@ -210,12 +207,13 @@ export const useMemberColumns = (
       header: '학번',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
+            if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'studentId', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -226,12 +224,13 @@ export const useMemberColumns = (
       header: '생년월일',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
+            if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'birthDate', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -242,12 +241,13 @@ export const useMemberColumns = (
       header: '가입일',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
+            if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'joinDate', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -280,16 +280,17 @@ export const useMemberColumns = (
                   }}
                 >
                   <Checkbox
-                    size="large"
                     onChange={(e) => {
-                      if (handlePatchMember)
+                      if (handlePatchMember) {
                         handlePatchMember(
                           info.row.original.memberId,
                           'membershipFee',
                           e.currentTarget.checked,
                         );
+                      }
                     }}
                     selected={Boolean(info.getValue())}
+                    size="large"
                   >
                     {''}
                   </Checkbox>
@@ -321,8 +322,8 @@ export const useMemberColumns = (
                       </ActivePeriod>
                       ~
                       <ActivePeriod
-                        style={{ pointerEvents: 'none' }}
                         size="small"
+                        style={{ pointerEvents: 'none' }}
                         variant="filledSecondary"
                       >
                         {member.activePeriod.endSemester}
@@ -346,18 +347,17 @@ export const useMemberColumns = (
                 return (
                   <Cell>
                     <SemesterStateButton
-                      selectedValue={member.expectedReturnSemester}
                       onStateChange={(value) => {
-                        const semesterId = semesters.find(
-                          (s) => s.semester === value,
-                        )?.semesterId;
-                        if (semesterId && handlePatchMember)
+                        const semesterId = semesters.find((s) => s.semester === value)?.semesterId;
+                        if (semesterId && handlePatchMember) {
                           handlePatchMember(
                             member.memberId,
                             'expectedReturnSemesterId',
                             semesterId,
                           );
+                        }
                       }}
+                      selectedValue={member.expectedReturnSemester}
                     />
                   </Cell>
                 );
@@ -383,18 +383,14 @@ export const useMemberColumns = (
                         gap: 4,
                       }}
                     >
-                      <InactivePeriod
-                        size="small"
-                        disabled
-                        variant="filledSecondary"
-                      >
+                      <InactivePeriod disabled size="small" variant="filledSecondary">
                         {member.inactivePeriod.startSemester}
                       </InactivePeriod>
                       ~
                       <InactivePeriod
-                        style={{ pointerEvents: 'none' }}
-                        size="small"
                         disabled
+                        size="small"
+                        style={{ pointerEvents: 'none' }}
                         variant="filledSecondary"
                       >
                         {member.inactivePeriod.endSemester}
@@ -423,16 +419,17 @@ export const useMemberColumns = (
                   }}
                 >
                   <Checkbox
-                    size="large"
                     onChange={(e) => {
-                      if (handlePatchMember)
+                      if (handlePatchMember) {
                         handlePatchMember(
                           info.row.original.memberId,
                           'isAdvisorDesired',
                           e.currentTarget.checked,
                         );
+                      }
                     }}
                     selected={Boolean(info.getValue())}
+                    size="large"
                   >
                     {''}
                   </Checkbox>
@@ -447,12 +444,13 @@ export const useMemberColumns = (
       header: '비고',
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchMember)
+            if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'note', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>

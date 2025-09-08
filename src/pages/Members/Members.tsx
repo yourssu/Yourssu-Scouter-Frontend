@@ -1,15 +1,12 @@
-import {
-  StyledContainer,
-  StyledTabsListContainer,
-  StyledTitle,
-} from '@/styles/pages/table.ts';
-import { useTabs } from '@yourssu/design-system-react';
-import { MemberState } from '@/query/member/schema.ts';
-import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { memberStateOptions } from '@/query/member/memberState/options.ts';
-import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
+import { useTabs } from '@yourssu/design-system-react';
 import { Suspense } from 'react';
+
+import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
+import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
+import { memberStateOptions } from '@/query/member/memberState/options.ts';
+import { MemberState } from '@/query/member/schema.ts';
+import { StyledContainer, StyledTabsListContainer, StyledTitle } from '@/styles/pages/table.ts';
 
 export const Members = () => {
   const [Tabs] = useTabs<MemberState>({
@@ -25,7 +22,7 @@ export const Members = () => {
         <StyledTabsListContainer>
           <Tabs.List size="large">
             {memberStates.map((state) => (
-              <Tabs.Tab key={state} id={state}>
+              <Tabs.Tab id={state} key={state}>
                 {state}
               </Tabs.Tab>
             ))}

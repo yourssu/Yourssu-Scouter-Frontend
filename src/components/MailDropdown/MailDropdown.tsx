@@ -1,9 +1,11 @@
-import { partOptions } from '@/query/part/options.ts';
-import { Part } from '@/query/part/schema';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
 import { DropdownMenu } from 'radix-ui';
 import { PropsWithChildren, useState } from 'react';
+
+import { partOptions } from '@/query/part/options.ts';
+import { Part } from '@/query/part/schema';
+
 import {
   StyledContent,
   StyledDropdownContainer,
@@ -21,7 +23,7 @@ interface PartDropdownProps extends PropsWithChildren {
 
 export const PartDropdown = ({ children, onSelectPart }: PartDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPart, setSelectedPart] = useState<Part | null>(null);
+  const [selectedPart, setSelectedPart] = useState<null | Part>(null);
 
   const { data: parts = [] } = useSuspenseQuery(partOptions());
 
@@ -34,20 +36,18 @@ export const PartDropdown = ({ children, onSelectPart }: PartDropdownProps) => {
   };
 
   return (
-    <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+    <DropdownMenu.Root onOpenChange={setIsOpen} open={isOpen}>
       <StyledTrigger asChild>
         {children || (
           <StyledDropdownContainer>
-            <StyledLabel>
-              {selectedPart ? selectedPart.partName : '파트 선택'}
-            </StyledLabel>
+            <StyledLabel>{selectedPart ? selectedPart.partName : '파트 선택'}</StyledLabel>
             <IcArrowsChevronDownLine />
           </StyledDropdownContainer>
         )}
       </StyledTrigger>
 
       <DropdownMenu.Portal>
-        <StyledContent sideOffset={5} align="start">
+        <StyledContent align="start" sideOffset={5}>
           <StyledItemsContainer>
             {parts.map((part, index) => (
               <StyledItem key={index} onClick={() => handleSelect(part)}>
@@ -61,13 +61,13 @@ export const PartDropdown = ({ children, onSelectPart }: PartDropdownProps) => {
   );
 };
 
-type MailType = '합격' | '불합격';
+type MailType = '불합격' | '합격';
 type MailLevel = '1차' | '최종';
 
 interface MailTemplate {
+  label: string;
   level: MailLevel;
   type: MailType;
-  label: string;
 }
 
 interface TemplateDropdownProps extends PropsWithChildren {
@@ -81,14 +81,9 @@ const templates: MailTemplate[] = [
   { level: '최종', type: '불합격', label: '[최종 불합격 메일]' },
 ];
 
-export const TemplateDropdown = ({
-  children,
-  onSelectTemplate,
-}: TemplateDropdownProps) => {
+export const TemplateDropdown = ({ children, onSelectTemplate }: TemplateDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<MailTemplate | null>(
-    null,
-  );
+  const [selectedTemplate, setSelectedTemplate] = useState<MailTemplate | null>(null);
 
   const handleSelect = (template: MailTemplate) => {
     setSelectedTemplate(template);
@@ -99,7 +94,7 @@ export const TemplateDropdown = ({
   };
 
   return (
-    <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+    <DropdownMenu.Root onOpenChange={setIsOpen} open={isOpen}>
       <StyledTrigger asChild>
         {children || (
           <StyledDropdownContainer>
@@ -112,7 +107,7 @@ export const TemplateDropdown = ({
       </StyledTrigger>
 
       <DropdownMenu.Portal>
-        <StyledContent sideOffset={5} align="start">
+        <StyledContent align="start" sideOffset={5}>
           <StyledItemsContainer>
             {templates.map((template, index) => (
               <StyledItem key={index} onClick={() => handleSelect(template)}>

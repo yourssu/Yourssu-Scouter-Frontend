@@ -1,15 +1,11 @@
-import {
-  MemberState,
-  PatchMember,
-  PatchMemberSchema,
-} from '@/query/member/schema.ts';
 import { api } from '@/apis/api.ts';
 import { MEMBER_URI } from '@/constants/uri.ts';
+import { MemberState, PatchMember, PatchMemberSchema } from '@/query/member/schema.ts';
 
 interface PatchMemberParams {
-  state: MemberState;
   memberId: number;
   params: PatchMember;
+  state: MemberState;
 }
 
 export const patchMember = ({ state, memberId, params }: PatchMemberParams) => {

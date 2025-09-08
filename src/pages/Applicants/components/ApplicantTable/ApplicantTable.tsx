@@ -1,41 +1,27 @@
-import {
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import { ApplicantState } from '@/query/applicant/schema.ts';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import { Pagination, useSnackbar } from '@yourssu/design-system-react';
+
 import Table from '@/components/Table/Table.tsx';
-import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import { applicantOptions } from '@/query/applicant/options.ts';
-import { patchApplicant } from '@/query/applicant/mutations/patchApplicant.ts';
+import { StyledPaginationWrapper } from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.style.ts';
 import {
   PatchApplicantHandler,
   useApplicantColumns,
 } from '@/query/applicant/hooks/useApplicantColumns.tsx';
-import { Pagination, useSnackbar } from '@yourssu/design-system-react';
-import { StyledPaginationWrapper } from '@/pages/Applicants/components/ApplicantTable/ApplicantTable.style.ts';
+import { useInvalidateApplicants } from '@/query/applicant/hooks/useInvalidateApplicants.ts';
+import { patchApplicant } from '@/query/applicant/mutations/patchApplicant.ts';
+import { applicantOptions } from '@/query/applicant/options.ts';
+import { ApplicantState } from '@/query/applicant/schema.ts';
 
 interface ApplicantTableProps {
-  state: ApplicantState;
-  semesterId: number;
-  partId: number | null;
   name: string;
+  partId: null | number;
+  semesterId: number;
+  state: ApplicantState;
 }
 
-const ApplicantTable = ({
-  state,
-  semesterId,
-  name,
-  partId,
-}: ApplicantTableProps) => {
-  const { data } = useSuspenseQuery(
-    applicantOptions({ state, semesterId, name, partId }),
-  );
+const ApplicantTable = ({ state, semesterId, name, partId }: ApplicantTableProps) => {
+  const { data } = useSuspenseQuery(applicantOptions({ state, semesterId, name, partId }));
 
   const { snackbar } = useSnackbar();
 
@@ -53,7 +39,7 @@ const ApplicantTable = ({
     onSuccess: async (_, { applicantId, params }) => {
       await invalidateApplicants();
 
-      if (params.state)
+      if (params.state) {
         await queryClient.prefetchQuery(
           applicantOptions({
             state: params.state,
@@ -62,10 +48,13 @@ const ApplicantTable = ({
             partId: null,
           }),
         );
+      }
 
       const applicant = data.find((d) => d.applicantId === applicantId);
 
-      if (!applicant) return;
+      if (!applicant) {
+        return;
+      }
 
       snackbar({
         type: 'info',
@@ -86,11 +75,7 @@ const ApplicantTable = ({
     },
   });
 
-  const handlePatchApplicant: PatchApplicantHandler = (
-    applicantId,
-    field,
-    value,
-  ) =>
+  const handlePatchApplicant: PatchApplicantHandler = (applicantId, field, value) =>
     patchApplicantMutate({
       applicantId,
       params: { [field]: value },
@@ -127,7 +112,7 @@ const ApplicantTable = ({
       </Table>
       {totalPage >= 2 && (
         <StyledPaginationWrapper>
-          <Pagination totalPage={totalPage} onPageChange={onPageChange} />
+          <Pagination onPageChange={onPageChange} totalPage={totalPage} />
         </StyledPaginationWrapper>
       )}
     </>

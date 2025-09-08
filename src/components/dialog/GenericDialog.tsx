@@ -1,27 +1,22 @@
-import { ReactNode } from 'react';
-import { DialogOption } from '../StateButton/StateButton';
-
-import { Dialog } from './Dialog';
 import { Popover } from 'radix-ui';
+import { ReactNode } from 'react';
+
+import { DialogOption } from '../StateButton/StateButton';
+import { Dialog } from './Dialog';
 
 interface GenericDialogProps {
-  options: DialogOption[];
-  onSelect: (value: string) => void;
-  width?: number;
-  position?: 'top' | 'bottom';
   children: ReactNode;
+  onSelect: (value: string) => void;
+  options: DialogOption[];
+  position?: 'bottom' | 'top';
+  width?: number;
 }
 
-export const GenericDialog = ({
-  options,
-  onSelect,
-  children,
-  width = 128,
-}: GenericDialogProps) => {
+export const GenericDialog = ({ options, onSelect, children, width = 128 }: GenericDialogProps) => {
   return (
     <Popover.Root>
       <Popover.Anchor asChild>{children}</Popover.Anchor>
-      <Dialog options={options} onSelect={onSelect} width={width} />
+      <Dialog onSelect={onSelect} options={options} width={width} />
     </Popover.Root>
   );
 };

@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { api } from '@/apis/api.ts';
 import { DepartmentArraySchema } from '@/query/department/schema.ts';
 

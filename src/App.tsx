@@ -1,3 +1,6 @@
+import { Suspense } from 'react';
+import { Route, Routes } from 'react-router';
+
 import { GoogleCallback } from '@/components/Auth/GoogleCallback';
 import Main from '@/components/Main/Main.tsx';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
@@ -5,21 +8,19 @@ import { Applicants } from '@/pages/Applicants/Applicants.tsx';
 import CalendarTestPage from '@/pages/CalendarTestPage';
 import { Members } from '@/pages/Members/Members.tsx';
 import { SendMail } from '@/pages/SendMail/SendMail';
-import { Suspense } from 'react';
-import { Route, Routes } from 'react-router';
 
 function App() {
   return (
     <ScouterErrorBoundary>
       <Suspense>
         <Routes>
-          <Route path="/oauth/callback/google" element={<GoogleCallback />} />
-          <Route path="*" element={<Main />}>
-            <Route index element={<>응애</>} />
-            <Route path="test" element={<CalendarTestPage />} />
-            <Route path="members" element={<Members />} />
-            <Route path="recruiting" element={<Applicants />} />
-            <Route path="send-mail" element={<SendMail />} />
+          <Route element={<GoogleCallback />} path="/oauth/callback/google" />
+          <Route element={<Main />} path="*">
+            <Route element={<>응애</>} index />
+            <Route element={<CalendarTestPage />} path="test" />
+            <Route element={<Members />} path="members" />
+            <Route element={<Applicants />} path="recruiting" />
+            <Route element={<SendMail />} path="send-mail" />
           </Route>
         </Routes>
       </Suspense>
