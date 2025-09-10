@@ -36,31 +36,29 @@ export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCar
             onSelect={(selectedDate) =>
               handleDateSelection(index, formatTemplates['01/01(월) 00:00'](selectedDate))
             }
-            selectedDate={new Date(date.value)}
-            trigger={
-              <TextFieldContainer
-                onClick={(e) => {
-                  if (date.value) {
-                    e.stopPropagation();
-                  }
-                }}
-              >
-                <TextField
-                  key={`date-field-${index}-${date.value}`}
-                  onClearButtonClick={() => handleDateClear(index)}
-                  placeholder="MM/DD(D) HH:MM"
-                  readOnly
-                  type="text"
-                  value={date.value}
-                />
-                {!date.value && (
-                  <IconWrapper>
-                    <IcCalenderLine width={20} />
-                  </IconWrapper>
-                )}
-              </TextFieldContainer>
-            }
-          />
+          >
+            <TextFieldContainer
+              onClick={(e) => {
+                if (date.value) {
+                  e.stopPropagation();
+                }
+              }}
+            >
+              <TextField
+                key={`date-field-${index}-${date.value}`}
+                onClearButtonClick={() => handleDateClear(index)}
+                placeholder="MM/DD(D) HH:MM"
+                readOnly
+                type="text"
+                value={date.value}
+              />
+              {!date.value && (
+                <IconWrapper>
+                  <IcCalenderLine width={20} />
+                </IconWrapper>
+              )}
+            </TextFieldContainer>
+          </CalendarDialog>
         </InputContainer>
       ))}
     </VariableCard>

@@ -10,11 +10,9 @@ const CalendarTestPage = () => {
   return (
     <div style={{ padding: '40px' }}>
       <h2>📅 캘린더 다이얼로그 예제</h2>
-      <CalendarDialog
-        onSelect={(date) => setSelectedDate(date)}
-        selectedDate={selectedDate}
-        trigger={<DateField date={selectedDate ?? new Date()} />}
-      />
+      <CalendarDialog onSelect={(date) => setSelectedDate(date)} selectedDate={selectedDate}>
+        <DateField date={selectedDate ?? new Date()} />
+      </CalendarDialog>
       <p style={{ marginTop: '20px' }}>
         선택된 날짜:{' '}
         <strong>{selectedDate ? formatTemplates['01/01(월) 00:00'](selectedDate) : '없음'}</strong>
