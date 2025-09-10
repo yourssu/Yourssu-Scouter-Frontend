@@ -2,9 +2,10 @@ import { IcClockLine } from '@yourssu/design-system-react';
 import { setHours, setMinutes } from 'date-fns';
 import { useEffect, useState } from 'react';
 
-import { formatTemplates } from '@/components/CalendarDialog/date';
+import { formatTemplates } from '@/utils/date';
 import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
 import { parseTimeInput } from '@/components/CalendarDialog/time';
+import { DateFormatTemplateNames } from '@/utils/date';
 
 interface MiniTimeFieldProps {
   date: Date;
@@ -12,7 +13,7 @@ interface MiniTimeFieldProps {
 }
 
 export const MiniTimeField = ({ date, onDateChange }: MiniTimeFieldProps) => {
-  const formatKey = '오전 12:00';
+  const formatKey: DateFormatTemplateNames = '오전 12:00';
   const [text, setText] = useState(() => formatTemplates[formatKey](date));
   const [isError, setIsError] = useState(false);
 

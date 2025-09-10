@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import { CalendarDialog } from '@/components/CalendarDialog/CalendarDialog';
-import { formatTemplates } from '@/components/CalendarDialog/date';
 import { DateField } from '@/components/CalendarDialog/DateField';
+import { formatTemplates } from '@/utils/date';
 
 const CalendarTestPage = () => {
   const [selectedDate, setSelectedDate] = useState(undefined as Date | undefined);

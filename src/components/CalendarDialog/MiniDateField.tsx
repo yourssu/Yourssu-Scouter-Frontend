@@ -1,14 +1,15 @@
 import { IcCalenderLine } from '@yourssu/design-system-react';
 
-import { formatTemplates } from '@/components/CalendarDialog/date';
+import { formatTemplates } from '@/utils/date';
 import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
+import { DateFormatTemplateNames } from '@/utils/date';
 
 interface MiniDateFieldProps {
   date: Date;
 }
 
 export const MiniDateField = ({ date }: MiniDateFieldProps) => {
-  const formatKey = '01/01(월)';
+  const formatKey: DateFormatTemplateNames = '01/01(월)';
   const format = formatTemplates[formatKey](date);
 
   return (

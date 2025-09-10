@@ -1,6 +1,6 @@
 import { Chip, IcCalenderLine, TextField } from '@yourssu/design-system-react';
 
-import { formatTemplates } from '@/components/CalendarDialog/date';
+import { formatTemplates } from '@/utils/date';
 
 import { CalendarDialog } from '../CalendarDialog/CalendarDialog';
 import { VariableCard } from './VariableCard';

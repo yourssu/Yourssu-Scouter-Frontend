@@ -9,3 +9,5 @@ export const formatTemplates = {
   '2025년 1월': formatKo('yyyy년 M월'),
   '오전 12:00': formatKo('aaaa h:mm'),
 };
+
+export type DateFormatTemplateNames = keyof typeof formatTemplates;
