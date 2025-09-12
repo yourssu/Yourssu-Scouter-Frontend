@@ -1,7 +1,7 @@
 import { IcCalenderLine } from '@yourssu/design-system-react';
 
-import { formatTemplates } from '@/utils/date';
 import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
+import { formatTemplates } from '@/utils/date';
 import { DateFormatTemplateNames } from '@/utils/date';
 
 interface MiniDateFieldProps {

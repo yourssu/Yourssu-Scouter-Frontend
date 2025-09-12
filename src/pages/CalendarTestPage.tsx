@@ -5,7 +5,7 @@ import { DateField } from '@/components/CalendarDialog/DateField';
 import { formatTemplates } from '@/utils/date';
 
 const CalendarTestPage = () => {
-  const [selectedDate, setSelectedDate] = useState(undefined as Date | undefined);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
   return (
     <div style={{ padding: '40px' }}>

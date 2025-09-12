@@ -2,9 +2,9 @@ import { IcClockLine } from '@yourssu/design-system-react';
 import { setHours, setMinutes } from 'date-fns';
 import { useEffect, useState } from 'react';
 
-import { formatTemplates } from '@/utils/date';
 import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
 import { parseTimeInput } from '@/components/CalendarDialog/time';
+import { formatTemplates } from '@/utils/date';
 import { DateFormatTemplateNames } from '@/utils/date';
 
 interface MiniTimeFieldProps {
