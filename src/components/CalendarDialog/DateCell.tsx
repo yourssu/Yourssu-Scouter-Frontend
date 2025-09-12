@@ -1,12 +1,13 @@
-import { StyledDateCell } from '@/components/CalendarDialog/DateCell.style';
 import { isSameDay } from 'date-fns';
 
+import { StyledDateCell } from '@/components/CalendarDialog/DateCell.style';
+
 interface CalendarDateProps {
+  currentMonth: number;
   date: Date;
   isToday: boolean;
-  currentMonth: number;
-  selectedDate?: Date;
   onClick: () => void;
+  selectedDate?: Date;
 }
 
 export const DateCell = ({
@@ -21,10 +22,10 @@ export const DateCell = ({
 
   return (
     <StyledDateCell
-      onClick={handleDateClick}
       disabled={date.getMonth() !== currentMonth}
       isSelected={isSelected}
       isToday={isToday}
+      onClick={handleDateClick}
     >
       {dateNum}
     </StyledDateCell>

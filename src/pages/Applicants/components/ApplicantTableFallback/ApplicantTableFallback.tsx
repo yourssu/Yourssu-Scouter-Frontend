@@ -1,4 +1,5 @@
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
 import Table from '@/components/Table/Table.tsx';
 import { useApplicantColumns } from '@/query/applicant/hooks/useApplicantColumns.tsx';
 

@@ -1,6 +1,6 @@
-import { StyledContainer } from '@/components/Cell/Cell.style.ts';
-
 import { PropsWithChildren } from 'react';
+
+import { StyledContainer } from '@/components/Cell/Cell.style.ts';
 
 interface CellProps extends PropsWithChildren {
   bold?: boolean;
@@ -9,7 +9,7 @@ interface CellProps extends PropsWithChildren {
 
 const Cell = ({ bold = false, editable = false, children }: CellProps) => {
   return (
-    <StyledContainer $editable={editable} $bold={bold}>
+    <StyledContainer $bold={bold} $editable={editable}>
       {children}
     </StyledContainer>
   );

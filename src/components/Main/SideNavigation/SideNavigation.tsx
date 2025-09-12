@@ -1,4 +1,14 @@
 import {
+  Divider,
+  IcCalenderLine,
+  IcMailLine,
+  IcPinLine,
+  IcStarLine,
+  IcUserLine,
+} from '@yourssu/design-system-react';
+
+import Logo from '@/assets/logo.svg';
+import {
   StyledContainer,
   StyledLinks,
   StyledLogo,
@@ -7,15 +17,6 @@ import {
   StyledSection,
   StyledSectionTitle,
 } from '@/components/Main/SideNavigation/SideNavigation.style.ts';
-import Logo from '@/assets/logo.svg';
-import {
-  Divider,
-  IcCalenderLine,
-  IcMailLine,
-  IcPinLine,
-  IcStarLine,
-  IcUserLine,
-} from '@yourssu/design-system-react';
 
 const SideNavigation = () => {
   const navItems = [
@@ -59,7 +60,7 @@ const SideNavigation = () => {
   return (
     <StyledContainer>
       <StyledLogo>
-        <img src={Logo} alt="Yourssu Logo" />
+        <img alt="Yourssu Logo" src={Logo} />
         <StyledLogoText>SCOUTER</StyledLogoText>
       </StyledLogo>
       <StyledLinks>
@@ -68,14 +69,12 @@ const SideNavigation = () => {
             <StyledSection key={title}>
               <StyledSectionTitle>{title}</StyledSectionTitle>
               {links.map(({ icon, text, pathname }) => (
-                <StyledNavigationLink to={pathname} key={text}>
+                <StyledNavigationLink key={text} to={pathname}>
                   {icon} {text}
                 </StyledNavigationLink>
               ))}
             </StyledSection>,
-            index < navItems.length - 1 && (
-              <Divider key={`divider-${index}`} thickness={1} />
-            ),
+            index < navItems.length - 1 && <Divider key={`divider-${index}`} thickness={1} />,
           ].filter(Boolean),
         )}
       </StyledLinks>

@@ -10,6 +10,7 @@ import {
 } from '@yourssu/design-system-react';
 import { DropdownMenu } from 'radix-ui';
 import { useState } from 'react';
+
 import {
   StyledBackButton,
   StyledContainer,
@@ -26,7 +27,7 @@ import {
   StyledVariableType,
 } from './VariableDialog.style';
 
-export type VariableType = '사람' | '날짜' | '링크' | '텍스트';
+export type VariableType = '날짜' | '링크' | '사람' | '텍스트';
 
 const variableTypes = [
   { type: '사람', icon: <IcUserLine width={20} /> },
@@ -36,18 +37,14 @@ const variableTypes = [
 ];
 
 interface VariableDialogProps {
-  onSelect: (
-    type: VariableType,
-    name: string,
-    differentForEachPerson: boolean,
-  ) => void;
+  onSelect: (type: VariableType, name: string, differentForEachPerson: boolean) => void;
   trigger: React.ReactNode;
 }
 
 export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<'type' | 'name'>('type');
-  const [selectedType, setSelectedType] = useState<VariableType | null>(null);
+  const [step, setStep] = useState<'name' | 'type'>('type');
+  const [selectedType, setSelectedType] = useState<null | VariableType>(null);
   const [variableName, setVariableName] = useState('');
   const [differentForEachPerson, setDifferentForEachPerson] = useState(false);
 
@@ -84,18 +81,15 @@ export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
   };
 
   return (
-    <DropdownMenu.Root open={open} onOpenChange={handleOpenChange} modal={true}>
+    <DropdownMenu.Root modal={true} onOpenChange={handleOpenChange} open={open}>
       <StyledTrigger asChild>{trigger}</StyledTrigger>
       <DropdownMenu.Portal>
-        <StyledContent sideOffset={5} align="start">
+        <StyledContent align="start" sideOffset={5}>
           {step === 'type' ? (
             <>
               <StyledTitle>변수 유형</StyledTitle>
               {variableTypes.map(({ type, icon }) => (
-                <StyledItem
-                  key={type}
-                  onClick={(e) => handleSelectType(e, type as VariableType)}
-                >
+                <StyledItem key={type} onClick={(e) => handleSelectType(e, type as VariableType)}>
                   <StyledItemIcon>{icon}</StyledItemIcon>
                   <StyledItemText>{type}</StyledItemText>
                 </StyledItem>
@@ -112,19 +106,17 @@ export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
 
               <StyledInputContainer>
                 <TextField
-                  value={variableName}
+                  autoFocus
                   onChange={(e) => setVariableName(e.target.value)}
                   placeholder="변수 이름"
-                  autoFocus
+                  value={variableName}
                 />
                 <StyledSwitchContainer>
-                  <StyledSwitchLabel>
-                    받는 사람마다 다르게 설정
-                  </StyledSwitchLabel>
+                  <StyledSwitchLabel>받는 사람마다 다르게 설정</StyledSwitchLabel>
                   <Switch
-                    size="medium"
                     isSelected={differentForEachPerson}
                     onSelectedChange={setDifferentForEachPerson}
+                    size="medium"
                   />
                 </StyledSwitchContainer>
                 <StyledVariableType>
@@ -134,11 +126,11 @@ export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
               </StyledInputContainer>
 
               <BoxButton
-                size="small"
-                variant="filledPrimary"
                 disabled={!variableName.trim()}
                 onClick={handleSubmit}
+                size="small"
                 style={{ width: '100%' }}
+                variant="filledPrimary"
               >
                 추가하기
               </BoxButton>

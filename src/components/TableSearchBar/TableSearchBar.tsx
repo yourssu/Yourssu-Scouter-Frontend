@@ -1,6 +1,7 @@
 import { SearchBar } from '@yourssu/design-system-react';
-import { StyledSearchBarContainer } from '@/components/TableSearchBar/TableSearchBar.style.ts';
 import { useFormContext } from 'react-hook-form';
+
+import { StyledSearchBarContainer } from '@/components/TableSearchBar/TableSearchBar.style.ts';
 
 interface TableSearchBarProps {
   placeholder?: string;

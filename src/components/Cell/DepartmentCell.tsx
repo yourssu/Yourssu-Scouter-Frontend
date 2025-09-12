@@ -1,11 +1,9 @@
 import { IcEditLine } from '@yourssu/design-system-react';
-import {
-  StyledContainer,
-  StyledEditIcon,
-} from '@/components/Cell/Cell.style.ts';
-import { PropsWithChildren } from 'react';
-import DepartmentSearchDialog from '@/components/DepartmentSearchDialog/DepartmentSearchDialog.tsx';
 import { Popover } from 'radix-ui';
+import { PropsWithChildren } from 'react';
+
+import { StyledContainer, StyledEditIcon } from '@/components/Cell/Cell.style.ts';
+import DepartmentSearchDialog from '@/components/DepartmentSearchDialog/DepartmentSearchDialog.tsx';
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
 interface DepartmentCellProps extends PropsWithChildren {
@@ -13,11 +11,7 @@ interface DepartmentCellProps extends PropsWithChildren {
   tooltipContent: string;
 }
 
-const DepartmentCell = ({
-  tooltipContent,
-  children,
-  onSelect,
-}: DepartmentCellProps) => {
+const DepartmentCell = ({ tooltipContent, children, onSelect }: DepartmentCellProps) => {
   return (
     <Popover.Root>
       <Popover.Anchor>
@@ -26,7 +20,7 @@ const DepartmentCell = ({
           <Popover.Trigger asChild>
             <StyledEditIcon>
               <Tooltip content={tooltipContent}>
-                <IcEditLine width={20} height={20} />
+                <IcEditLine height={20} width={20} />
               </Tooltip>
             </StyledEditIcon>
           </Popover.Trigger>

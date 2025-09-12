@@ -1,15 +1,12 @@
-import {
-  StyledContainer,
-  StyledTabsListContainer,
-  StyledTitle,
-} from '@/styles/pages/table.ts';
-import { useTabs } from '@yourssu/design-system-react';
-import ApplicantTab from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.tsx';
-import { ApplicantState } from '@/query/applicant/schema.ts';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { applicantStateOptions } from '@/query/applicant/applicantState/options.ts';
+import { useTabs } from '@yourssu/design-system-react';
 import { Suspense } from 'react';
+
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
+import ApplicantTab from '@/pages/Applicants/components/ApplicantTab/ApplicantTab.tsx';
+import { applicantStateOptions } from '@/query/applicant/applicantState/options.ts';
+import { ApplicantState } from '@/query/applicant/schema.ts';
+import { StyledContainer, StyledTabsListContainer, StyledTitle } from '@/styles/pages/table.ts';
 
 export const Applicants = () => {
   const [Tabs] = useTabs<ApplicantState>({
@@ -25,7 +22,7 @@ export const Applicants = () => {
         <StyledTabsListContainer>
           <Tabs.List size="large">
             {memberStates.map((state) => (
-              <Tabs.Tab key={state} id={state}>
+              <Tabs.Tab id={state} key={state}>
                 {state}
               </Tabs.Tab>
             ))}

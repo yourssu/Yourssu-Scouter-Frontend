@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { BoxButton } from '@yourssu/design-system-react';
+import styled from 'styled-components';
 
 export const ActivePeriod = styled(BoxButton)`
   pointer-events: none;

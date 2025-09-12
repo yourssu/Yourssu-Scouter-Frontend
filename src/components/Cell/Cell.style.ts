@@ -19,8 +19,8 @@ export const StyledEditIcon = styled.span`
 `;
 
 export const StyledContainer = styled.span<{
-  $editable: boolean;
   $bold: boolean;
+  $editable: boolean;
 }>`
   display: flex;
   justify-content: space-between;

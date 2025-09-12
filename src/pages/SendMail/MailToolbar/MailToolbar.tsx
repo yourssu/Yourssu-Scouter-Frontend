@@ -1,16 +1,7 @@
+import { Editor } from '@tiptap/react';
+
 import ChangeBold from '@/assets/SendMail/ChangeBold.svg';
 import ChangeItalic from '@/assets/SendMail/ChangeItalic.svg';
-import { Editor } from '@tiptap/react';
-import {
-  ColorButton,
-  Divider,
-  FontFamilySelect,
-  FontSizeSelect,
-  ToolbarButton,
-  ToolbarContainer,
-  ToolbarGroup,
-} from './MailToolbar.style';
-
 import ChangeLink from '@/assets/SendMail/ChangeLink.svg';
 import ChangeOrdered_list from '@/assets/SendMail/ChangeOrdered-list.svg';
 import ChangePhoto from '@/assets/SendMail/ChangePhoto.svg';
@@ -20,6 +11,16 @@ import ChangeText_align_right from '@/assets/SendMail/ChangeText-align-right.svg
 import ChangeText_align from '@/assets/SendMail/ChangeText-align.svg';
 import ChangeUnderline from '@/assets/SendMail/ChangeUnderline.svg';
 import ChangeUnordered_list from '@/assets/SendMail/ChangeUnordered-list.svg';
+
+import {
+  ColorButton,
+  Divider,
+  FontFamilySelect,
+  FontSizeSelect,
+  ToolbarButton,
+  ToolbarContainer,
+  ToolbarGroup,
+} from './MailToolbar.style';
 
 interface MailToolbarProps {
   editor: Editor | null;
@@ -32,13 +33,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
 
   const colors = ['#000000', '#334155', '#5736F5'];
   const fontSizes = ['12px', '14px', '16px', '18px', '20px', '24px'];
-  const fontFamilies = [
-    'Arial',
-    'Times New Roman',
-    'Courier New',
-    'Georgia',
-    'Verdana',
-  ];
+  const fontFamilies = ['Arial', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana'];
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const size = e.target.value;
@@ -79,48 +74,46 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
       <ToolbarGroup>
         {colors.map((color) => (
           <ColorButton
-            key={color}
+            className={editor.isActive('textStyle', { color }) ? 'is-active' : ''}
             color={color}
+            key={color}
             onClick={() => editor.chain().focus().setColor(color).run()}
-            className={
-              editor.isActive('textStyle', { color }) ? 'is-active' : ''
-            }
           />
         ))}
       </ToolbarGroup>
 
       <ToolbarGroup>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
           className={editor.isActive('bold') ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().toggleBold().run()}
           title="Bold"
+          type="button"
         >
-          <img src={ChangeBold} alt="Bold" />
+          <img alt="Bold" src={ChangeBold} />
         </ToolbarButton>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
           className={editor.isActive('italic') ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().toggleItalic().run()}
           title="Italic"
+          type="button"
         >
-          <img src={ChangeItalic} alt="Italic" />
+          <img alt="Italic" src={ChangeItalic} />
         </ToolbarButton>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={editor.isActive('underline') ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
           title="Underline"
+          type="button"
         >
-          <img src={ChangeUnderline} alt="Underline" />
+          <img alt="Underline" src={ChangeUnderline} />
         </ToolbarButton>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
           className={editor.isActive('strike') ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().toggleStrike().run()}
           title="Strike"
+          type="button"
         >
-          <img src={ChangeStrike} alt="Strike" />
+          <img alt="Strike" src={ChangeStrike} />
         </ToolbarButton>
       </ToolbarGroup>
 
@@ -128,30 +121,28 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
 
       <ToolbarGroup>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
           className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
           title="Align Left"
+          type="button"
         >
-          <img src={ChangeText_align_left} alt="Align Left" />
+          <img alt="Align Left" src={ChangeText_align_left} />
         </ToolbarButton>
         <ToolbarButton
-          type="button"
+          className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          className={
-            editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''
-          }
           title="Align Center"
+          type="button"
         >
-          <img src={ChangeText_align} alt="Align Center" />
+          <img alt="Align Center" src={ChangeText_align} />
         </ToolbarButton>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
           className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
           title="Align Right"
+          type="button"
         >
-          <img src={ChangeText_align_right} alt="Align Right" />
+          <img alt="Align Right" src={ChangeText_align_right} />
         </ToolbarButton>
       </ToolbarGroup>
 
@@ -159,20 +150,20 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
 
       <ToolbarGroup>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={editor.isActive('orderedList') ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
           title="Ordered List"
+          type="button"
         >
-          <img src={ChangeOrdered_list} alt="Ordered List" />
+          <img alt="Ordered List" src={ChangeOrdered_list} />
         </ToolbarButton>
         <ToolbarButton
-          type="button"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={editor.isActive('bulletList') ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
           title="Bullet List"
+          type="button"
         >
-          <img src={ChangeUnordered_list} alt="Bullet List" />
+          <img alt="Bullet List" src={ChangeUnordered_list} />
         </ToolbarButton>
       </ToolbarGroup>
 
@@ -180,7 +171,6 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
 
       <ToolbarGroup>
         <ToolbarButton
-          type="button"
           onClick={() => {
             // 이미지 업로드 로직 구현 필요
             const url = window.prompt('이미지 URL 입력:');
@@ -189,12 +179,13 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
             }
           }}
           title="Insert Img"
+          type="button"
         >
-          <img src={ChangePhoto} alt="Insert Img" />
+          <img alt="Insert Img" src={ChangePhoto} />
         </ToolbarButton>
 
         <ToolbarButton
-          type="button"
+          className={editor.isActive('link') ? 'is-active' : ''}
           onClick={() => {
             const previousUrl = editor.getAttributes('link').href;
             const url = window.prompt('URL 입력:', previousUrl);
@@ -209,20 +200,15 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
             }
 
             try {
-              editor
-                .chain()
-                .focus()
-                .extendMarkRange('link')
-                .setLink({ href: url })
-                .run();
+              editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
             } catch (error) {
-              console.log(error);
+              console.error(error);
             }
           }}
-          className={editor.isActive('link') ? 'is-active' : ''}
           title="Insert Link"
+          type="button"
         >
-          <img src={ChangeLink} alt="Insert Link" />
+          <img alt="Insert Link" src={ChangeLink} />
         </ToolbarButton>
       </ToolbarGroup>
     </ToolbarContainer>

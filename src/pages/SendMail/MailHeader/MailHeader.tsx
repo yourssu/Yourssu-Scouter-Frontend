@@ -1,5 +1,6 @@
 import { useTabs } from '@yourssu/design-system-react';
 import { ReactNode, useState } from 'react';
+
 import { HeaderType, Recipient, RecipientId } from '../mail.type';
 import {
   HeaderContainer,
@@ -10,10 +11,10 @@ import {
 } from './MailHeader.style';
 
 interface MailHeaderProps {
-  type: HeaderType;
-  recipients?: Recipient[];
-  onTabChange?: (id: RecipientId) => void;
   children?: ReactNode;
+  onTabChange?: (id: RecipientId) => void;
+  recipients?: Recipient[];
+  type: HeaderType;
 }
 
 export const MailHeader = ({
@@ -54,8 +55,8 @@ export const MailHeader = ({
           <Tabs.List>
             {recipients.map((recipient) => (
               <Tabs.Tab
-                key={recipient.id}
                 id={recipient.id}
+                key={recipient.id}
                 onClick={() => handleTabClick(recipient.id)}
               >
                 {recipient.name}

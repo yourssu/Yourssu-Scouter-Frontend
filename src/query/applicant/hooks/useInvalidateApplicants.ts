@@ -1,8 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  applicantOptions,
-  ApplicantQueryParams,
-} from '@/query/applicant/options.ts';
+
+import { applicantOptions, ApplicantQueryParams } from '@/query/applicant/options.ts';
 
 export const useInvalidateApplicants = (params?: ApplicantQueryParams) => {
   const queryClient = useQueryClient();

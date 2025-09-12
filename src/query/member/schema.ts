@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { DateSchema, PhoneNumberSchema } from '@/scheme/common.ts';
 
 const PartSchema = z.object({
@@ -17,10 +18,7 @@ const NicknameSchema = z
 
 const YourssuEmailSchema = z
   .string()
-  .regex(
-    /^[a-zA-Z0-9._-]+\.urssu@gmail\.com$/,
-    '~.urssu@gmail.com 형식으로 입력해주세요',
-  );
+  .regex(/^[a-zA-Z0-9._-]+\.urssu@gmail\.com$/, '~.urssu@gmail.com 형식으로 입력해주세요');
 
 const MemberRoleSchema = z.enum(['Lead', 'ViceLead', 'Member']);
 

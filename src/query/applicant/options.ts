@@ -1,15 +1,13 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { api } from '@/apis/api.ts';
-import {
-  ApplicantArraySchema,
-  ApplicantState,
-} from '@/query/applicant/schema.ts';
+import { ApplicantArraySchema, ApplicantState } from '@/query/applicant/schema.ts';
 
 export type ApplicantQueryParams = {
-  state: ApplicantState;
-  semesterId: number;
   name: string;
-  partId: number | null;
+  partId: null | number;
+  semesterId: number;
+  state: ApplicantState;
 };
 
 export const applicantOptions = (params?: ApplicantQueryParams) => {

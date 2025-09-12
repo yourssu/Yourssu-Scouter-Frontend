@@ -1,3 +1,12 @@
+import { useMutation, usePrefetchQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { BoxButton, IcRetryRefreshLine, useSnackbar } from '@yourssu/design-system-react';
+import { Suspense } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+
+import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
+import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
+import TableSearchBar from '@/components/TableSearchBar/TableSearchBar.tsx';
+import { usePartFilter } from '@/hooks/usePartFilter.ts';
 import {
   StyledContainer,
   StyledLastUpdate,
@@ -5,29 +14,13 @@ import {
   StyledTopContainer,
   StyledTopLeftContainer,
 } from '@/pages/Members/components/MemberTab/MemberTab.style.ts';
-import TableSearchBar from '@/components/TableSearchBar/TableSearchBar.tsx';
-import { FormProvider, useForm } from 'react-hook-form';
 import MemberTable from '@/pages/Members/components/MemberTable/MemberTable.tsx';
-import { MemberState } from '@/query/member/schema.ts';
-import { Suspense } from 'react';
-import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
-import {
-  BoxButton,
-  IcRetryRefreshLine,
-  useSnackbar,
-} from '@yourssu/design-system-react';
-import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
-import {
-  useMutation,
-  usePrefetchQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
 import MemberTableFallback from '@/pages/Members/components/MemberTableFallback/MemberTableFallback.tsx';
-import { memberRoleOptions } from '@/query/member/memberRole/options.ts';
-import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
-import { usePartFilter } from '@/hooks/usePartFilter.ts';
+import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
 import { memberLastUpdatedTimeOptions } from '@/query/member/lastUpdatedTime/options.ts';
+import { memberRoleOptions } from '@/query/member/memberRole/options.ts';
+import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
+import { MemberState } from '@/query/member/schema.ts';
 
 interface MemberTabProps {
   state: MemberState;
@@ -63,9 +56,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
 
   const { partId, partName, onPartChange } = usePartFilter();
 
-  const { data: lastUpdatedTime } = useSuspenseQuery(
-    memberLastUpdatedTimeOptions(),
-  );
+  const { data: lastUpdatedTime } = useSuspenseQuery(memberLastUpdatedTimeOptions());
 
   usePrefetchQuery(memberRoleOptions());
 
@@ -77,10 +68,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
             <TableSearchBar placeholder="이름 혹은 닉네임으로 검색" />
           </FormProvider>
           <div>
-            <PartStateButton
-              selectedValue={partName}
-              onStateChange={onPartChange}
-            />
+            <PartStateButton onStateChange={onPartChange} selectedValue={partName} />
           </div>
         </StyledTopLeftContainer>
         <StyledLastUpdate>
@@ -91,11 +79,11 @@ const MemberTab = ({ state }: MemberTabProps) => {
             </StyledLastUpdateTime>
           )}
           <BoxButton
-            leftIcon={<IcRetryRefreshLine />}
-            variant="outlined"
-            size="medium"
-            onClick={handleClick}
             disabled={postMembersFromApplicantsMutation.isPending}
+            leftIcon={<IcRetryRefreshLine />}
+            onClick={handleClick}
+            size="medium"
+            variant="outlined"
           >
             업데이트
           </BoxButton>
@@ -103,11 +91,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
       </StyledTopContainer>
       <ScouterErrorBoundary>
         <Suspense fallback={<MemberTableFallback state={state} />}>
-          <MemberTable
-            partId={partId}
-            state={state}
-            search={methods.watch('search')}
-          />
+          <MemberTable partId={partId} search={methods.watch('search')} state={state} />
         </Suspense>
       </ScouterErrorBoundary>
     </StyledContainer>

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { DateSchema, EmailSchema, PhoneNumberSchema } from '@/scheme/common.ts';
 
 const DivisionSchema = z.enum(['운영', '개발', '디자인']);

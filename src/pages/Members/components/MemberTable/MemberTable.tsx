@@ -1,29 +1,19 @@
-import { MemberState } from '@/query/member/schema.ts';
-import {
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import Table from '@/components/Table/Table.tsx';
-import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import { memberOptions } from '@/query/member/options.ts';
-import { patchMember } from '@/query/member/mutations/patchMember.ts';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { Pagination, useSnackbar } from '@yourssu/design-system-react';
-import {
-  PatchMemberHandler,
-  useMemberColumns,
-} from '@/query/member/hooks/useMemberColumns.tsx';
+
+import Table from '@/components/Table/Table.tsx';
 import { StyledPaginationWrapper } from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
+import { useInvalidateMembers } from '@/query/member/hooks/useInvalidateMembers.ts';
+import { PatchMemberHandler, useMemberColumns } from '@/query/member/hooks/useMemberColumns.tsx';
+import { patchMember } from '@/query/member/mutations/patchMember.ts';
+import { memberOptions } from '@/query/member/options.ts';
+import { MemberState } from '@/query/member/schema.ts';
 
 interface MemberTableProps {
-  state: MemberState;
+  partId: null | number;
   search: string;
-  partId: number | null;
+  state: MemberState;
 }
 
 const MemberTable = ({ state, search, partId }: MemberTableProps) => {
@@ -37,14 +27,15 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
     onSuccess: async (_, { memberId, params }) => {
       await invalidateMembers();
 
-      if (params.state)
-        await queryClient.prefetchQuery(
-          memberOptions(params.state, { partId: null, search: '' }),
-        );
+      if (params.state) {
+        await queryClient.prefetchQuery(memberOptions(params.state, { partId: null, search: '' }));
+      }
 
       const member = data.find((d) => d.memberId === memberId);
 
-      if (!member) return;
+      if (!member) {
+        return;
+      }
 
       snackbar({
         type: 'info',
@@ -105,7 +96,7 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
       </Table>
       {totalPage >= 2 && (
         <StyledPaginationWrapper>
-          <Pagination totalPage={totalPage} onPageChange={onPageChange} />
+          <Pagination onPageChange={onPageChange} totalPage={totalPage} />
         </StyledPaginationWrapper>
       )}
     </>

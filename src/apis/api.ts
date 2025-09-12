@@ -1,15 +1,13 @@
-import { API_CONFIG } from '@/constants/config';
 import ky, { AfterResponseHook, BeforeRequestHook } from 'ky';
+
+import { API_CONFIG } from '@/constants/config';
+
 import { authService } from './auth.service';
 import { tokenService } from './token.service';
 
 const DEFAULT_API_RETRY_LIMIT = 2;
 
-const handleTokenRefresh: AfterResponseHook = async (
-  request,
-  _options,
-  response,
-) => {
+const handleTokenRefresh: AfterResponseHook = async (request, _options, response) => {
   if (response.status !== 401) {
     return response;
   }

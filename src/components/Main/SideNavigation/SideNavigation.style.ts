@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { NavLink } from 'react-router';
+import styled from 'styled-components';
 
 export const StyledContainer = styled.nav`
   display: flex;

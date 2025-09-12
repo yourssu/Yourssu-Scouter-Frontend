@@ -1,18 +1,19 @@
 import { flexRender, HeaderGroup, Row } from '@tanstack/react-table';
+import { PropsWithChildren } from 'react';
+
 import {
-  StyledBorder,
   StyledBasis,
   StyledBodyCell,
+  StyledBorder,
+  StyledBorderBox,
   StyledCell,
   StyledList,
+  StyledOuterBorder,
   StyledTable,
   StyledTableContainer,
   StyledTableContainerContainer,
   StyledThead,
-  StyledBorderBox,
-  StyledOuterBorder,
 } from '@/components/Table/Table.style.ts';
-import { PropsWithChildren } from 'react';
 import { useHasScrollElement } from '@/hooks/useHasScrollElement.ts';
 
 const Header = ({ headerGroups }: { headerGroups: HeaderGroup<unknown>[] }) => (
@@ -36,10 +37,7 @@ const Body = ({ rows }: { rows: Row<unknown>[] }) => (
     {rows.map((row) => (
       <StyledList key={row.id}>
         {row.getVisibleCells().map((cell) => (
-          <StyledBodyCell
-            key={cell.id}
-            style={{ minWidth: `${cell.column.getSize()}px` }}
-          >
+          <StyledBodyCell key={cell.id} style={{ minWidth: `${cell.column.getSize()}px` }}>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </StyledBodyCell>
         ))}

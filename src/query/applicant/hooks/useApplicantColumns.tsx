@@ -1,11 +1,12 @@
-import Cell from '@/components/Cell/Cell.tsx';
-import PartsCell from '@/components/Cell/PartsCell.tsx';
-import InputCell from '@/components/Cell/InputCell.tsx';
-import { ApplicantStateButton } from '@/components/StateButton';
-import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
-import { createColumnHelper } from '@tanstack/react-table';
-import { Applicant, PatchApplicant } from '@/query/applicant/schema.ts';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { createColumnHelper } from '@tanstack/react-table';
+
+import Cell from '@/components/Cell/Cell.tsx';
+import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
+import InputCell from '@/components/Cell/InputCell.tsx';
+import PartsCell from '@/components/Cell/PartsCell.tsx';
+import { ApplicantStateButton } from '@/components/StateButton';
+import { Applicant, PatchApplicant } from '@/query/applicant/schema.ts';
 import { partOptions } from '@/query/part/options.ts';
 
 const columnHelper = createColumnHelper<Applicant>();
@@ -16,9 +17,7 @@ export type PatchApplicantHandler = (
   value: unknown,
 ) => void;
 
-export const useApplicantColumns = (
-  handlePatchApplicant?: PatchApplicantHandler,
-) => {
+export const useApplicantColumns = (handlePatchApplicant?: PatchApplicantHandler) => {
   const { data: partWithIds } = useSuspenseQuery(partOptions());
 
   return [
@@ -32,18 +31,13 @@ export const useApplicantColumns = (
       size: 196,
       cell: (info) => (
         <PartsCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           onSelect={(value) => {
-            const partId = partWithIds.find(
-              (p) => p.partName === value,
-            )?.partId;
-            if (partId && handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'partId',
-                partId,
-              );
+            const partId = partWithIds.find((p) => p.partName === value)?.partId;
+            if (partId && handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'partId', partId);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </PartsCell>
@@ -54,16 +48,13 @@ export const useApplicantColumns = (
       size: 111,
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'name',
-                value,
-              );
+            if (handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'name', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -75,15 +66,12 @@ export const useApplicantColumns = (
       cell: (info) => (
         <Cell>
           <ApplicantStateButton
-            selectedValue={info.getValue()}
             onStateChange={(state) => {
-              if (handlePatchApplicant)
-                handlePatchApplicant(
-                  info.row.original.applicantId,
-                  'state',
-                  state,
-                );
+              if (handlePatchApplicant) {
+                handlePatchApplicant(info.row.original.applicantId, 'state', state);
+              }
             }}
+            selectedValue={info.getValue()}
           />
         </Cell>
       ),
@@ -93,16 +81,13 @@ export const useApplicantColumns = (
       size: 138,
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'applicationDate',
-                value,
-              );
+            if (handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'applicationDate', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -113,16 +98,13 @@ export const useApplicantColumns = (
       size: 284,
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'email',
-                value,
-              );
+            if (handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'email', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -133,16 +115,13 @@ export const useApplicantColumns = (
       size: 171,
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'phoneNumber',
-                value,
-              );
+            if (handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'phoneNumber', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -153,15 +132,12 @@ export const useApplicantColumns = (
       size: 260,
       cell: (info) => (
         <DepartmentCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           onSelect={(value) => {
-            if (handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'departmentId',
-                value,
-              );
+            if (handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'departmentId', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </DepartmentCell>
@@ -172,16 +148,13 @@ export const useApplicantColumns = (
       size: 132,
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'studentId',
-                value,
-              );
+            if (handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'studentId', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -192,16 +165,13 @@ export const useApplicantColumns = (
       size: 99,
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchApplicant)
-              handlePatchApplicant(
-                info.row.original.applicantId,
-                'academicSemester',
-                value,
-              );
+            if (handlePatchApplicant) {
+              handlePatchApplicant(info.row.original.applicantId, 'academicSemester', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>
@@ -212,12 +182,13 @@ export const useApplicantColumns = (
       size: 106,
       cell: (info) => (
         <InputCell
-          tooltipContent={`${info.row.original.name} 정보 수정`}
           defaultValue={info.getValue()}
           handleSubmit={(value) => {
-            if (handlePatchApplicant)
+            if (handlePatchApplicant) {
               handlePatchApplicant(info.row.original.applicantId, 'age', value);
+            }
           }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
         >
           {info.getValue()}
         </InputCell>

@@ -1,15 +1,16 @@
-import { DialogContainer, StyledTextButton } from './Dialog.style';
 import { Popover } from 'radix-ui';
 import { ReactNode } from 'react';
 
+import { DialogContainer, StyledTextButton } from './Dialog.style';
+
 interface DialogOption {
-  label: string;
   icon?: ReactNode;
+  label: string;
 }
 
 interface DialogProps {
-  options: DialogOption[];
   onSelect: (value: string) => void;
+  options: DialogOption[];
   width: number;
 }
 
@@ -22,13 +23,13 @@ export const Dialog = ({ options, onSelect, width }: DialogProps) => {
             <Popover.Close asChild key={option.label}>
               <StyledTextButton
                 key={option.label}
-                size="medium"
-                variant="textSecondary"
                 leftIcon={option.icon}
-                onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => {
                   onSelect(option.label);
                 }}
+                onMouseDown={(e) => e.stopPropagation()}
+                size="medium"
+                variant="textSecondary"
               >
                 {option.label}
               </StyledTextButton>

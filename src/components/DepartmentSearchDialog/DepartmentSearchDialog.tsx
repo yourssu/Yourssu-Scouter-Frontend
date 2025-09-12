@@ -1,14 +1,15 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { SearchBar } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+
 import {
   StyledButton,
   StyledContent,
   StyledGroup,
   StyledItem,
 } from '@/components/DepartmentSearchDialog/DepartmentSearchDialog.style.ts';
-import { SearchBar } from '@yourssu/design-system-react';
-import { useForm } from 'react-hook-form';
-import { useMemo } from 'react';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { departmentOptions } from '@/query/department/options.ts';
 
 interface DepartmentSearchDialogProps {
@@ -26,27 +27,23 @@ const DepartmentSearchDialog = ({ onSelect }: DepartmentSearchDialogProps) => {
   const departmentSearch = watch('department');
 
   const filteredDepartments = useMemo(() => {
-    if (departmentSearch === '') return [];
-    return departments.filter((department) =>
-      department.departmentName.includes(departmentSearch),
-    );
+    if (departmentSearch === '') {
+      return [];
+    }
+    return departments.filter((department) => department.departmentName.includes(departmentSearch));
   }, [departments, departmentSearch]);
 
   return (
     <Popover.Portal>
-      <StyledContent
-        $gap={filteredDepartments.length > 0}
-        side="top"
-        sideOffset={6}
-      >
+      <StyledContent $gap={filteredDepartments.length > 0} side="top" sideOffset={6}>
         <StyledGroup>
           {filteredDepartments.map((department) => (
             <StyledItem key={department.departmentId}>
               <Popover.Close asChild>
                 <StyledButton
+                  onClick={() => onSelect(department.departmentId)}
                   size="medium"
                   variant="textSecondary"
-                  onClick={() => onSelect(department.departmentId)}
                 >
                   {department.departmentName}
                 </StyledButton>
@@ -55,10 +52,7 @@ const DepartmentSearchDialog = ({ onSelect }: DepartmentSearchDialogProps) => {
           ))}
         </StyledGroup>
         <SearchBar>
-          <SearchBar.Input
-            {...register('department')}
-            placeholder={'학과 이름 검색'}
-          />
+          <SearchBar.Input {...register('department')} placeholder={'학과 이름 검색'} />
         </SearchBar>
       </StyledContent>
     </Popover.Portal>

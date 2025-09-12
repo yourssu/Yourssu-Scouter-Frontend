@@ -1,6 +1,7 @@
-import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
-import { formatTemplates } from '@/components/CalendarDialog/date';
 import { IcCalenderLine, IcClockLine } from '@yourssu/design-system-react';
+
+import { formatTemplates } from '@/components/CalendarDialog/date';
+import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
 
 type MiniDateFieldVariants = 'date' | 'time';
 
@@ -26,7 +27,7 @@ export const MiniDateField = ({ date, variant }: DateFieldProps) => {
 
   return (
     <MiniDateFieldContainer>
-      <IconComponent width={24} height={24} color="#6E7687" />
+      <IconComponent color="#6E7687" height={24} width={24} />
       <span>{format}</span>
     </MiniDateFieldContainer>
   );

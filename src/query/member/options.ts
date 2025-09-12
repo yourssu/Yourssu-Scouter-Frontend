@@ -1,17 +1,15 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { api } from '@/apis/api.ts';
 import { MEMBER_URI } from '@/constants/uri.ts';
 import { MemberArraySchema, MemberState } from '@/query/member/schema.ts';
 
 type MemberQueryParams = {
+  partId: null | number;
   search: string;
-  partId: number | null;
 };
 
-export const memberOptions = (
-  state: MemberState,
-  params?: MemberQueryParams,
-) => {
+export const memberOptions = (state: MemberState, params?: MemberQueryParams) => {
   const baseKey = ['members', state] as const;
 
   return queryOptions({

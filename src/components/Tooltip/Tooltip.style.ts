@@ -8,8 +8,8 @@ export const TooltipWrapper = styled.div`
 `;
 
 interface TooltipContentProps {
-  $position?: 'top' | 'bottom' | 'left' | 'right';
   $offset?: number;
+  $position?: 'bottom' | 'left' | 'right' | 'top';
 }
 
 export const TooltipContent = styled.div<TooltipContentProps>`

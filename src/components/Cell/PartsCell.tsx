@@ -1,15 +1,13 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { IcEditLine } from '@yourssu/design-system-react';
-import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
+import { Popover } from 'radix-ui';
 import { PropsWithChildren } from 'react';
-import {
-  StyledContainer,
-  StyledEditIcon,
-} from '@/components/Cell/Cell.style.ts';
+
+import { StyledContainer, StyledEditIcon } from '@/components/Cell/Cell.style.ts';
+import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 import { useElementWidth } from '@/hooks/useElementWidth.ts';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { partOptions } from '@/query/part/options.ts';
-import { Popover } from 'radix-ui';
 
 interface PartsCellProps extends PropsWithChildren {
   onSelect: (value: string) => void;
@@ -22,13 +20,13 @@ const PartsCell = ({ tooltipContent, children, onSelect }: PartsCellProps) => {
   const { width, ref } = useElementWidth();
 
   return (
-    <GenericDialog width={width} options={options} onSelect={onSelect}>
+    <GenericDialog onSelect={onSelect} options={options} width={width}>
       <StyledContainer $bold={false} $editable={true} ref={ref}>
         {children}
         <Popover.Trigger asChild>
           <StyledEditIcon>
             <Tooltip content={tooltipContent}>
-              <IcEditLine width={20} height={20} />
+              <IcEditLine height={20} width={20} />
             </Tooltip>
           </StyledEditIcon>
         </Popover.Trigger>

@@ -1,4 +1,4 @@
-export type VariableType = 'name' | 'date' | 'text' | 'link';
+export type VariableType = 'date' | 'link' | 'name' | 'text';
 
 // 공통 데이터인데 바뀔 수 있음
 export interface VariableItem {
@@ -7,8 +7,8 @@ export interface VariableItem {
 }
 
 export interface BaseVariableCardProps {
-  title: string;
   count?: number;
+  title: string;
 }
 
 export interface NameVariableCardProps extends BaseVariableCardProps {
@@ -23,8 +23,8 @@ export interface DateVariableCardProps extends BaseVariableCardProps {
 }
 
 export interface TextVariableCardProps extends BaseVariableCardProps {
-  texts: VariableItem[];
   onValueChange?: (index: number, value: string) => void;
+  texts: VariableItem[];
 }
 
 export interface LinkVariableCardProps extends BaseVariableCardProps {
