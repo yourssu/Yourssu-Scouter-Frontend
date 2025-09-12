@@ -31,9 +31,9 @@ import {
 } from './CalendarDialog.style';
 
 interface CalendarDialogProps {
-  children: React.ReactNode;
   onSelect: (date: Date) => void;
   selectedDate?: Date | undefined;
+  trigger: React.ReactNode;
 }
 
 export const generateCalendarDates = (currentDate: { month: number; year: number }): Date[] => {
@@ -51,7 +51,7 @@ export const generateCalendarDates = (currentDate: { month: number; year: number
   return dates;
 };
 
-export const CalendarDialog = ({ onSelect, children, selectedDate }: CalendarDialogProps) => {
+export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
   const today = new Date();
   const displayDate = selectedDate ?? today;
@@ -83,7 +83,7 @@ export const CalendarDialog = ({ onSelect, children, selectedDate }: CalendarDia
   return (
     <StyledWrapper>
       <Popover.Root onOpenChange={setOpen} open={open}>
-        <Popover.Trigger asChild>{children}</Popover.Trigger>
+        <Popover.Trigger asChild>{trigger}</Popover.Trigger>
         <Popover.Content>
           <CalendarDialogContainer>
             <CalendarContainer>

@@ -25,6 +25,7 @@ export const CalendarHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 12px;
+  user-select: none;
 `;
 
 export const CalendarHeaderText = styled.p`
