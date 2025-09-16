@@ -103,6 +103,7 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
                 <DatesWrapper>
                   {dates.map((date) => (
                     <DateCell
+                      key={date.toISOString()}
                       currentMonth={currentDate.month}
                       date={date}
                       isToday={isSameDay(date, today)}

@@ -1,9 +1,16 @@
 import { IcClockLine } from '@yourssu/design-system-react';
-import { setHours, setMinutes } from 'date-fns';
+import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
+import { DropdownMenu } from 'radix-ui';
+import { addMinutes, setHours, setMinutes } from 'date-fns';
 import { useEffect, useState } from 'react';
 
 import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
-import { parseTimeInput } from '@/components/CalendarDialog/time';
+import {
+  StyledContent,
+  StyledItem,
+  StyledItemsContainer,
+  StyledItemText,
+} from '@/components/CalendarDialog/DateField.style';
 import { formatTemplates } from '@/utils/date';
 import { DateFormatTemplateNames } from '@/utils/date';
 
@@ -14,38 +21,49 @@ interface MiniTimeFieldProps {
 
 export const MiniTimeField = ({ date, onDateChange }: MiniTimeFieldProps) => {
   const formatKey: DateFormatTemplateNames = '오전 12:00';
-  const [text, setText] = useState(() => formatTemplates[formatKey](date));
-  const [isError, setIsError] = useState(false);
+  const [time, setTime] = useState(() => formatTemplates[formatKey](date));
 
   useEffect(() => {
     const newFormat = formatTemplates[formatKey](date);
-    setText(newFormat);
+    setTime(newFormat);
   }, [date]);
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
+  const handleSelect = (timeValue: Date) => {
+    const newDate = setMinutes(setHours(date, timeValue.getHours()), timeValue.getMinutes());
+    onDateChange(newDate);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      const parsedTime = parseTimeInput(text);
-      if (!parsedTime || parsedTime.hour < 0) {
-        setIsError(true);
-        return;
-      }
-      const { hour, minute } = parsedTime;
-      const newDate = setMinutes(setHours(date, hour), minute);
-      onDateChange(newDate);
-      const newFormat = formatTemplates[formatKey](newDate);
-      setIsError(false);
-      setText(newFormat);
-    }
-  };
+  const timeOptions = [];
+  let currentTime = setHours(setMinutes(date, 0), 9);
+  const end = setHours(setMinutes(date, 0), 22);
+  while (currentTime <= end) {
+    timeOptions.push({
+      label: formatTemplates[formatKey](currentTime),
+      value: currentTime,
+    });
+    currentTime = addMinutes(currentTime, 30);
+  }
 
   return (
-    <MiniDateFieldContainer $isError={isError}>
-      <IcClockLine color="#6E7687" height={24} width={24} />
-      <input onChange={handleTextChange} onKeyDown={handleKeyDown} value={text} />
-    </MiniDateFieldContainer>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <MiniDateFieldContainer>
+          <IcClockLine color="#6E7687" height={24} width={24} />
+          {time}
+          <IcArrowsChevronDownFilled color="#6E7687" height={16} width={16} />
+        </MiniDateFieldContainer>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <StyledContent align="start" sideOffset={5}>
+          <StyledItemsContainer>
+            {timeOptions.map((timeOptions) => (
+              <StyledItem key={timeOptions.label} onClick={() => handleSelect(timeOptions.value)}>
+                <StyledItemText>{timeOptions.label}</StyledItemText>
+              </StyledItem>
+            ))}
+          </StyledItemsContainer>
+        </StyledContent>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 };
