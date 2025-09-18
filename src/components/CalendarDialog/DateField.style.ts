@@ -73,6 +73,11 @@ export const StyledItemsContainer = styled.div`
   gap: 4px;
 `;
 
+export const StyledItemText = styled.span`
+  color: ${({ theme }) => theme.semantic.color.textBasicTertiary};
+  ${({ theme }) => theme.typo.B3_Sb_14};
+`;
+
 export const StyledItem = styled(DropdownMenu.Item)`
   display: flex;
   align-items: center;
@@ -84,15 +89,9 @@ export const StyledItem = styled(DropdownMenu.Item)`
 
   &:hover {
     background-color: ${({ theme }) => theme.semantic.color.buttonTextSecondaryPressed};
-  }
-`;
-
-export const StyledItemText = styled.span`
-  color: ${({ theme }) => theme.semantic.color.textBasicTertiary};
-  ${({ theme }) => theme.typo.B3_Sb_14};
-
-  &:hover {
-    color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
+    ${StyledItemText} {
+      color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
+    }
   }
 `;
 
