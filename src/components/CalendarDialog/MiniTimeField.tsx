@@ -1,7 +1,7 @@
 import { IcClockLine } from '@yourssu/design-system-react';
 import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
-import { DropdownMenu } from 'radix-ui';
 import { addMinutes, setHours, setMinutes } from 'date-fns';
+import { DropdownMenu } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
 import { MiniDateFieldContainer } from '@/components/CalendarDialog/DateField.style';
