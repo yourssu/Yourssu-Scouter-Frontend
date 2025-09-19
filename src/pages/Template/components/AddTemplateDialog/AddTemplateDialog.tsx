@@ -1,14 +1,8 @@
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
-import { getChipType } from '@/components/VariableChip/VariableChip';
-import { VariableType } from '@/components/VariableDialog/VariableDialog';
-import {
-  MailEditorContent,
-  MailEditorContentRef,
-} from '@/pages/SendMail/MailEditorContent/MailEditorContent';
-import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
+import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
 
 import {
   StyledBody,
@@ -26,14 +20,6 @@ interface Template {
   title: string;
 }
 
-// 추가: Variable 인터페이스
-interface Variable {
-  differentForEachPerson: boolean;
-  id: string;
-  name: string;
-  type: VariableType;
-}
-
 interface AddTemplateDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -45,8 +31,6 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     title: '',
     content: '',
   });
-
-  const editorRef = useRef<MailEditorContentRef>(null); // 추가
 
   const handleSave = () => {
     if (formData.title.trim()) {
@@ -80,14 +64,6 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     }));
   };
 
-  // 추가: MailHeader에서 변수 클릭 시 에디터에 삽입
-  const handleVariableClick = (variable: Variable) => {
-    if (editorRef.current) {
-      const chipType = getChipType(variable.type, variable.name);
-      editorRef.current.insertVariable(chipType, variable.name);
-    }
-  };
-
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
@@ -104,11 +80,9 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
           <StyledBody>
-            <MailHeader onVariableClick={handleVariableClick} type="normal" />
-            <MailEditorContent
-              initialContent={formData.content}
+            <TemplateEditor
+              templateContent={formData.content}
               onContentChange={handleContentChange}
-              ref={editorRef} // 추가
             />
           </StyledBody>
           <StyledFooter>
