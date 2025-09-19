@@ -22,10 +22,10 @@ export const DateCell = ({
 
   return (
     <StyledDateCell
+      $isSelected={isSelected}
+      $isToday={isToday}
       disabled={date.getMonth() !== currentMonth}
-      isSelected={isSelected}
-      isToday={isToday}
-      onClick={handleDateClick}
+      onMouseDown={handleDateClick}
     >
       {dateNum}
     </StyledDateCell>

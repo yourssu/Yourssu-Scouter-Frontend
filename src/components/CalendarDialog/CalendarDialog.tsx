@@ -1,10 +1,21 @@
 import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
-import { addDays, endOfMonth, endOfWeek, isSameDay, startOfWeek } from 'date-fns';
+import {
+  addDays,
+  addHours,
+  addMonths,
+  endOfMonth,
+  endOfWeek,
+  isSameDay,
+  setHours,
+  startOfHour,
+  startOfWeek,
+} from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
 
 import { DateCell } from '@/components/CalendarDialog/DateCell';
 import { MiniDateField } from '@/components/CalendarDialog/MiniDateField';
+import { MiniTimeField } from '@/components/CalendarDialog/MiniTimeField';
 
 import {
   CalendarBody,
@@ -40,13 +51,10 @@ export const generateCalendarDates = (currentDate: { month: number; year: number
   return dates;
 };
 
-export const CalendarDialog = ({
-  onSelect,
-  trigger,
-  selectedDate = new Date(),
-}: CalendarDialogProps) => {
+export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
   const today = new Date();
+  const displayDate = selectedDate ?? today;
   const [currentDate, setCurrentDate] = useState<{
     month: number;
     year: number;
@@ -59,42 +67,32 @@ export const CalendarDialog = ({
 
   const handleSelectDate = (date: Date) => {
     onSelect(date);
-    setOpen(false);
+  };
+
+  const handleMonthChange = (amount: number) => {
+    const newDate = addMonths(new Date(currentDate.year, currentDate.month, 1), amount);
+    setCurrentDate({ year: newDate.getFullYear(), month: newDate.getMonth() });
+  };
+
+  const getCloseHour = (date: Date) => {
+    const now = new Date();
+    const nextHour = startOfHour(addHours(now, 1));
+    return setHours(date, nextHour.getHours());
   };
 
   return (
     <StyledWrapper>
       <Popover.Root onOpenChange={setOpen} open={open}>
-        <Popover.Anchor asChild>
-          <div onClick={() => setOpen(true)}>{trigger}</div>
-        </Popover.Anchor>
+        <Popover.Trigger asChild>{trigger}</Popover.Trigger>
         <Popover.Content>
           <CalendarDialogContainer>
             <CalendarContainer>
               <CalendarHeader>
-                <IcArrowsChevronLeftLine
-                  height={20}
-                  onClick={() =>
-                    setCurrentDate((currentDate) => ({
-                      year: currentDate.year,
-                      month: currentDate.month - 1,
-                    }))
-                  }
-                  width={20}
-                />
+                <IcArrowsChevronLeftLine height={20} onClick={() => handleMonthChange(-1)} />
                 <CalendarHeaderText>
                   {`${currentDate.year}년 ${currentDate.month + 1}월`}
                 </CalendarHeaderText>
-                <IcArrowsChevronRightLine
-                  height={20}
-                  onClick={() =>
-                    setCurrentDate((currentDate) => ({
-                      year: currentDate.year,
-                      month: currentDate.month + 1,
-                    }))
-                  }
-                  width={20}
-                />
+                <IcArrowsChevronRightLine height={20} onClick={() => handleMonthChange(1)} />
               </CalendarHeader>
               <CalendarBody>
                 <DayRow>
@@ -108,8 +106,8 @@ export const CalendarDialog = ({
                       currentMonth={currentDate.month}
                       date={date}
                       isToday={isSameDay(date, today)}
-                      key={date.toLocaleDateString()}
-                      onClick={() => handleSelectDate(date)}
+                      key={date.toISOString()}
+                      onClick={() => handleSelectDate(getCloseHour(date))}
                       selectedDate={selectedDate}
                     />
                   ))}
@@ -117,8 +115,8 @@ export const CalendarDialog = ({
               </CalendarBody>
             </CalendarContainer>
             <DateFieldWrapper>
-              <MiniDateField date={selectedDate} variant="date" />
-              <MiniDateField date={selectedDate} variant="time" />
+              <MiniDateField date={displayDate} />
+              <MiniTimeField date={displayDate} onDateChange={handleSelectDate} />
             </DateFieldWrapper>
           </CalendarDialogContainer>
         </Popover.Content>

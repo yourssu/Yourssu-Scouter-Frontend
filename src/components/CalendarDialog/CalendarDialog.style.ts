@@ -11,7 +11,6 @@ export const CalendarDialogContainer = styled.div`
   justify-items: center;
   z-index: 1;
   max-height: 438px;
-  overflow-y: auto;
   gap: 20px;
 `;
 
@@ -26,6 +25,7 @@ export const CalendarHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 12px;
+  user-select: none;
 `;
 
 export const CalendarHeaderText = styled.p`

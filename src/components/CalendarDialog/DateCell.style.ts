@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledDateCell = styled.button<{
-  isSelected: boolean;
-  isToday: boolean;
+  $isSelected: boolean;
+  $isToday: boolean;
 }>`
   outline: none;
   border: none;
@@ -30,19 +30,24 @@ export const StyledDateCell = styled.button<{
     background: none;
   }
 
-  ${({ isSelected, theme }) =>
-    isSelected &&
-    `
-    color: ${theme.semantic.color.textBasicWhite};
-    background: ${theme.semantic.color.bgBrandPrimary};
-    border-radius: 50%;
-  `}
-
-  ${({ isToday, theme }) =>
-    isToday &&
+  ${({ $isToday, theme }) =>
+    $isToday &&
     `
     color: ${theme.semantic.color.textBasicPrimary};
     background: ${theme.semantic.color.bgBasicStrong};
     border-radius: 50%;
+  `}
+
+  ${({ $isSelected, theme }) =>
+    $isSelected &&
+    `
+    color: ${theme.semantic.color.textBasicWhite};
+    background: ${theme.semantic.color.bgBrandPrimary};
+    border-radius: 50%;
+
+    &:hover {
+      color: ${theme.semantic.color.textBasicWhite};
+      background: ${theme.semantic.color.bgBrandPrimary};
+    }
   `}
 `;
