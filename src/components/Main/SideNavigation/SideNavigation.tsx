@@ -41,7 +41,7 @@ const SideNavigation = () => {
         {
           icon: <IcCalenderLine />,
           text: '면접 일정 관리',
-          pathname: '/schedules',
+          pathname: '/interview',
         },
         {
           icon: <IcPinLine />,
