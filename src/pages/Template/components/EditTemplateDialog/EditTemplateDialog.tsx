@@ -1,14 +1,6 @@
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
-import { useEffect, useRef, useState } from 'react';
-
-import { getChipType } from '@/components/VariableChip/VariableChip';
-import { VariableType } from '@/components/VariableDialog/VariableDialog';
-import {
-  MailEditorContent,
-  MailEditorContentRef,
-} from '@/pages/SendMail/MailEditorContent/MailEditorContent';
-import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
+import { useEffect, useState } from 'react';
 
 import {
   StyledBody,
@@ -18,6 +10,7 @@ import {
   StyledOverlay,
   StyledTitleInput,
 } from './EditTemplateDialog.style';
+import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
 
 interface Template {
   content?: string;
@@ -33,13 +26,6 @@ interface EditTemplateDialogProps {
   template: null | Template;
 }
 
-interface Variable {
-  differentForEachPerson: boolean;
-  id: string;
-  name: string;
-  type: VariableType;
-}
-
 export const EditTemplateDialog = ({
   isOpen,
   onClose,
@@ -50,7 +36,6 @@ export const EditTemplateDialog = ({
     title: '',
     content: '',
   });
-  const editorRef = useRef<MailEditorContentRef>(null);
 
   // template이 변경될 때 폼 데이터 업데이트
   useEffect(() => {
@@ -92,14 +77,9 @@ export const EditTemplateDialog = ({
     }));
   };
 
-  const handleVariableClick = (variable: Variable) => {
-    if (editorRef.current) {
-      const chipType = getChipType(variable.type, variable.name);
-      editorRef.current.insertVariable(chipType, variable.name);
-    }
-  };
-
-  if (!template) {return null;}
+  if (!template) {
+    return null;
+  }
 
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
@@ -118,11 +98,9 @@ export const EditTemplateDialog = ({
           </StyledHeader>
 
           <StyledBody>
-            <MailHeader onVariableClick={handleVariableClick} type="normal" />
-            <MailEditorContent
-              initialContent={template.content}
+            <TemplateEditor
+              templateContent={template.content ?? ''}
               onContentChange={handleContentChange}
-              ref={editorRef}
             />
           </StyledBody>
 
