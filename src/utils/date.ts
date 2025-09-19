@@ -1,3 +1,4 @@
+import { addDays, endOfMonth, endOfWeek, startOfWeek } from 'date-fns';
 import { formatWithOptions } from 'date-fns/fp';
 import { ko } from 'date-fns/locale';
 
@@ -11,3 +12,18 @@ export const formatTemplates = {
 };
 
 export type DateFormatTemplateNames = keyof typeof formatTemplates;
+
+export const generateCalendarDates = (currentDate: { month: number; year: number }): Date[] => {
+  const firstDayOfMonth = new Date(currentDate.year, currentDate.month, 1);
+  const lastDayOfMonth = endOfMonth(firstDayOfMonth);
+  const firstDayOfView = startOfWeek(firstDayOfMonth);
+  const lastDayOfView = endOfWeek(lastDayOfMonth);
+
+  const dates: Date[] = [];
+  let tempDate = firstDayOfView;
+  while (tempDate <= lastDayOfView) {
+    dates.push(tempDate);
+    tempDate = addDays(tempDate, 1);
+  }
+  return dates;
+};
