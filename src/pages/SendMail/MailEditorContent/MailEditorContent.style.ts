@@ -29,4 +29,14 @@ export const StyledEditorContent = styled(EditorContent)`
       margin: 0;
     }
   }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background-color: #d9d9d9;
+    transition: background-color 0.3s ease;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
 `;
