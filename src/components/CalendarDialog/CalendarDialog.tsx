@@ -7,6 +7,7 @@ import {
   endOfWeek,
   isSameDay,
   setHours,
+  setMinutes,
   startOfHour,
   startOfWeek,
 } from 'date-fns';
@@ -65,19 +66,34 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
   const dates = generateCalendarDates(currentDate);
 
-  const handleSelectDate = (date: Date) => {
-    onSelect(date);
-  };
-
   const handleMonthChange = (amount: number) => {
     const newDate = addMonths(new Date(currentDate.year, currentDate.month, 1), amount);
     setCurrentDate({ year: newDate.getFullYear(), month: newDate.getMonth() });
   };
 
+  const handleDateChange = (date: Date) => {
+    if (selectedDate) {
+      const selectedHours = selectedDate.getHours();
+      const selectedMinutes = selectedDate.getMinutes();
+      const updatedDate = setHours(setMinutes(date, selectedMinutes), selectedHours);
+      onSelect(updatedDate);
+    } else {
+      onSelect(getCloseHour(date));
+    }
+  };
+
+  const handleTimeChange = (date: Date) => {
+    onSelect(date);
+  };
+
   const getCloseHour = (date: Date) => {
     const now = new Date();
     const nextHour = startOfHour(addHours(now, 1));
-    return setHours(date, nextHour.getHours());
+    let targetHour = nextHour.getHours();
+    if (targetHour < 9 || targetHour > 22) {
+      targetHour = 9;
+    }
+    return setHours(date, targetHour);
   };
 
   return (
@@ -107,7 +123,7 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
                       date={date}
                       isToday={isSameDay(date, today)}
                       key={date.toISOString()}
-                      onClick={() => handleSelectDate(getCloseHour(date))}
+                      onClick={() => handleDateChange(date)}
                       selectedDate={selectedDate}
                     />
                   ))}
@@ -116,7 +132,7 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
             </CalendarContainer>
             <DateFieldWrapper>
               <MiniDateField date={displayDate} />
-              <MiniTimeField date={displayDate} onDateChange={handleSelectDate} />
+              <MiniTimeField date={displayDate} onDateChange={handleTimeChange} />
             </DateFieldWrapper>
           </CalendarDialogContainer>
         </Popover.Content>
