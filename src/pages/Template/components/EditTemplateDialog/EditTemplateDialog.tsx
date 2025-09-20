@@ -33,8 +33,8 @@ export const EditTemplateDialog = ({
   template,
 }: EditTemplateDialogProps) => {
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
+    title: template ? template.title : '',
+    content: template ? template.content : '',
   });
 
   // template이 변경될 때 폼 데이터 업데이트
@@ -85,14 +85,14 @@ export const EditTemplateDialog = ({
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
         <StyledOverlay />
-        <StyledContent>
+        <StyledContent onOpenAutoFocus={(e) => e.preventDefault()}>
           <StyledHeader>
             <Dialog.Title style={{ display: 'none' }} />
             <Dialog.Description style={{ display: 'none' }} />
             <StyledTitleInput
               onChange={handleTitleChange}
               placeholder="제목을 입력하세요"
-              value={template.title}
+              value={formData.title}
             />
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
