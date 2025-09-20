@@ -47,11 +47,17 @@ const setAuthHeader: BeforeRequestHook = (request) => {
   }
 };
 
-export const api = ky.create({
+/* 
+  API 토큰이 필요없는 상황에서 사용해요.
+*/
+export const nativeApi = ky.create({
   prefixUrl: API_CONFIG.BASE_URL,
   retry: {
     limit: DEFAULT_API_RETRY_LIMIT,
   },
+});
+
+export const api = nativeApi.extend({
   hooks: {
     beforeRequest: [setAuthHeader],
     afterResponse: [handleTokenRefresh],
