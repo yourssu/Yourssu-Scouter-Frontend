@@ -10,6 +10,7 @@ const sizeStyles = {
     height: 24px;
     padding: 0 8px;
     ${({ theme }) => theme.typo.C1_Sb_13}
+    vertical-align: bottom;
   `,
 };
 
@@ -29,6 +30,15 @@ export const IconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.semantic.color.iconBrandSecondary};
+`;
+
+export const CloseIconWrapper = styled.span`
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.semantic.color.iconBasicTertiary};
 `;
 
 export const Label = styled.span`

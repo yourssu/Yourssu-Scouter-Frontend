@@ -12,6 +12,8 @@ export const ToolbarContainer = styled.div`
 
 export const ToolbarGroup = styled.div`
   display: flex;
+  position: relative;
+  align-items: center;
 `;
 
 export const ToolbarButton = styled.button`
@@ -46,10 +48,14 @@ const SelectBase = styled.select`
 
 export const FontSizeSelect = styled(SelectBase)`
   width: 70px;
+  color: #334155;
+  appearance: none;
 `;
 
 export const FontFamilySelect = styled(SelectBase)`
   width: 140px;
+  color: #334155;
+  appearance: none;
 `;
 
 export const ColorButton = styled.button`

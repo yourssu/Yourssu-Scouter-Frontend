@@ -1,4 +1,5 @@
 import { Editor } from '@tiptap/react';
+import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
 
 import ChangeBold from '@/assets/SendMail/ChangeBold.svg';
 import ChangeItalic from '@/assets/SendMail/ChangeItalic.svg';
@@ -56,6 +57,16 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
             </option>
           ))}
         </FontSizeSelect>
+        <IcArrowsChevronDownFilled
+          color={'#98A2B3'}
+          height={16}
+          style={{
+            position: 'absolute',
+            right: '8px',
+            pointerEvents: 'none',
+          }}
+          width={16}
+        />
       </ToolbarGroup>
 
       <ToolbarGroup>
@@ -67,6 +78,16 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
             </option>
           ))}
         </FontFamilySelect>
+        <IcArrowsChevronDownFilled
+          color={'#98A2B3'}
+          height={16}
+          style={{
+            position: 'absolute',
+            right: '8px',
+            pointerEvents: 'none',
+          }}
+          width={16}
+        />
       </ToolbarGroup>
 
       <Divider />
