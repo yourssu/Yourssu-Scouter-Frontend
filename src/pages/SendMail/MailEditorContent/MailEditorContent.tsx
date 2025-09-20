@@ -79,8 +79,6 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
               .focus()
               .insertContent({ type: 'variableChip', attrs: { type, label } })
               .run();
-            // console.log('Variable inserted:', { type, label });
-            // console.log('Current editor content:', editor.getHTML());
           }
         },
         deleteVariable: (label: string) => {

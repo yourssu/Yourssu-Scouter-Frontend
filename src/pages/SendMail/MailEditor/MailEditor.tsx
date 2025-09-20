@@ -75,11 +75,9 @@ export const MailEditor = () => {
   };
 
   const handleVariableDelete = (variable: Variable) => {
-    // console.log('Attempting to delete variable:', variable);
     if (editorRef.current) {
       setVariables((prev) => prev.filter((v) => v.id !== variable.id));
       editorRef.current.deleteVariable(variable.name);
-      // console.log('Variable deleted from editor:', variable);
     }
   };
 

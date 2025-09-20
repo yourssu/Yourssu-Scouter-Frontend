@@ -61,7 +61,6 @@ export const MailHeader = ({
     name: string,
     differentForEachPerson: boolean,
   ) => {
-    // console.log('MailHeader를 거쳐 변수 추가:', { type, name });
     if (onVariableAdd) {
       onVariableAdd(type, name, differentForEachPerson);
     }
