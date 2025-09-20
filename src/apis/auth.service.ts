@@ -1,4 +1,4 @@
-import { api } from '@/apis/api';
+import { nativeApi } from '@/apis/api';
 import { API_CONFIG } from '@/constants/config';
 import { GoogleLoginResponse, TokenResponse } from '@/types/auth.types';
 
@@ -7,7 +7,7 @@ import { tokenService } from './token.service';
 export const authService = {
   googleLogin: async (code: string): Promise<GoogleLoginResponse> => {
     try {
-      const response = await api
+      const response = await nativeApi
         .post('oauth2/login/google', {
           json: { authorizationCode: code },
           throwHttpErrors: false,
@@ -43,7 +43,7 @@ export const authService = {
   // },
 
   refreshToken: async (refreshToken: string): Promise<TokenResponse> => {
-    const response = await api
+    const response = await nativeApi
       .post('refresh-token', {
         json: { refreshToken: `${refreshToken}` },
       })
@@ -55,7 +55,7 @@ export const authService = {
 
   logout: async () => {
     try {
-      await api.post('logout', {
+      await nativeApi.post('logout', {
         json: { refreshToken: `${tokenService.getAccessToken()}` },
       });
     } catch (error) {
