@@ -1,8 +1,8 @@
-// VariableChipNode.ts
 import { mergeAttributes, Node } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
+import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
-import { VariableChipNodeView } from './VariableChipNodeView';
+import { VariableChip } from '@/components/VariableChip/VariableChip';
 
 export interface VariableChipOptions {
   htmlAttributes: Record<string, any>;
@@ -93,3 +93,19 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
     };
   },
 });
+
+const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
+  const { type, label } = node.attrs as { label: string; type: string };
+
+  return (
+    <NodeViewWrapper
+      as="span"
+      className="variable-chip-node"
+      style={{
+        display: 'inline-block',
+      }}
+    >
+      <VariableChip label={label} size="small" type={type as any} />
+    </NodeViewWrapper>
+  );
+};
