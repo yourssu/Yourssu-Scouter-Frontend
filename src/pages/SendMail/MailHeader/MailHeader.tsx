@@ -1,7 +1,8 @@
 import { IcArrowsChevronDownLine, useTabs } from '@yourssu/design-system-react';
 import { ReactNode, useState } from 'react';
 
-import { getChipType, VariableChip } from '@/components/VariableChip/VariableChip';
+import { getChipType } from '@/components/VariableChip/utils';
+import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog } from '@/components/VariableDialog/VariableDialog';
 import { VariableType } from '@/types/editor';
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { getChipType } from '@/components/VariableChip/VariableChip';
+import { getChipType } from '@/components/VariableChip/utils';
 import { EditorContainer } from '@/pages/SendMail/MailEditor/MailEditor.style';
 import {
   MailEditorContent,
