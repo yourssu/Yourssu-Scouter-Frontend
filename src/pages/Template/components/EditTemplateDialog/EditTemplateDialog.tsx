@@ -1,3 +1,4 @@
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
@@ -88,8 +89,10 @@ export const EditTemplateDialog = ({
         <StyledOverlay />
         <StyledContent onOpenAutoFocus={(e) => e.preventDefault()}>
           <StyledHeader>
-            <Dialog.Title style={{ display: 'none' }} />
-            <Dialog.Description style={{ display: 'none' }} />
+            <VisuallyHidden>
+              <Dialog.Title />
+              <Dialog.Description />
+            </VisuallyHidden>
             <StyledTitleInput
               onChange={handleTitleChange}
               placeholder="제목을 입력하세요"

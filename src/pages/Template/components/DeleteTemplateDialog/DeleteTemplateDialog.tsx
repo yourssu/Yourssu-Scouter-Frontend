@@ -1,3 +1,4 @@
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 
@@ -34,7 +35,9 @@ export const DeleteTemplateDialog = ({
         <StyledContent>
           <StyledHeader>
             <StyledTitle>이 템플릿을 삭제하시겠습니까?</StyledTitle>
-            <Dialog.Description style={{ display: 'none' }} />
+            <VisuallyHidden>
+              <Dialog.Description />
+            </VisuallyHidden>
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
           <StyledDescription>{templateTitle}</StyledDescription>

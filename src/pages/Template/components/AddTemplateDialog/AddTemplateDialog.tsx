@@ -1,3 +1,4 @@
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useState } from 'react';
@@ -69,8 +70,10 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
       <Dialog.Portal>
         <StyledOverlay />
         <StyledContent>
-          <Dialog.Title style={{ display: 'none' }} />
-          <Dialog.Description style={{ display: 'none' }} />
+          <VisuallyHidden>
+            <Dialog.Title />
+            <Dialog.Description />
+          </VisuallyHidden>
           <StyledHeader>
             <StyledTitleInput
               onChange={handleTitleChange}
