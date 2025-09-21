@@ -3,6 +3,9 @@ import { styled } from 'styled-components';
 
 export const EditorWrapper = styled.div`
   padding: 16px;
+  overflow-y: auto;
+  scrollbar-color: #d9d9d9 transparent;
+  scrollbar-width: thin;
 `;
 
 export const StyledEditorContent = styled(EditorContent)`
@@ -10,7 +13,6 @@ export const StyledEditorContent = styled(EditorContent)`
   outline: none;
   min-height: 280px;
   max-height: 572px;
-  overflow-y: auto;
   position: relative;
 
   .tiptap {
@@ -28,15 +30,5 @@ export const StyledEditorContent = styled(EditorContent)`
       padding-left: 24px;
       margin: 0;
     }
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background-color: #d9d9d9;
-    transition: background-color 0.3s ease;
-  }
-
-  &::-webkit-scrollbar {
-    width: 8px;
   }
 `;
