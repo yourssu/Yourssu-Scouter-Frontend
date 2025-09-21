@@ -35,8 +35,8 @@ export const EditTemplateDialog = ({
   template,
 }: EditTemplateDialogProps) => {
   const [formData, setFormData] = useState({
-    title: template ? template.title : '',
-    content: template ? template.content : '',
+    title: template?.title ?? '',
+    content: template?.content ?? '',
   });
 
   // template이 변경될 때 폼 데이터 업데이트
