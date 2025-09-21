@@ -210,7 +210,6 @@ export const Templates = () => {
             </Tabs.Panel>
           ))}
         </Tabs>
-
         {/* 삭제 확인 Dialog */}
         <DeleteTemplateDialog
           isOpen={dialogState.type === 'delete'}
@@ -218,15 +217,15 @@ export const Templates = () => {
           onConfirm={handleConfirmDelete}
           templateTitle={dialogState.selectedTemplate?.title || ''}
         />
-
         {/* 편집 Dialog */}
-        <EditTemplateDialog
-          isOpen={dialogState.type === 'edit'}
-          onClose={handleCloseDialog}
-          onSave={handleSaveEdit}
-          template={dialogState.selectedTemplate}
-        />
-
+        {!!dialogState.selectedTemplate && (
+          <EditTemplateDialog
+            isOpen={dialogState.type === 'edit'}
+            onClose={handleCloseDialog}
+            onSave={handleSaveEdit}
+            template={dialogState.selectedTemplate}
+          />
+        )}
         {/* 편집 Dialog */}
         <AddTemplateDialog
           isOpen={dialogState.type === 'add'}

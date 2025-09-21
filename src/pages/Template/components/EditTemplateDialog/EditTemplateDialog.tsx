@@ -25,7 +25,7 @@ interface EditTemplateDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (template: Template) => void;
-  template: null | Template;
+  template: Template;
 }
 
 export const EditTemplateDialog = ({
@@ -78,10 +78,6 @@ export const EditTemplateDialog = ({
       content,
     }));
   };
-
-  if (!template) {
-    return null;
-  }
 
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
