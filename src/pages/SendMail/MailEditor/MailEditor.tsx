@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { getChipType } from '@/components/VariableChip/VariableChip';
-import { VariableType } from '@/components/VariableDialog/VariableDialog';
+import { VariableType } from '@/types/editor';
 
 import { Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';

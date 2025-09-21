@@ -8,7 +8,8 @@ import {
   IcUserLine,
 } from '@yourssu/design-system-react';
 
-import { VariableType } from '../VariableDialog/VariableDialog';
+import { VariableType } from '@/types/editor';
+
 import { ChipWrapper, CloseIconWrapper, IconWrapper, Label } from './VariableChip.style';
 
 type ChipSize = 'large' | 'small';

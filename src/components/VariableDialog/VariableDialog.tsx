@@ -11,6 +11,8 @@ import {
 import { DropdownMenu } from 'radix-ui';
 import { useState } from 'react';
 
+import { VariableType } from '@/types/editor';
+
 import {
   StyledBackButton,
   StyledContainer,
@@ -26,8 +28,6 @@ import {
   StyledTrigger,
   StyledVariableType,
 } from './VariableDialog.style';
-
-export type VariableType = '날짜' | '링크' | '사람' | '텍스트';
 
 const variableTypes = [
   { type: '사람', icon: <IcUserLine width={20} /> },
