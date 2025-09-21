@@ -18,8 +18,8 @@ export const MailEditor = () => {
   const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
 
   const [variables, setVariables] = useState<Variable[]>([
-    { id: '1', type: '텍스트', name: '파트명', differentForEachPerson: false },
-    { id: '2', type: '사람', name: '지원자', differentForEachPerson: true },
+    { id: '1', type: '파트명', name: '파트명', differentForEachPerson: false },
+    { id: '2', type: '지원자', name: '지원자', differentForEachPerson: true },
   ]);
 
   const editorRef = useRef<MailEditorContentRef>(null);
@@ -46,7 +46,7 @@ export const MailEditor = () => {
 
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
-      const chipType = getChipType(variable.type, variable.name);
+      const chipType = getChipType(variable.type);
       editorRef.current.insertVariable(chipType, variable.name);
     }
   };
@@ -61,10 +61,7 @@ export const MailEditor = () => {
 
     setVariables((prev) => [...prev, newVariable]);
 
-    editorRef.current?.insertVariable(
-      getChipType(newVariable.type, newVariable.name),
-      newVariable.name,
-    );
+    editorRef.current?.insertVariable(getChipType(newVariable.type), newVariable.name);
   };
 
   const handleVariableDelete = (variable: Variable) => {

@@ -83,7 +83,7 @@ export const MailHeader = ({
               label={variable.name}
               onClick={() => handleVariableChipClick(variable)}
               onDelete={() => handleVariableChipDelete(variable)}
-              type={getChipType(variable.type, variable.name)}
+              type={getChipType(variable.type)}
             />
           ))}
         </VariableSection>

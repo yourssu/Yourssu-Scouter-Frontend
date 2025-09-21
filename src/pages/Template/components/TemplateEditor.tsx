@@ -16,15 +16,15 @@ interface TemplateEditorProps {
 
 export const TemplateEditor = ({ templateContent, onContentChange }: TemplateEditorProps) => {
   const [variables, setVariables] = useState<Variable[]>([
-    { id: '1', type: '텍스트', name: '파트명', differentForEachPerson: false },
-    { id: '2', type: '사람', name: '지원자', differentForEachPerson: true },
+    { id: '1', type: '파트명', name: '파트명', differentForEachPerson: false },
+    { id: '2', type: '지원자', name: '지원자', differentForEachPerson: true },
   ]);
 
   const editorRef = useRef<MailEditorContentRef>(null);
 
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
-      const chipType = getChipType(variable.type, variable.name);
+      const chipType = getChipType(variable.type);
       editorRef.current.insertVariable(chipType, variable.name);
     }
   };
