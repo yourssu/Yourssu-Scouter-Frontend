@@ -1,6 +1,5 @@
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
-// VariableChipNodeView.tsx
 import { VariableChip } from '@/components/VariableChip/VariableChip';
 
 export const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {

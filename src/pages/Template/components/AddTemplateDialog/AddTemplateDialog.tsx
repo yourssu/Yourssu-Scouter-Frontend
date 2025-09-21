@@ -81,8 +81,8 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
           </StyledHeader>
           <StyledBody>
             <TemplateEditor
-              templateContent={formData.content}
               onContentChange={handleContentChange}
+              templateContent={formData.content}
             />
           </StyledBody>
           <StyledFooter>

@@ -1,14 +1,13 @@
 import { useRef, useState } from 'react';
 
 import { getChipType } from '@/components/VariableChip/VariableChip';
-import { VariableType } from '@/components/VariableDialog/VariableDialog'; // 추가
-
+import { VariableType } from '@/components/VariableDialog/VariableDialog';
+import { EditorContainer } from '@/pages/SendMail/MailEditor/MailEditor.style';
 import {
   MailEditorContent,
   MailEditorContentRef,
 } from '@/pages/SendMail/MailEditorContent/MailEditorContent';
 import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
-import { EditorContainer } from '@/pages/SendMail/MailEditor/MailEditor.style';
 
 interface Variable {
   differentForEachPerson: boolean;
@@ -18,8 +17,8 @@ interface Variable {
 }
 
 interface TemplateEditorProps {
-  templateContent: string;
   onContentChange: (content: string) => void;
+  templateContent: string;
 }
 
 export const TemplateEditor = ({ templateContent, onContentChange }: TemplateEditorProps) => {

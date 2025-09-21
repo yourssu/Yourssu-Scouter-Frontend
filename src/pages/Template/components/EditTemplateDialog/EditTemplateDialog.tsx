@@ -2,6 +2,8 @@ import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
+import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
+
 import {
   StyledBody,
   StyledContent,
@@ -10,7 +12,6 @@ import {
   StyledOverlay,
   StyledTitleInput,
 } from './EditTemplateDialog.style';
-import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
 
 interface Template {
   content?: string;
@@ -99,8 +100,8 @@ export const EditTemplateDialog = ({
 
           <StyledBody>
             <TemplateEditor
-              templateContent={template.content ?? ''}
               onContentChange={handleContentChange}
+              templateContent={template.content ?? ''}
             />
           </StyledBody>
 
