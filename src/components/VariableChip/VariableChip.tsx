@@ -49,8 +49,8 @@ export const VariableChip = ({
       <IconWrapper>{iconMap[type]}</IconWrapper>
       <Label>{label}</Label>
       {label !== '파트명' && label !== '지원자' && size === 'large' ? (
-        <CloseIconWrapper>
-          <IcCloseFilled onClick={handleDeleteClick} />
+        <CloseIconWrapper onClick={handleDeleteClick}>
+          <IcCloseFilled />
         </CloseIconWrapper>
       ) : null}
     </ChipWrapper>
