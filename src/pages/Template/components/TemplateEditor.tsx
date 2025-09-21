@@ -7,14 +7,7 @@ import {
   MailEditorContentRef,
 } from '@/pages/SendMail/MailEditorContent/MailEditorContent';
 import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
-import { VariableType } from '@/types/editor';
-
-interface Variable {
-  differentForEachPerson: boolean;
-  id: string;
-  name: string;
-  type: VariableType;
-}
+import { Variable, VariableType } from '@/types/editor';
 
 interface TemplateEditorProps {
   onContentChange: (content: string) => void;

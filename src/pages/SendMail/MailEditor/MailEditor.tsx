@@ -1,19 +1,12 @@
 import { useRef, useState } from 'react';
 
 import { getChipType } from '@/components/VariableChip/utils';
-import { VariableType } from '@/types/editor';
+import { Variable, VariableType } from '@/types/editor';
 
 import { Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
-
-interface Variable {
-  differentForEachPerson: boolean;
-  id: string;
-  name: string;
-  type: VariableType;
-}
 
 export const MailEditor = () => {
   const [editorContents, setEditorContents] = useState<Record<RecipientId, string>>({

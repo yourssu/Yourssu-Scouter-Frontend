@@ -4,7 +4,7 @@ import { ReactNode, useState } from 'react';
 import { getChipType } from '@/components/VariableChip/utils';
 import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog } from '@/components/VariableDialog/VariableDialog';
-import { VariableType } from '@/types/editor';
+import { Variable, VariableType } from '@/types/editor';
 
 import { HeaderType, Recipient, RecipientId } from '../mail.type';
 import {
@@ -14,14 +14,6 @@ import {
   VariableAddButton,
   VariableSection,
 } from './MailHeader.style';
-
-// 변수 타입 정의
-interface Variable {
-  differentForEachPerson: boolean;
-  id: string;
-  name: string;
-  type: VariableType;
-}
 
 interface MailHeaderProps {
   children?: ReactNode;
