@@ -29,6 +29,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@yourssu/design-system-react": "^2.3.4",
     "clsx": "^2.1.1",
+    "core-js": "^3.45.1",
     "date-fns": "^4.1.0",
     "ky": "^1.7.4",
     "radix-ui": "^1.1.3",
