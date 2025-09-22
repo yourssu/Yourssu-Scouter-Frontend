@@ -1,21 +1,32 @@
+import { AuthTokenType } from '@/types/auth.types';
+
+const accessTokenKey = 'accessToken';
+const refreshTokenKey = 'refreshToken';
+const tokenTypeKey = 'tokenType';
+
 export const tokenService = {
-  getAccessToken: () => localStorage.getItem('accessToken'),
+  getAccessToken: () => localStorage.getItem(accessTokenKey),
 
-  getRefreshToken: () => localStorage.getItem('refreshToken'),
+  getRefreshToken: () => localStorage.getItem(refreshTokenKey),
 
-  setTokens: (accessToken: string, refreshToken: string) => {
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
+  getTokenType: () => localStorage.getItem(tokenTypeKey),
+
+  setTokens: ({ accessToken, refreshToken, tokenType }: AuthTokenType) => {
+    localStorage.setItem(accessTokenKey, accessToken);
+    localStorage.setItem(refreshTokenKey, refreshToken);
+    localStorage.setItem(tokenTypeKey, tokenType);
   },
 
   clearTokens: () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem(accessTokenKey);
+    localStorage.removeItem(refreshTokenKey);
+    localStorage.removeItem(tokenTypeKey);
   },
 
   hasTokens: () => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-    return !!(accessToken && refreshToken);
+    const accessToken = tokenService.getAccessToken();
+    const refreshToken = tokenService.getRefreshToken();
+    const tokenType = tokenService.getTokenType();
+    return !!(accessToken && refreshToken && tokenType);
   },
 };
