@@ -1,6 +1,7 @@
-import { IcArrowsChevronDownLine, useTabs } from '@yourssu/design-system-react';
-import { ReactNode, useState } from 'react';
+import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
+import { useState } from 'react';
 
+import { Tab } from '@/components/Tab';
 import { getChipType } from '@/components/VariableChip/utils';
 import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog } from '@/components/VariableDialog/VariableDialog';
@@ -16,7 +17,6 @@ import {
 } from './MailHeader.style';
 
 interface MailHeaderProps {
-  children?: ReactNode;
   onTabChange?: (id: RecipientId) => void;
   onVariableAdd?: (type: VariableType, name: string, differentForEachPerson: boolean) => void;
   onVariableClick?: (variable: Variable) => void;
@@ -30,18 +30,12 @@ export const MailHeader = ({
   type = 'normal',
   recipients = [],
   onTabChange,
-  children,
   variables = [],
   onVariableAdd,
   onVariableClick,
   onVariableDelete,
 }: MailHeaderProps) => {
   const [activeTabId, setActiveTabId] = useState<RecipientId>('recipient-0');
-
-  const [Tabs] = useTabs<RecipientId>({
-    defaultTab: activeTabId,
-    scrollable: true,
-  });
 
   const handleTabClick = (id: RecipientId) => {
     setActiveTabId(id);
@@ -106,20 +100,15 @@ export const MailHeader = ({
   if (type === 'tabs') {
     return (
       <TabsContainer>
-        <Tabs>
-          <Tabs.List>
-            {recipients.map((recipient) => (
-              <Tabs.Tab
-                id={recipient.id}
-                key={recipient.id}
-                onClick={() => handleTabClick(recipient.id)}
-              >
-                {recipient.name}
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
-          {children}
-        </Tabs>
+        <Tab
+          defaultTab={activeTabId}
+          onTabChange={handleTabClick}
+          tabs={recipients.map(({ id }) => id)}
+        >
+          {() => {
+            return undefined;
+          }}
+        </Tab>
       </TabsContainer>
     );
   }
