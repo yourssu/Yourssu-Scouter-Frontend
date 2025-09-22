@@ -41,8 +41,9 @@ const handleTokenRefresh: AfterResponseHook = async (request, _options, response
 
 const setAuthHeader: BeforeRequestHook = (request) => {
   const accessToken = tokenService.getAccessToken();
+  const tokenType = tokenService.getTokenType();
   if (accessToken) {
-    request.headers.set('Authorization', `${accessToken}`);
+    request.headers.set('Authorization', `${tokenType} ${accessToken}`);
     request.headers.set('Content-Type', 'application/json');
   }
 };

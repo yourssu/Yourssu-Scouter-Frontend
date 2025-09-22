@@ -18,7 +18,7 @@ export const authService = {
         throw new Error('Login failed');
       }
 
-      tokenService.setTokens(response.accessToken, response.refreshToken);
+      tokenService.setTokens(response);
       return response;
     } catch (error) {
       console.error('Google login error:', error);
@@ -49,7 +49,7 @@ export const authService = {
       })
       .json<TokenResponse>();
 
-    tokenService.setTokens(response.accessToken, response.refreshToken);
+    tokenService.setTokens(response);
     return response;
   },
 
