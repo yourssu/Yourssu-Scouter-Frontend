@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+@theme {
+  --radius-handy-xs: 8px;
+  --radius-handy-sm: 10px;
+  --radius-handy-m: 12px;
+  --radius-handy-l: 14px;
+  --radius-handy-xl: 16px;
+}

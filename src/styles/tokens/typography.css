@@ -1,0 +1,458 @@
+@import 'tailwindcss';
+
+/* 
+  이 변수들은 tailwind 클래스로 추출되어선 안돼요. 
+  따라서 handy 접두사를 붙여줘요.
+*/
+@theme {
+  --handy-font-weight-lt: 300;
+  --handy-font-weight-rg: 400;
+  --handy-font-weight-sb: 600;
+
+  /* Display */
+  --handy-font-size-d1: 96px;
+  --handy-leading-d1: 120px;
+  --handy-font-size-d2: 88px;
+  --handy-leading-d2: 114px;
+  --handy-font-size-d3: 80px;
+  --handy-leading-d3: 100px;
+  --handy-font-size-d4: 72px;
+  --handy-leading-d4: 90px;
+  --handy-font-size-d5: 64px;
+  --handy-leading-d5: 80px;
+  --handy-font-size-d6: 56px;
+  --handy-leading-d6: 72px;
+
+  /* Heading */
+  --handy-font-size-h1: 48px;
+  --handy-leading-h1: 62px;
+  --handy-font-size-h2: 40px;
+  --handy-leading-h2: 52px;
+  --handy-font-size-h3: 32px;
+  --handy-leading-h3: 42px;
+
+  /* Title */
+  --handy-font-size-t1: 28px;
+  --handy-leading-t1: 38px;
+  --handy-font-size-t2: 24px;
+  --handy-leading-t2: 34px;
+  --handy-font-size-t3: 20px;
+  --handy-leading-t3: 28px;
+  --handy-font-size-t4: 18px;
+  --handy-leading-t4: 26px;
+
+  /* Body */
+  --handy-font-size-b1: 16px;
+  --handy-leading-b1: 24px;
+  --handy-font-size-b2: 15px;
+  --handy-leading-b2: 22px;
+  --handy-font-size-b3: 14px;
+  --handy-leading-b3: 20px;
+
+  /* Caption */
+  --handy-font-size-c1: 13px;
+  --handy-leading-c1: 18px;
+  --handy-font-size-c2: 12px;
+  --handy-leading-c2: 18px;
+  --handy-font-size-c3: 11px;
+  --handy-leading-c3: 16px;
+}
+
+@utility typo-d1_lt_96 {
+  font-size: var(--handy-font-size-d1);
+  line-height: var(--handy-leading-d1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-d1_rg_96 {
+  font-size: var(--handy-font-size-d1);
+  line-height: var(--handy-leading-d1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-d1_sb_96 {
+  font-size: var(--handy-font-size-d1);
+  line-height: var(--handy-leading-d1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-d2_lt_88 {
+  font-size: var(--handy-font-size-d2);
+  line-height: var(--handy-leading-d2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-d2_rg_88 {
+  font-size: var(--handy-font-size-d2);
+  line-height: var(--handy-leading-d2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-d2_sb_88 {
+  font-size: var(--handy-font-size-d2);
+  line-height: var(--handy-leading-d2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-d3_lt_80 {
+  font-size: var(--handy-font-size-d3);
+  line-height: var(--handy-leading-d3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-d3_rg_80 {
+  font-size: var(--handy-font-size-d3);
+  line-height: var(--handy-leading-d3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-d3_sb_80 {
+  font-size: var(--handy-font-size-d3);
+  line-height: var(--handy-leading-d3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-d4_lt_72 {
+  font-size: var(--handy-font-size-d4);
+  line-height: var(--handy-leading-d4);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-d4_rg_72 {
+  font-size: var(--handy-font-size-d4);
+  line-height: var(--handy-leading-d4);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-d4_sb_72 {
+  font-size: var(--handy-font-size-d4);
+  line-height: var(--handy-leading-d4);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-d5_lt_64 {
+  font-size: var(--handy-font-size-d5);
+  line-height: var(--handy-leading-d5);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-d5_rg_64 {
+  font-size: var(--handy-font-size-d5);
+  line-height: var(--handy-leading-d5);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-d5_sb_64 {
+  font-size: var(--handy-font-size-d5);
+  line-height: var(--handy-leading-d5);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-d6_lt_56 {
+  font-size: var(--handy-font-size-d6);
+  line-height: var(--handy-leading-d6);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-d6_rg_56 {
+  font-size: var(--handy-font-size-d6);
+  line-height: var(--handy-leading-d6);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-d6_sb_56 {
+  font-size: var(--handy-font-size-d6);
+  line-height: var(--handy-leading-d6);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-h1_lt_48 {
+  font-size: var(--handy-font-size-h1);
+  line-height: var(--handy-leading-h1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-h1_rg_48 {
+  font-size: var(--handy-font-size-h1);
+  line-height: var(--handy-leading-h1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-h1_sb_48 {
+  font-size: var(--handy-font-size-h1);
+  line-height: var(--handy-leading-h1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-h2_lt_40 {
+  font-size: var(--handy-font-size-h2);
+  line-height: var(--handy-leading-h2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-h2_rg_40 {
+  font-size: var(--handy-font-size-h2);
+  line-height: var(--handy-leading-h2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-h2_sb_40 {
+  font-size: var(--handy-font-size-h2);
+  line-height: var(--handy-leading-h2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-h3_lt_32 {
+  font-size: var(--handy-font-size-h3);
+  line-height: var(--handy-leading-h3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-h3_rg_32 {
+  font-size: var(--handy-font-size-h3);
+  line-height: var(--handy-leading-h3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-h3_sb_32 {
+  font-size: var(--handy-font-size-h3);
+  line-height: var(--handy-leading-h3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-t1_lt_28 {
+  font-size: var(--handy-font-size-t1);
+  line-height: var(--handy-leading-t1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-t1_rg_28 {
+  font-size: var(--handy-font-size-t1);
+  line-height: var(--handy-leading-t1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-t1_sb_28 {
+  font-size: var(--handy-font-size-t1);
+  line-height: var(--handy-leading-t1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-t2_lt_24 {
+  font-size: var(--handy-font-size-t2);
+  line-height: var(--handy-leading-t2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-t2_rg_24 {
+  font-size: var(--handy-font-size-t2);
+  line-height: var(--handy-leading-t2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-t2_sb_24 {
+  font-size: var(--handy-font-size-t2);
+  line-height: var(--handy-leading-t2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-t3_lt_20 {
+  font-size: var(--handy-font-size-t3);
+  line-height: var(--handy-leading-t3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-t3_rg_20 {
+  font-size: var(--handy-font-size-t3);
+  line-height: var(--handy-leading-t3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-t3_sb_20 {
+  font-size: var(--handy-font-size-t3);
+  line-height: var(--handy-leading-t3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-t4_lt_18 {
+  font-size: var(--handy-font-size-t4);
+  line-height: var(--handy-leading-t4);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-t4_rg_18 {
+  font-size: var(--handy-font-size-t4);
+  line-height: var(--handy-leading-t4);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-t4_sb_18 {
+  font-size: var(--handy-font-size-t4);
+  line-height: var(--handy-leading-t4);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-b1_lt_16 {
+  font-size: var(--handy-font-size-b1);
+  line-height: var(--handy-leading-b1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-b1_rg_16 {
+  font-size: var(--handy-font-size-b1);
+  line-height: var(--handy-leading-b1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-b1_sb_16 {
+  font-size: var(--handy-font-size-b1);
+  line-height: var(--handy-leading-b1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-b2_lt_15 {
+  font-size: var(--handy-font-size-b2);
+  line-height: var(--handy-leading-b2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-b2_rg_15 {
+  font-size: var(--handy-font-size-b2);
+  line-height: var(--handy-leading-b2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-b2_sb_15 {
+  font-size: var(--handy-font-size-b2);
+  line-height: var(--handy-leading-b2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-b3_lt_14 {
+  font-size: var(--handy-font-size-b3);
+  line-height: var(--handy-leading-b3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-b3_rg_14 {
+  font-size: var(--handy-font-size-b3);
+  line-height: var(--handy-leading-b3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-b3_sb_14 {
+  font-size: var(--handy-font-size-b3);
+  line-height: var(--handy-leading-b3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-c1_lt_13 {
+  font-size: var(--handy-font-size-c1);
+  line-height: var(--handy-leading-c1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-c1_rg_13 {
+  font-size: var(--handy-font-size-c1);
+  line-height: var(--handy-leading-c1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-c1_sb_13 {
+  font-size: var(--handy-font-size-c1);
+  line-height: var(--handy-leading-c1);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-c2_lt_12 {
+  font-size: var(--handy-font-size-c2);
+  line-height: var(--handy-leading-c2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-c2_rg_12 {
+  font-size: var(--handy-font-size-c2);
+  line-height: var(--handy-leading-c2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-c2_sb_12 {
+  font-size: var(--handy-font-size-c2);
+  line-height: var(--handy-leading-c2);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}
+
+@utility typo-c3_lt_11 {
+  font-size: var(--handy-font-size-c3);
+  line-height: var(--handy-leading-c3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-lt);
+}
+
+@utility typo-c3_rg_11 {
+  font-size: var(--handy-font-size-c3);
+  line-height: var(--handy-leading-c3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-rg);
+}
+
+@utility typo-c3_sb_11 {
+  font-size: var(--handy-font-size-c3);
+  line-height: var(--handy-leading-c3);
+  letter-spacing: -0.02em;
+  font-weight: var(--handy-font-weight-sb);
+}

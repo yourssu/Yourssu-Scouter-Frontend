@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+
+@theme inline {
+  /* Background Colors */
+  --color-bg-basicDefault: #ffffff;
+  --color-bg-basicLight: var(--color-gray50);
+  --color-bg-basicStrong: var(--color-gray100);
+  --color-bg-basicBlack: var(--color-gray950);
+  --color-bg-brandPrimary: var(--color-violet500);
+  --color-bg-brandSecondary: var(--color-violet50);
+  --color-bg-statusNegative: var(--color-status-redPrimary);
+  --color-bg-statusPositive: var(--color-violet500);
+
+  /* Text Colors */
+  --color-text-basicPrimary: var(--color-gray950);
+  --color-text-basicSecondary: var(--color-gray700);
+  --color-text-basicTertiary: var(--color-gray500);
+  --color-text-basicDisabled: var(--color-gray300);
+  --color-text-basicWhite: #ffffff;
+  --color-text-brandPrimary: var(--color-violet500);
+  --color-text-brandSecondary: var(--color-violet600);
+  --color-text-statusNegative: var(--color-status-redPrimary);
+  --color-text-statusPositive: var(--color-violet500);
+
+  /* Line Colors */
+  --color-line-basicLight: var(--color-gray100);
+  --color-line-basicMedium: var(--color-gray200);
+  --color-line-basicStrong: var(--color-gray300);
+  --color-line-brandPrimary: var(--color-violet500);
+  --color-line-statusNegative: var(--color-status-redPrimary);
+  --color-line-statusPositive: var(--color-violet500);
+
+  /* Basic Button Colors */
+  --color-button-filledPrimaryEnabled: var(--color-violet500);
+  --color-button-filledPrimaryPressed: var(--color-violet700);
+  --color-button-filledPrimaryDisabled: var(--color-gray100);
+  --color-button-filledSecondaryEnabled: var(--color-violet50);
+  --color-button-filledSecondaryPressed: var(--color-violet200);
+  --color-button-filledSecondaryDisabled: var(--color-gray100);
+  --color-button-outlinedEnabled: #ffffff00;
+  --color-button-outlinedPressed: var(--color-gray100);
+  --color-button-outlinedDisabled: #ffffff00;
+  --color-button-textPrimaryEnabled: #ffffff00;
+  --color-button-textPrimaryPressed: var(--color-violet50);
+  --color-button-textPrimaryDisabled: #ffffff00;
+  --color-button-textSecondaryEnabled: #ffffff00;
+  --color-button-textSecondaryPressed: var(--color-gray100);
+  --color-button-textSecondaryDisabled: #ffffff00;
+
+  /* Fab Button Colors */
+  --color-button-fabPrimaryEnabled: var(--color-violet500);
+  --color-button-fabPrimaryPressed: var(--color-violet700);
+  --color-button-fabPrimaryDisabled: var(--color-gray100);
+  --color-button-fabSecondaryEnabled: #ffffff;
+  --color-button-fabSecondaryPressed: var(--color-gray100);
+  --color-button-fabSecondaryDisabled: #ffffff;
+
+  /* Radio Button Colors */
+  --color-button-radioSelected: var(--color-violet500);
+  --color-button-radioUnselected: var(--color-gray200);
+  --color-button-radioDisabled: #ffffff;
+
+  /* Icon Colors */
+  --color-icon-basicPrimary: var(--color-gray950);
+  --color-icon-basicSecondary: var(--color-gray700);
+  --color-icon-basicTertiary: var(--color-gray500);
+  --color-icon-basicDisabled: var(--color-gray200);
+  --color-icon-basicDisabledStrong: var(--color-gray300);
+  --color-icon-basicWhite: #ffffff;
+  --color-icon-brandPrimary: var(--color-violet500);
+  --color-icon-brandSecondary: var(--color-violet600);
+
+  /* Checkbox Colors */
+  --color-checkboxSelected: var(--color-violet500);
+  --color-checkboxUnselected: #ffffff;
+  --color-checkboxDisabled: var(--color-gray200);
+
+  /* Chip Colors */
+  --color-chipSelected: var(--color-violet100);
+  --color-chipUnselected: var(--color-gray100);
+  --color-chipDisabled: var(--color-gray50);
+
+  /* Pagination Colors */
+  --color-pagination-brandPressed: var(--color-violet50);
+  --color-pagination-basicSelected: var(--color-gray950);
+  --color-pagination-basicUnselected: var(--color-gray200);
+
+  /* Switch Colors */
+  --color-switchSelected: var(--color-violet500);
+  --color-switchUnselected: var(--color-gray300);
+  --color-switchDisabled: var(--color-gray200);
+  --color-switchThumb: #ffffff;
+
+  /* Snackbar Colors */
+  --color-snackbarInfo: var(--color-gray800);
+  --color-snackbarError: var(--color-status-redSecondary);
+}

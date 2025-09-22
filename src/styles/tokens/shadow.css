@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+@theme inline {
+  --shadow-fabPrimary: 0 4px 8px 0 var(--color-effect100);
+  --shadow-fabSecondary: 0 4px 8px 0 var(--color-effect50);
+}

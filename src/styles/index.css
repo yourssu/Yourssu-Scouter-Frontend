@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 @import './base.css';
+@import './tokens/color.primary.css';
+@import './tokens/color.semantic.css';
+@import './tokens/shadow.css';
+@import './tokens/radius.css';
+@import './tokens/typography.css';
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
