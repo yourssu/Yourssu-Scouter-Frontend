@@ -3,11 +3,11 @@ import { useTabs } from '@yourssu/design-system-react';
 import { Suspense } from 'react';
 
 import { PageLayout } from '@/components/layouts/PageLayout';
+import { PageTabListLayout } from '@/components/layouts/PageTabListLayout';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
 import { memberStateOptions } from '@/query/member/memberState/options.ts';
 import { MemberState } from '@/query/member/schema.ts';
-import { StyledTabsListContainer } from '@/styles/pages/table.ts';
 
 export const Members = () => {
   const [Tabs] = useTabs<MemberState>({
@@ -19,7 +19,7 @@ export const Members = () => {
   return (
     <PageLayout title="유어슈 멤버">
       <Tabs>
-        <StyledTabsListContainer>
+        <PageTabListLayout>
           <Tabs.List size="large">
             {memberStates.map((state) => (
               <Tabs.Tab id={state} key={state}>
@@ -27,7 +27,7 @@ export const Members = () => {
               </Tabs.Tab>
             ))}
           </Tabs.List>
-        </StyledTabsListContainer>
+        </PageTabListLayout>
         {memberStates.map((state) => (
           <Tabs.Panel key={state} value={state}>
             <ScouterErrorBoundary>
