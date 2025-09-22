@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import styled from 'styled-components';
 
 export const StyledContainer = styled.nav`
@@ -11,14 +11,22 @@ export const StyledContainer = styled.nav`
   background: #f7f8f8;
 `;
 
-export const StyledLogo = styled.div`
-  display: flex;
+export const StyledLogoWrapper = styled.div`
+  width: 100%;
   height: 80px;
   padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+`;
+
+export const StyledLogoLink = styled(Link)`
+  display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
-  align-self: stretch;
+
+  text-decoration: none;
+  color: inherit;
 `;
 
 export const StyledLogoText = styled.span`
