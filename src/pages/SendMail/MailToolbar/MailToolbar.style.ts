@@ -25,6 +25,7 @@ export const ToolbarButton = styled.button`
   align-items: center;
   justify-content: center;
   background: ${({ theme }) => theme.semantic.color.bgBasicStrong};
+  color: ${({ theme }) => theme.primitive.color.gray500};
 
   &:hover {
     background: #e0e0e0;
@@ -32,7 +33,6 @@ export const ToolbarButton = styled.button`
 
   &.is-active {
     background-color: #e0e0e0;
-    color: #1976d2;
   }
 `;
 

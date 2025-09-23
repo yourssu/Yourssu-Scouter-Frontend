@@ -7,7 +7,6 @@ import {
   IcUserLine,
 } from '@yourssu/design-system-react';
 
-import Logo from '@/assets/logo.svg';
 import {
   StyledContainer,
   StyledLinks,
@@ -62,7 +61,7 @@ const SideNavigation = () => {
     <StyledContainer>
       <StyledLogoWrapper>
         <StyledLogoLink to="/">
-          <img alt="Yourssu Logo" src={Logo} />
+          <img alt="Yourssu Logo" src="/logo.svg" />
           <StyledLogoText>SCOUTER</StyledLogoText>
         </StyledLogoLink>
       </StyledLogoWrapper>

@@ -1,0 +1,22 @@
+import { BaseIconProps } from '@/components/Icons/type';
+
+export const IcChangeLink = ({ width = 16, height = 16, ...props }: BaseIconProps) => {
+  return (
+    <svg
+      fill="none"
+      height={height}
+      viewBox="0 0 16 16"
+      width={width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M11.1666 8.83339L11.9999 8.00006C13.1045 6.89549 13.1045 5.10463 11.9999 4.00006C10.8954 2.89549 9.1045 2.89549 7.99994 4.00006L7.1666 4.83339M4.83327 7.16672L3.99994 8.00006C2.89537 9.10463 2.89537 10.8955 3.99994 12.0001C5.1045 13.1046 6.89537 13.1046 7.99994 12.0001L8.83327 11.1667M9.49994 6.50006L6.49994 9.50006"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+};

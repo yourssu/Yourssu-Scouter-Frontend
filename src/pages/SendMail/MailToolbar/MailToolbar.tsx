@@ -1,17 +1,17 @@
 import { Editor } from '@tiptap/react';
 import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
 
-import ChangeBold from '@/assets/SendMail/ChangeBold.svg';
-import ChangeItalic from '@/assets/SendMail/ChangeItalic.svg';
-import ChangeLink from '@/assets/SendMail/ChangeLink.svg';
-import ChangeOrdered_list from '@/assets/SendMail/ChangeOrdered-list.svg';
-import ChangePhoto from '@/assets/SendMail/ChangePhoto.svg';
-import ChangeStrike from '@/assets/SendMail/ChangeStrike.svg';
-import ChangeText_align_left from '@/assets/SendMail/ChangeText-align-left.svg';
-import ChangeText_align_right from '@/assets/SendMail/ChangeText-align-right.svg';
-import ChangeText_align from '@/assets/SendMail/ChangeText-align.svg';
-import ChangeUnderline from '@/assets/SendMail/ChangeUnderline.svg';
-import ChangeUnordered_list from '@/assets/SendMail/ChangeUnordered-list.svg';
+import { IcChangeBold } from '@/components/Icons/Editor/IcChangeBold';
+import { IcChangeItalic } from '@/components/Icons/Editor/IcChangeItalic';
+import { IcChangeLink } from '@/components/Icons/Editor/IcChangeLink';
+import { IcChangeOrderedList } from '@/components/Icons/Editor/IcChangeOrderedList';
+import { IcChangePhoto } from '@/components/Icons/Editor/IcChangePhoto';
+import { IcChangeStrike } from '@/components/Icons/Editor/IcChangeStrike';
+import { IcChangeTextAlign } from '@/components/Icons/Editor/IcChangeTextAlign';
+import { IcChangeTextAlignLeft } from '@/components/Icons/Editor/IcChangeTextAlignLeft';
+import { IcChangeTextAlignRight } from '@/components/Icons/Editor/IcChangeTextAlignRight';
+import { IcChangeUnderline } from '@/components/Icons/Editor/IcChangeUnderline';
+import { IcChangeUnorderedList } from '@/components/Icons/Editor/IcChangeUnorderedList';
 
 import {
   ColorButton,
@@ -110,7 +110,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Bold"
           type="button"
         >
-          <img alt="Bold" src={ChangeBold} />
+          <IcChangeBold />
         </ToolbarButton>
         <ToolbarButton
           className={editor.isActive('italic') ? 'is-active' : ''}
@@ -118,7 +118,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Italic"
           type="button"
         >
-          <img alt="Italic" src={ChangeItalic} />
+          <IcChangeItalic />
         </ToolbarButton>
         <ToolbarButton
           className={editor.isActive('underline') ? 'is-active' : ''}
@@ -126,7 +126,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Underline"
           type="button"
         >
-          <img alt="Underline" src={ChangeUnderline} />
+          <IcChangeUnderline />
         </ToolbarButton>
         <ToolbarButton
           className={editor.isActive('strike') ? 'is-active' : ''}
@@ -134,7 +134,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Strike"
           type="button"
         >
-          <img alt="Strike" src={ChangeStrike} />
+          <IcChangeStrike />
         </ToolbarButton>
       </ToolbarGroup>
 
@@ -147,7 +147,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Align Left"
           type="button"
         >
-          <img alt="Align Left" src={ChangeText_align_left} />
+          <IcChangeTextAlignLeft />
         </ToolbarButton>
         <ToolbarButton
           className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
@@ -155,7 +155,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Align Center"
           type="button"
         >
-          <img alt="Align Center" src={ChangeText_align} />
+          <IcChangeTextAlign />
         </ToolbarButton>
         <ToolbarButton
           className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
@@ -163,7 +163,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Align Right"
           type="button"
         >
-          <img alt="Align Right" src={ChangeText_align_right} />
+          <IcChangeTextAlignRight />
         </ToolbarButton>
       </ToolbarGroup>
 
@@ -176,7 +176,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Ordered List"
           type="button"
         >
-          <img alt="Ordered List" src={ChangeOrdered_list} />
+          <IcChangeOrderedList />
         </ToolbarButton>
         <ToolbarButton
           className={editor.isActive('bulletList') ? 'is-active' : ''}
@@ -184,7 +184,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Bullet List"
           type="button"
         >
-          <img alt="Bullet List" src={ChangeUnordered_list} />
+          <IcChangeUnorderedList />
         </ToolbarButton>
       </ToolbarGroup>
 
@@ -202,7 +202,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Insert Img"
           type="button"
         >
-          <img alt="Insert Img" src={ChangePhoto} />
+          <IcChangePhoto />
         </ToolbarButton>
 
         <ToolbarButton
@@ -229,7 +229,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
           title="Insert Link"
           type="button"
         >
-          <img alt="Insert Link" src={ChangeLink} />
+          <IcChangeLink />
         </ToolbarButton>
       </ToolbarGroup>
     </ToolbarContainer>
