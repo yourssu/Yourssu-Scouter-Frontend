@@ -11,8 +11,9 @@ import Logo from '@/assets/logo.svg';
 import {
   StyledContainer,
   StyledLinks,
-  StyledLogo,
+  StyledLogoLink,
   StyledLogoText,
+  StyledLogoWrapper,
   StyledNavigationLink,
   StyledSection,
   StyledSectionTitle,
@@ -59,10 +60,12 @@ const SideNavigation = () => {
 
   return (
     <StyledContainer>
-      <StyledLogo>
-        <img alt="Yourssu Logo" src={Logo} />
-        <StyledLogoText>SCOUTER</StyledLogoText>
-      </StyledLogo>
+      <StyledLogoWrapper>
+        <StyledLogoLink to="/">
+          <img alt="Yourssu Logo" src={Logo} />
+          <StyledLogoText>SCOUTER</StyledLogoText>
+        </StyledLogoLink>
+      </StyledLogoWrapper>
       <StyledLinks>
         {navItems.flatMap(({ title, links }, index) =>
           [
