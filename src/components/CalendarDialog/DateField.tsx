@@ -14,3 +14,5 @@ export const DateField = forwardRef<HTMLDivElement, DateFieldProps>(({ date, ...
     <IcCalenderLine height={20} width={20} />
   </DateFieldContainer>
 ));
+
+DateField.displayName = 'DateField';

@@ -1,5 +1,3 @@
-export type VariableType = 'date' | 'link' | 'name' | 'text';
-
 // 공통 데이터인데 바뀔 수 있음
 export interface VariableItem {
   label?: string;
