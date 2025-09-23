@@ -7,6 +7,8 @@ import { BrowserRouter } from 'react-router';
 
 import App from '@/App.tsx';
 
+import 'core-js/stable';
+
 import './styles/index.css';
 
 const queryClient = new QueryClient();
