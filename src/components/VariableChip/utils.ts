@@ -8,11 +8,11 @@ export const getChipType = (variableType: VariableType) => {
       return 'link';
     case '사람':
       return 'person';
-    case '지원자':
+    case '사람/지원자':
       return 'applicant';
     case '텍스트':
       return 'text';
-    case '파트명':
+    case '텍스트/파트명':
       return 'part';
     default:
       return 'part';

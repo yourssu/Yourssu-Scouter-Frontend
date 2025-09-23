@@ -18,8 +18,8 @@ export const MailEditor = () => {
   const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
 
   const [variables, setVariables] = useState<Variable[]>([
-    { id: '1', type: '파트명', name: '파트명', differentForEachPerson: false },
-    { id: '2', type: '지원자', name: '지원자', differentForEachPerson: true },
+    { id: '1', type: '텍스트/파트명', name: '파트명', differentForEachPerson: false },
+    { id: '2', type: '사람/지원자', name: '지원자', differentForEachPerson: true },
   ]);
 
   const editorRef = useRef<MailEditorContentRef>(null);
