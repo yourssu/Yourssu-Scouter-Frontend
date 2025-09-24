@@ -1,9 +1,5 @@
-import { StyledContainer, StyledTitle } from '@/styles/pages/table';
+import { PageLayout } from '@/components/layouts/PageLayout';
 
 export const InterviewPage = () => {
-  return (
-    <StyledContainer>
-      <StyledTitle>면접 일정 관리</StyledTitle>
-    </StyledContainer>
-  );
+  return <PageLayout title="면접 일정 관리" />;
 };
