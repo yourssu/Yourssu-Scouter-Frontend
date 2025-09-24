@@ -1,43 +1,28 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useTabs } from '@yourssu/design-system-react';
 import { Suspense } from 'react';
 
 import { PageLayout } from '@/components/layouts/PageLayout';
-import { PageTabListLayout } from '@/components/layouts/PageTabListLayout';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
+import { Tab } from '@/components/Tab';
 import MemberTab from '@/pages/Members/components/MemberTab/MemberTab.tsx';
 import { memberStateOptions } from '@/query/member/memberState/options.ts';
-import { MemberState } from '@/query/member/schema.ts';
 
 export const Members = () => {
-  const [Tabs] = useTabs<MemberState>({
-    defaultTab: '액티브',
-    scrollable: true,
-  });
   const { data: memberStates } = useSuspenseQuery(memberStateOptions());
 
   return (
     <PageLayout title="유어슈 멤버">
-      <Tabs>
-        <PageTabListLayout>
-          <Tabs.List size="large">
-            {memberStates.map((state) => (
-              <Tabs.Tab id={state} key={state}>
-                {state}
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
-        </PageTabListLayout>
-        {memberStates.map((state) => (
-          <Tabs.Panel key={state} value={state}>
+      <Tab defaultTab="액티브" tabListClassName="px-10" tabs={memberStates}>
+        {({ tab }) => (
+          <div className="border-line-basicLight border-t px-10 pb-12">
             <ScouterErrorBoundary>
               <Suspense>
-                <MemberTab state={state} />
+                <MemberTab state={tab} />
               </Suspense>
             </ScouterErrorBoundary>
-          </Tabs.Panel>
-        ))}
-      </Tabs>
+          </div>
+        )}
+      </Tab>
     </PageLayout>
   );
 };
