@@ -9,5 +9,5 @@
   "arrowParens": "always",
   "endOfLine": "auto",
   "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindFunctions": ["clsx", "cn"]
+  "tailwindFunctions": ["clsx", "cn", "tv"]
 }
