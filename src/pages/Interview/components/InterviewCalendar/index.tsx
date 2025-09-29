@@ -9,9 +9,11 @@ interface InterviewCalendarProps {
 
 export const InterviewCalendar = ({ month, week, year }: InterviewCalendarProps) => {
   return (
-    <table className="w-full border-collapse border-spacing-0">
-      <InterviewCalendarHead month={month} week={week} year={year} />
-      <InterviewCalendarBody />
-    </table>
+    <div className="flex-[1_1_0] overflow-y-auto">
+      <table className="w-full border-collapse border-spacing-0">
+        <InterviewCalendarHead month={month} week={week} year={year} />
+        <InterviewCalendarBody />
+      </table>
+    </div>
   );
 };
