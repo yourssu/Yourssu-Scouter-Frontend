@@ -1,3 +1,4 @@
+import { InterviewCalendarBody } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendarBody';
 import { InterviewCalendarHead } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendarHead';
 
 interface InterviewCalendarProps {
@@ -10,6 +11,7 @@ export const InterviewCalendar = ({ month, week, year }: InterviewCalendarProps)
   return (
     <table className="w-full border-collapse border-spacing-0">
       <InterviewCalendarHead month={month} week={week} year={year} />
+      <InterviewCalendarBody />
     </table>
   );
 };
