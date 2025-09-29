@@ -94,4 +94,7 @@
   /* Snackbar Colors */
   --color-snackbarInfo: var(--color-gray800);
   --color-snackbarError: var(--color-status-redSecondary);
+
+  /* Scrollbar Colors */
+  --color-scrollbarThumb: #d9d9d9;
 }
