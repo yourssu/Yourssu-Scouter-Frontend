@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar';
 import { TemplateList } from '@/components/TemplateList/TemplateList';
+import { Template } from '@/types/template';
 
 import { AddTemplateDialog } from './components/AddTemplateDialog/AddTemplateDialog';
 import { DeleteTemplateDialog } from './components/DeleteTemplateDialog/DeleteTemplateDialog';
@@ -21,13 +22,6 @@ type TabType = (typeof templateTypes)[number];
 
 interface TemplateFormData {
   search: string;
-}
-
-interface Template {
-  content?: string; // 편집에 필요한 추가 데이터
-  date: string;
-  id: number;
-  title: string;
 }
 
 const convertEnterToBr = (text: string) => {

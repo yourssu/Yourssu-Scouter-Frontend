@@ -4,6 +4,7 @@ import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
+import { Template } from '@/types/template';
 
 import {
   StyledBody,
@@ -13,13 +14,6 @@ import {
   StyledOverlay,
   StyledTitleInput,
 } from './EditTemplateDialog.style';
-
-interface Template {
-  content?: string;
-  date: string;
-  id: number;
-  title: string;
-}
 
 interface EditTemplateDialogProps {
   isOpen: boolean;
