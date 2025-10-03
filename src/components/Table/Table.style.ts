@@ -9,28 +9,6 @@ export const StyledTableContainerContainer = styled.div`
 export const StyledTableContainer = styled.div`
   overflow: auto;
   width: 100%;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-  }
-
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    height: 8px;
-    background-color: transparent;
-    border-radius: 999px;
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background-color: #b5b9c4;
-    transition: background-color 0.3s ease;
-  }
-
   border-radius: ${({ theme }) => theme.semantic.radius.l}px;
 `;
 

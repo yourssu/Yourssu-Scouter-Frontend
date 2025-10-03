@@ -13,27 +13,6 @@ export const DialogContainer = styled.div<{
   z-index: 1;
   max-height: 300px;
   overflow-y: auto;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-  }
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    width: 8px;
-    background-color: transparent;
-    border-radius: 999px;
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background-color: #b5b9c4;
-    transition: background-color 0.3s ease;
-  }
 `;
 
 export const StyledTextButton = styled(TextButton)`

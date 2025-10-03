@@ -31,27 +31,7 @@ export const StyledGroup = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-
   overflow: auto;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-  }
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    width: 8px;
-    background-color: transparent;
-    border-radius: 999px;
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background-color: #b5b9c4;
-    transition: background-color 0.3s ease;
-  }
 `;
 
 export const StyledItem = styled.div`

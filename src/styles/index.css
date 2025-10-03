@@ -14,6 +14,11 @@
   outline: none;
 }
 
+* {
+  scrollbar-color: var(--color-scrollbarThumb) transparent;
+  scrollbar-width: thin;
+}
+
 body {
   font-family: 'Pretendard Variable', sans-serif;
   line-height: 1.5;
