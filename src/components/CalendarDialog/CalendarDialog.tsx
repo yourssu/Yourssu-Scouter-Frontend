@@ -1,22 +1,12 @@
 import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
-import {
-  addDays,
-  addHours,
-  addMonths,
-  endOfMonth,
-  endOfWeek,
-  isSameDay,
-  setHours,
-  setMinutes,
-  startOfHour,
-  startOfWeek,
-} from 'date-fns';
+import { addHours, addMonths, isSameDay, setHours, setMinutes, startOfHour } from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
 
 import { DateCell } from '@/components/CalendarDialog/DateCell';
 import { MiniDateField } from '@/components/CalendarDialog/MiniDateField';
 import { MiniTimeField } from '@/components/CalendarDialog/MiniTimeField';
+import { generateCalendarDates } from '@/utils/date';
 
 import {
   CalendarBody,
@@ -36,21 +26,6 @@ interface CalendarDialogProps {
   selectedDate?: Date | undefined;
   trigger: React.ReactNode;
 }
-
-export const generateCalendarDates = (currentDate: { month: number; year: number }): Date[] => {
-  const firstDayOfMonth = new Date(currentDate.year, currentDate.month, 1);
-  const lastDayOfMonth = endOfMonth(firstDayOfMonth);
-  const firstDayOfView = startOfWeek(firstDayOfMonth);
-  const lastDayOfView = endOfWeek(lastDayOfMonth);
-
-  const dates: Date[] = [];
-  let tempDate = firstDayOfView;
-  while (tempDate <= lastDayOfView) {
-    dates.push(tempDate);
-    tempDate = addDays(tempDate, 1);
-  }
-  return dates;
-};
 
 export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
