@@ -4,6 +4,7 @@ import { Dialog } from 'radix-ui';
 import { useState } from 'react';
 
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
+import { defaultVariables, Variable } from '@/types/editor';
 import { Template } from '@/types/template';
 
 import {
@@ -25,6 +26,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
   const [formData, setFormData] = useState({
     title: '',
     content: '',
+    variables: defaultVariables,
   });
 
   const handleSave = () => {
@@ -32,6 +34,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
       onSave({
         title: formData.title.trim(),
         content: formData.content,
+        variables: formData.variables,
       });
       handleClose();
     }
@@ -41,6 +44,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     setFormData({
       title: '',
       content: '',
+      variables: defaultVariables,
     });
     onClose();
   };
@@ -56,6 +60,13 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     setFormData((prev) => ({
       ...prev,
       content,
+    }));
+  };
+
+  const handleVariablesChange = (variables: Variable[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      variables,
     }));
   };
 
@@ -79,7 +90,9 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
           <StyledBody>
             <TemplateEditor
               onContentChange={handleContentChange}
+              onVariablesChange={handleVariablesChange}
               templateContent={formData.content}
+              templateVariables={formData.variables}
             />
           </StyledBody>
           <StyledFooter>

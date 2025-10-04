@@ -4,6 +4,7 @@ import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
+import { defaultVariables, Variable } from '@/types/editor';
 import { Template } from '@/types/template';
 
 import {
@@ -31,6 +32,7 @@ export const EditTemplateDialog = ({
   const [formData, setFormData] = useState({
     title: template?.title ?? '',
     content: template?.content ?? '',
+    variables: template?.variables ?? defaultVariables,
   });
 
   // template이 변경될 때 폼 데이터 업데이트
@@ -39,6 +41,7 @@ export const EditTemplateDialog = ({
       setFormData({
         title: template.title,
         content: template.content || '',
+        variables: template.variables || defaultVariables,
       });
     }
   }, [template]);
@@ -49,6 +52,7 @@ export const EditTemplateDialog = ({
         ...template,
         title: formData.title.trim(),
         content: formData.content,
+        variables: formData.variables,
       });
       onClose();
     }
@@ -73,6 +77,13 @@ export const EditTemplateDialog = ({
     }));
   };
 
+  const handleVariablesChange = (variables: Variable[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      variables,
+    }));
+  };
+
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
@@ -94,7 +105,9 @@ export const EditTemplateDialog = ({
           <StyledBody>
             <TemplateEditor
               onContentChange={handleContentChange}
-              templateContent={template.content ?? ''}
+              onVariablesChange={handleVariablesChange}
+              templateContent={formData.content ?? ''}
+              templateVariables={formData.variables || defaultVariables}
             />
           </StyledBody>
 

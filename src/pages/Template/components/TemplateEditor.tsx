@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { getChipType } from '@/components/VariableChip/utils';
 import { EditorContainer } from '@/pages/SendMail/MailEditor/MailEditor.style';
@@ -11,15 +11,17 @@ import { Variable, VariableType } from '@/types/editor';
 
 interface TemplateEditorProps {
   onContentChange: (content: string) => void;
+  onVariablesChange: (variables: Variable[]) => void;
   templateContent: string;
+  templateVariables: Variable[];
 }
 
-export const TemplateEditor = ({ templateContent, onContentChange }: TemplateEditorProps) => {
-  const [variables, setVariables] = useState<Variable[]>([
-    { id: '1', type: '텍스트/파트명', name: '파트명', differentForEachPerson: false },
-    { id: '2', type: '사람/지원자', name: '지원자', differentForEachPerson: true },
-  ]);
-
+export const TemplateEditor = ({
+  templateContent,
+  templateVariables,
+  onContentChange,
+  onVariablesChange,
+}: TemplateEditorProps) => {
   const editorRef = useRef<MailEditorContentRef>(null);
 
   const handleVariableClick = (variable: Variable) => {
@@ -37,12 +39,12 @@ export const TemplateEditor = ({ templateContent, onContentChange }: TemplateEdi
       differentForEachPerson,
     };
 
-    setVariables((prev) => [...prev, newVariable]);
+    onVariablesChange([...templateVariables, newVariable]);
   };
 
   const handleVariableDelete = (variable: Variable) => {
     if (editorRef.current) {
-      setVariables((prev) => prev.filter((v) => v.id !== variable.id));
+      onVariablesChange(templateVariables.filter((v) => v.id !== variable.id));
       editorRef.current.deleteVariable(variable.name);
     }
   };
@@ -55,7 +57,7 @@ export const TemplateEditor = ({ templateContent, onContentChange }: TemplateEdi
           onVariableClick={handleVariableClick}
           onVariableDelete={handleVariableDelete}
           type="normal"
-          variables={variables}
+          variables={templateVariables}
         />
         <MailEditorContent
           initialContent={templateContent}
