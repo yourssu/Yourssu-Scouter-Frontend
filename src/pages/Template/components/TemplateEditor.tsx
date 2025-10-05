@@ -37,15 +37,18 @@ export const TemplateEditor = ({
       type,
       name,
       differentForEachPerson,
+      isFixed: false,
     };
 
     onVariablesChange([...templateVariables, newVariable]);
   };
 
   const handleVariableDelete = (variable: Variable) => {
-    if (editorRef.current) {
-      onVariablesChange(templateVariables.filter((v) => v.id !== variable.id));
-      editorRef.current.deleteVariable(variable.name);
+    if (!variable.isFixed) {
+      if (editorRef.current) {
+        onVariablesChange(templateVariables.filter((v) => v.id !== variable.id));
+        editorRef.current.deleteVariable(variable.name);
+      }
     }
   };
 
