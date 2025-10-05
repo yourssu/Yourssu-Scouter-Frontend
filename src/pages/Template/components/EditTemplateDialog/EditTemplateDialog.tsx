@@ -32,7 +32,7 @@ export const EditTemplateDialog = ({
   const [formData, setFormData] = useState({
     title: template?.title ?? '',
     content: template?.content ?? '',
-    variables: template?.variables ?? defaultVariables,
+    variables: template?.variables?.length ? template.variables : defaultVariables,
   });
 
   // template이 변경될 때 폼 데이터 업데이트
@@ -41,7 +41,7 @@ export const EditTemplateDialog = ({
       setFormData({
         title: template.title,
         content: template.content || '',
-        variables: template.variables || defaultVariables,
+        variables: template.variables?.length ? template.variables : defaultVariables,
       });
     }
   }, [template]);
@@ -107,7 +107,7 @@ export const EditTemplateDialog = ({
               onContentChange={handleContentChange}
               onVariablesChange={handleVariablesChange}
               templateContent={formData.content ?? ''}
-              templateVariables={formData.variables || defaultVariables}
+              templateVariables={formData.variables}
             />
           </StyledBody>
 
