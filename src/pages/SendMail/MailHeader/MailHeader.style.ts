@@ -20,11 +20,11 @@ export const VariableSection = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 `;
 
 export const VariableAddButton = styled(BoxButton)`
-  background-color: ${({ theme }) =>
-    theme.semantic.color.bgBasicBlack} !important;
+  background-color: ${({ theme }) => theme.semantic.color.bgBasicBlack} !important;
 `;
 
 export const TabsContainer = styled.div`
