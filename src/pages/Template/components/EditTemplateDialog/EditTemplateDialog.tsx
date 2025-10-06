@@ -4,7 +4,7 @@ import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
-import { defaultVariables, Variable } from '@/types/editor';
+import { Variable } from '@/types/editor';
 import { Template } from '@/types/template';
 
 import {
@@ -30,9 +30,9 @@ export const EditTemplateDialog = ({
   template,
 }: EditTemplateDialogProps) => {
   const [formData, setFormData] = useState({
-    title: template?.title ?? '',
-    content: template?.content ?? '',
-    variables: template?.variables?.length ? template.variables : defaultVariables,
+    title: template.title,
+    content: template.content ?? '',
+    variables: template.variables,
   });
 
   // template이 변경될 때 폼 데이터 업데이트
@@ -40,8 +40,8 @@ export const EditTemplateDialog = ({
     if (template) {
       setFormData({
         title: template.title,
-        content: template.content || '',
-        variables: template.variables?.length ? template.variables : defaultVariables,
+        content: template.content ?? '',
+        variables: template.variables,
       });
     }
   }, [template]);

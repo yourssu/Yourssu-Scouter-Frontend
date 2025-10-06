@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar';
 import { TemplateList } from '@/components/TemplateList/TemplateList';
+import { defaultVariables } from '@/types/editor';
 import { Template } from '@/types/template';
 
 import { AddTemplateDialog } from './components/AddTemplateDialog/AddTemplateDialog';
@@ -61,24 +62,28 @@ const mock: Template[] = [
    - {{식시얼, -지식에 대한 질문 등}}
    
    으로 구성이 될 예정이며, 상황에 따라 일부 가격이 있을 수 있음을 참고 바랍니다.`),
+    variables: defaultVariables,
   },
   {
     id: 2,
     title: '[1차 서류 불합격 메일]',
     date: '2024.12.12에 수정됨',
     content: '안녕하세요. 1차 서류 전형 결과를 안내드립니다...',
+    variables: defaultVariables,
   },
   {
     id: 3,
     title: '[최종 합격 메일]',
     date: '2024.12.12에 수정됨',
     content: '최종 합격을 진심으로 축하드립니다...',
+    variables: defaultVariables,
   },
   {
     id: 4,
     title: '[최종 불합격 메일]',
     date: '2024.12.12에 수정됨',
     content: '최종 전형 결과를 안내드립니다...',
+    variables: defaultVariables,
   },
 ];
 

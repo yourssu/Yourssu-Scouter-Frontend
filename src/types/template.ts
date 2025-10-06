@@ -5,5 +5,5 @@ export interface Template {
   date: string;
   id: number;
   title: string;
-  variables?: Variable[];
+  variables: Variable[];
 }
