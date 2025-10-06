@@ -31,7 +31,7 @@ export const EditTemplateDialog = ({
 }: EditTemplateDialogProps) => {
   const [formData, setFormData] = useState({
     title: template.title,
-    content: template.content ?? '',
+    content: template.content,
     variables: template.variables,
   });
 
@@ -40,7 +40,7 @@ export const EditTemplateDialog = ({
     if (template) {
       setFormData({
         title: template.title,
-        content: template.content ?? '',
+        content: template.content,
         variables: template.variables,
       });
     }
@@ -106,7 +106,7 @@ export const EditTemplateDialog = ({
             <TemplateEditor
               onContentChange={handleContentChange}
               onVariablesChange={handleVariablesChange}
-              templateContent={formData.content ?? ''}
+              templateContent={formData.content}
               templateVariables={formData.variables}
             />
           </StyledBody>
