@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 
 import { getChipType } from '@/components/VariableChip/utils';
 import { Variable, VariableType } from '@/types/editor';
+import { defaultVariables } from '@/types/editor';
 
 import { Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
@@ -17,10 +18,7 @@ export const MailEditor = () => {
 
   const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
 
-  const [variables, setVariables] = useState<Variable[]>([
-    { id: '1', type: '텍스트/파트명', name: '파트명', differentForEachPerson: false },
-    { id: '2', type: '사람/지원자', name: '지원자', differentForEachPerson: true },
-  ]);
+  const [variables, setVariables] = useState<Variable[]>(defaultVariables); // 메일 페이지 작업 시 수정
 
   const editorRef = useRef<MailEditorContentRef>(null);
 
@@ -57,6 +55,7 @@ export const MailEditor = () => {
       type,
       name,
       differentForEachPerson,
+      isFixed: false,
     };
 
     setVariables((prev) => [...prev, newVariable]);
@@ -65,9 +64,11 @@ export const MailEditor = () => {
   };
 
   const handleVariableDelete = (variable: Variable) => {
-    if (editorRef.current) {
-      setVariables((prev) => prev.filter((v) => v.id !== variable.id));
-      editorRef.current.deleteVariable(variable.name);
+    if (!variable.isFixed) {
+      if (editorRef.current) {
+        setVariables((prev) => prev.filter((v) => v.id !== variable.id));
+        editorRef.current.deleteVariable(variable.name);
+      }
     }
   };
 

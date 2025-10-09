@@ -4,6 +4,8 @@ import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
+import { Variable } from '@/types/editor';
+import { Template } from '@/types/template';
 
 import {
   StyledBody,
@@ -13,13 +15,6 @@ import {
   StyledOverlay,
   StyledTitleInput,
 } from './EditTemplateDialog.style';
-
-interface Template {
-  content?: string;
-  date: string;
-  id: number;
-  title: string;
-}
 
 interface EditTemplateDialogProps {
   isOpen: boolean;
@@ -35,8 +30,9 @@ export const EditTemplateDialog = ({
   template,
 }: EditTemplateDialogProps) => {
   const [formData, setFormData] = useState({
-    title: template?.title ?? '',
-    content: template?.content ?? '',
+    title: template.title,
+    content: template.content,
+    variables: template.variables,
   });
 
   // template이 변경될 때 폼 데이터 업데이트
@@ -44,7 +40,8 @@ export const EditTemplateDialog = ({
     if (template) {
       setFormData({
         title: template.title,
-        content: template.content || '',
+        content: template.content,
+        variables: template.variables,
       });
     }
   }, [template]);
@@ -55,6 +52,7 @@ export const EditTemplateDialog = ({
         ...template,
         title: formData.title.trim(),
         content: formData.content,
+        variables: formData.variables,
       });
       onClose();
     }
@@ -79,6 +77,13 @@ export const EditTemplateDialog = ({
     }));
   };
 
+  const handleVariablesChange = (variables: Variable[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      variables,
+    }));
+  };
+
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
@@ -100,7 +105,9 @@ export const EditTemplateDialog = ({
           <StyledBody>
             <TemplateEditor
               onContentChange={handleContentChange}
-              templateContent={template.content ?? ''}
+              onVariablesChange={handleVariablesChange}
+              templateContent={formData.content}
+              templateVariables={formData.variables}
             />
           </StyledBody>
 
