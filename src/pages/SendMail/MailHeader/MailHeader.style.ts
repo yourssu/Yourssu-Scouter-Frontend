@@ -8,6 +8,7 @@ export const HeaderContainer = styled.div`
   padding: 8px;
   min-height: 48px;
   border-bottom: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
+  flex-shrink: 0;
 `;
 
 export const HeaderLabel = styled.span`
@@ -20,11 +21,12 @@ export const VariableSection = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 `;
 
 export const VariableAddButton = styled(BoxButton)`
-  background-color: ${({ theme }) =>
-    theme.semantic.color.bgBasicBlack} !important;
+  background-color: ${({ theme }) => theme.semantic.color.bgBasicBlack} !important;
+  align-self: flex-start;
 `;
 
 export const TabsContainer = styled.div`
