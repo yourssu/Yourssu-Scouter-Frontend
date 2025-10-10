@@ -2,12 +2,12 @@ import { z } from 'zod';
 
 const VariableSchema = z.object({
   key: z.string(),
-  type: z.enum(['PERSON', 'DATE', 'LINK', 'TEXT']).optional(),
+  type: z.enum(['PERSON', 'DATE', 'LINK', 'TEXT']).optional().nullable(),
   displayName: z.string(),
   perRecipient: z.boolean(),
 });
 
-const TemplateSchema = z.object({
+export const TemplateSchema = z.object({
   title: z.string(),
   bodyHtml: z.string(),
   variables: z.array(VariableSchema),
