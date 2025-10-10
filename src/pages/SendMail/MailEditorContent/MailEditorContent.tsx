@@ -23,7 +23,7 @@ interface MailEditorContentProps {
 
 export interface MailEditorContentRef {
   deleteVariable: (label: string) => void;
-  insertVariable: (type: string, label: string) => void;
+  insertVariable: (key: string, type: string, label: string) => void;
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
@@ -72,12 +72,12 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
     useImperativeHandle(
       ref,
       () => ({
-        insertVariable: (type: string, label: string) => {
+        insertVariable: (key: string, type: string, label: string) => {
           if (editor) {
             editor
               .chain()
               .focus()
-              .insertContent({ type: 'variableChip', attrs: { type, label } })
+              .insertContent({ type: 'variableChip', attrs: { key, type, label } })
               .run();
           }
         },
