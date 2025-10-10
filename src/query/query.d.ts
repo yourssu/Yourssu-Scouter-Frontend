@@ -12,7 +12,8 @@ type BaseKey =
   | 'parts'
   | 'schedules'
   | 'semesterNow'
-  | 'semesters';
+  | 'semesters'
+  | 'templates';
 
 type QueryKey = readonly [BaseKey, ...ReadonlyArray<unknown>];
 
