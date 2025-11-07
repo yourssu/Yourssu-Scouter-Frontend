@@ -1,9 +1,14 @@
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { BoxButton, IcPlusLine, useTabs } from '@yourssu/design-system-react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar';
 import { TemplateList } from '@/components/TemplateList/TemplateList';
+import { deleteTemplate } from '@/query/template/mutations/deleteTemplate';
+import { postTemplateFromForms } from '@/query/template/mutations/postTemplatesFromForms';
+import { templateOptions } from '@/query/template/options';
 import { defaultVariables } from '@/types/editor';
 import { Template } from '@/types/template';
 
@@ -103,31 +108,47 @@ export const Templates = () => {
 
   // 통합 Dialog 상태 관리
   const [dialogState, setDialogState] = useState<{
-    selectedTemplate: null | Template;
+    selectedTemplateId: number | undefined;
     type: DialogType;
   }>({
     type: null,
-    selectedTemplate: null,
+    selectedTemplateId: undefined,
+  });
+  const queryClient = useQueryClient();
+  const { data: templates } = useSuspenseQuery(templateOptions.all());
+
+  const postTemplateMutation = useMutation({
+    mutationFn: postTemplateFromForms,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['templates'] });
+    },
+  });
+
+  const deleteTemplateMutation = useMutation({
+    mutationFn: deleteTemplate,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['templates'] });
+    },
   });
 
   // 삭제 Dialog 열기
   const handleDeleteTemplate = (id: number) => {
-    const template = mock.find((t) => t.id === id);
+    const template = templates.find((t) => t.id === id);
     if (template) {
       setDialogState({
         type: 'delete',
-        selectedTemplate: template,
+        selectedTemplateId: template.id,
       });
     }
   };
 
   // 편집 Dialog 열기
   const handleEditTemplate = (id: number) => {
-    const template = mock.find((t) => t.id === id);
+    const template = templates.find((t) => t.id === id);
     if (template) {
       setDialogState({
         type: 'edit',
-        selectedTemplate: template,
+        selectedTemplateId: template.id,
       });
     }
   };
@@ -136,7 +157,7 @@ export const Templates = () => {
   const handleAddTemplate = () => {
     setDialogState({
       type: 'add',
-      selectedTemplate: null, // 새로 만들 때는 null
+      selectedTemplateId: undefined, // 새로 만들 때는 null
     });
   };
 
@@ -144,15 +165,16 @@ export const Templates = () => {
   const handleCloseDialog = () => {
     setDialogState({
       type: null,
-      selectedTemplate: null,
+      selectedTemplateId: undefined,
     });
   };
 
   // 실제 삭제 로직
   const handleConfirmDelete = () => {
-    if (dialogState.selectedTemplate) {
-      console.log('삭제 기능', dialogState.selectedTemplate.id);
-      // TODO: 실제 삭제 API 호출
+    if (dialogState.selectedTemplateId) {
+      console.log('삭제 기능', dialogState.selectedTemplateId);
+      deleteTemplateMutation.mutate({ templateId: dialogState.selectedTemplateId });
+      handleCloseDialog();
     }
   };
 
@@ -164,8 +186,9 @@ export const Templates = () => {
 
   // 새 템플릿 저장 로직
   const handleSaveAdd = (newTemplate: Omit<Template, 'date' | 'id'>) => {
+    // 실제 추가 API 호출
     console.log('템플릿 추가', newTemplate);
-    // TODO: 실제 추가 API 호출
+    postTemplateMutation.mutate(newTemplate);
   };
 
   return (
@@ -196,7 +219,7 @@ export const Templates = () => {
                 </BoxButton>
               </StyledSearchbar>
               <StyledTemplateList>
-                {mock.map((template) => (
+                {templates.map((template) => (
                   <TemplateList
                     date={template.date}
                     key={template.id}
@@ -214,22 +237,24 @@ export const Templates = () => {
           isOpen={dialogState.type === 'delete'}
           onClose={handleCloseDialog}
           onConfirm={handleConfirmDelete}
-          templateTitle={dialogState.selectedTemplate?.title || ''}
+          templateTitle={
+            templates.find((t) => t.id === dialogState.selectedTemplateId)?.title || ''
+          }
         />
         {/* 편집 Dialog */}
-        {!!dialogState.selectedTemplate && (
+        {!!dialogState.selectedTemplateId && (
           <EditTemplateDialog
             isOpen={dialogState.type === 'edit'}
             onClose={handleCloseDialog}
             onSave={handleSaveEdit}
-            template={dialogState.selectedTemplate}
+            templateId={dialogState.selectedTemplateId}
           />
         )}
-        {/* 편집 Dialog */}
+        {/* 추가 Dialog */}
         <AddTemplateDialog
           isOpen={dialogState.type === 'add'}
           onClose={handleCloseDialog}
-          onSave={handleSaveAdd} // 수정!
+          onSave={handleSaveAdd}
         />
       </StyledContainer>
     </FormProvider>
