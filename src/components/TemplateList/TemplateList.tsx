@@ -25,7 +25,7 @@ export const TemplateList = ({ title, date, onDelete, onClick }: TemplateListPro
     <TemplateItemContainer onClick={onClick}>
       <TemplateItemContent>
         <TemplateTitle>{title}</TemplateTitle>
-        <TemplateDate>{date}</TemplateDate>
+        <TemplateDate>{date}에 수정됨</TemplateDate>
       </TemplateItemContent>
       <TrashIconButton onClick={handleDelete}>
         <IcTrashLine />
