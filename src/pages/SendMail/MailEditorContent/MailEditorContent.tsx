@@ -78,6 +78,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
               .chain()
               .focus()
               .insertContent({ type: 'variableChip', attrs: { key, type, label } })
+              .insertContent(' ') // 변수칩 뒤에 공백 추가
               .run();
           }
         },
