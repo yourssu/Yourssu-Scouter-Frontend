@@ -1,6 +1,6 @@
 import { api } from '@/apis/api.ts';
 import { Variable } from '@/types/editor';
-import { transformBodyHtml, transformVariables } from '@/utils/transformTemplate.ts';
+import { transformContentToBodyHtml, transformVariables } from '@/utils/transformTemplate.ts';
 
 interface PostTemplateParams {
   content: string;
@@ -11,7 +11,7 @@ interface PostTemplateParams {
 export const postTemplateFromForms = (params: PostTemplateParams) => {
   const formattedParams = {
     title: params.title,
-    bodyHtml: transformBodyHtml(params.content),
+    bodyHtml: transformContentToBodyHtml(params.content),
     variables: transformVariables(params.variables),
   };
 
