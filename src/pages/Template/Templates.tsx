@@ -8,6 +8,7 @@ import TableSearchBar from '@/components/TableSearchBar/TableSearchBar';
 import { TemplateList } from '@/components/TemplateList/TemplateList';
 import { deleteTemplate } from '@/query/template/mutations/deleteTemplate';
 import { postTemplateFromForms } from '@/query/template/mutations/postTemplatesFromForms';
+import { putTemplate } from '@/query/template/mutations/putTemplate';
 import { templateOptions } from '@/query/template/options';
 import { Template } from '@/types/template';
 
@@ -68,6 +69,13 @@ export const Templates = () => {
     },
   });
 
+  const putTemplateMutation = useMutation({
+    mutationFn: putTemplate,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['templates'] });
+    },
+  });
+
   // 삭제 Dialog 열기
   const handleDeleteTemplate = (id: number) => {
     const template = templates.find((t) => t.id === id);
@@ -109,22 +117,21 @@ export const Templates = () => {
   // 실제 삭제 로직
   const handleConfirmDelete = () => {
     if (dialogState.selectedTemplateId) {
-      console.log('삭제 기능', dialogState.selectedTemplateId);
+      // console.log('삭제 기능', dialogState.selectedTemplateId);
       deleteTemplateMutation.mutate({ templateId: dialogState.selectedTemplateId });
       handleCloseDialog();
     }
   };
 
   // 편집 저장 로직
-  const handleSaveEdit = (updatedTemplate: Template) => {
-    console.log('편집 저장', updatedTemplate);
-    // TODO: 실제 업데이트 API 호출
+  const handleSaveEdit = (updatedTemplate: Omit<Template, 'date'>) => {
+    // console.log('편집 저장', updatedTemplate);
+    putTemplateMutation.mutate(updatedTemplate);
   };
 
   // 새 템플릿 저장 로직
   const handleSaveAdd = (newTemplate: Omit<Template, 'date' | 'id'>) => {
-    // 실제 추가 API 호출
-    console.log('템플릿 추가', newTemplate);
+    // console.log('템플릿 추가', newTemplate);
     postTemplateMutation.mutate(newTemplate);
   };
 
