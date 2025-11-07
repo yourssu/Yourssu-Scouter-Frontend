@@ -7,25 +7,34 @@ const VariableSchema = z.object({
   perRecipient: z.boolean(),
 });
 
-export const TemplateSchema = z.object({
+export const BaseTemplateSchema = z.object({
+  id: z.number(),
   title: z.string(),
   bodyHtml: z.string(),
   variables: z.array(VariableSchema),
+  updatedAt: z.string(),
 });
 
-export const TemplateListSchema = z.object({
-  content: z.array(TemplateSchema.omit({ bodyHtml: true, variables: true })),
+export const TemplateListItemSchema = BaseTemplateSchema.pick({
+  id: true,
+  title: true,
+  updatedAt: true,
+});
+
+export const TemplateListResponseSchema = z.object({
+  content: z.array(TemplateListItemSchema),
   page: z.number(),
   size: z.number(),
   totalElements: z.number(),
   totalPages: z.number(),
 });
 
-export const PatchTemplateSchema = TemplateSchema.extend({
-  id: z.number(),
-  updatedAt: z.string(),
+export const TemplatePayloadSchema = BaseTemplateSchema.omit({
+  id: true,
+  updatedAt: true,
 });
 
-export type TemplateList = z.infer<typeof TemplateListSchema>;
-export type Template = z.infer<typeof TemplateSchema>;
-export type PatchTemplate = z.infer<typeof PatchTemplateSchema>;
+export type Template = z.infer<typeof BaseTemplateSchema>;
+export type TemplateListItem = z.infer<typeof TemplateListItemSchema>;
+export type TemplatePayload = z.infer<typeof TemplatePayloadSchema>;
+export type TemplateListResponse = z.infer<typeof TemplateListResponseSchema>;
