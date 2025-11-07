@@ -9,7 +9,6 @@ import { TemplateList } from '@/components/TemplateList/TemplateList';
 import { deleteTemplate } from '@/query/template/mutations/deleteTemplate';
 import { postTemplateFromForms } from '@/query/template/mutations/postTemplatesFromForms';
 import { templateOptions } from '@/query/template/options';
-import { defaultVariables } from '@/types/editor';
 import { Template } from '@/types/template';
 
 import { AddTemplateDialog } from './components/AddTemplateDialog/AddTemplateDialog';
@@ -29,68 +28,6 @@ type TabType = (typeof templateTypes)[number];
 interface TemplateFormData {
   search: string;
 }
-
-const convertEnterToBr = (text: string) => {
-  return text.replace(/\n/g, '<br />');
-};
-
-const mock: Template[] = [
-  {
-    id: 1,
-    title: '[1차 서류 합격 메일]',
-    date: '2024.12.12에 수정됨',
-    content:
-      convertEnterToBr(`안녕하세요, 김솔미 님, 유어슈 Product Design 팀 리크루팅 담당자 🙋 파트 담당자 입니다😊
-   
-   우선, 유어슈 Product Design 팀에 지원해주셔서 감사드립니다.
-   
-   지원자 김솔미 님께서 제출해 주신 서류를 검토한 결과, 김솔미 님의 역량을 더 자세히 알아보기 위해 과제와 면접 과정을 진행하기로 결정하였습니다.
-   
-   다음은 면접 진행에 대한 안내입니다. 면접 전 해당 내용을 반드시 숙지해 주시기 바랍니다.
-   
-   <면접 날짜 및 시간>
-   
-   김솔미 님의 면접은 📅면접 일시 에 진행될 예정이며 면접 진행 시간은 최소 ⏰최소 시간 에서 최대 ⏰최대 시간 이 걸릴 것으로 예상하고 있습니다. 가능 여부를 이메일로 꼭 회신해주시길 바랍니다.
-   
-   <면접 진행>
-   
-   면접은 유어슈 동아리방(학생회관 244호) 혹은 진리관 등의 학교 내 건물에서 오프라인으로 진행됩니다. 확정된 장소는 면접일 하루 전까지, 메일을 통해 안내드릴 예정이니 면접 전 장소를 확인해주시길 바랍니다.
-   
-   <면접 당일 유의할 점>
-   
-   면접을 진행하기로 한 시간에 부재하시는 경우, 확인을 위해 서류에 작성해주신 연락처로 연락을 드릴 수 있음을 양해 부탁드립니다.
-   
-   <구성>
-   
-   면접의 경우,
-   - 서류에 작성해주신 내용에 대한 질문
-   - {{식시얼, -지식에 대한 질문 등}}
-   
-   으로 구성이 될 예정이며, 상황에 따라 일부 가격이 있을 수 있음을 참고 바랍니다.`),
-    variables: defaultVariables,
-  },
-  {
-    id: 2,
-    title: '[1차 서류 불합격 메일]',
-    date: '2024.12.12에 수정됨',
-    content: '안녕하세요. 1차 서류 전형 결과를 안내드립니다...',
-    variables: defaultVariables,
-  },
-  {
-    id: 3,
-    title: '[최종 합격 메일]',
-    date: '2024.12.12에 수정됨',
-    content: '최종 합격을 진심으로 축하드립니다...',
-    variables: defaultVariables,
-  },
-  {
-    id: 4,
-    title: '[최종 불합격 메일]',
-    date: '2024.12.12에 수정됨',
-    content: '최종 전형 결과를 안내드립니다...',
-    variables: defaultVariables,
-  },
-];
 
 type DialogType = 'add' | 'delete' | 'edit' | null;
 
