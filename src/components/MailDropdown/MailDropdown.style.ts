@@ -9,7 +9,6 @@ export const StyledTrigger = styled(DropdownMenu.Trigger)`
   padding: 16px 20px;
   background-color: ${({ theme }) => theme.semantic.color.bgBasicDefault};
   border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
-  max-width: 562px;
   width: 100%;
   cursor: pointer;
 

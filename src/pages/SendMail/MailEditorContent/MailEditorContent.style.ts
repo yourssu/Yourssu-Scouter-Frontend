@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 export const EditorWrapper = styled.div`
   padding: 16px;
   overflow-y: auto;
+  flex: 1;
 `;
 
 export const StyledEditorContent = styled(EditorContent)`
