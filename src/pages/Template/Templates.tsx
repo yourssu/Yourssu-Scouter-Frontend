@@ -9,7 +9,7 @@ import { TemplateList } from '@/components/TemplateList/TemplateList';
 import { deleteTemplate } from '@/query/template/mutations/deleteTemplate';
 import { postTemplateFromForms } from '@/query/template/mutations/postTemplatesFromForms';
 import { putTemplate } from '@/query/template/mutations/putTemplate';
-import { templateOptions } from '@/query/template/options';
+import { templateKeys, templateOptions } from '@/query/template/options';
 import { Template } from '@/types/template';
 
 import { AddTemplateDialog } from './components/AddTemplateDialog/AddTemplateDialog';
@@ -58,21 +58,30 @@ export const Templates = () => {
   const postTemplateMutation = useMutation({
     mutationFn: postTemplateFromForms,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['templates'] });
+      queryClient.invalidateQueries({ queryKey: templateKeys.all });
     },
   });
 
   const deleteTemplateMutation = useMutation({
     mutationFn: deleteTemplate,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['templates'] });
+      queryClient.invalidateQueries({ queryKey: templateKeys.all });
     },
   });
 
   const putTemplateMutation = useMutation({
     mutationFn: putTemplate,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['templates'] });
+    onSuccess: (_data, params) => {
+      const updatedPayload = params;
+
+      queryClient.invalidateQueries({ queryKey: templateKeys.all });
+
+      queryClient.setQueryData(templateKeys.detail(updatedPayload.id), (oldData: Template) => {
+        return {
+          ...(oldData || {}),
+          ...updatedPayload,
+        };
+      });
     },
   });
 
