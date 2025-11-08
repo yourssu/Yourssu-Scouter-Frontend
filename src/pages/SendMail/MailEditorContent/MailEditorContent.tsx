@@ -67,6 +67,18 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
           onContentChange(editor.getHTML());
         }
       },
+      editorProps: {
+        transformPastedHTML(html) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+
+          doc.querySelectorAll('span').forEach((span) => {
+            span.replaceWith(...span.childNodes);
+          });
+
+          return doc.body.innerHTML;
+        },
+      },
     });
 
     useImperativeHandle(
