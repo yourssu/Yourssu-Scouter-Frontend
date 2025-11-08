@@ -7,6 +7,7 @@ export const StyledContainer = styled.header`
   justify-content: flex-end;
   align-items: flex-end;
   gap: 12px;
+  border-bottom: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
 `;
 
 export const StyledNickname = styled.span`
