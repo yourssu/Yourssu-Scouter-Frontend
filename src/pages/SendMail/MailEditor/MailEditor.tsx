@@ -4,12 +4,16 @@ import { getChipType } from '@/components/VariableChip/utils';
 import { Variable, VariableType } from '@/types/editor';
 import { getDefaultVariables } from '@/types/editor';
 
-import { Recipient, RecipientId } from '../mail.type';
+import { EditorType, Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
 
-export const MailEditor = () => {
+interface MailEditorProps {
+  type: EditorType;
+}
+
+export const MailEditor = ({ type }: MailEditorProps) => {
   const [editorContents, setEditorContents] = useState<Record<RecipientId, string>>({
     'recipient-0': '',
     'recipient-1': '',
@@ -73,8 +77,8 @@ export const MailEditor = () => {
     }
   };
 
-  return (
-    <>
+  if (type === 'normal') {
+    return (
       <EditorContainer>
         <MailHeader
           onVariableAdd={handleVariableAdd}
@@ -85,7 +89,9 @@ export const MailEditor = () => {
         />
         <MailEditorContent ref={editorRef} />
       </EditorContainer>
-
+    );
+  } else if (type === 'tabs') {
+    return (
       <EditorContainer>
         <MailHeader onTabChange={handleTabChange} recipients={recipients} type="tabs" />
         <MailEditorContent
@@ -95,6 +101,6 @@ export const MailEditor = () => {
           recipientName={activeRecipientName}
         />
       </EditorContainer>
-    </>
-  );
+    );
+  }
 };
