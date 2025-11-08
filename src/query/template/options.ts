@@ -13,7 +13,7 @@ const TypeMap: Record<string, VariableType> = {
   TEXT: '텍스트',
 };
 
-const templateKeys = {
+export const templateKeys = {
   all: ['templates'] as const,
   detail: (id: number) => [...templateKeys.all, id] as const,
 };
@@ -21,7 +21,7 @@ const templateKeys = {
 export const templateOptions = {
   all: () =>
     queryOptions({
-      queryKey: ['templates'],
+      queryKey: templateKeys.all,
       queryFn: async () => {
         const data = await api.get('api/mails/templates').json();
         const response = TemplateListResponseSchema.parse(data).content;
@@ -37,7 +37,7 @@ export const templateOptions = {
     }),
   detail: (templateId: number) =>
     queryOptions({
-      queryKey: ['templates', templateId],
+      queryKey: templateKeys.detail(templateId),
       queryFn: async () => {
         const data = await api.get(`api/mails/templates/${templateId}`).json();
         const response = BaseTemplateSchema.parse(data);
