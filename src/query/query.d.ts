@@ -10,6 +10,7 @@ type BaseKey =
   | 'members'
   | 'memberStates'
   | 'parts'
+  | 'schedules'
   | 'semesterNow'
   | 'semesters';
 
