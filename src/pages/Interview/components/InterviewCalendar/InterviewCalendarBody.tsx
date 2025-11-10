@@ -1,24 +1,66 @@
+import { useQuery } from '@tanstack/react-query';
+import { format, isSameDay, parseISO } from 'date-fns';
 import { range } from 'es-toolkit';
 
-export const InterviewCalendarBody = () => {
-  const availableTimes = range(9 * 60, 22 * 60, 30).map((v) => ({
+import type { Schedule } from '@/query/schedule/schema';
+
+import { InterviewScheduleBlock } from '@/pages/Interview/components/InterviewScheduleBlock';
+import { useCalendarWeekDates } from '@/pages/Interview/hooks/useCalendarWeekDates';
+import { scheduleOptions } from '@/query/schedule/options';
+
+interface InterviewCalendarBodyProps {
+  month: number;
+  partId: null | number;
+  week: number;
+  year: number;
+}
+
+export const InterviewCalendarBody = ({
+  month,
+  week,
+  year,
+  partId,
+}: InterviewCalendarBodyProps) => {
+  const { data: schedules = [] } = useQuery(scheduleOptions(partId));
+  const weekDates = useCalendarWeekDates({ month, week, year });
+
+  const availableTimes = range(11 * 60 + 30, 17 * 60, 30).map((v) => ({
     hour: Math.floor(v / 60).toString(),
     minute: (v % 60).toString().padStart(2, '0'),
   }));
 
+  const getSchedulesForCell = (date: Date, hour: string, minute: string): Schedule[] => {
+    const cellTime = `${hour.padStart(2, '0')}:${minute}`;
+    return schedules.filter((schedule) => {
+      const scheduleDate = parseISO(schedule.startTime);
+      const scheduleTime = format(scheduleDate, 'HH:mm');
+      return isSameDay(scheduleDate, date) && scheduleTime === cellTime;
+    });
+  };
+
   return (
     <tbody>
-      {availableTimes.map(({ hour, minute }, i) => {
+      {availableTimes.map(({ hour, minute }) => {
         return (
           <tr key={`${hour}:${minute}`}>
             <td className="border-line-basicMedium h-14">
               <div className="typo-c2_sb_12 text-text-basicTertiary size-full px-2.5 py-[5px] text-right">
-                {i % 2 === 0 && `${hour} : ${minute}`}
+                {minute === '00' && `${hour} : ${minute}`}
               </div>
             </td>
-            {range(7).map((v) => (
-              <td className="border-line-basicMedium h-14 border" key={`${hour}:${minute}:${v}`} />
-            ))}
+            {weekDates.map((date, dayIndex) => {
+              const cellSchedules = getSchedulesForCell(date, hour, minute);
+              return (
+                <td
+                  className="border-line-basicMedium h-14 border p-1"
+                  key={`${hour}:${minute}:${dayIndex}`}
+                >
+                  {cellSchedules.map((schedule) => (
+                    <InterviewScheduleBlock key={schedule.id} schedule={schedule} />
+                  ))}
+                </td>
+              );
+            })}
           </tr>
         );
       })}
