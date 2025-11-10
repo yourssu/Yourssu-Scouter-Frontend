@@ -9,6 +9,10 @@ export const usePartFilter = () => {
   const [partId, setPartId] = useState<null | number>(null);
 
   const onPartChange = (partName: string) => {
+    if (partName === '전체일정 보기') {
+      setPartId(null);
+      return;
+    }
     const partId = parts.find((p) => p.partName === partName)?.partId;
     if (partId) {
       setPartId(partId);
