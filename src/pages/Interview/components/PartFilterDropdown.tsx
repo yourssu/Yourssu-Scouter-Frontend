@@ -33,7 +33,7 @@ export const PartFilterDropdown = ({ partName, onPartChange }: PartFilterDropdow
     <Popover.Root>
       <Popover.Trigger asChild>
         <button
-          className="border-line-basicMedium text-text-basicPrimary flex h-9 items-center gap-2 rounded-xl border bg-white px-4 py-2 text-sm hover:bg-gray-50"
+          className="border-line-basicMedium text-text-basicPrimary flex h-[40px] items-center gap-2 rounded-xl border bg-white px-4 py-2 text-sm hover:bg-gray-50"
           type="button"
         >
           <div className="size-2.5 rounded-full" style={{ backgroundColor: selectedColor }} />
@@ -55,10 +55,7 @@ export const PartFilterDropdown = ({ partName, onPartChange }: PartFilterDropdow
               type="button"
             >
               <div className="flex items-center gap-2.5">
-                <div
-                  className="size-2.5 rounded-full"
-                  style={{ backgroundColor: '#ECEFFF' }}
-                />
+                <div className="size-2.5 rounded-full" style={{ backgroundColor: '#ECEFFF' }} />
                 <span className="typo-b3_sb_14 text-text-basicPrimary">전체일정 보기</span>
               </div>
             </button>

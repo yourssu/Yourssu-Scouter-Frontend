@@ -42,16 +42,16 @@ export const InterviewPage = () => {
 
   return (
     <PageLayout title="면접 일정 관리">
+      <InterviewHeader
+        month={month}
+        onNextWeek={handleNextWeek}
+        onPartChange={onPartChange}
+        onPrevWeek={handlePrevWeek}
+        partName={partName}
+        week={week}
+      />
       <div className="flex h-full gap-6 overflow-hidden">
         <div className="flex min-w-0 flex-col" style={{ width: '70%' }}>
-          <InterviewHeader
-            month={month}
-            onNextWeek={handleNextWeek}
-            onPartChange={onPartChange}
-            onPrevWeek={handlePrevWeek}
-            partName={partName}
-            week={week}
-          />
           <InterviewCalendar month={month} partId={partId} week={week} year={year} />
         </div>
         <div className="flex-1">
