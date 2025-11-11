@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { PageLayout } from '@/components/layouts/PageLayout';
 import { usePartFilter } from '@/hooks/usePartFilter';
-import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar';
-import { InterviewCalendarHeader } from '@/pages/Interview/components/InterviewCalendarHeader';
+import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
+import { InterviewHeader } from '@/pages/Interview/components/InterviewHeader';
 import { InterviewSidebar } from '@/pages/Interview/components/InterviewSidebar';
 
 export const InterviewPage = () => {
@@ -44,7 +44,7 @@ export const InterviewPage = () => {
     <PageLayout title="면접 일정 관리">
       <div className="flex h-full gap-6 overflow-hidden">
         <div className="flex min-w-0 flex-col" style={{ width: '70%' }}>
-          <InterviewCalendarHeader
+          <InterviewHeader
             month={month}
             onNextWeek={handleNextWeek}
             onPartChange={onPartChange}

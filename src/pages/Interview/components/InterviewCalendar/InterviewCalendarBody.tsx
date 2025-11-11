@@ -4,8 +4,8 @@ import { range } from 'es-toolkit';
 
 import type { Schedule } from '@/query/schedule/schema';
 
+import { useCalendarWeekDates } from '@/hooks/useCalendarWeekDates';
 import { InterviewScheduleBlock } from '@/pages/Interview/components/InterviewScheduleBlock';
-import { useCalendarWeekDates } from '@/pages/Interview/hooks/useCalendarWeekDates';
 import { scheduleOptions } from '@/query/schedule/options';
 
 interface InterviewCalendarBodyProps {

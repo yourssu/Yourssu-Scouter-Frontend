@@ -1,6 +1,6 @@
 import { tv } from 'tailwind-variants';
 
-import { useCalendarWeekDates } from '@/pages/Interview/hooks/useCalendarWeekDates';
+import { useCalendarWeekDates } from '@/hooks/useCalendarWeekDates';
 import { formatTemplates } from '@/utils/date';
 
 interface InterviewCalendarHeadProps {

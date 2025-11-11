@@ -2,7 +2,7 @@ import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/desi
 
 import { PartFilterDropdown } from './PartFilterDropdown';
 
-interface InterviewCalendarHeaderProps {
+interface InterviewHeaderProps {
   month: number;
   onNextWeek: () => void;
   onPartChange: (partName: string) => void;
@@ -11,14 +11,14 @@ interface InterviewCalendarHeaderProps {
   week: number;
 }
 
-export const InterviewCalendarHeader = ({
+export const InterviewHeader = ({
   month,
   week,
   onPrevWeek,
   onNextWeek,
   partName,
   onPartChange,
-}: InterviewCalendarHeaderProps) => {
+}: InterviewHeaderProps) => {
   return (
     <div className="mb-6 flex items-center justify-between pl-6">
       <div className="flex items-center gap-4">
