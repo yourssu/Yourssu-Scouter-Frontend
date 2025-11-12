@@ -24,7 +24,7 @@ export const InterviewHeader = ({
   onPartChange,
 }: InterviewHeaderProps) => {
   return (
-    <div className="border-line-basicMedium flex min-h-[48px] items-center justify-between border-b pr-[425px] pl-[45px]">
+    <div className="border-line-basicMedium flex min-h-[48px] w-[70%] items-center justify-between border-b pl-[45px]">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-[15px]">
           <span className="text-text-basicPrimary font-semibold">
