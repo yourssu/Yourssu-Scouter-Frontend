@@ -30,4 +30,5 @@
 
   --color-status-redPrimary: #ff5c5c;
   --color-status-redSecondary: #ffebeb;
+  --color-status-redPrimaryBackground: rgba(255, 92, 92, 0.18); /* #rgba(#ff5c5c, 0.1) */
 }
