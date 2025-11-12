@@ -1,8 +1,11 @@
-import { format, parseISO } from 'date-fns';
+import clsx from 'clsx';
 
 import type { Schedule } from '@/query/schedule/schema';
 
+import { formatTemplates } from '@/utils/date';
+
 interface InterviewScheduleBlockProps {
+  isFirstBlock?: boolean;
   schedule: Schedule;
 }
 
@@ -22,18 +25,27 @@ const getPartColor = (part: string): string => {
   return PART_COLORS[part] || 'bg-gray-100 text-gray-700';
 };
 
-export const InterviewScheduleBlock = ({ schedule }: InterviewScheduleBlockProps) => {
+export const InterviewScheduleBlock = ({
+  schedule,
+  isFirstBlock = true,
+}: InterviewScheduleBlockProps) => {
   const colorClass = getPartColor(schedule.part);
-  const startTime = format(parseISO(schedule.startTime), 'HH:mm');
 
   return (
     <div
-      className={`rounded-lg p-3 text-sm ${colorClass} mb-1 cursor-pointer transition-shadow hover:shadow-md`}
+      className={clsx(
+        'size-full min-h-[64px] cursor-pointer rounded-lg p-3 text-sm transition-shadow hover:shadow-md',
+        colorClass,
+      )}
     >
-      <div className="mb-1 font-semibold">
-        {schedule.name} 님 {schedule.part}
-      </div>
-      <div className="text-xs opacity-80">{startTime}</div>
+      {isFirstBlock && (
+        <>
+          <div className="mb-1 font-semibold">
+            {schedule.name} 님 {schedule.part}
+          </div>
+          <div className="text-xs opacity-80">{formatTemplates['23:59'](schedule.startTime)}</div>
+        </>
+      )}
     </div>
   );
 };
