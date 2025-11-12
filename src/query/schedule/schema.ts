@@ -1,9 +1,11 @@
 import { z } from 'zod';
 
+import { partNames } from '@/types/part';
+
 export const ScheduleSchema = z.object({
   id: z.number(),
   name: z.string(),
-  part: z.string(),
+  part: z.enum(partNames),
   startTime: z.string(),
   endTime: z.string(),
 });
