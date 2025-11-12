@@ -6,7 +6,7 @@ import Main from '@/components/Main/Main.tsx';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Applicants } from '@/pages/Applicants/Applicants.tsx';
 import CalendarTestPage from '@/pages/CalendarTestPage';
-import { InterviewPage } from '@/pages/Interview';
+import { InterviewPage } from '@/pages/Interview/Interview';
 import { Members } from '@/pages/Members/Members.tsx';
 import { SendMail } from '@/pages/SendMail/SendMail';
 import { Templates } from '@/pages/Template/Templates';
