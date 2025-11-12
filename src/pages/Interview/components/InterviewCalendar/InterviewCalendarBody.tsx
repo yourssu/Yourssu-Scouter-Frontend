@@ -1,14 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
 import { isSameDay, parseISO } from 'date-fns';
 import { range } from 'es-toolkit';
 
+import type { Schedule } from '@/query/schedule/schema';
+
 import { useCalendarWeekDates } from '@/hooks/useCalendarWeekDates';
 import { InterviewScheduleBlock } from '@/pages/Interview/components/InterviewScheduleBlock';
-import { scheduleOptions } from '@/query/schedule/options';
 
 interface InterviewCalendarBodyProps {
   month: number;
   partId: null | number;
+  schedules: Schedule[];
   week: number;
   year: number;
 }
@@ -17,9 +18,8 @@ export const InterviewCalendarBody = ({
   month,
   week,
   year,
-  partId,
+  schedules,
 }: InterviewCalendarBodyProps) => {
-  const { data: schedules = [] } = useQuery(scheduleOptions(partId));
   const weekDates = useCalendarWeekDates({ month, week, year });
 
   const availableTimes = range(9 * 60, 22 * 60, 30).map((v) => ({
