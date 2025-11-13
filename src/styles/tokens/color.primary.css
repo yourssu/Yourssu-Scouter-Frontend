@@ -31,4 +31,14 @@
   --color-status-redPrimary: #ff5c5c;
   --color-status-redSecondary: #ffebeb;
   --color-status-redPrimaryBackground: rgba(255, 92, 92, 0.18); /* #rgba(#ff5c5c, 0.1) */
+
+  --color-table-productDesignBackground: #f2f4ff;
+  --color-table-frontendBackground: #f7fff8;
+  --color-table-backendBackground: #f7f8f8;
+  --color-table-iosBackground: #f2fcff;
+  --color-table-androidBackground: #fcf3ff;
+  --color-table-legalBackground: #fffae2;
+  --color-table-marketingBackground: #fff3f3;
+  --color-table-pmBackground: #fff5f2;
+  --color-table-hrBackground: #f1f1f4;
 }
