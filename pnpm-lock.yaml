@@ -95,6 +95,9 @@ importers:
       react-router:
         specifier: ^7.1.3
         version: 7.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-simplikit:
+        specifier: ^0.0.46
+        version: 0.0.46(react@18.3.1)
       styled-components:
         specifier: ^6.1.14
         version: 6.1.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3135,6 +3138,11 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
+
+  react-simplikit@0.0.46:
+    resolution: {integrity: sha512-HQpROB8oN3uZHQVVjTnlh8qthpzOzCNrlVvQmxM8OicvjNO8TzdROZrHRZHPhrFGjUk0gNJZkPTslQ30cVNhmA==}
+    peerDependencies:
+      react: '*'
 
   react-style-singleton@2.2.3:
     resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
@@ -6685,6 +6693,10 @@ snapshots:
       turbo-stream: 2.4.0
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
+
+  react-simplikit@0.0.46(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-style-singleton@2.2.3(@types/react@18.3.20)(react@18.3.1):
     dependencies:
