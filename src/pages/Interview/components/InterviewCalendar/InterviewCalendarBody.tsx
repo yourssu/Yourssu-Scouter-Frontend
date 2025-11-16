@@ -1,4 +1,4 @@
-import { isSameDay, parseISO } from 'date-fns';
+import { getHours, getMinutes, isSameDay } from 'date-fns';
 import { range } from 'es-toolkit';
 
 import type { Schedule } from '@/query/schedule/schema';
@@ -32,29 +32,17 @@ export const InterviewCalendarBody = ({
 
     return schedules
       .filter((schedule) => isSameDay(schedule.startTime, date))
-      .map((schedule) => {
-        const { startTime, endTime } = schedule;
-        const start = parseISO(startTime);
-        const end = parseISO(endTime);
-        const startHour = start.getHours();
-        const startMinute = start.getMinutes();
-        const endHour = end.getHours();
-        const endMinute = end.getMinutes();
-        const isFirstBlock = Number(hour) === startHour && Number(minute) === startMinute;
-        return {
-          startHour,
-          startMinute,
-          endHour,
-          endMinute,
-          isFirstBlock,
-          ...schedule,
-        };
-      })
-      .filter((schedule) => {
-        const startTotalMinutes = schedule.startHour * 60 + schedule.startMinute;
-        const endTotalMinutes = schedule.endHour * 60 + schedule.endMinute;
+      .filter(({ startTime, endTime }) => {
+        const startTotalMinutes = getHours(startTime) * 60 + getMinutes(startTime);
+        const endTotalMinutes = getHours(endTime) * 60 + getMinutes(endTime);
         return startTotalMinutes <= targetTotalMinutes && targetTotalMinutes < endTotalMinutes;
-      });
+      })
+      .map((schedule) => ({
+        isFirstBlock:
+          getHours(schedule.startTime) === Number(hour) &&
+          getMinutes(schedule.startTime) === Number(minute),
+        ...schedule,
+      }));
   };
 
   return (
