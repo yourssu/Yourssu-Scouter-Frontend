@@ -13,10 +13,14 @@ export const Content = ({ children }: React.PropsWithChildren<unknown>) => {
   return <div className="text-text-basicTertiary typo-c1_rg_13 py-2.5">{children}</div>;
 };
 
-export const Warning = ({ children }: React.PropsWithChildren<unknown>) => {
+export const Warning = ({
+  children,
+  left,
+}: React.PropsWithChildren<{ left?: React.ReactNode }>) => {
   return (
-    <div className="bg-status-redPrimaryBackground text-status-redPrimary typo-c1_rg_13 rounded-xl px-2.5 py-1">
-      {children}
+    <div className="bg-status-redPrimaryBackground text-status-redPrimary flex items-center gap-1 rounded-xl px-2.5 py-1">
+      {left && <span className="typo-c1_sb_13">{left}</span>}
+      <span className="typo-c1_rg_13">{children}</span>
     </div>
   );
 };
