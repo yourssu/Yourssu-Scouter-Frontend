@@ -15,7 +15,6 @@ export const InterviewPage = () => {
   const [week, setWeek] = useState(2);
 
   const { partId, partName, onPartChange } = usePartFilter();
-
   const { data: schedules } = useSuspenseQuery(scheduleOptions(partId));
 
   const handlePrevWeek = () => {
@@ -65,7 +64,7 @@ export const InterviewPage = () => {
           />
         </div>
         <div className="flex-1">
-          <InterviewSidebar />
+          <InterviewSidebar schedules={schedules} />
         </div>
       </div>
     </PageLayout>
