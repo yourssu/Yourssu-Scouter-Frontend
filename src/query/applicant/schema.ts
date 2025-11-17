@@ -25,6 +25,7 @@ export const ApplicantSchema = z.object({
   studentId: z.string(),
   semester: z.string(),
   age: z.string(),
+  availableTimes: z.array(z.string()),
 });
 
 export const PatchApplicantSchema = ApplicantSchema.omit({
