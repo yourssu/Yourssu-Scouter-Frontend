@@ -1,4 +1,4 @@
-import { addDays, endOfMonth, endOfWeek, startOfWeek } from 'date-fns';
+import { addDays, DateArg, endOfMonth, endOfWeek, isBefore, startOfWeek } from 'date-fns';
 import { formatWithOptions } from 'date-fns/fp';
 import { enUS, ko } from 'date-fns/locale';
 
@@ -29,4 +29,17 @@ export const generateCalendarDates = (currentDate: { month: number; year: number
     tempDate = addDays(tempDate, 1);
   }
   return dates;
+};
+
+export const isInRange = (
+  target: DateArg<Date>,
+  {
+    from,
+    to,
+  }: {
+    from: DateArg<Date>;
+    to: DateArg<Date>;
+  },
+) => {
+  return isBefore(from, target) && isBefore(target, to);
 };
