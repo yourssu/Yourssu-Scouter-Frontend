@@ -11,7 +11,7 @@ interface IndicatorProps {
 }
 
 const Row = ({ children }: React.PropsWithChildren) => {
-  return <div className="flex w-full items-center justify-between">{children}</div>;
+  return <div className="flex w-full items-center justify-between py-2">{children}</div>;
 };
 
 const ButtonGroup = ({ children }: React.PropsWithChildren) => {
@@ -50,8 +50,8 @@ const Indicator = ({ onNextWeek, onPrevWeek, date, disabled }: IndicatorProps) =
 
 export const InterviewHeaderLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="border-line-basicMedium flex min-h-[48px] w-[70%] flex-col gap-4 border-b pl-[45px]">
-      {children}
+    <div className="border-line-basicMedium min-h-[48px] w-full border-b">
+      <div className="flex h-full w-[70%] flex-col pl-[45px]">{children}</div>
     </div>
   );
 };

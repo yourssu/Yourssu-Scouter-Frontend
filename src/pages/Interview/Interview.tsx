@@ -52,7 +52,7 @@ export const InterviewPage = () => {
 
   return (
     <CalendarModeContext.Provider value={{ calendarMode, setCalendarMode }}>
-      <PageLayout title="면접 일정 관리">
+      <PageLayout title={calendarMode.type === '면접일정보기' ? '면접 일정 관리' : undefined}>
         <SwitchCase
           caseBy={{
             면접일정보기: () => (
@@ -73,8 +73,8 @@ export const InterviewPage = () => {
           value={calendarMode.type}
         />
 
-        <div className="flex h-full gap-6 overflow-hidden">
-          <div className="flex min-w-0 flex-col" style={{ width: '70%' }}>
+        <div className="flex flex-[1_1_0] overflow-hidden">
+          <div className="flex min-w-0 flex-col pt-12 pr-6" style={{ width: '70%' }}>
             <InterviewCalendar
               month={month}
               partId={partId}
