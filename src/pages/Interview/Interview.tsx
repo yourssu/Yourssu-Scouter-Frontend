@@ -6,6 +6,8 @@ import { usePartFilter } from '@/hooks/usePartFilter';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
 import { InterviewHeader } from '@/pages/Interview/components/InterviewHeader';
 import { InterviewSidebar } from '@/pages/Interview/components/InterviewSidebar';
+import { CalendarModeContext } from '@/pages/Interview/context';
+import { CalendarModeType } from '@/pages/Interview/type';
 import { scheduleOptions } from '@/query/schedule/options';
 
 export const InterviewPage = () => {
@@ -14,6 +16,9 @@ export const InterviewPage = () => {
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
   const [week, setWeek] = useState(2);
 
+  const [calendarMode, setCalendarMode] = useState<CalendarModeType>({
+    type: '면접일정보기',
+  });
   const { partId, partName, onPartChange } = usePartFilter();
   const { data: schedules } = useSuspenseQuery(scheduleOptions(partId));
 
@@ -44,29 +49,31 @@ export const InterviewPage = () => {
   };
 
   return (
-    <PageLayout title="면접 일정 관리">
-      <InterviewHeader
-        month={month}
-        onNextWeek={handleNextWeek}
-        onPartChange={onPartChange}
-        onPrevWeek={handlePrevWeek}
-        partName={partName}
-        week={week}
-      />
-      <div className="flex h-full gap-6 overflow-hidden">
-        <div className="flex min-w-0 flex-col" style={{ width: '70%' }}>
-          <InterviewCalendar
-            month={month}
-            partId={partId}
-            schedules={schedules}
-            week={week}
-            year={year}
-          />
+    <CalendarModeContext.Provider value={{ calendarMode, setCalendarMode }}>
+      <PageLayout title="면접 일정 관리">
+        <InterviewHeader
+          month={month}
+          onNextWeek={handleNextWeek}
+          onPartChange={onPartChange}
+          onPrevWeek={handlePrevWeek}
+          partName={partName}
+          week={week}
+        />
+        <div className="flex h-full gap-6 overflow-hidden">
+          <div className="flex min-w-0 flex-col" style={{ width: '70%' }}>
+            <InterviewCalendar
+              month={month}
+              partId={partId}
+              schedules={schedules}
+              week={week}
+              year={year}
+            />
+          </div>
+          <div className="flex-1">
+            <InterviewSidebar schedules={schedules} />
+          </div>
         </div>
-        <div className="flex-1">
-          <InterviewSidebar schedules={schedules} />
-        </div>
-      </div>
-    </PageLayout>
+      </PageLayout>
+    </CalendarModeContext.Provider>
   );
 };
