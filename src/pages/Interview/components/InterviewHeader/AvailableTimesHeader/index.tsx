@@ -1,8 +1,7 @@
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeader/InterviewHeaderLayout';
-import { InterviewScheduleAddButton } from '@/pages/Interview/components/InterviewHeader/InterviewScheduleHeader/InterviewScheduleAddButton';
 import { PartFilterDropdown } from '@/pages/Interview/components/InterviewHeader/InterviewScheduleHeader/PartFilterDropdown';
 
-interface InterviewScheduleHeaderProps {
+interface AvailableTimesHeaderProps {
   indicator: {
     month: number;
     onNextWeek: () => void;
@@ -15,10 +14,10 @@ interface InterviewScheduleHeaderProps {
   };
 }
 
-export const InterviewScheduleHeader = ({
+export const AvailableTimesHeader = ({
   indicator: { month, week, onNextWeek, onPrevWeek },
   part: { onPartChange, partName },
-}: InterviewScheduleHeaderProps) => {
+}: AvailableTimesHeaderProps) => {
   return (
     <InterviewHeaderLayout>
       <InterviewHeaderLayout.Row>
@@ -29,8 +28,6 @@ export const InterviewScheduleHeader = ({
         />
         <InterviewHeaderLayout.ButtonGroup>
           <PartFilterDropdown onPartChange={onPartChange} partName={partName} />
-          {/* Todo: onPartChange가 usePartFilter에 강결합되어 있어서 usePartFilter 자체를 리팩토링해야함. */}
-          <InterviewScheduleAddButton onClick={() => onPartChange('Product Design')} />
         </InterviewHeaderLayout.ButtonGroup>
       </InterviewHeaderLayout.Row>
     </InterviewHeaderLayout>

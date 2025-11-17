@@ -5,6 +5,7 @@ import { SwitchCase } from 'react-simplikit';
 import { PageLayout } from '@/components/layouts/PageLayout';
 import { usePartFilter } from '@/hooks/usePartFilter';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
+import { AvailableTimesHeader } from '@/pages/Interview/components/InterviewHeader/AvailableTimesHeader';
 import { InterviewScheduleHeader } from '@/pages/Interview/components/InterviewHeader/InterviewScheduleHeader';
 import { InterviewSidebar } from '@/pages/Interview/components/InterviewSidebar';
 import { CalendarModeContext } from '@/pages/Interview/context';
@@ -56,19 +57,16 @@ export const InterviewPage = () => {
           caseBy={{
             면접일정보기: () => (
               <InterviewScheduleHeader
-                indicator={{
-                  month,
-                  week,
-                  onNextWeek: handleNextWeek,
-                  onPrevWeek: handlePrevWeek,
-                }}
-                part={{
-                  partName,
-                  onPartChange,
-                }}
+                indicator={{ month, week, onNextWeek: handleNextWeek, onPrevWeek: handlePrevWeek }}
+                part={{ partName, onPartChange }}
               />
             ),
-            희망일정보기: () => <div />,
+            희망일정보기: () => (
+              <AvailableTimesHeader
+                indicator={{ month, week, onNextWeek: handleNextWeek, onPrevWeek: handlePrevWeek }}
+                part={{ partName, onPartChange }}
+              />
+            ),
             일정수동지정: () => <div />,
             일정자동생성: () => <div />,
           }}
