@@ -2,29 +2,23 @@ import { queryOptions } from '@tanstack/react-query';
 
 import { api } from '@/apis/api.ts';
 import { ApplicantArraySchema, ApplicantState } from '@/query/applicant/schema.ts';
+import { compactSearchParams } from '@/utils/ky';
 
 export type ApplicantQueryParams = {
-  name: string;
-  partId: null | number;
-  semesterId: number;
-  state: ApplicantState;
+  name?: string;
+  partId?: null | number;
+  semesterId?: number;
+  state?: ApplicantState;
 };
 
-export const applicantOptions = (params?: ApplicantQueryParams) => {
+export const applicantOptions = (params: ApplicantQueryParams = {}) => {
   const baseKey = ['applicants'] as const;
 
   return queryOptions({
     queryKey: params ? [...baseKey, params] : baseKey,
     queryFn: async () => {
       const res = await api.get('applicants', {
-        searchParams: params && {
-          state: params.state,
-          semesterId: params.semesterId,
-          name: params.name,
-          ...(params.partId && {
-            partId: params.partId,
-          }),
-        },
+        searchParams: compactSearchParams(params),
       });
       const data = await res.json();
       return ApplicantArraySchema.parse(data);
