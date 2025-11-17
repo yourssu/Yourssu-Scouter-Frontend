@@ -1,10 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { SwitchCase } from 'react-simplikit';
 
 import { PageLayout } from '@/components/layouts/PageLayout';
 import { usePartFilter } from '@/hooks/usePartFilter';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
-import { InterviewHeader } from '@/pages/Interview/components/InterviewHeader';
+import { InterviewScheduleHeader } from '@/pages/Interview/components/InterviewHeader/InterviewScheduleHeader';
 import { InterviewSidebar } from '@/pages/Interview/components/InterviewSidebar';
 import { CalendarModeContext } from '@/pages/Interview/context';
 import { CalendarModeType } from '@/pages/Interview/type';
@@ -51,14 +52,29 @@ export const InterviewPage = () => {
   return (
     <CalendarModeContext.Provider value={{ calendarMode, setCalendarMode }}>
       <PageLayout title="면접 일정 관리">
-        <InterviewHeader
-          month={month}
-          onNextWeek={handleNextWeek}
-          onPartChange={onPartChange}
-          onPrevWeek={handlePrevWeek}
-          partName={partName}
-          week={week}
+        <SwitchCase
+          caseBy={{
+            면접일정보기: () => (
+              <InterviewScheduleHeader
+                indicator={{
+                  month,
+                  week,
+                  onNextWeek: handleNextWeek,
+                  onPrevWeek: handlePrevWeek,
+                }}
+                part={{
+                  partName,
+                  onPartChange,
+                }}
+              />
+            ),
+            희망일정보기: () => <div />,
+            일정수동지정: () => <div />,
+            일정자동생성: () => <div />,
+          }}
+          value={calendarMode.type}
         />
+
         <div className="flex h-full gap-6 overflow-hidden">
           <div className="flex min-w-0 flex-col" style={{ width: '70%' }}>
             <InterviewCalendar
