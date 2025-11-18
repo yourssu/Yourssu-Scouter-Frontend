@@ -9,15 +9,10 @@ interface InterviewScheduleHeaderProps {
     onPrevWeek: () => void;
     week: number;
   };
-  part: {
-    onPartChange: (partName: string) => void;
-    partName: string;
-  };
 }
 
 export const InterviewScheduleHeader = ({
   indicator: { month, week, onNextWeek, onPrevWeek },
-  part: { partName, onPartChange },
 }: InterviewScheduleHeaderProps) => {
   return (
     <InterviewHeaderLayout>
@@ -28,7 +23,7 @@ export const InterviewScheduleHeader = ({
           onPrevWeek={onPrevWeek}
         />
         <InterviewHeaderLayout.ButtonGroup>
-          <PartFilterDropdown onPartChange={onPartChange} partName={partName} />
+          <PartFilterDropdown />
           <InterviewScheduleAddButton />
         </InterviewHeaderLayout.ButtonGroup>
       </InterviewHeaderLayout.Row>

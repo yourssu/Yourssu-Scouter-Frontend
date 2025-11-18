@@ -1,15 +1,15 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { usePartFilter } from '@/hooks/usePartFilter';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { InterviewScheduleCalendar } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScehduleCalendar';
 import { InterviewScheduleHeader } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleHeader';
 import { InterviewScheduleSidebar } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleSidebar';
+import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { scheduleOptions } from '@/query/schedule/options';
 
 export const InterviewScheduleMode = () => {
-  const { partId, partName, onPartChange } = usePartFilter();
+  const { partId } = useInterviewPartSelectionContext();
   const { year, month, week, handlePrevWeek, handleNextWeek } = useWeekIndicator();
 
   const { data: schedules } = useSuspenseQuery(scheduleOptions(partId));
@@ -24,10 +24,6 @@ export const InterviewScheduleMode = () => {
               week,
               onNextWeek: handleNextWeek,
               onPrevWeek: handlePrevWeek,
-            }}
-            part={{
-              partName,
-              onPartChange,
             }}
           />
         ),

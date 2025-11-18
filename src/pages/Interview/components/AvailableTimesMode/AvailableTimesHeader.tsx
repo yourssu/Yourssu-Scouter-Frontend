@@ -12,15 +12,10 @@ interface AvailableTimesHeaderProps {
     week: number;
     year: number;
   };
-  part: {
-    onPartChange: (partName: string) => void;
-    partName: string;
-  };
 }
 
 export const AvailableTimesHeader = ({
   indicator: { year, month, week, onNextWeek, onPrevWeek },
-  part: { onPartChange, partName },
   applicants,
 }: AvailableTimesHeaderProps) => {
   return (
@@ -32,7 +27,7 @@ export const AvailableTimesHeader = ({
           onPrevWeek={onPrevWeek}
         />
         <InterviewHeaderLayout.ButtonGroup>
-          <PartFilterDropdown onPartChange={onPartChange} partName={partName} />
+          <PartFilterDropdown />
         </InterviewHeaderLayout.ButtonGroup>
       </InterviewHeaderLayout.Row>
       <InterviewHeaderLayout.Row>
