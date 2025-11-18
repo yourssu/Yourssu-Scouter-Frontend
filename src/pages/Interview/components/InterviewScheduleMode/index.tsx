@@ -4,7 +4,7 @@ import { usePartFilter } from '@/hooks/usePartFilter';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { InterviewScheduleCalendar } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScehduleCalendar';
 import { InterviewScheduleHeader } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleHeader';
-import { InterviewSidebar } from '@/pages/Interview/components/InterviewSidebar';
+import { InterviewScheduleSidebar } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleSidebar';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { scheduleOptions } from '@/query/schedule/options';
 
@@ -34,7 +34,7 @@ export const InterviewScheduleMode = () => {
         calendar: (
           <InterviewScheduleCalendar month={month} schedules={schedules} week={week} year={year} />
         ),
-        sidebar: <InterviewSidebar schedules={schedules} />,
+        sidebar: <InterviewScheduleSidebar schedules={schedules} />,
       }}
       title="면접 일정 관리"
     />
