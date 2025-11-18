@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { usePartFilter } from '@/hooks/usePartFilter';
-import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
+import { InterviewScheduleCalendar } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScehduleCalendar';
 import { InterviewScheduleHeader } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleHeader';
 import { InterviewSidebar } from '@/pages/Interview/components/InterviewSidebar';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
@@ -32,13 +32,7 @@ export const InterviewScheduleMode = () => {
           />
         ),
         calendar: (
-          <InterviewCalendar
-            month={month}
-            partId={partId}
-            schedules={schedules}
-            week={week}
-            year={year}
-          />
+          <InterviewScheduleCalendar month={month} schedules={schedules} week={week} year={year} />
         ),
         sidebar: <InterviewSidebar schedules={schedules} />,
       }}
