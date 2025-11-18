@@ -97,7 +97,10 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
               />
             </div>
             <div>
-              <PartStateButton onStateChange={onPartChange} selectedValue={partName} />
+              <PartStateButton
+                onStateChange={onPartChange}
+                selectedValue={partName ?? '파트 선택'}
+              />
             </div>
           </StyledTopLeftContainer>
           <StyledLastUpdate>
