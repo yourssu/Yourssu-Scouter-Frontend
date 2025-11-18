@@ -1,8 +1,8 @@
 import { BoxButton } from '@yourssu/design-system-react';
 
-import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebar/InterviewSidebarCard';
+import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebarCard';
 
-export const InterviewDownloadCard = () => {
+export const InterviewSidebarDownloadCard = () => {
   return (
     <InterviewSidebarCard>
       <InterviewSidebarCard.Title>면접 일정 저장</InterviewSidebarCard.Title>
