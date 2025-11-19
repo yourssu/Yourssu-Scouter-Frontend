@@ -61,9 +61,8 @@ export class DateMap<T> {
 
   constructor(options?: DateMapOptions<T>) {
     this.precisionRange = this.makePrecisionRange(options?.precision);
-    this.map = new Map<number, T>(
-      options?.initialEntries?.map(([k, v]) => [this.normalizeKey(k), v]),
-    );
+    this.map = new Map<number, T>();
+    this.setAll(options?.initialEntries ?? []);
     this.assertPrecisionRangeIsValid();
   }
 
