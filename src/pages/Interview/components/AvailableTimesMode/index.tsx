@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { AvailableTimesCalendar } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesCalendar';
 import { AvailableTimesHeader } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesHeader';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
@@ -33,7 +34,14 @@ export const AvailableTimesMode = () => {
             }}
           />
         ),
-        calendar: <div />,
+        calendar: (
+          <AvailableTimesCalendar
+            availableApplicants={availableApplicants}
+            month={month}
+            week={week}
+            year={year}
+          />
+        ),
         sidebar: <div />,
       }}
     />
