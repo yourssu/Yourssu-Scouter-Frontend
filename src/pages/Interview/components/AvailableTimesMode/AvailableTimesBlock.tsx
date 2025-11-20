@@ -6,6 +6,7 @@ import { Applicant } from '@/query/applicant/schema';
 
 interface AvailableTimesBlockProps {
   applicants: Applicant[];
+  isStatic?: boolean;
   totalPartApplicants: number;
 }
 
@@ -25,8 +26,23 @@ const block = tv({
 export const AvailableTimesBlock = ({
   applicants,
   totalPartApplicants,
+  isStatic,
 }: AvailableTimesBlockProps) => {
   const { setHoveredBlockApplicantIds } = useAvailableTimesModeHoverContext();
+
+  const onHoverStart = () => {
+    if (isStatic) {
+      return;
+    }
+    setHoveredBlockApplicantIds(applicants.map(({ applicantId }) => applicantId));
+  };
+
+  const onHoverEnd = () => {
+    if (isStatic) {
+      return;
+    }
+    setHoveredBlockApplicantIds([]);
+  };
 
   const getOpacityLevel = () => {
     const ratio = applicants.length / totalPartApplicants;
@@ -47,11 +63,9 @@ export const AvailableTimesBlock = ({
 
   return (
     <motion.div
-      className={block({ opacity: getOpacityLevel() })}
-      onHoverEnd={() => setHoveredBlockApplicantIds([])}
-      onHoverStart={() =>
-        setHoveredBlockApplicantIds(applicants.map(({ applicantId }) => applicantId))
-      }
+      className={block({ opacity: isStatic ? 'full' : getOpacityLevel() })}
+      onHoverEnd={onHoverEnd}
+      onHoverStart={onHoverStart}
     />
   );
 };

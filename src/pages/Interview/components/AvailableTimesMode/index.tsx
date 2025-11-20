@@ -23,12 +23,15 @@ export const AvailableTimesMode = () => {
   });
 
   const [hoveredBlockApplicantIds, setHoveredBlockApplicantIds] = useState<number[]>([]);
+  const [hoveredChipApplicantId, setHoveredChipApplicantId] = useState<null | number>(null);
 
   return (
     <AvailableTimesModeHoverContext.Provider
       value={{
         hoveredBlockApplicantIds,
+        hoveredChipApplicantId,
         setHoveredBlockApplicantIds,
+        setHoveredChipApplicantId,
       }}
     >
       <InterviewPageLayout
