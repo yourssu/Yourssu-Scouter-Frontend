@@ -1,14 +1,14 @@
 import { IcAlertTriangleFilled } from '@yourssu/design-system-react';
 
-import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebar/InterviewSidebarCard';
+import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebarCard';
 import { Schedule } from '@/query/schedule/schema';
 import { formatTemplates } from '@/utils/date';
 
-interface InterviewConflictCardProps {
+interface InterviewSidebarConflictCardProps {
   schedules: Schedule[];
 }
 
-export const InterviewConflictCard = ({ schedules }: InterviewConflictCardProps) => {
+export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConflictCardProps) => {
   return (
     <InterviewSidebarCard>
       <InterviewSidebarCard.Title
