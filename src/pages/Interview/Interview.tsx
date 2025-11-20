@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { PageLayout } from '@/components/layouts/PageLayout';
@@ -5,6 +6,7 @@ import { usePartFilter } from '@/hooks/usePartFilter';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
 import { InterviewHeader } from '@/pages/Interview/components/InterviewHeader';
 import { InterviewSidebar } from '@/pages/Interview/components/InterviewSidebar';
+import { scheduleOptions } from '@/query/schedule/options';
 
 export const InterviewPage = () => {
   const currentDate = new Date();
@@ -13,6 +15,7 @@ export const InterviewPage = () => {
   const [week, setWeek] = useState(2);
 
   const { partId, partName, onPartChange } = usePartFilter();
+  const { data: schedules } = useSuspenseQuery(scheduleOptions(partId));
 
   const handlePrevWeek = () => {
     if (week > 0) {
@@ -52,10 +55,16 @@ export const InterviewPage = () => {
       />
       <div className="flex h-full gap-6 overflow-hidden">
         <div className="flex min-w-0 flex-col" style={{ width: '70%' }}>
-          <InterviewCalendar month={month} partId={partId} week={week} year={year} />
+          <InterviewCalendar
+            month={month}
+            partId={partId}
+            schedules={schedules}
+            week={week}
+            year={year}
+          />
         </div>
         <div className="flex-1">
-          <InterviewSidebar />
+          <InterviewSidebar schedules={schedules} />
         </div>
       </div>
     </PageLayout>
