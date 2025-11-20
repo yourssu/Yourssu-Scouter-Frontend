@@ -2,12 +2,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
 
+import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { partOptions } from '@/query/part/options';
-
-interface PartFilterDropdownProps {
-  onPartChange: (partName: string) => void;
-  partName: string;
-}
 
 const PART_COLORS: Record<string, string> = {
   HR: '#25262C',
@@ -22,12 +18,12 @@ const PART_COLORS: Record<string, string> = {
   'Product Design': '#6B5CFF',
 };
 
-export const PartFilterDropdown = ({ partName, onPartChange }: PartFilterDropdownProps) => {
+export const PartFilterDropdown = () => {
   const { data: parts } = useSuspenseQuery(partOptions());
+  const { partName, onPartChange } = useInterviewPartSelectionContext();
 
-  const displayName = partName === '파트 선택' ? '전체일정 보기' : partName;
-  const selectedColor =
-    displayName === '전체일정 보기' ? '#ECEFFF' : PART_COLORS[partName] || '#E3E4E8';
+  const displayName = partName ?? '전체일정 보기';
+  const selectedColor = (partName ? PART_COLORS[partName] : '#ECEFFF') ?? '#E3E4E8';
 
   return (
     <Popover.Root>

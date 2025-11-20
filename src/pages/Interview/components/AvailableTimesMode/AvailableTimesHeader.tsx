@@ -1,19 +1,23 @@
+import { AvailableTimesHeaderChipGroup } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesHeaderChipGroup';
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeaderLayout';
-import { InterviewScheduleAddButton } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleAddButton';
 import { PartFilterDropdown } from '@/pages/Interview/components/InterviewScheduleMode/PartFilterDropdown';
+import { Applicant } from '@/query/applicant/schema';
 
-interface InterviewScheduleHeaderProps {
+interface AvailableTimesHeaderProps {
+  applicants: Applicant[];
   indicator: {
     month: number;
     onNextWeek: () => void;
     onPrevWeek: () => void;
     week: number;
+    year: number;
   };
 }
 
-export const InterviewScheduleHeader = ({
-  indicator: { month, week, onNextWeek, onPrevWeek },
-}: InterviewScheduleHeaderProps) => {
+export const AvailableTimesHeader = ({
+  indicator: { year, month, week, onNextWeek, onPrevWeek },
+  applicants,
+}: AvailableTimesHeaderProps) => {
   return (
     <InterviewHeaderLayout>
       <InterviewHeaderLayout.Row>
@@ -24,8 +28,15 @@ export const InterviewScheduleHeader = ({
         />
         <InterviewHeaderLayout.ButtonGroup>
           <PartFilterDropdown />
-          <InterviewScheduleAddButton />
         </InterviewHeaderLayout.ButtonGroup>
+      </InterviewHeaderLayout.Row>
+      <InterviewHeaderLayout.Row>
+        <AvailableTimesHeaderChipGroup
+          applicants={applicants}
+          month={month}
+          week={week}
+          year={year}
+        />
       </InterviewHeaderLayout.Row>
     </InterviewHeaderLayout>
   );

@@ -68,7 +68,7 @@ const MemberTab = ({ state }: MemberTabProps) => {
             <TableSearchBar placeholder="이름 혹은 닉네임으로 검색" />
           </FormProvider>
           <div>
-            <PartStateButton onStateChange={onPartChange} selectedValue={partName} />
+            <PartStateButton onStateChange={onPartChange} selectedValue={partName ?? '파트 선택'} />
           </div>
         </StyledTopLeftContainer>
         <StyledLastUpdate>
