@@ -4,19 +4,18 @@ import { PartFilterDropdown } from '@/pages/Interview/components/InterviewSchedu
 import { Applicant } from '@/query/applicant/schema';
 
 interface AvailableTimesHeaderProps {
-  applicants: Applicant[];
+  availableApplicants: Applicant[];
   indicator: {
     month: number;
     onNextWeek: () => void;
     onPrevWeek: () => void;
     week: number;
-    year: number;
   };
 }
 
 export const AvailableTimesHeader = ({
-  indicator: { year, month, week, onNextWeek, onPrevWeek },
-  applicants,
+  indicator: { month, week, onNextWeek, onPrevWeek },
+  availableApplicants,
 }: AvailableTimesHeaderProps) => {
   return (
     <InterviewHeaderLayout>
@@ -31,12 +30,7 @@ export const AvailableTimesHeader = ({
         </InterviewHeaderLayout.ButtonGroup>
       </InterviewHeaderLayout.Row>
       <InterviewHeaderLayout.Row>
-        <AvailableTimesHeaderChipGroup
-          applicants={applicants}
-          month={month}
-          week={week}
-          year={year}
-        />
+        <AvailableTimesHeaderChipGroup availableApplicants={availableApplicants} />
       </InterviewHeaderLayout.Row>
     </InterviewHeaderLayout>
   );
