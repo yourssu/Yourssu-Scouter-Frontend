@@ -1,7 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import { AvailableTimesCalendar } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesCalendar';
 import { AvailableTimesHeader } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesHeader';
+import { AvailableTimesModeHoverContext } from '@/pages/Interview/components/AvailableTimesMode/context';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { useAvailableApplicantsInWeek } from '@/pages/Interview/hooks/useAvailableApplicantsInWeek';
@@ -20,30 +22,39 @@ export const AvailableTimesMode = () => {
     applicants,
   });
 
+  const [hoveredBlockApplicantIds, setHoveredBlockApplicantIds] = useState<number[]>([]);
+
   return (
-    <InterviewPageLayout
-      slots={{
-        header: (
-          <AvailableTimesHeader
-            availableApplicants={availableApplicants}
-            indicator={{
-              month,
-              week,
-              onNextWeek: handleNextWeek,
-              onPrevWeek: handlePrevWeek,
-            }}
-          />
-        ),
-        calendar: (
-          <AvailableTimesCalendar
-            availableApplicants={availableApplicants}
-            month={month}
-            week={week}
-            year={year}
-          />
-        ),
-        sidebar: <div />,
+    <AvailableTimesModeHoverContext.Provider
+      value={{
+        hoveredBlockApplicantIds,
+        setHoveredBlockApplicantIds,
       }}
-    />
+    >
+      <InterviewPageLayout
+        slots={{
+          header: (
+            <AvailableTimesHeader
+              availableApplicants={availableApplicants}
+              indicator={{
+                month,
+                week,
+                onNextWeek: handleNextWeek,
+                onPrevWeek: handlePrevWeek,
+              }}
+            />
+          ),
+          calendar: (
+            <AvailableTimesCalendar
+              availableApplicants={availableApplicants}
+              month={month}
+              week={week}
+              year={year}
+            />
+          ),
+          sidebar: <div />,
+        }}
+      />
+    </AvailableTimesModeHoverContext.Provider>
   );
 };

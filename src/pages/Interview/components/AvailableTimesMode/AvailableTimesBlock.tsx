@@ -1,5 +1,7 @@
+import { motion } from 'motion/react';
 import { tv } from 'tailwind-variants';
 
+import { useAvailableTimesModeHoverContext } from '@/pages/Interview/components/AvailableTimesMode/context';
 import { Applicant } from '@/query/applicant/schema';
 
 interface AvailableTimesBlockProps {
@@ -24,6 +26,8 @@ export const AvailableTimesBlock = ({
   applicants,
   totalPartApplicants,
 }: AvailableTimesBlockProps) => {
+  const { setHoveredBlockApplicantIds } = useAvailableTimesModeHoverContext();
+
   const getOpacityLevel = () => {
     const ratio = applicants.length / totalPartApplicants;
     if (ratio <= 0.2) {
@@ -41,5 +45,13 @@ export const AvailableTimesBlock = ({
     return 'full' as const;
   };
 
-  return <div className={block({ opacity: getOpacityLevel() })} />;
+  return (
+    <motion.div
+      className={block({ opacity: getOpacityLevel() })}
+      onHoverEnd={() => setHoveredBlockApplicantIds([])}
+      onHoverStart={() =>
+        setHoveredBlockApplicantIds(applicants.map(({ applicantId }) => applicantId))
+      }
+    />
+  );
 };
