@@ -1,12 +1,25 @@
-import { IcArrowsChevronDownLine, IcCheckLine, IcClockFilled } from '@yourssu/design-system-react';
+import {
+  IcArrowsChevronDownLine,
+  IcArrowsChevronUpLine,
+  IcCheckLine,
+  IcClockFilled,
+} from '@yourssu/design-system-react';
 import clsx from 'clsx';
+import { useState } from 'react';
 import { tv } from 'tailwind-variants';
 
 import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebarCard';
 
-interface SelectItemProps {
+interface SelectHeaderProps {
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+  value: SelectValueType;
+}
+
+interface SelectItemProps<TValue extends SelectValueType> {
+  onSelect: (v: TValue) => void;
   selected?: boolean;
-  value: string;
+  value: TValue;
 }
 
 const item = tv({
@@ -28,11 +41,37 @@ const item = tv({
   },
 });
 
-const SelectItem = ({ value, selected }: SelectItemProps) => {
+const SelectHeader = ({ onOpenChange, open, value }: SelectHeaderProps) => {
+  const { content, title, icon, value: valueStyle, valueContainer } = item();
+
+  const Icon = open ? IcArrowsChevronUpLine : IcArrowsChevronDownLine;
+
+  return (
+    <InterviewSidebarCard.Title
+      className="cursor-pointer"
+      onClick={() => onOpenChange(!open)}
+      rightIcon={<Icon className="size-6" />}
+    >
+      <div className={clsx(content())}>
+        <div className={clsx(title())}>면접 시간</div>
+        <div className={clsx(valueContainer())}>
+          <IcClockFilled className={clsx(icon({ selected: true }))} />
+          <div className={clsx(valueStyle({ selected: true }))}>{value}</div>
+        </div>
+      </div>
+    </InterviewSidebarCard.Title>
+  );
+};
+
+const SelectItem = <TValue extends SelectValueType>({
+  value,
+  selected,
+  onSelect,
+}: SelectItemProps<TValue>) => {
   const { container, content, title, icon, value: valueStyle, valueContainer } = item();
 
   return (
-    <button className={container()}>
+    <button className={container()} onClick={() => onSelect(value)}>
       <div className={clsx(content())}>
         <div className={clsx(title(), 'invisible')}>면접 시간</div>
         <div className={clsx(valueContainer())}>
@@ -45,25 +84,29 @@ const SelectItem = ({ value, selected }: SelectItemProps) => {
 };
 
 export const AvailableTimesSidebarDurationCard = () => {
-  const { content, title, icon, value: valueStyle, valueContainer } = item();
+  const [open, setOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState<SelectValueType>('1 hour');
 
   return (
     <InterviewSidebarCard>
-      <InterviewSidebarCard.Title rightIcon={<IcArrowsChevronDownLine className="size-6" />}>
-        <div className={clsx(content())}>
-          <div className={clsx(title())}>면접 시간</div>
-          <div className={clsx(valueContainer())}>
-            <IcClockFilled className={clsx(icon({ selected: true }))} />
-            <div className={clsx(valueStyle({ selected: true }))}>1 hour</div>
-          </div>
-        </div>
-      </InterviewSidebarCard.Title>
-
-      {/* // Todo: Divider, VerticalDivider 컴포넌트로 공통화? */}
-      <div className="bg-line-basicMedium h-[1px] w-full" />
-
-      <SelectItem value="30 minutes" />
-      <SelectItem selected value="1 hour" />
+      <SelectHeader onOpenChange={setOpen} open={open} value={selectedValue} />
+      {open && (
+        <>
+          {/* // Todo: Divider, VerticalDivider 컴포넌트로 공통화? */}
+          <div className="bg-line-basicMedium h-[1px] w-full" />
+          {selectValues.map((value) => (
+            <SelectItem
+              key={value}
+              onSelect={setSelectedValue}
+              selected={selectedValue === value}
+              value={value}
+            />
+          ))}
+        </>
+      )}
     </InterviewSidebarCard>
   );
 };
+
+const selectValues = ['30 minutes', '1 hour'] as const;
+type SelectValueType = (typeof selectValues)[number];
