@@ -4,7 +4,9 @@ import { InterviewSidebarLayout } from '@/pages/Interview/components/InterviewSi
 export const AvailableTimesSidebar = () => {
   return (
     <InterviewSidebarLayout>
-      <AvailableTimesSidebarDurationCard />
+      <InterviewSidebarLayout.CardList>
+        <AvailableTimesSidebarDurationCard />
+      </InterviewSidebarLayout.CardList>
     </InterviewSidebarLayout>
   );
 };
