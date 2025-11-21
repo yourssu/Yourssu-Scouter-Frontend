@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { AvailableTimesCalendar } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesCalendar';
 import { AvailableTimesHeader } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesHeader';
+import { AvailableTimesSidebar } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesSidebar';
 import { AvailableTimesModeHoverContext } from '@/pages/Interview/components/AvailableTimesMode/context';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
@@ -55,7 +56,7 @@ export const AvailableTimesMode = () => {
               year={year}
             />
           ),
-          sidebar: <div />,
+          sidebar: <AvailableTimesSidebar />,
         }}
       />
     </AvailableTimesModeHoverContext.Provider>
