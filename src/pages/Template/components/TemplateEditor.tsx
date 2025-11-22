@@ -27,13 +27,13 @@ export const TemplateEditor = ({
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
       const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(chipType, variable.name);
+      editorRef.current.insertVariable(variable.id, chipType, variable.name);
     }
   };
 
   const handleVariableAdd = (type: VariableType, name: string, differentForEachPerson: boolean) => {
     const newVariable: Variable = {
-      id: Date.now().toString(),
+      id: `var-${Date.now().toString()}`,
       type,
       name,
       differentForEachPerson,
