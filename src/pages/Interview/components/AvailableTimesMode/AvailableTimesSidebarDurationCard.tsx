@@ -9,14 +9,16 @@ import { useState } from 'react';
 import { tv } from 'tailwind-variants';
 
 import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebarCard';
+import { useInterviewAutoScheduleContext } from '@/pages/Interview/context';
+import { interviewDurationOptions, InterviewDurationType } from '@/pages/Interview/type';
 
 interface SelectHeaderProps {
   onOpenChange: (open: boolean) => void;
   open: boolean;
-  value: SelectValueType;
+  value: InterviewDurationType;
 }
 
-interface SelectItemProps<TValue extends SelectValueType> {
+interface SelectItemProps<TValue extends InterviewDurationType> {
   onSelect: (v: TValue) => void;
   selected?: boolean;
   value: TValue;
@@ -63,7 +65,7 @@ const SelectHeader = ({ onOpenChange, open, value }: SelectHeaderProps) => {
   );
 };
 
-const SelectItem = <TValue extends SelectValueType>({
+const SelectItem = <TValue extends InterviewDurationType>({
   value,
   selected,
   onSelect,
@@ -85,28 +87,20 @@ const SelectItem = <TValue extends SelectValueType>({
 
 export const AvailableTimesSidebarDurationCard = () => {
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<SelectValueType>('1 hour');
+  const { duration, setDuration } = useInterviewAutoScheduleContext();
 
   return (
     <InterviewSidebarCard>
-      <SelectHeader onOpenChange={setOpen} open={open} value={selectedValue} />
+      <SelectHeader onOpenChange={setOpen} open={open} value={duration} />
       {open && (
         <>
           {/* // Todo: Divider, VerticalDivider 컴포넌트로 공통화? */}
           <div className="bg-line-basicMedium h-[1px] w-full" />
-          {selectValues.map((value) => (
-            <SelectItem
-              key={value}
-              onSelect={setSelectedValue}
-              selected={selectedValue === value}
-              value={value}
-            />
+          {interviewDurationOptions.map((v) => (
+            <SelectItem key={v} onSelect={setDuration} selected={duration === v} value={v} />
           ))}
         </>
       )}
     </InterviewSidebarCard>
   );
 };
-
-const selectValues = ['30 minutes', '1 hour'] as const;
-type SelectValueType = (typeof selectValues)[number];
