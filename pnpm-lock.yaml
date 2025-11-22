@@ -77,6 +77,9 @@ importers:
       motion:
         specifier: ^12.23.18
         version: 12.23.18(@emotion/is-prop-valid@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      overlay-kit:
+        specifier: ^1.8.6
+        version: 1.8.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       radix-ui:
         specifier: ^1.1.3
         version: 1.2.0(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2873,6 +2876,12 @@ packages:
 
   orderedmap@2.1.1:
     resolution: {integrity: sha512-TvAWxi0nDe1j/rtMcWcIj94+Ffe6n7zhow33h40SKxmsmozs6dz/e+EajymfoFcHd7sxNn8yHM8839uixMOV6g==}
+
+  overlay-kit@1.8.6:
+    resolution: {integrity: sha512-0JeZ+QcoMCEgW4OndzCJger/eHZHGan7M9iQ6sHxrMPVwLyqSN8665CdciNrNjzorV3xGtqVeZUs2o4rt4ddYw==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19
+      react-dom: ^16.8 || ^17 || ^18 || ^19
 
   own-keys@1.0.1:
     resolution: {integrity: sha512-qFOyK5PjiWZd+QQIh+1jhdb9LpxTF0qs7Pm8o5QHYZ0M3vKqSqzsZaEB6oWlxZ+q2sJBMI/Ktgd2N5ZwQoRHfg==}
@@ -6416,6 +6425,11 @@ snapshots:
       word-wrap: 1.2.5
 
   orderedmap@2.1.1: {}
+
+  overlay-kit@1.8.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   own-keys@1.0.1:
     dependencies:
