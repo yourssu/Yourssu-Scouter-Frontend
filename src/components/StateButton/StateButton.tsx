@@ -2,7 +2,7 @@ import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
 import { Popover } from 'radix-ui';
 import { ReactNode } from 'react';
 
-import { GenericDialog } from '../dialog/GenericDialog';
+import { GenericDialog } from '../dialog/legacy/GenericDialog';
 import { StyledBoxButton } from './StateButton.style';
 
 export type DialogOption = {

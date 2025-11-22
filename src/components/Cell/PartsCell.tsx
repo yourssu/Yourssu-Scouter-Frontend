@@ -4,7 +4,7 @@ import { Popover } from 'radix-ui';
 import { PropsWithChildren } from 'react';
 
 import { StyledContainer, StyledEditIcon } from '@/components/Cell/Cell.style.ts';
-import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
+import { GenericDialog } from '@/components/dialog/legacy/GenericDialog';
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 import { useElementWidth } from '@/hooks/useElementWidth.ts';
 import { partOptions } from '@/query/part/options.ts';
