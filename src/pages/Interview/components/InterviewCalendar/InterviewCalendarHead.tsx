@@ -47,7 +47,7 @@ export const InterviewCalendarHead = ({ month, week, year }: InterviewCalendarHe
   }).map((v) => formatTemplates['Mon 12'](v).split(' '));
 
   return (
-    <thead className="border-line-basicMedium shadow-fabPrimary sticky top-0 bg-white">
+    <thead className="border-line-basicMedium shadow-fabPrimary sticky top-0 z-50 bg-white">
       <tr>
         <th className={cellContainer()}>
           <div className={cellBorder({ first: true })}>

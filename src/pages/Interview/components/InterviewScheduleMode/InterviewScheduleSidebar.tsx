@@ -13,10 +13,12 @@ export const InterviewScheduleSidebar = ({ schedules }: InterviewScheduleSidebar
 
   return (
     <InterviewSidebarLayout>
-      {confilctGroups.map((group, i) => (
-        <InterviewSidebarConflictCard key={i} schedules={group} />
-      ))}
-      <InterviewSidebarDownloadCard />
+      <InterviewSidebarLayout.CardList>
+        {confilctGroups.map((group, i) => (
+          <InterviewSidebarConflictCard key={i} schedules={group} />
+        ))}
+        <InterviewSidebarDownloadCard />
+      </InterviewSidebarLayout.CardList>
     </InterviewSidebarLayout>
   );
 };
