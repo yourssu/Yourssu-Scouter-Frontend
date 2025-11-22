@@ -25,7 +25,7 @@ import {
   StyledTitleContainer,
   StyledTopContainer,
 } from '@/components/ApplicationDialog/ApplicationDialog.style.ts';
-import { GenericDialog } from '@/components/dialog/GenericDialog.tsx';
+import { GenericDialog } from '@/components/dialog/legacy/GenericDialog';
 import { postApplicantsFromForms } from '@/query/applicant/mutations/postApplicantsFromForms.ts';
 import { partOptions } from '@/query/part/options.ts';
 import { Part } from '@/query/part/schema.ts';

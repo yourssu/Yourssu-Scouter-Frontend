@@ -1,7 +1,7 @@
 import { Popover } from 'radix-ui';
 import { ReactNode } from 'react';
 
-import { DialogOption } from '../StateButton/StateButton';
+import { DialogOption } from '../../StateButton/StateButton';
 import { Dialog } from './Dialog';
 
 interface GenericDialogProps {
