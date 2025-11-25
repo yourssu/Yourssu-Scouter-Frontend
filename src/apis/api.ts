@@ -7,15 +7,18 @@ import { tokenService } from './token.service';
 
 const DEFAULT_API_RETRY_LIMIT = 2;
 
-const handleTokenRefresh: AfterResponseHook = async (request, _options, response) => {
-  if (response.status !== 401) {
+// 백엔드에서 token 만료를 400으로 보냄(유어슈 멤버/지원자 관련)
+type AuthErrorCodes = 'Auth-004' | 'OAuth-Token-Refresh-Fail';
+
+const checkTokenFreshness: AfterResponseHook = async (request, _options, response) => {
+  if (response.status !== 401 && response.status !== 400) {
     return response;
   }
 
   const errorResponse = await response.json().catch(() => null);
-  const errorCode = (errorResponse as { errorCode?: string })?.errorCode;
+  const errorCode = (errorResponse as { errorCode?: AuthErrorCodes })?.errorCode;
 
-  if (errorCode === 'Auth-004') {
+  if (errorCode === 'Auth-004' || errorCode === 'OAuth-Token-Refresh-Fail') {
     authService.logout();
     authService.initiateGoogleLogin();
     return response;
@@ -48,7 +51,7 @@ const setAuthHeader: BeforeRequestHook = (request) => {
   }
 };
 
-/* 
+/*
   API 토큰이 필요없는 상황에서 사용해요.
 */
 export const nativeApi = ky.create({
@@ -61,6 +64,6 @@ export const nativeApi = ky.create({
 export const api = nativeApi.extend({
   hooks: {
     beforeRequest: [setAuthHeader],
-    afterResponse: [handleTokenRefresh],
+    afterResponse: [checkTokenFreshness],
   },
 });
