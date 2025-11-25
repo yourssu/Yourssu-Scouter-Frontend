@@ -16,7 +16,7 @@ const Title = ({
     <div className={cn('flex w-full items-center justify-between', className)} {...props}>
       <div className="flex items-center gap-[7px]">
         {leftIcon && <div className="size-5">{leftIcon}</div>}
-        <p className="typo-b1_sb_16 text-text-basicSecondary">{children}</p>
+        <div className="typo-b1_sb_16 text-text-basicSecondary">{children}</div>
       </div>
       {rightIcon && <div className="size-6">{rightIcon}</div>}
     </div>

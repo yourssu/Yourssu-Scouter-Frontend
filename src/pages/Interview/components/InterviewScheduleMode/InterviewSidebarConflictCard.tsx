@@ -1,4 +1,5 @@
 import { IcAlertTriangleFilled } from '@yourssu/design-system-react';
+import { Fragment as ReactFragment } from 'react/jsx-runtime';
 
 import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebarCard';
 import { Schedule } from '@/query/schedule/schema';
@@ -19,7 +20,7 @@ export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConf
       <InterviewSidebarCard.Content>
         <div className="grid grid-cols-[auto_1fr] items-center gap-x-2 gap-y-3">
           {schedules.map((schedule) => (
-            <>
+            <ReactFragment key={schedule.id}>
               <div className="typo-b3_sb_14">{schedule.part}</div>
               <div className="flex w-full items-center gap-2">
                 <div className="typo-b2_rg_15 bg-bg-basicLight rounded-full px-3 py-2">
@@ -29,7 +30,7 @@ export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConf
                   {formatTemplates['01/01(월) 00:00'](schedule.startTime)}
                 </div>
               </div>
-            </>
+            </ReactFragment>
           ))}
         </div>
       </InterviewSidebarCard.Content>
