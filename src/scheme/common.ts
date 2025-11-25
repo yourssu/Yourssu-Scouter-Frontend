@@ -3,8 +3,8 @@ import { z } from 'zod';
 export const DateSchema = z
   .string()
   .regex(
-    /^(19|20)\d{2}\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01])$/,
-    '날짜는 yyyy.mm.dd 형식으로 입력해주세요',
+    /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/,
+    '날짜는 yyyy-mm-dd 형식으로 입력해주세요',
   );
 
 export const PhoneNumberSchema = z.string();
