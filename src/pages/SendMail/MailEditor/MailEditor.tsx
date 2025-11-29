@@ -45,7 +45,7 @@ export const MailEditor = () => {
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
       const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(chipType, variable.name);
+      editorRef.current.insertVariable(variable.id, chipType, variable.name);
     }
   };
 
@@ -60,7 +60,11 @@ export const MailEditor = () => {
 
     setVariables((prev) => [...prev, newVariable]);
 
-    editorRef.current?.insertVariable(getChipType(newVariable.type), newVariable.name);
+    editorRef.current?.insertVariable(
+      newVariable.id,
+      getChipType(newVariable.type),
+      newVariable.name,
+    );
   };
 
   const handleVariableDelete = (variable: Variable) => {

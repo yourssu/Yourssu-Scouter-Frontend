@@ -23,7 +23,7 @@ interface MailEditorContentProps {
 
 export interface MailEditorContentRef {
   deleteVariable: (label: string) => void;
-  insertVariable: (type: string, label: string) => void;
+  insertVariable: (key: string, type: string, label: string) => void;
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
@@ -67,17 +67,32 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
           onContentChange(editor.getHTML());
         }
       },
+      editorProps: {
+        transformPastedHTML(html) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+
+          doc.querySelectorAll('span').forEach((span) => {
+            if (span.hasAttribute('data-variable-chip')) {
+              return;
+            }
+            span.replaceWith(...span.childNodes);
+          });
+          return doc.body.innerHTML;
+        },
+      },
     });
 
     useImperativeHandle(
       ref,
       () => ({
-        insertVariable: (type: string, label: string) => {
+        insertVariable: (key: string, type: string, label: string) => {
           if (editor) {
             editor
               .chain()
               .focus()
-              .insertContent({ type: 'variableChip', attrs: { type, label } })
+              .insertContent({ type: 'variableChip', attrs: { key, type, label } })
+              .insertContent(' ') // 변수칩 뒤에 공백 추가
               .run();
           }
         },
