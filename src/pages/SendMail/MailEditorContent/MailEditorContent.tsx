@@ -73,9 +73,11 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
           const doc = parser.parseFromString(html, 'text/html');
 
           doc.querySelectorAll('span').forEach((span) => {
+            if (span.hasAttribute('data-variable-chip')) {
+              return;
+            }
             span.replaceWith(...span.childNodes);
           });
-
           return doc.body.innerHTML;
         },
       },
