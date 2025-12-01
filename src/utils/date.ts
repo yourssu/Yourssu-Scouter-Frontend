@@ -12,7 +12,7 @@ export const formatTemplates = {
   '오전 12:00': formatKo('aaaa h:mm'),
   'Mon 12': formatEn('EEE dd'),
   '23:59': formatKo('HH:mm'),
-  '2025.01.01': formatEn('yyyy.MM.dd'),
+  '2025.01.01': formatKo('yyyy.MM.dd'),
 };
 
 export type DateFormatTemplateNames = keyof typeof formatTemplates;
