@@ -2,16 +2,17 @@ import { queryOptions } from '@tanstack/react-query';
 
 import { api } from '@/apis/api.ts';
 import { BaseTemplateSchema, TemplateListResponseSchema } from '@/query/template/schema';
+import { VariableNames } from '@/query/template/schema.ts';
 import { defaultVariables, VariableType } from '@/types/editor';
 import { formatTemplates } from '@/utils/date';
 import { transformBodyHtmlToContent } from '@/utils/transformTemplate.ts';
 
-const TypeMap: Record<string, VariableType> = {
+const variableTypeMap = {
   PERSON: '사람',
   DATE: '날짜',
   LINK: '링크',
   TEXT: '텍스트',
-};
+} as const satisfies Record<VariableNames, VariableType>;
 
 export const templateKeys = {
   all: ['templates'] as const,
@@ -53,7 +54,7 @@ export const templateOptions = {
           return {
             id: variable.key,
             name: variable.displayName,
-            type: TypeMap[variable.type],
+            type: variableTypeMap[variable.type],
             isFixed: false,
             differentForEachPerson: variable.perRecipient,
           };
