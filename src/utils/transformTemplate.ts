@@ -10,18 +10,20 @@ const typeMap: {
   텍스트: 'TEXT',
 };
 
+// <span ... data-key="key"></span> -> {{key}} 로 변환
 export const transformContentToBodyHtml = (content: string) => {
-  const regex = /<span[^>]*data-key="([^"]*)"[^>]*><\/span>/g;
+  const spanWithDataKeyAttribute = /<span[^>]*data-key="([^"]*)"[^>]*><\/span>/g; // data-key 속성을 가진 <span> 태그를 찾는 정규식
 
-  return content.replace(regex, (_match, key) => {
+  return content.replace(spanWithDataKeyAttribute, (_match, key) => {
     return `{{${key}}}`;
   });
 };
 
+// {{key}} -> < ... data-key="key" data-type="..." data-label="label" data-variable-chip></span> 로 변환
 export const transformBodyHtmlToContent = (bodyHtml: string, variables: Variable[]) => {
-  const regex = /{{(.*?)}}/g;
+  const curlyBracePattern = /{{(.*?)}}/g; // {{...}} 패턴을 찾는 정규식
 
-  return bodyHtml.replace(regex, (match, key) => {
+  return bodyHtml.replace(curlyBracePattern, (match, key) => {
     const variable = variables.find((v) => v.id === key);
 
     if (!variable) {
