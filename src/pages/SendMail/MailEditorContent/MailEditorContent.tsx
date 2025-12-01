@@ -29,7 +29,7 @@ export interface MailEditorContentRef {
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
   ({ recipientName, initialContent, onContentChange }, ref) => {
-    const placeholderContent = recipientName
+    const placeholderText = recipientName
       ? `${recipientName}님에게 보낼 내용`
       : '내용을 입력하세요';
 
@@ -61,7 +61,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
           },
         }),
         Placeholder.configure({
-          placeholder: placeholderContent,
+          placeholder: placeholderText,
           emptyEditorClass: 'is-editor-empty',
         }),
       ],
@@ -102,7 +102,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
               .chain()
               .focus()
               .insertContent({ type: 'variableChip', attrs: { key, type, label } })
-              .insertContent(' ') // 변수칩 뒤에 공백 추가
+              .insertContent(' ') // 변수칩 뒤에 공백 추가(가독성 향상 및 커서 줄바꿈 현상 방지)
               .run();
           }
         },

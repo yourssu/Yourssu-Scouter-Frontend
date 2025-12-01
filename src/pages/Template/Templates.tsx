@@ -127,7 +127,6 @@ export const Templates = () => {
   // 실제 삭제 로직
   const handleConfirmDelete = () => {
     if (dialogState.selectedTemplateId) {
-      // console.log('삭제 기능', dialogState.selectedTemplateId);
       deleteTemplateMutation.mutate({ templateId: dialogState.selectedTemplateId });
       handleCloseDialog();
     }
@@ -135,13 +134,11 @@ export const Templates = () => {
 
   // 편집 저장 로직
   const handleSaveEdit = (updatedTemplate: Omit<Template, 'date'>) => {
-    // console.log('편집 저장', updatedTemplate);
     putTemplateMutation.mutate(updatedTemplate);
   };
 
   // 새 템플릿 저장 로직
   const handleSaveAdd = (newTemplate: Omit<Template, 'date' | 'id'>) => {
-    // console.log('템플릿 추가', newTemplate);
     postTemplateMutation.mutate(newTemplate);
   };
 
