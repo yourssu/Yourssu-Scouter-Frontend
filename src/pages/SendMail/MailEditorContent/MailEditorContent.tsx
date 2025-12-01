@@ -22,7 +22,7 @@ interface MailEditorContentProps {
 }
 
 export interface MailEditorContentRef {
-  deleteVariable: (label: string) => void;
+  deleteVariable: (key: string) => void;
   insertVariable: (key: string, type: string, label: string) => void;
 }
 
@@ -96,14 +96,14 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
               .run();
           }
         },
-        deleteVariable: (label: string) => {
+        deleteVariable: (key: string) => {
           if (editor) {
             const transaction = editor.state.tr;
             const nodesToDelete: { pos: number; size: number }[] = []; // 텍스트 내 삭제할 노드 위치와 크기 저장
 
             // 텍스트 전체 탐색
             editor.state.doc.descendants((node, pos) => {
-              if (node.type.name === 'variableChip' && node.attrs.label === label) {
+              if (node.type.name === 'variableChip' && node.attrs.key === key) {
                 nodesToDelete.push({ pos, size: node.nodeSize });
               }
             });

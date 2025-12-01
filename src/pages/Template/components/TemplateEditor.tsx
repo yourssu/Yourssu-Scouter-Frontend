@@ -47,7 +47,7 @@ export const TemplateEditor = ({
     if (!variable.isFixed) {
       if (editorRef.current) {
         onVariablesChange(templateVariables.filter((v) => v.id !== variable.id));
-        editorRef.current.deleteVariable(variable.name);
+        editorRef.current.deleteVariable(variable.id);
       }
     }
   };
