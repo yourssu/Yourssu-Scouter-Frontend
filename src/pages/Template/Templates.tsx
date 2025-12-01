@@ -11,6 +11,7 @@ import { postTemplateFromForms } from '@/query/template/mutations/postTemplatesF
 import { putTemplate } from '@/query/template/mutations/putTemplate';
 import { templateKeys, templateOptions } from '@/query/template/options';
 import { Template } from '@/types/template';
+import { formatTemplates } from '@/utils/date';
 
 import { AddTemplateDialog } from './components/AddTemplateDialog/AddTemplateDialog';
 import { DeleteTemplateDialog } from './components/DeleteTemplateDialog/DeleteTemplateDialog';
@@ -174,7 +175,7 @@ export const Templates = () => {
               <StyledTemplateList>
                 {templates.map((template) => (
                   <TemplateList
-                    date={template.date}
+                    date={formatTemplates['2025.01.01'](template.date)}
                     key={template.id}
                     onClick={() => handleEditTemplate(template.id)}
                     onDelete={() => handleDeleteTemplate(template.id)}
