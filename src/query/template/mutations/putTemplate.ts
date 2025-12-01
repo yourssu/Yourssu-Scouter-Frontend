@@ -16,5 +16,11 @@ export const putTemplate = (params: PutTemplateParams) => {
     variables: transformVariables(params.variables),
   };
 
-  return api.put(`api/mails/templates/${params.id}`, { json: formattedParams }).json();
+  return api
+    .put<{
+      id: number;
+      title: string;
+      updatedAt: string;
+    }>(`api/mails/templates/${params.id}`, { json: formattedParams })
+    .json();
 };

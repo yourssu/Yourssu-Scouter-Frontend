@@ -15,5 +15,11 @@ export const postTemplateFromForms = (params: PostTemplateParams) => {
     variables: transformVariables(params.variables),
   };
 
-  return api.post('api/mails/templates', { json: formattedParams }).json();
+  return api
+    .post<{
+      id: number;
+      title: string;
+      updatedAt: string;
+    }>('api/mails/templates', { json: formattedParams })
+    .json();
 };
