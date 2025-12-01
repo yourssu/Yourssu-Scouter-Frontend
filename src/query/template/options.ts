@@ -4,7 +4,6 @@ import { api } from '@/apis/api.ts';
 import { BaseTemplateSchema, TemplateListResponseSchema } from '@/query/template/schema';
 import { VariableNames } from '@/query/template/schema.ts';
 import { defaultVariables, VariableType } from '@/types/editor';
-import { formatTemplates } from '@/utils/date';
 import { transformBodyHtmlToContent } from '@/utils/transformTemplate.ts';
 
 const variableTypeMap = {
@@ -30,7 +29,7 @@ export const templateOptions = {
           // 백엔드 응답을 프론트엔드 형식에 맞게 변환
           id: template.id,
           title: template.title,
-          date: formatTemplates['2025.01.01'](template.updatedAt),
+          date: template.updatedAt,
         }));
         return templateData;
       },
@@ -66,7 +65,7 @@ export const templateOptions = {
           title: response.title,
           content: transformBodyHtmlToContent(response.bodyHtml, templateVariables),
           variables: templateVariables,
-          date: formatTemplates['2025.01.01'](response.updatedAt),
+          date: response.updatedAt,
         };
         return templateDetail;
       },
