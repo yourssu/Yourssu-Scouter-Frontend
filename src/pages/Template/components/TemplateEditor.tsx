@@ -33,7 +33,7 @@ export const TemplateEditor = ({
 
   const handleVariableAdd = (type: VariableType, name: string, differentForEachPerson: boolean) => {
     const newVariable: Variable = {
-      id: `var-${Date.now().toString()}`,
+      id: `var-${crypto.randomUUID()}`,
       type,
       name,
       differentForEachPerson,
