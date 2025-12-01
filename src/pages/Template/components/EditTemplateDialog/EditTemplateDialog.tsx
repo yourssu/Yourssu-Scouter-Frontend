@@ -41,13 +41,11 @@ export const EditTemplateDialog = ({
 
   // templateDetail이 변경될 때 폼 데이터 업데이트
   useEffect(() => {
-    if (templateDetail) {
-      setFormData({
-        title: templateDetail.title,
-        content: templateDetail.content,
-        variables: templateDetail.variables,
-      });
-    }
+    setFormData({
+      title: templateDetail.title,
+      content: templateDetail.content,
+      variables: templateDetail.variables,
+    });
   }, [templateDetail]);
 
   const handleSave = () => {
