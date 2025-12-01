@@ -3,6 +3,7 @@ import FontFamily from '@tiptap/extension-font-family';
 import FontSize from '@tiptap/extension-font-size';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
+import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
@@ -28,9 +29,9 @@ export interface MailEditorContentRef {
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
   ({ recipientName, initialContent, onContentChange }, ref) => {
-    const defaultContent = recipientName
-      ? `<p>${recipientName}님에게 보낼 내용</p>`
-      : '<p>내용을 입력하세요</p>';
+    const placeholderContent = recipientName
+      ? `${recipientName}님에게 보낼 내용`
+      : '내용을 입력하세요';
 
     const editor = useEditor({
       extensions: [
@@ -59,9 +60,18 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
             target: '_blank',
           },
         }),
+        Placeholder.configure({
+          placeholder: placeholderContent,
+          emptyEditorClass: 'is-editor-empty',
+        }),
       ],
-      content: initialContent || defaultContent,
+      content: initialContent || '',
       editable: true,
+      onCreate: ({ editor }) => {
+        if (onContentChange) {
+          onContentChange(editor.getHTML());
+        }
+      },
       onUpdate: ({ editor }) => {
         if (onContentChange) {
           onContentChange(editor.getHTML());
