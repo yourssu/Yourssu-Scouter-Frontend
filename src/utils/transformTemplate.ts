@@ -1,14 +1,16 @@
 import { getChipType } from '@/components/VariableChip/utils';
+import { VariableNames } from '@/query/template/schema.ts';
 import { Variable } from '@/types/editor.ts';
+import { VariableType } from '@/types/editor.ts';
 
-const typeMap: {
-  [key: string]: 'DATE' | 'LINK' | 'PERSON' | 'TEXT';
-} = {
+type MappableVariableType = Exclude<VariableType, '사람/지원자' | '텍스트/파트명'>;
+
+const variableTypeMap = {
   날짜: 'DATE',
   링크: 'LINK',
   사람: 'PERSON',
   텍스트: 'TEXT',
-};
+} as const satisfies Record<MappableVariableType, VariableNames>;
 
 // <span ... data-key="key"></span> -> {{key}} 로 변환
 export const transformContentToBodyHtml = (content: string) => {
@@ -38,7 +40,7 @@ export const transformVariables = (variables: Variable[]) => {
   return variables.map((variable) => {
     const baseVariable = {
       key: variable.id,
-      type: variable.isFixed ? null : typeMap[variable.type],
+      type: variable.isFixed ? null : variableTypeMap[variable.type as MappableVariableType],
       displayName: variable.name,
       perRecipient: variable.differentForEachPerson,
     };
@@ -48,7 +50,7 @@ export const transformVariables = (variables: Variable[]) => {
     } else {
       return {
         ...baseVariable,
-        type: typeMap[variable.type],
+        type: variableTypeMap[variable.type as MappableVariableType],
       };
     }
   });
