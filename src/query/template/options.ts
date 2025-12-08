@@ -2,7 +2,7 @@ import { queryOptions } from '@tanstack/react-query';
 
 import { api } from '@/apis/api.ts';
 import { BaseTemplateSchema, TemplateListResponseSchema } from '@/query/template/schema';
-import { VariableNames } from '@/query/template/schema.ts';
+import { VariableTypeName } from '@/query/template/schema.ts';
 import { defaultVariables, VariableType } from '@/types/editor';
 import { transformBodyHtmlToContent } from '@/utils/transformTemplate.ts';
 
@@ -11,7 +11,7 @@ const variableTypeMap = {
   DATE: '날짜',
   LINK: '링크',
   TEXT: '텍스트',
-} as const satisfies Record<VariableNames, VariableType>;
+} as const satisfies Record<VariableTypeName, VariableType>;
 
 export const templateKeys = {
   all: ['templates'] as const,

@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-export const VariableNames = ['PERSON', 'DATE', 'LINK', 'TEXT'] as const;
-export type VariableNames = (typeof VariableNames)[number];
+const VariableType = ['PERSON', 'DATE', 'LINK', 'TEXT'] as const;
+export type VariableTypeName = (typeof VariableType)[number];
 
 const VariableSchema = z.object({
   key: z.string(),
-  type: z.enum(VariableNames).optional().nullable(),
+  type: z.enum(VariableType).optional().nullable(),
   displayName: z.string(),
   perRecipient: z.boolean(),
 });
