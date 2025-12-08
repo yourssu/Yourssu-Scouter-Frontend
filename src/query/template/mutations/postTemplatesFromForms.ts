@@ -1,4 +1,5 @@
 import { api } from '@/apis/api.ts';
+import { TemplateItem } from '@/query/template/schema.ts';
 import { Variable } from '@/types/editor';
 import { transformContentToBodyHtml, transformVariables } from '@/utils/transformTemplate.ts';
 
@@ -15,11 +16,5 @@ export const postTemplateFromForms = (params: PostTemplateParams) => {
     variables: transformVariables(params.variables),
   };
 
-  return api
-    .post<{
-      id: number;
-      title: string;
-      updatedAt: string;
-    }>('api/mails/templates', { json: formattedParams })
-    .json();
+  return api.post<TemplateItem>('api/mails/templates', { json: formattedParams }).json();
 };

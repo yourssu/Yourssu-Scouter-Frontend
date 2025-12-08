@@ -18,14 +18,14 @@ export const BaseTemplateSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const TemplateListItemSchema = BaseTemplateSchema.pick({
+export const TemplateItemSchema = BaseTemplateSchema.pick({
   id: true,
   title: true,
   updatedAt: true,
 });
 
 export const TemplateListResponseSchema = z.object({
-  content: z.array(TemplateListItemSchema),
+  content: z.array(TemplateItemSchema),
   page: z.number(),
   size: z.number(),
   totalElements: z.number(),
@@ -38,6 +38,6 @@ export const TemplatePayloadSchema = BaseTemplateSchema.omit({
 });
 
 export type Template = z.infer<typeof BaseTemplateSchema>;
-export type TemplateListItem = z.infer<typeof TemplateListItemSchema>;
+export type TemplateItem = z.infer<typeof TemplateItemSchema>;
 export type TemplatePayload = z.infer<typeof TemplatePayloadSchema>;
 export type TemplateListResponse = z.infer<typeof TemplateListResponseSchema>;
