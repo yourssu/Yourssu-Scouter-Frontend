@@ -14,7 +14,7 @@ export const StyledEditorContent = styled(EditorContent)`
   position: relative;
 
   .tiptap {
-    white-space: pre-wrap;
+    // white-space: pre-wrap;
     font-synthesis: weight style small-caps;
 
     a {
