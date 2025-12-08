@@ -49,15 +49,16 @@ export const EditTemplateDialog = ({
   }, [templateDetail]);
 
   const handleSave = () => {
-    if (templateDetail && formData.title.trim()) {
-      onSave({
-        ...templateDetail,
-        title: formData.title.trim(),
-        content: formData.content,
-        variables: formData.variables,
-      });
-      onClose();
+    if (!formData.title.trim()) {
+      return;
     }
+    onSave({
+      ...templateDetail,
+      title: formData.title.trim(),
+      content: formData.content,
+      variables: formData.variables,
+    });
+    onClose();
   };
 
   const handleClose = () => {
