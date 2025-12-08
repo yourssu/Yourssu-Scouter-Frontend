@@ -27,16 +27,16 @@ export const TemplateEditor = ({
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
       const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(variable.id, chipType, variable.name);
+      editorRef.current.insertVariable(variable.key, chipType, variable.displayName);
     }
   };
 
-  const handleVariableAdd = (type: VariableType, name: string, differentForEachPerson: boolean) => {
+  const handleVariableAdd = (type: VariableType, displayName: string, perRecipient: boolean) => {
     const newVariable: Variable = {
-      id: `var-${crypto.randomUUID()}`,
+      key: `var-${crypto.randomUUID()}`,
       type,
-      name,
-      differentForEachPerson,
+      displayName,
+      perRecipient,
       isFixed: false,
     };
 
@@ -46,8 +46,8 @@ export const TemplateEditor = ({
   const handleVariableDelete = (variable: Variable) => {
     if (!variable.isFixed) {
       if (editorRef.current) {
-        onVariablesChange(templateVariables.filter((v) => v.id !== variable.id));
-        editorRef.current.deleteVariable(variable.id);
+        onVariablesChange(templateVariables.filter((v) => v.key !== variable.key));
+        editorRef.current.deleteVariable(variable.key);
       }
     }
   };

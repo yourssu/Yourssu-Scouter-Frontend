@@ -46,16 +46,16 @@ export const templateOptions = {
         const templateVariables = response.variables.map((variable) => {
           // 고정 변수(지원자명, 파트명)는 type이 null로 오기 때문에 미리 정의된 defaultVariables에서 찾아서 매핑
           if (!variable.type) {
-            return defaultVariables.find((v) => v.id === variable.key)!;
+            return defaultVariables.find((v) => v.key === variable.key)!;
           }
           // 그 외 변수들은 TypeMap을 사용하여 매핑
           // 나머지 항목들도 프론트엔드 형식에 맞게 변환
           return {
-            id: variable.key,
-            name: variable.displayName,
+            key: variable.key,
+            displayName: variable.displayName,
             type: variableTypeMap[variable.type],
             isFixed: false,
-            differentForEachPerson: variable.perRecipient,
+            perRecipient: variable.perRecipient,
           };
         });
 

@@ -26,23 +26,23 @@ export const transformBodyHtmlToContent = (bodyHtml: string, variables: Variable
   const curlyBracePattern = /{{(.*?)}}/g; // {{...}} 패턴을 찾는 정규식
 
   return bodyHtml.replace(curlyBracePattern, (match, key) => {
-    const variable = variables.find((v) => v.id === key);
+    const variable = variables.find((v) => v.key === key);
 
     if (!variable) {
       return match;
     }
 
-    return `<span data-key="${variable.id}" data-type="${getChipType(variable.type)}" data-label="${variable.name}" data-variable-chip=""></span>`;
+    return `<span data-key="${variable.key}" data-type="${getChipType(variable.type)}" data-label="${variable.displayName}" data-variable-chip=""></span>`;
   });
 };
 
 export const transformVariables = (variables: Variable[]) => {
   return variables.map((variable) => {
     const baseVariable = {
-      key: variable.id,
+      key: variable.key,
       type: variable.isFixed ? null : variableTypeMap[variable.type as MappableVariableType],
-      displayName: variable.name,
-      perRecipient: variable.differentForEachPerson,
+      displayName: variable.displayName,
+      perRecipient: variable.perRecipient,
     };
 
     if (variable.isFixed) {

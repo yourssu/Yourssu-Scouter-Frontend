@@ -45,33 +45,33 @@ export const MailEditor = () => {
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
       const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(variable.id, chipType, variable.name);
+      editorRef.current.insertVariable(variable.key, chipType, variable.displayName);
     }
   };
 
-  const handleVariableAdd = (type: VariableType, name: string, differentForEachPerson: boolean) => {
+  const handleVariableAdd = (type: VariableType, displayName: string, perRecipient: boolean) => {
     const newVariable: Variable = {
-      id: Date.now().toString(),
+      key: `var-${crypto.randomUUID()}`,
       type,
-      name,
-      differentForEachPerson,
+      displayName,
+      perRecipient,
       isFixed: false,
     };
 
     setVariables((prev) => [...prev, newVariable]);
 
     editorRef.current?.insertVariable(
-      newVariable.id,
+      newVariable.key,
       getChipType(newVariable.type),
-      newVariable.name,
+      newVariable.displayName,
     );
   };
 
   const handleVariableDelete = (variable: Variable) => {
     if (!variable.isFixed) {
       if (editorRef.current) {
-        setVariables((prev) => prev.filter((v) => v.id !== variable.id));
-        editorRef.current.deleteVariable(variable.name);
+        setVariables((prev) => prev.filter((v) => v.key !== variable.key));
+        editorRef.current.deleteVariable(variable.displayName);
       }
     }
   };

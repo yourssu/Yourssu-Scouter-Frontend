@@ -79,7 +79,7 @@ export const Templates = () => {
 
       queryClient.setQueryData(templateKeys.detail(updatedPayload.id), (oldData: Template) => {
         return {
-          ...(oldData || {}),
+          ...oldData,
           ...updatedPayload,
         };
       });
