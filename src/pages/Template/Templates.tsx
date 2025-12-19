@@ -72,15 +72,24 @@ export const Templates = () => {
 
   const putTemplateMutation = useMutation({
     mutationFn: putTemplate,
-    onSuccess: (_data, params) => {
+    onSuccess: (data, params) => {
       const updatedPayload = params;
 
+      // 템플릿 리스트 갱신
       queryClient.invalidateQueries({ queryKey: templateKeys.all });
 
+      // 템플릿 상세 데이터 갱신
       queryClient.setQueryData(templateKeys.detail(updatedPayload.id), (oldData: Template) => {
+        if (!oldData) {
+          return;
+        }
+
         return {
           ...oldData,
-          ...updatedPayload,
+          date: data.updatedAt,
+          title: updatedPayload.title,
+          content: updatedPayload.content,
+          variables: updatedPayload.variables,
         };
       });
     },
