@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { ManualScheduleHeader } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeader';
+import { ManualScheduleSidebar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebar';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { useAvailableApplicantsInWeek } from '@/pages/Interview/hooks/useAvailableApplicantsInWeek';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
@@ -39,7 +40,7 @@ export const ManualScheduleMode = () => {
           />
         ),
         calendar: <div />,
-        sidebar: <div />,
+        sidebar: <ManualScheduleSidebar />,
       }}
     />
   );
