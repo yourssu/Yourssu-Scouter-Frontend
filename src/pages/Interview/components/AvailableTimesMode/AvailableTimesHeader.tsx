@@ -1,6 +1,6 @@
 import { AvailableTimesHeaderChipGroup } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesHeaderChipGroup';
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeaderLayout';
-import { PartFilterDropdown } from '@/pages/Interview/components/InterviewScheduleMode/PartFilterDropdown';
+import { PartFilterDropdown } from '@/pages/Interview/components/PartFilterDropdown';
 import { Applicant } from '@/query/applicant/schema';
 
 interface AvailableTimesHeaderProps {
