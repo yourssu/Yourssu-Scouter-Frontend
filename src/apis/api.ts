@@ -14,12 +14,17 @@ const checkTokenFreshness: AfterResponseHook = async (request, _options, respons
   if (response.status !== 401 && response.status !== 400 && response.status !== 403) {
     return response;
   }
-
-  const errorResponse = await response.json<{ errorCode?: AuthErrorCodes }>().catch(() => null);
-  const errorCode = errorResponse?.errorCode;
+  const errorResponse = await response.json().catch(() => null);
+  const errorCode = (errorResponse as { errorCode?: AuthErrorCodes })?.errorCode;
 
   if (errorCode === 'Auth-004' || errorCode === 'OAuth-Token-Refresh-Fail') {
     authService.logout();
+    authService.initiateGoogleLogin();
+    return response;
+  }
+
+  if (errorCode === 'GOOGLE_OAUTH_RECONSENT_REQUIRED') {
+    // 로그아웃 없이 재동의
     authService.initiateGoogleLogin();
     return response;
   }
