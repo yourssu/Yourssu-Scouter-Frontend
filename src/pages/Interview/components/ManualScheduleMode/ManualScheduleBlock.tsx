@@ -1,20 +1,35 @@
 import clsx from 'clsx';
 
 import { Applicant } from '@/query/applicant/schema';
+import { formatTemplates } from '@/utils/date';
 
 interface ManualScheduleBlockProps {
   applicant: Applicant | undefined;
+  date: Date;
   onClick: () => void;
 }
 
-export const ManualScheduleBlock = ({ applicant, onClick }: ManualScheduleBlockProps) => {
+export const ManualScheduleBlock = ({ applicant, date, onClick }: ManualScheduleBlockProps) => {
   return (
     <button
       className={clsx(
-        'bg-bg-brandPrimary block size-full cursor-pointer rounded-lg',
+        'bg-bg-brandPrimary flex size-full cursor-pointer flex-col rounded-lg text-white',
         !applicant && 'opacity-20 hover:opacity-60',
       )}
       onClick={onClick}
-    />
+    >
+      {applicant && (
+        <>
+          <div className="typo-c3_sb_11 flex size-full items-end gap-1.5 px-2">
+            <div>{applicant.name} 님</div>
+            <div>{applicant.part}</div>
+          </div>
+          <div className="typo-c3_rg_11 flex size-full items-start gap-1.5 px-2">
+            <div>{formatTemplates['23:59'](date)}</div>
+            <div>유어슈 동아리방</div>
+          </div>
+        </>
+      )}
+    </button>
   );
 };

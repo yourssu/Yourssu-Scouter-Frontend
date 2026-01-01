@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { useDateMap } from '@/hooks/useDateMap';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { ManualScheduleCalendar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleCalendar';
 import { ManualScheduleHeader } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeader';
@@ -9,6 +10,7 @@ import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { useAvailableApplicantsInWeek } from '@/pages/Interview/hooks/useAvailableApplicantsInWeek';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { applicantOptions } from '@/query/applicant/options';
+import { Applicant } from '@/query/applicant/schema';
 
 export const ManualScheduleMode = () => {
   const { partId } = useInterviewPartSelectionContext();
@@ -23,6 +25,9 @@ export const ManualScheduleMode = () => {
   });
 
   const [selectedApplicant, setSelectedApplicant] = useState(availableApplicants[0]);
+  const [completedScheduleMap, completedScheduleMapAction] = useDateMap<Applicant>({
+    precision: '분',
+  });
 
   return (
     <InterviewPageLayout
@@ -42,6 +47,8 @@ export const ManualScheduleMode = () => {
         ),
         calendar: (
           <ManualScheduleCalendar
+            completedScheduleMap={completedScheduleMap}
+            completedScheduleMapAction={completedScheduleMapAction}
             key={selectedApplicant.applicantId} // 선택한 지원자가 바뀌면 캘린더를 다시 렌더링
             month={month}
             selectedApplicant={selectedApplicant}
