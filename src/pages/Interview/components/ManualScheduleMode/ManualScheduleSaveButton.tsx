@@ -6,6 +6,7 @@ import { assert } from 'es-toolkit';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import {
   useInterviewAutoScheduleContext,
+  useInterviewCalendarModeContext,
   useInterviewPartSelectionContext,
 } from '@/pages/Interview/context';
 import { Applicant } from '@/query/applicant/schema';
@@ -22,8 +23,9 @@ export const ManualScheduleSaveButton = ({
   completedApplicants,
   totalApplicantCount,
 }: ManualScheduleSaveButtonProps) => {
-  const { partName, partId } = useInterviewPartSelectionContext();
   const openAlertDialog = useAlertDialog();
+  const { setCalendarMode } = useInterviewCalendarModeContext();
+  const { partName, partId, onPartChange } = useInterviewPartSelectionContext();
   const { duration } = useInterviewAutoScheduleContext();
   const { mutateAsync: mutatePostSchedule } = useMutation({
     mutationFn: postSchedule,
@@ -62,6 +64,9 @@ export const ManualScheduleSaveButton = ({
         })),
       });
       await invalidateSchedule();
+
+      onPartChange(null);
+      setCalendarMode('면접일정');
     }
   };
 
