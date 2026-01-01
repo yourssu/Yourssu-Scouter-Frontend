@@ -17,11 +17,12 @@ import { Applicant } from '@/query/applicant/schema';
 export const ManualScheduleMode = () => {
   const { duration } = useInterviewAutoScheduleContext();
   const { partId } = useInterviewPartSelectionContext();
-  const { year, month, week, handlePrevWeek, handleNextWeek } = useWeekIndicator();
 
   const { data: applicants } = useSuspenseQuery(applicantOptions({ partId }));
-
   const [selectedApplicant, setSelectedApplicant] = useState(applicants[0]);
+  const { year, month, week, handlePrevWeek, handleNextWeek, jump } = useWeekIndicator({
+    initialDate: selectedApplicant?.availableTimes[0],
+  });
   const [completedScheduleMap, completedScheduleMapAction] = useDateMap<Applicant>({
     precision: duration === '1시간' ? '시간' : '분',
   });
@@ -39,7 +40,12 @@ export const ManualScheduleMode = () => {
               onPrevWeek: handlePrevWeek,
               week,
             }}
-            onSelectedApplicantChange={setSelectedApplicant}
+            onSelectedApplicantChange={(v) => {
+              if (v.availableTimes.length > 0) {
+                jump(v.availableTimes[0]);
+              }
+              setSelectedApplicant(v);
+            }}
             selectedApplicant={selectedApplicant}
           />
         ),
