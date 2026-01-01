@@ -2,6 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
+import { ManualScheduleCalendar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleCalendar';
 import { ManualScheduleHeader } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeader';
 import { ManualScheduleSidebar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebar';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
@@ -39,7 +40,7 @@ export const ManualScheduleMode = () => {
             selectedApplicant={selectedApplicant}
           />
         ),
-        calendar: <div />,
+        calendar: <ManualScheduleCalendar month={month} week={week} year={year} />,
         sidebar: (
           <ManualScheduleSidebar
             completedApplicants={[]}
