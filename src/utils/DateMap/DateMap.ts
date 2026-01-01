@@ -18,7 +18,7 @@ import {
  * @template T - DateMap이 저장하는 값의 타입이에요. 함수 타입은 허용되지 않아요.
  *
  * @param {DateMapOptions<T>} [options] - DateMap이 어떻게 동작할지 설정하는 옵션이에요.
- * @param {DateMapValueEntries<T>} [options.initialEntries] - DateMap 생성시 추가할 초기 엔트리들의 배열이에요.
+ * @param {DateMapSetterEntries<T>} [options.initialEntries] - DateMap 생성시 추가할 초기 엔트리들의 배열이에요.
  * @param {DateMapPrecisionRange | DateMapPrecisionType} [options.precision] - 날짜를 비교할 때 사용할 정밀도 범위를 지정해요.
  * - 지정하지 않으면, 날짜 전체로 비교해요.
  * - 단일 값으로 지정하면, 해당 정밀도 미만의 값이 모두 무시돼요.

@@ -15,6 +15,6 @@ export type DateMapPrecisionRange = {
 };
 
 export type DateMapOptions<T> = {
-  initialEntries?: DateMapValueEntries<T>;
+  initialEntries?: DateMapSetterEntries<T>;
   precision?: DateMapPrecisionRange | DateMapPrecisionType;
 };
