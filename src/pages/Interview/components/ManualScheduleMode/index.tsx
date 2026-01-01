@@ -40,7 +40,12 @@ export const ManualScheduleMode = () => {
           />
         ),
         calendar: <div />,
-        sidebar: <ManualScheduleSidebar />,
+        sidebar: (
+          <ManualScheduleSidebar
+            completedApplicants={[]}
+            totalApplicantCount={availableApplicants.length}
+          />
+        ),
       }}
     />
   );
