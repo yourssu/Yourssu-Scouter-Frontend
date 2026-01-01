@@ -32,6 +32,7 @@ export const ManualScheduleMode = () => {
         header: (
           <ManualScheduleHeader
             applicants={applicants}
+            completedApplicants={Array.from(completedScheduleMap.values())}
             indicator={{
               month,
               onNextWeek: handleNextWeek,
