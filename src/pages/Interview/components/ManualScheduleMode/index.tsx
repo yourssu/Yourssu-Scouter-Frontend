@@ -10,7 +10,6 @@ import {
   useInterviewAutoScheduleContext,
   useInterviewPartSelectionContext,
 } from '@/pages/Interview/context';
-import { useAvailableApplicantsInWeek } from '@/pages/Interview/hooks/useAvailableApplicantsInWeek';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { applicantOptions } from '@/query/applicant/options';
 import { Applicant } from '@/query/applicant/schema';
@@ -21,14 +20,8 @@ export const ManualScheduleMode = () => {
   const { year, month, week, handlePrevWeek, handleNextWeek } = useWeekIndicator();
 
   const { data: applicants } = useSuspenseQuery(applicantOptions({ partId }));
-  const availableApplicants = useAvailableApplicantsInWeek({
-    applicants,
-    month,
-    week,
-    year,
-  });
 
-  const [selectedApplicant, setSelectedApplicant] = useState(availableApplicants[0]);
+  const [selectedApplicant, setSelectedApplicant] = useState(applicants[0]);
   const [completedScheduleMap, completedScheduleMapAction] = useDateMap<Applicant>({
     precision: duration === '1시간' ? '시간' : '분',
   });
@@ -38,7 +31,7 @@ export const ManualScheduleMode = () => {
       slots={{
         header: (
           <ManualScheduleHeader
-            applicants={availableApplicants}
+            applicants={applicants}
             indicator={{
               month,
               onNextWeek: handleNextWeek,
@@ -62,8 +55,8 @@ export const ManualScheduleMode = () => {
         ),
         sidebar: (
           <ManualScheduleSidebar
-            completedApplicants={[]}
-            totalApplicantCount={availableApplicants.length}
+            completedApplicants={Array.from(completedScheduleMap.values())}
+            totalApplicantCount={applicants.length}
           />
         ),
       }}
