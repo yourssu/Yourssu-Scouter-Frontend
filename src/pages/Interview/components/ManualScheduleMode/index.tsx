@@ -6,13 +6,17 @@ import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageL
 import { ManualScheduleCalendar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleCalendar';
 import { ManualScheduleHeader } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeader';
 import { ManualScheduleSidebar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebar';
-import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
+import {
+  useInterviewAutoScheduleContext,
+  useInterviewPartSelectionContext,
+} from '@/pages/Interview/context';
 import { useAvailableApplicantsInWeek } from '@/pages/Interview/hooks/useAvailableApplicantsInWeek';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { applicantOptions } from '@/query/applicant/options';
 import { Applicant } from '@/query/applicant/schema';
 
 export const ManualScheduleMode = () => {
+  const { duration } = useInterviewAutoScheduleContext();
   const { partId } = useInterviewPartSelectionContext();
   const { year, month, week, handlePrevWeek, handleNextWeek } = useWeekIndicator();
 
@@ -26,7 +30,7 @@ export const ManualScheduleMode = () => {
 
   const [selectedApplicant, setSelectedApplicant] = useState(availableApplicants[0]);
   const [completedScheduleMap, completedScheduleMapAction] = useDateMap<Applicant>({
-    precision: '분',
+    precision: duration === '1시간' ? '시간' : '분',
   });
 
   return (

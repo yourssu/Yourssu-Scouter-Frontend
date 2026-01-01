@@ -3,6 +3,7 @@ import { setHours, setMinutes } from 'date-fns';
 import { useDateMap, UseDateMapAction } from '@/hooks/useDateMap';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
 import { ManualScheduleBlock } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleBlock';
+import { useInterviewAutoScheduleContext } from '@/pages/Interview/context';
 import { Applicant } from '@/query/applicant/schema';
 import { DateMap } from '@/utils/DateMap';
 
@@ -23,6 +24,8 @@ export const ManualScheduleCalendar = ({
   week,
   year,
 }: ManualScheduleCalendarProps) => {
+  const { duration } = useInterviewAutoScheduleContext();
+
   const [map] = useDateMap({
     initialEntries: selectedApplicant.availableTimes.map((time) => [new Date(time), true]),
     precision: '분',
@@ -46,6 +49,7 @@ export const ManualScheduleCalendar = ({
             <ManualScheduleBlock
               applicant={settedApplicantHere}
               date={targetDate}
+              isFirstBlock={duration === '30분' || (duration === '1시간' && minute === 0)}
               onClick={() => {
                 // 1. 클릭한 블럭에 채워져있는 게 내 일정이라면 지운다
                 if (settedApplicantHereIsMe) {

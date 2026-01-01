@@ -6,10 +6,16 @@ import { formatTemplates } from '@/utils/date';
 interface ManualScheduleBlockProps {
   applicant: Applicant | undefined;
   date: Date;
+  isFirstBlock: boolean;
   onClick: () => void;
 }
 
-export const ManualScheduleBlock = ({ applicant, date, onClick }: ManualScheduleBlockProps) => {
+export const ManualScheduleBlock = ({
+  applicant,
+  date,
+  isFirstBlock,
+  onClick,
+}: ManualScheduleBlockProps) => {
   return (
     <button
       className={clsx(
@@ -18,7 +24,7 @@ export const ManualScheduleBlock = ({ applicant, date, onClick }: ManualSchedule
       )}
       onClick={onClick}
     >
-      {applicant && (
+      {applicant && isFirstBlock && (
         <>
           <div className="typo-c3_sb_11 flex size-full items-end gap-1.5 px-2">
             <div>{applicant.name} 님</div>
