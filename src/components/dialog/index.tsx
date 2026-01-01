@@ -86,7 +86,7 @@ export const Dialog = ({
             </DialogPrimitive.Overlay>
             <DialogPrimitive.Content
               {...contentProps}
-              className="absolute top-1/2 left-1/2 z-50 min-w-[386px] -translate-1/2"
+              className="fixed top-1/2 left-1/2 z-50 min-w-[386px] -translate-1/2"
               onInteractOutside={onCloseWithOutside}
               onPointerDownOutside={onCloseWithOutside}
             >
