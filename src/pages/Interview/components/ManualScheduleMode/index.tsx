@@ -40,7 +40,15 @@ export const ManualScheduleMode = () => {
             selectedApplicant={selectedApplicant}
           />
         ),
-        calendar: <ManualScheduleCalendar month={month} week={week} year={year} />,
+        calendar: (
+          <ManualScheduleCalendar
+            key={selectedApplicant.applicantId} // 선택한 지원자가 바뀌면 캘린더를 다시 렌더링
+            month={month}
+            selectedApplicant={selectedApplicant}
+            week={week}
+            year={year}
+          />
+        ),
         sidebar: (
           <ManualScheduleSidebar
             completedApplicants={[]}
