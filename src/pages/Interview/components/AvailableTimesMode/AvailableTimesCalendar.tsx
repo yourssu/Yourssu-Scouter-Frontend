@@ -4,6 +4,7 @@ import { useDateMap } from '@/hooks/useDateMap';
 import { AvailableTimesBlock } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesBlock';
 import { useAvailableTimesModeHoverContext } from '@/pages/Interview/components/AvailableTimesMode/context';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
+import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { Applicant } from '@/query/applicant/schema';
 
 interface AvailableTimesCalendarProps {
@@ -22,6 +23,7 @@ export const AvailableTimesCalendar = ({
   availableApplicants,
 }: AvailableTimesCalendarProps) => {
   const { hoveredChipApplicantId } = useAvailableTimesModeHoverContext();
+  const { partName: selectedPartName } = useInterviewPartSelectionContext();
 
   const makeAvailableApplicantEntries = (applicant: Applicant): AvailableApplicantEntry[] => {
     return applicant.availableTimes.map((time) => [new Date(time), [applicant]]);
@@ -38,10 +40,15 @@ export const AvailableTimesCalendar = ({
         const targetDate = setMinutes(setHours(date, hour), minute);
         const applicants = map.get(targetDate) ?? [];
 
-        const filteredApplicants =
-          hoveredChipApplicantId !== null
-            ? applicants.filter(({ applicantId }) => applicantId === hoveredChipApplicantId)
-            : applicants;
+        const isHoveredApplicant = (v: Applicant) =>
+          hoveredChipApplicantId ? v.applicantId === hoveredChipApplicantId : true;
+
+        const isPartSelectedApplicant = (v: Applicant) =>
+          selectedPartName ? v.part === selectedPartName : true;
+
+        const filteredApplicants = applicants
+          .filter(isHoveredApplicant)
+          .filter(isPartSelectedApplicant);
 
         return (
           filteredApplicants.length > 0 && (

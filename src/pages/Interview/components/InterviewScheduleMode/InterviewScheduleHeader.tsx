@@ -1,6 +1,6 @@
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeaderLayout';
 import { InterviewScheduleAddButton } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleAddButton';
-import { PartFilterDropdown } from '@/pages/Interview/components/InterviewScheduleMode/PartFilterDropdown';
+import { PartFilterDropdown } from '@/pages/Interview/components/PartFilterDropdown';
 
 interface InterviewScheduleHeaderProps {
   indicator: {
