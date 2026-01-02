@@ -38,5 +38,11 @@ export const useWeekIndicator = ({ initialDate }: UseWeekIndicatorProps = {}) =>
     }
   };
 
-  return { year, month, week, handlePrevWeek, handleNextWeek };
+  const jump = (date: DateArg<Date>) => {
+    setYear(getYear(date));
+    setMonth(getMonth(date) + 1);
+    setWeek(getWeekOfMonth(date) - 1);
+  };
+
+  return { year, month, week, handlePrevWeek, handleNextWeek, jump };
 };

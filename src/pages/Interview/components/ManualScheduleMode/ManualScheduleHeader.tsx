@@ -4,6 +4,7 @@ import { Applicant } from '@/query/applicant/schema';
 
 interface ManualScheduleHeaderProps {
   applicants: Applicant[];
+  completedApplicants: Applicant[];
   indicator: {
     month: number;
     onNextWeek: () => void;
@@ -17,6 +18,7 @@ interface ManualScheduleHeaderProps {
 export const ManualScheduleHeader = ({
   applicants,
   selectedApplicant,
+  completedApplicants,
   onSelectedApplicantChange,
   indicator: { month, week, onNextWeek, onPrevWeek },
 }: ManualScheduleHeaderProps) => {
@@ -32,6 +34,7 @@ export const ManualScheduleHeader = ({
       <InterviewHeaderLayout.Row>
         <ManualScheduleHeaderChipGroup
           applicants={applicants}
+          completedApplicants={completedApplicants}
           onSelectedApplicantChange={onSelectedApplicantChange}
           selectedApplicant={selectedApplicant}
         />

@@ -1,15 +1,17 @@
+import { IcCheckLine } from '@yourssu/design-system-react';
 import { tv } from 'tailwind-variants';
 
 import { Applicant } from '@/query/applicant/schema';
 
 interface ManualScheduleHeaderChipGroupProps {
   applicants: Applicant[];
+  completedApplicants: Applicant[];
   onSelectedApplicantChange: (v: Applicant) => void;
   selectedApplicant: Applicant;
 }
 
 const chip = tv({
-  base: 'typo-b2_rg_15 cursor-pointer rounded-full px-3 py-1.5',
+  base: 'typo-b2_rg_15 flex cursor-pointer items-center gap-0.5 rounded-full px-3 py-1.5',
   variants: {
     active: {
       true: 'bg-chipSelected text-text-brandPrimary font-semibold',
@@ -21,6 +23,7 @@ const chip = tv({
 export const ManualScheduleHeaderChipGroup = ({
   applicants,
   selectedApplicant,
+  completedApplicants,
   onSelectedApplicantChange,
 }: ManualScheduleHeaderChipGroupProps) => {
   return (
@@ -33,6 +36,9 @@ export const ManualScheduleHeaderChipGroup = ({
             key={applicant.name}
             onClick={() => onSelectedApplicantChange(applicant)}
           >
+            {completedApplicants.find((v) => v.applicantId === applicant.applicantId) && (
+              <IcCheckLine size="20px" />
+            )}
             {applicant.name}
           </button>
         ))}

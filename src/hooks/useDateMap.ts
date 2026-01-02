@@ -3,7 +3,7 @@ import { usePreservedReference } from 'react-simplikit';
 
 import { DateMap, DateMapOptions, DateMapSetterEntries, DateMapSetterType } from '@/utils/DateMap';
 
-type UseDateMapAction<T> = {
+export type UseDateMapAction<T> = {
   remove: (key: Date) => void;
   reset: () => void;
   set: (key: Date, value: DateMapSetterType<T>) => void;
