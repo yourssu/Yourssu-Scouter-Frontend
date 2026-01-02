@@ -6,6 +6,7 @@ import { useAvailableTimesModeHoverContext } from '@/pages/Interview/components/
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { Applicant } from '@/query/applicant/schema';
+import { DateMapSetterEntries } from '@/utils/DateMap';
 
 interface AvailableTimesCalendarProps {
   availableApplicants: Applicant[];
@@ -13,8 +14,6 @@ interface AvailableTimesCalendarProps {
   week: number;
   year: number;
 }
-
-type AvailableApplicantEntry = [Date, Applicant[]];
 
 export const AvailableTimesCalendar = ({
   month,
@@ -25,8 +24,13 @@ export const AvailableTimesCalendar = ({
   const { hoveredChipApplicantId } = useAvailableTimesModeHoverContext();
   const { partName: selectedPartName } = useInterviewPartSelectionContext();
 
-  const makeAvailableApplicantEntries = (applicant: Applicant): AvailableApplicantEntry[] => {
-    return applicant.availableTimes.map((time) => [new Date(time), [applicant]]);
+  const makeAvailableApplicantEntries = (
+    applicant: Applicant,
+  ): DateMapSetterEntries<Applicant[]> => {
+    return applicant.availableTimes.map((time) => [
+      new Date(time),
+      (prev) => [...(prev ?? []), applicant],
+    ]);
   };
 
   const [map] = useDateMap({
