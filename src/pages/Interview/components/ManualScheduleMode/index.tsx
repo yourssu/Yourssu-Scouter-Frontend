@@ -62,7 +62,7 @@ export const ManualScheduleMode = () => {
         ),
         sidebar: (
           <ManualScheduleSidebar
-            completedApplicants={Array.from(completedScheduleMap.values())}
+            completedApplicants={completedScheduleMap.entries()}
             totalApplicantCount={applicants.length}
           />
         ),
