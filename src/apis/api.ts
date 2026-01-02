@@ -1,20 +1,12 @@
 import ky, { AfterResponseHook, BeforeRequestHook } from 'ky';
 
 import { API_CONFIG } from '@/constants/config';
-import { ReconsentError } from '@/utils/error';
+import { AUTH_ERROR_MAP, AuthErrorCodes, ReconsentError } from '@/utils/error';
 
 import { authService } from './auth.service';
 import { tokenService } from './token.service';
 
 const DEFAULT_API_RETRY_LIMIT = 2;
-
-export const AUTH_ERROR_STATUS_CODES = [
-  'Auth-004',
-  'GOOGLE_OAUTH_RECONSENT_REQUIRED',
-  'OAuth-Token-Refresh-Fail',
-] as const;
-
-export type AuthErrorCodes = (typeof AUTH_ERROR_STATUS_CODES)[number];
 
 const checkTokenFreshness: AfterResponseHook = async (request, _options, response) => {
   if (response.status !== 401 && response.status !== 400 && response.status !== 403) {
@@ -24,17 +16,17 @@ const checkTokenFreshness: AfterResponseHook = async (request, _options, respons
   const errorResponse = await response.json().catch(() => null);
   const errorCode = (errorResponse as { errorCode?: AuthErrorCodes })?.errorCode;
 
-  if (errorCode === 'Auth-004' || errorCode === 'OAuth-Token-Refresh-Fail') {
+  if (errorCode === AUTH_ERROR_MAP.AUTH_004 || errorCode === AUTH_ERROR_MAP.REFRESH_FAIL) {
     authService.logout();
     authService.initiateGoogleLogin();
     return response;
   }
 
-  if (errorCode === 'GOOGLE_OAUTH_RECONSENT_REQUIRED') {
+  if (errorCode === AUTH_ERROR_MAP.RECONSENT_REQUIRED) {
     throw new ReconsentError();
   }
 
-  if (errorCode === 'GOOGLE_OAUTH_RECONSENT_REQUIRED') {
+  if (errorCode === AUTH_ERROR_MAP.RECONSENT_REQUIRED) {
     // 로그아웃 없이 재동의
     authService.initiateGoogleLogin();
     return response;
