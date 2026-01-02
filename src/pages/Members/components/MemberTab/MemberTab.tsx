@@ -3,7 +3,6 @@ import { BoxButton, IcRetryRefreshLine, useSnackbar } from '@yourssu/design-syst
 import { Suspense } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ReconsentError } from '@/apis/api';
 import { authService } from '@/apis/auth.service';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
@@ -24,6 +23,7 @@ import { memberLastUpdatedTimeOptions } from '@/query/member/lastUpdatedTime/opt
 import { memberRoleOptions } from '@/query/member/memberRole/options.ts';
 import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
 import { MemberState } from '@/query/member/schema.ts';
+import { ReconsentError } from '@/utils/error.ts';
 
 interface MemberTabProps {
   state: MemberState;

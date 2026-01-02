@@ -1,26 +1,26 @@
 import ky, { AfterResponseHook, BeforeRequestHook } from 'ky';
 
 import { API_CONFIG } from '@/constants/config';
+import { ReconsentError } from '@/utils/error';
 
 import { authService } from './auth.service';
 import { tokenService } from './token.service';
 
 const DEFAULT_API_RETRY_LIMIT = 2;
 
-// 백엔드에서 token 만료를 400으로 보냄(유어슈 멤버/지원자 관련)
-type AuthErrorCodes = 'Auth-004' | 'GOOGLE_OAUTH_RECONSENT_REQUIRED' | 'OAuth-Token-Refresh-Fail';
+export const AUTH_ERROR_STATUS_CODES = [
+  'Auth-004',
+  'GOOGLE_OAUTH_RECONSENT_REQUIRED',
+  'OAuth-Token-Refresh-Fail',
+] as const;
 
-export class ReconsentError extends Error {
-  constructor() {
-    super('GOOGLE_OAUTH_RECONSENT_REQUIRED');
-    this.name = 'ReconsentError';
-  }
-}
+export type AuthErrorCodes = (typeof AUTH_ERROR_STATUS_CODES)[number];
 
 const checkTokenFreshness: AfterResponseHook = async (request, _options, response) => {
   if (response.status !== 401 && response.status !== 400 && response.status !== 403) {
     return response;
   }
+
   const errorResponse = await response.json().catch(() => null);
   const errorCode = (errorResponse as { errorCode?: AuthErrorCodes })?.errorCode;
 
