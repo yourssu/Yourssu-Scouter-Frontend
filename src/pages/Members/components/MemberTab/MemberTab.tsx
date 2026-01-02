@@ -3,9 +3,11 @@ import { BoxButton, IcRetryRefreshLine, useSnackbar } from '@yourssu/design-syst
 import { Suspense } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { authService } from '@/apis/auth.service';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar.tsx';
+import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { usePartFilter } from '@/hooks/usePartFilter.ts';
 import {
   StyledContainer,
@@ -21,6 +23,7 @@ import { memberLastUpdatedTimeOptions } from '@/query/member/lastUpdatedTime/opt
 import { memberRoleOptions } from '@/query/member/memberRole/options.ts';
 import { postMembersFromApplicants } from '@/query/member/mutations/postMembersFromApplicants.ts';
 import { MemberState } from '@/query/member/schema.ts';
+import { ReconsentError } from '@/utils/error.ts';
 
 interface MemberTabProps {
   state: MemberState;
@@ -34,12 +37,27 @@ const MemberTab = ({ state }: MemberTabProps) => {
   });
 
   const { snackbar } = useSnackbar();
+  const openAlertDialog = useAlertDialog();
 
   const invalidateMembers = useInvalidateMembers(state);
   const postMembersFromApplicantsMutation = useMutation({
     mutationFn: postMembersFromApplicants,
     onSuccess: invalidateMembers,
-    onError: () => {
+    onError: async (error) => {
+      // 403 에러 시 재동의 유도
+      if (error instanceof ReconsentError) {
+        const confirmed = await openAlertDialog({
+          title: '권한 재동의가 필요합니다',
+          content: '구글 계정의 권한 동의가 필요합니다. 확인을 누르면 로그인 페이지로 이동합니다.',
+          primaryButtonText: '확인',
+        });
+
+        if (confirmed) {
+          authService.initiateGoogleLogin();
+        }
+        return;
+      }
+      // 기타 에러
       snackbar({
         type: 'error',
         width: '400px',
