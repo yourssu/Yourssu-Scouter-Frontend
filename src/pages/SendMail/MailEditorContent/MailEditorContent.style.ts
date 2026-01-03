@@ -14,6 +14,7 @@ export const StyledEditorContent = styled(EditorContent)`
   position: relative;
 
   .tiptap {
+    // white-space: pre-wrap;
     font-synthesis: weight style small-caps;
 
     a {
@@ -27,6 +28,13 @@ export const StyledEditorContent = styled(EditorContent)`
     ol {
       padding-left: 24px;
       margin: 0;
+    }
+    p.is-editor-empty:first-child::before {
+      color: ${({ theme }) => theme.semantic.color.textBasicDisabled};
+      content: attr(data-placeholder);
+      float: left;
+      height: 0;
+      pointer-events: none;
     }
   }
 `;

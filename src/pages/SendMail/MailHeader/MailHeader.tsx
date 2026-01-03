@@ -18,7 +18,7 @@ import {
 
 interface MailHeaderProps {
   onTabChange?: (id: RecipientId) => void;
-  onVariableAdd?: (type: VariableType, name: string, differentForEachPerson: boolean) => void;
+  onVariableAdd?: (type: VariableType, name: string, perRecipient: boolean) => void;
   onVariableClick?: (variable: Variable) => void;
   onVariableDelete?: (variable: Variable) => void;
   recipients?: Recipient[];
@@ -44,13 +44,9 @@ export const MailHeader = ({
     }
   };
 
-  const handleVariableChipAdd = (
-    type: VariableType,
-    name: string,
-    differentForEachPerson: boolean,
-  ) => {
+  const handleVariableChipAdd = (type: VariableType, name: string, perRecipient: boolean) => {
     if (onVariableAdd) {
-      onVariableAdd(type, name, differentForEachPerson);
+      onVariableAdd(type, name, perRecipient);
     }
   };
 
@@ -73,8 +69,8 @@ export const MailHeader = ({
           <HeaderLabel>변수 :</HeaderLabel>
           {variables.map((variable) => (
             <VariableChip
-              key={variable.id}
-              label={variable.name}
+              key={variable.key}
+              label={variable.displayName}
               onClick={() => handleVariableChipClick(variable)}
               onDelete={() => handleVariableChipDelete(variable)}
               type={getChipType(variable.type)}
