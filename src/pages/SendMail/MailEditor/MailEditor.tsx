@@ -55,7 +55,6 @@ export const MailEditor = () => {
       type,
       displayName,
       perRecipient,
-      isFixed: false,
     };
 
     setVariables((prev) => [...prev, newVariable]);
@@ -68,11 +67,9 @@ export const MailEditor = () => {
   };
 
   const handleVariableDelete = (variable: Variable) => {
-    if (!variable.isFixed) {
-      if (editorRef.current) {
-        setVariables((prev) => prev.filter((v) => v.key !== variable.key));
-        editorRef.current.deleteVariable(variable.displayName);
-      }
+    if (editorRef.current) {
+      setVariables((prev) => prev.filter((v) => v.key !== variable.key));
+      editorRef.current.deleteVariable(variable.key);
     }
   };
 

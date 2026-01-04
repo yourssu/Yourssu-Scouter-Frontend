@@ -52,7 +52,6 @@ export const templateOptions = {
             key: variable.key,
             displayName: variable.displayName,
             type: variableTypeMap[variable.type],
-            isFixed: false,
             perRecipient: variable.perRecipient,
           };
         });
