@@ -1,5 +1,6 @@
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeaderLayout';
 import { ManualScheduleHeaderChipGroup } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeaderChipGroup';
+import { ScheduleModeToggleButton } from '@/pages/Interview/components/ScheduleModeToggleButton';
 import { Applicant } from '@/query/applicant/schema';
 
 interface ManualScheduleHeaderProps {
@@ -30,6 +31,7 @@ export const ManualScheduleHeader = ({
           onNextWeek={onNextWeek}
           onPrevWeek={onPrevWeek}
         />
+        <ScheduleModeToggleButton />
       </InterviewHeaderLayout.Row>
       <InterviewHeaderLayout.Row>
         <ManualScheduleHeaderChipGroup
