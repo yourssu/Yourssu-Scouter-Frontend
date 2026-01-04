@@ -8,7 +8,7 @@ export interface Variable {
   type: VariableType;
 }
 
-export const defaultVariables: Variable[] = [
+export const getDefaultVariables = (): Variable[] => [
   {
     key: `var-${crypto.randomUUID()}`,
     type: '텍스트/파트명',

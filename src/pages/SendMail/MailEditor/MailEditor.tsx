@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { getChipType } from '@/components/VariableChip/utils';
 import { Variable, VariableType } from '@/types/editor';
-import { defaultVariables } from '@/types/editor';
+import { getDefaultVariables } from '@/types/editor';
 
 import { Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
@@ -18,7 +18,7 @@ export const MailEditor = () => {
 
   const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
 
-  const [variables, setVariables] = useState<Variable[]>(defaultVariables); // 메일 페이지 작업 시 수정
+  const [variables, setVariables] = useState<Variable[]>(getDefaultVariables()); // 메일 페이지 작업 시 수정
 
   const editorRef = useRef<MailEditorContentRef>(null);
 
