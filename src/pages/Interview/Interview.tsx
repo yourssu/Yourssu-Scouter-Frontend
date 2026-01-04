@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
 import { usePartFilter } from '@/hooks/usePartFilter';
+import { AutoScheduleMode } from '@/pages/Interview/components/AutoScheduleMode';
 import { AvailableTimesMode } from '@/pages/Interview/components/AvailableTimesMode';
 import { InterviewScheduleMode } from '@/pages/Interview/components/InterviewScheduleMode';
 import { ManualScheduleMode } from '@/pages/Interview/components/ManualScheduleMode';
@@ -33,7 +34,7 @@ export const InterviewPage = () => {
               면접일정: () => <InterviewScheduleMode />,
               희망일정: () => <AvailableTimesMode />,
               수동생성: () => <ManualScheduleMode />,
-              자동생성: () => <div />,
+              자동생성: () => <AutoScheduleMode />,
             }}
             value={calendarMode}
           />
