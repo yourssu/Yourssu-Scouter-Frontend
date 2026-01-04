@@ -7,13 +7,14 @@ import {
   useInterviewCalendarModeContext,
   useInterviewPartSelectionContext,
 } from '@/pages/Interview/context';
+import { CalendarModeType } from '@/pages/Interview/type';
 
 export const AvailableTimesSidebar = () => {
   const { partName } = useInterviewPartSelectionContext();
   const { setCalendarMode } = useInterviewCalendarModeContext();
   const openAlertDialog = useAlertDialog();
 
-  const onManualScheduleModeButtonClick = () => {
+  const onScheduleModeButtonClick = (mode: Extract<CalendarModeType, '수동생성' | '자동생성'>) => {
     if (!partName) {
       openAlertDialog({
         title: '파트를 선택해주세요',
@@ -28,7 +29,7 @@ export const AvailableTimesSidebar = () => {
       return;
     }
 
-    setCalendarMode('수동생성');
+    setCalendarMode(mode);
   };
 
   return (
@@ -40,13 +41,18 @@ export const AvailableTimesSidebar = () => {
         <div className="grid grid-cols-2 gap-3">
           <BoxButton
             className="w-full"
-            onClick={onManualScheduleModeButtonClick}
+            onClick={() => onScheduleModeButtonClick('수동생성')}
             size="xlarge"
             variant="filledSecondary"
           >
             일정 수동 생성
           </BoxButton>
-          <BoxButton className="w-full" size="xlarge" variant="filledPrimary">
+          <BoxButton
+            className="w-full"
+            onClick={() => onScheduleModeButtonClick('자동생성')}
+            size="xlarge"
+            variant="filledPrimary"
+          >
             일정 자동 생성
           </BoxButton>
         </div>
