@@ -1,13 +1,28 @@
 import { z } from 'zod';
 
-const VariableType = ['PERSON', 'DATE', 'LINK', 'TEXT'] as const;
+import { VariableKeyType } from '@/types/editor';
+
+const VariableType = ['PERSON', 'DATE', 'LINK', 'TEXT', 'APPLICANT', 'PARTNAME'] as const;
 export type VariableTypeName = (typeof VariableType)[number];
 
+const VariableKeyTypeSchema = z.custom<VariableKeyType>(
+  (val) => typeof val === 'string' && val.startsWith('var-'),
+  {
+    message: "key는 반드시 'var-'로 시작해야 합니다.",
+  },
+);
+
 const VariableSchema = z.object({
-  key: z.string(),
-  type: z.enum(VariableType).optional().nullable(),
+  key: VariableKeyTypeSchema,
+  type: z.enum(VariableType),
   displayName: z.string(),
   perRecipient: z.boolean(),
+});
+
+export const VariablePayloadSchema = VariableSchema.extend({
+  key: z.custom<VariableKeyType>((val) => typeof val === 'string' && val.startsWith('var-'), {
+    message: "서버에 저장하려면 key가 'var-'로 시작해야 합니다.",
+  }),
 });
 
 export const BaseTemplateSchema = z.object({

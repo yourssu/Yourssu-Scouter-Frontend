@@ -3,14 +3,14 @@ import { VariableTypeName } from '@/query/template/schema.ts';
 import { Variable } from '@/types/editor.ts';
 import { VariableType } from '@/types/editor.ts';
 
-type MappableVariableType = Exclude<VariableType, '사람/지원자' | '텍스트/파트명'>;
-
 const variableTypeMap = {
   날짜: 'DATE',
   링크: 'LINK',
   사람: 'PERSON',
   텍스트: 'TEXT',
-} as const satisfies Record<MappableVariableType, VariableTypeName>;
+  '사람/지원자': 'APPLICANT',
+  '텍스트/파트명': 'PARTNAME',
+} as const satisfies Record<VariableType, VariableTypeName>;
 
 // <span ... data-key="key"></span> -> {{key}} 로 변환
 export const transformContentToBodyHtml = (content: string) => {
@@ -38,19 +38,9 @@ export const transformBodyHtmlToContent = (bodyHtml: string, variables: Variable
 
 export const transformVariables = (variables: Variable[]) => {
   return variables.map((variable) => {
-    const mapVariableType = (type: VariableType): MappableVariableType => {
-      if (type === '사람/지원자') {
-        return '사람';
-      }
-      if (type === '텍스트/파트명') {
-        return '텍스트';
-      }
-      return type;
-    };
-
     return {
       key: variable.key,
-      type: variable.isFixed ? null : variableTypeMap[mapVariableType(variable.type)],
+      type: variableTypeMap[variable.type],
       displayName: variable.displayName,
       perRecipient: variable.perRecipient,
     };

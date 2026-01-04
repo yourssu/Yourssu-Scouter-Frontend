@@ -12,6 +12,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { forwardRef, useImperativeHandle } from 'react';
 
 import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
+import { VariableKeyType } from '@/types/editor';
 
 import { MailToolbar } from '../MailToolbar/MailToolbar';
 import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
@@ -23,8 +24,8 @@ interface MailEditorContentProps {
 }
 
 export interface MailEditorContentRef {
-  deleteVariable: (key: string) => void;
-  insertVariable: (key: string, type: string, label: string) => void;
+  deleteVariable: (key: VariableKeyType) => void;
+  insertVariable: (key: VariableKeyType, type: string, label: string) => void;
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
@@ -82,7 +83,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
     useImperativeHandle(
       ref,
       () => ({
-        insertVariable: (key: string, type: string, label: string) => {
+        insertVariable: (key: VariableKeyType, type: string, label: string) => {
           if (editor) {
             editor
               .chain()
@@ -92,7 +93,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
               .run();
           }
         },
-        deleteVariable: (key: string) => {
+        deleteVariable: (key: VariableKeyType) => {
           if (editor) {
             const transaction = editor.state.tr;
             const nodesToDelete: { pos: number; size: number }[] = []; // 텍스트 내 삭제할 노드 위치와 크기 저장
