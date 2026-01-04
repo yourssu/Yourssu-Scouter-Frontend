@@ -1,4 +1,5 @@
 import { AutoScheduleHeader } from '@/pages/Interview/components/AutoScheduleMode/AutoScheduleHeader';
+import { AutoScheduleSidebar } from '@/pages/Interview/components/AutoScheduleMode/AutoScheduleSidebar';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 
@@ -19,8 +20,9 @@ export const AutoScheduleMode = () => {
           />
         ),
         calendar: <div />,
-        sidebar: <div />,
+        sidebar: <AutoScheduleSidebar />,
       }}
+      variants="sidebar-expand"
     />
   );
 };
