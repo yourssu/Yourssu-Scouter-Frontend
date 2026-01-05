@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 const BottomArea = ({ children }: React.PropsWithChildren<unknown>) => {
@@ -8,8 +9,21 @@ const BottomArea = ({ children }: React.PropsWithChildren<unknown>) => {
   );
 };
 
-const CardList = ({ children }: React.PropsWithChildren<unknown>) => {
-  return <div className="flex flex-[1_1_0] flex-col gap-2.5 px-5 py-12">{children}</div>;
+const CardList = ({ title, children }: React.PropsWithChildren<{ title?: string }>) => {
+  return (
+    <div className="flex min-h-0 flex-[1_1_0] flex-col">
+      {title && (
+        <div className="border-line-basicMedium typo-t4_sb_18 sticky top-0 border-b bg-white px-4 py-3 text-center">
+          {title}
+        </div>
+      )}
+      <div className="min-h-0 flex-[1_1_0] overflow-y-auto">
+        <div className={clsx('flex flex-col gap-2.5 px-5', title ? 'py-5' : 'py-12')}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export const InterviewSidebarLayout = ({ children }: React.PropsWithChildren<unknown>) => {

@@ -50,8 +50,8 @@ const Indicator = ({ onNextWeek, onPrevWeek, date, disabled }: IndicatorProps) =
 
 export const InterviewHeaderLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="border-line-basicMedium min-h-[48px] w-full border-b">
-      <div className="flex h-full w-[70%] flex-col pl-[45px]">{children}</div>
+    <div className="min-h-[48px] w-full">
+      <div className="flex h-full flex-col pl-[45px]">{children}</div>
     </div>
   );
 };

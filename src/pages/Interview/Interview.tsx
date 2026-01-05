@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
 import { usePartFilter } from '@/hooks/usePartFilter';
@@ -34,7 +34,11 @@ export const InterviewPage = () => {
               면접일정: () => <InterviewScheduleMode />,
               희망일정: () => <AvailableTimesMode />,
               수동생성: () => <ManualScheduleMode />,
-              자동생성: () => <AutoScheduleMode />,
+              자동생성: () => (
+                <Suspense>
+                  <AutoScheduleMode />
+                </Suspense>
+              ),
             }}
             value={calendarMode}
           />
