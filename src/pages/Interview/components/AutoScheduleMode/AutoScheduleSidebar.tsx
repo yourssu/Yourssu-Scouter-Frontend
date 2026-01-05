@@ -1,8 +1,8 @@
-import { BoxButton } from '@yourssu/design-system-react';
 import clsx from 'clsx';
 import { assert } from 'es-toolkit';
 import { RadioGroup } from 'radix-ui';
 
+import { AutoScheduleSaveButton } from '@/pages/Interview/components/AutoScheduleMode/AutoScheduleSaveButton';
 import { AutoScheduleThumbnail } from '@/pages/Interview/components/AutoScheduleMode/AutoScheduleThumbnail';
 import { AutoScheduleCandidate } from '@/pages/Interview/components/AutoScheduleMode/type';
 import { InterviewSidebarLayout } from '@/pages/Interview/components/InterviewSidebarLayout';
@@ -55,9 +55,7 @@ export const AutoScheduleSidebar = ({
         </RadioGroup.Root>
       </InterviewSidebarLayout.CardList>
       <InterviewSidebarLayout.BottomArea>
-        <BoxButton className="w-full" size="xlarge" variant="filledPrimary">
-          시간표 저장하기
-        </BoxButton>
+        <AutoScheduleSaveButton scheduleCandidate={selectedCandidate} />
       </InterviewSidebarLayout.BottomArea>
     </InterviewSidebarLayout>
   );

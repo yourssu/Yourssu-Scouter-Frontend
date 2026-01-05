@@ -1,6 +1,5 @@
 import { HiSparkles } from 'react-icons/hi2';
 
-import { AutoScheduleRefetchButton } from '@/pages/Interview/components/AutoScheduleMode/AutoScheduleRefetchButton';
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeaderLayout';
 import { ScheduleModeToggleButton } from '@/pages/Interview/components/ScheduleModeToggleButton';
 
@@ -24,10 +23,7 @@ export const AutoScheduleHeader = ({
           onNextWeek={onNextWeek}
           onPrevWeek={onPrevWeek}
         />
-        <div className="flex items-center gap-2.5">
-          <AutoScheduleRefetchButton />
-          <ScheduleModeToggleButton />
-        </div>
+        <ScheduleModeToggleButton />
       </InterviewHeaderLayout.Row>
       <InterviewHeaderLayout.Row>
         <div className="bg-bg-brandSecondary text-text-brandPrimary typo-b3_rg_14 flex w-full max-w-90 items-center gap-2 rounded-md px-2.5 py-2">
