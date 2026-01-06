@@ -1,10 +1,15 @@
 import { BoxButton } from '@yourssu/design-system-react';
 
 import { VariableGroup } from '@/pages/SendMail/MailSidebar/VariableGroup';
+import { Variable } from '@/types/editor';
+
+export interface MailSidebarProps {
+  variables?: Variable[];
+}
 
 export const MailSidebar = () => {
   return (
-    <div className="flex w-md flex-col justify-between">
+    <div className="flex h-full w-md flex-col justify-between">
       <div className="typo-t4_sb_18 border-line-basicMedium flex justify-center border-b-1 px-[16px] py-[12px]">
         변수 리스트
       </div>
