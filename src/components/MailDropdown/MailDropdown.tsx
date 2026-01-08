@@ -5,6 +5,7 @@ import { PropsWithChildren, useState } from 'react';
 
 import { partOptions } from '@/query/part/options.ts';
 import { Part } from '@/query/part/schema';
+import { templateOptions } from '@/query/template/options';
 
 import {
   StyledContent,
@@ -20,16 +21,20 @@ import {
 interface PartDropdownProps extends PropsWithChildren {
   isDisabled?: boolean;
   onSelectPart?: (part: Part) => void;
+  selectedPart?: Part;
 }
 
-export const PartDropdown = ({ children, onSelectPart, isDisabled }: PartDropdownProps) => {
+export const PartDropdown = ({
+  children,
+  onSelectPart,
+  selectedPart,
+  isDisabled,
+}: PartDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPart, setSelectedPart] = useState<null | Part>(null);
 
   const { data: parts = [] } = useSuspenseQuery(partOptions());
 
   const handleSelect = (part: Part) => {
-    setSelectedPart(part);
     if (onSelectPart) {
       onSelectPart(part);
     }
@@ -62,39 +67,25 @@ export const PartDropdown = ({ children, onSelectPart, isDisabled }: PartDropdow
   );
 };
 
-type MailType = '불합격' | '합격';
-type MailLevel = '1차' | '최종';
-
-interface MailTemplate {
-  label: string;
-  level: MailLevel;
-  type: MailType;
-}
-
 interface TemplateDropdownProps extends PropsWithChildren {
   isDisabled?: boolean;
-  onSelectTemplate?: (template: MailTemplate) => void;
+  onSelectTemplateId?: (templateId: number) => void;
+  selectedTemplateId?: number;
 }
-
-const templates: MailTemplate[] = [
-  { level: '1차', type: '합격', label: '[1차 서류 합격 메일]' },
-  { level: '1차', type: '불합격', label: '[1차 서류 불합격 메일]' },
-  { level: '최종', type: '합격', label: '[최종 합격 메일]' },
-  { level: '최종', type: '불합격', label: '[최종 불합격 메일]' },
-];
 
 export const TemplateDropdown = ({
   children,
-  onSelectTemplate,
+  selectedTemplateId,
+  onSelectTemplateId,
   isDisabled,
 }: TemplateDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<MailTemplate | null>(null);
+  const { data: templates = [] } = useSuspenseQuery(templateOptions.all());
+  const selectedTemplate = templates.find((template) => template.id === selectedTemplateId);
 
-  const handleSelect = (template: MailTemplate) => {
-    setSelectedTemplate(template);
-    if (onSelectTemplate) {
-      onSelectTemplate(template);
+  const handleSelect = (templateId: number) => {
+    if (onSelectTemplateId) {
+      onSelectTemplateId(templateId);
     }
     setIsOpen(false);
   };
@@ -105,7 +96,7 @@ export const TemplateDropdown = ({
         {children || (
           <StyledDropdownContainer>
             <StyledSelectedLabel $isDisabled={isDisabled}>
-              {selectedTemplate ? selectedTemplate.label : '템플릿 선택'}
+              {selectedTemplate ? selectedTemplate.title : '템플릿 선택'}
             </StyledSelectedLabel>
             <IcArrowsChevronDownLine color={isDisabled ? '#B5B9C4' : '#000'} />
           </StyledDropdownContainer>
@@ -116,8 +107,8 @@ export const TemplateDropdown = ({
         <StyledContent align="start" sideOffset={5}>
           <StyledItemsContainer>
             {templates.map((template, index) => (
-              <StyledItem key={index} onClick={() => handleSelect(template)}>
-                <StyledItemText>{template.label}</StyledItemText>
+              <StyledItem key={index} onClick={() => handleSelect(template.id)}>
+                <StyledItemText>{template.title}</StyledItemText>
               </StyledItem>
             ))}
           </StyledItemsContainer>
