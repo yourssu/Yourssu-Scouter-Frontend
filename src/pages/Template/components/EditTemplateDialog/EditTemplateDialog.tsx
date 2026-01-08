@@ -1,9 +1,11 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
+import { templateOptions } from '@/query/template/options';
 import { Variable } from '@/types/editor';
 import { Template } from '@/types/template';
 
@@ -20,42 +22,43 @@ interface EditTemplateDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (template: Template) => void;
-  template: Template;
+  templateId: number;
 }
 
 export const EditTemplateDialog = ({
   isOpen,
   onClose,
   onSave,
-  template,
+  templateId,
 }: EditTemplateDialogProps) => {
+  const { data: templateDetail } = useSuspenseQuery(templateOptions.detail(templateId));
+
   const [formData, setFormData] = useState({
-    title: template.title,
-    content: template.content,
-    variables: template.variables,
+    title: templateDetail.title,
+    content: templateDetail.content,
+    variables: templateDetail.variables,
   });
 
-  // template이 변경될 때 폼 데이터 업데이트
+  // templateDetail이 변경될 때 폼 데이터 업데이트
   useEffect(() => {
-    if (template) {
-      setFormData({
-        title: template.title,
-        content: template.content,
-        variables: template.variables,
-      });
-    }
-  }, [template]);
+    setFormData({
+      title: templateDetail.title,
+      content: templateDetail.content,
+      variables: templateDetail.variables,
+    });
+  }, [templateDetail]);
 
   const handleSave = () => {
-    if (template && formData.title.trim()) {
-      onSave({
-        ...template,
-        title: formData.title.trim(),
-        content: formData.content,
-        variables: formData.variables,
-      });
-      onClose();
+    if (!formData.title.trim()) {
+      return;
     }
+    onSave({
+      ...templateDetail,
+      title: formData.title.trim(),
+      content: formData.content,
+      variables: formData.variables,
+    });
+    onClose();
   };
 
   const handleClose = () => {

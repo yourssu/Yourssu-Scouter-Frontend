@@ -44,11 +44,13 @@ export const VariableChip = ({
     }
   };
 
+  const isDeletable = !(type === 'part' || type === 'applicant');
+
   return (
     <ChipWrapper onClick={onClick} size={size} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <IconWrapper>{iconMap[type]}</IconWrapper>
       <Label>{label}</Label>
-      {label !== '파트명' && label !== '지원자' && size === 'large' ? (
+      {isDeletable ? (
         <CloseIconWrapper onClick={handleDeleteClick}>
           <IcCloseFilled />
         </CloseIconWrapper>

@@ -3,6 +3,7 @@ import FontFamily from '@tiptap/extension-font-family';
 import FontSize from '@tiptap/extension-font-size';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
+import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
@@ -11,6 +12,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { forwardRef, useImperativeHandle } from 'react';
 
 import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
+import { VariableKeyType } from '@/types/editor';
 
 import { MailToolbar } from '../MailToolbar/MailToolbar';
 import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
@@ -22,15 +24,15 @@ interface MailEditorContentProps {
 }
 
 export interface MailEditorContentRef {
-  deleteVariable: (label: string) => void;
-  insertVariable: (type: string, label: string) => void;
+  deleteVariable: (key: VariableKeyType) => void;
+  insertVariable: (key: VariableKeyType, type: string, label: string) => void;
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
   ({ recipientName, initialContent, onContentChange }, ref) => {
-    const defaultContent = recipientName
-      ? `<p>${recipientName}님에게 보낼 내용</p>`
-      : '<p>내용을 입력하세요</p>';
+    const placeholderText = recipientName
+      ? `${recipientName}님에게 보낼 내용`
+      : '내용을 입력하세요';
 
     const editor = useEditor({
       extensions: [
@@ -59,9 +61,18 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
             target: '_blank',
           },
         }),
+        Placeholder.configure({
+          placeholder: placeholderText,
+          emptyEditorClass: 'is-editor-empty',
+        }),
       ],
-      content: initialContent || defaultContent,
+      content: initialContent || '',
       editable: true,
+      onCreate: ({ editor }) => {
+        if (onContentChange) {
+          onContentChange(editor.getHTML());
+        }
+      },
       onUpdate: ({ editor }) => {
         if (onContentChange) {
           onContentChange(editor.getHTML());
@@ -72,23 +83,24 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
     useImperativeHandle(
       ref,
       () => ({
-        insertVariable: (type: string, label: string) => {
+        insertVariable: (key: VariableKeyType, type: string, label: string) => {
           if (editor) {
             editor
               .chain()
               .focus()
-              .insertContent({ type: 'variableChip', attrs: { type, label } })
+              .insertContent({ type: 'variableChip', attrs: { key, type, label } })
+              .insertContent(' ') // 변수칩 뒤에 공백 추가(가독성 향상 및 커서 줄바꿈 현상 방지)
               .run();
           }
         },
-        deleteVariable: (label: string) => {
+        deleteVariable: (key: VariableKeyType) => {
           if (editor) {
             const transaction = editor.state.tr;
             const nodesToDelete: { pos: number; size: number }[] = []; // 텍스트 내 삭제할 노드 위치와 크기 저장
 
             // 텍스트 전체 탐색
             editor.state.doc.descendants((node, pos) => {
-              if (node.type.name === 'variableChip' && node.attrs.label === label) {
+              if (node.type.name === 'variableChip' && node.attrs.key === key) {
                 nodesToDelete.push({ pos, size: node.nodeSize });
               }
             });

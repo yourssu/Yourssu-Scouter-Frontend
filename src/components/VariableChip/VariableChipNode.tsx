@@ -18,7 +18,6 @@ declare module '@tiptap/core' {
 
 export const VariableChipNode = Node.create<VariableChipOptions>({
   name: 'variableChip',
-
   group: 'inline',
   inline: true,
   selectable: true,
@@ -32,6 +31,18 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
 
   addAttributes() {
     return {
+      key: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('data-key'),
+        renderHTML: (attributes) => {
+          if (!attributes.key) {
+            return {};
+          }
+          return {
+            'data-key': attributes.key,
+          };
+        },
+      },
       type: {
         default: 'text',
         parseHTML: (element) => element.getAttribute('data-type'),

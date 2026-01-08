@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { getChipType } from '@/components/VariableChip/utils';
 import { Variable, VariableType } from '@/types/editor';
-import { defaultVariables } from '@/types/editor';
+import { getDefaultVariables } from '@/types/editor';
 
 import { Recipient, RecipientId } from '../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
@@ -18,7 +18,7 @@ export const MailEditor = () => {
 
   const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
 
-  const [variables, setVariables] = useState<Variable[]>(defaultVariables); // 메일 페이지 작업 시 수정
+  const [variables, setVariables] = useState<Variable[]>(getDefaultVariables()); // 메일 페이지 작업 시 수정
 
   const editorRef = useRef<MailEditorContentRef>(null);
 
@@ -45,30 +45,31 @@ export const MailEditor = () => {
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
       const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(chipType, variable.name);
+      editorRef.current.insertVariable(variable.key, chipType, variable.displayName);
     }
   };
 
-  const handleVariableAdd = (type: VariableType, name: string, differentForEachPerson: boolean) => {
+  const handleVariableAdd = (type: VariableType, displayName: string, perRecipient: boolean) => {
     const newVariable: Variable = {
-      id: Date.now().toString(),
+      key: `var-${crypto.randomUUID()}`,
       type,
-      name,
-      differentForEachPerson,
-      isFixed: false,
+      displayName,
+      perRecipient,
     };
 
     setVariables((prev) => [...prev, newVariable]);
 
-    editorRef.current?.insertVariable(getChipType(newVariable.type), newVariable.name);
+    editorRef.current?.insertVariable(
+      newVariable.key,
+      getChipType(newVariable.type),
+      newVariable.displayName,
+    );
   };
 
   const handleVariableDelete = (variable: Variable) => {
-    if (!variable.isFixed) {
-      if (editorRef.current) {
-        setVariables((prev) => prev.filter((v) => v.id !== variable.id));
-        editorRef.current.deleteVariable(variable.name);
-      }
+    if (editorRef.current) {
+      setVariables((prev) => prev.filter((v) => v.key !== variable.key));
+      editorRef.current.deleteVariable(variable.key);
     }
   };
 

@@ -37,7 +37,7 @@ const variableTypes = [
 ];
 
 interface VariableDialogProps {
-  onSelect: (type: VariableType, name: string, differentForEachPerson: boolean) => void;
+  onSelect: (type: VariableType, name: string, perRecipient: boolean) => void;
   trigger: React.ReactNode;
 }
 
@@ -46,7 +46,7 @@ export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
   const [step, setStep] = useState<'name' | 'type'>('type');
   const [selectedType, setSelectedType] = useState<null | VariableType>(null);
   const [variableName, setVariableName] = useState('');
-  const [differentForEachPerson, setDifferentForEachPerson] = useState(false);
+  const [perRecipient, setPerRecipient] = useState(false);
 
   const handleSelectType = (e: React.MouseEvent, type: VariableType) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
 
   const handleSubmit = () => {
     if (selectedType && variableName.trim()) {
-      onSelect(selectedType, variableName, differentForEachPerson);
+      onSelect(selectedType, variableName, perRecipient);
       setOpen(false);
       resetState();
     }
@@ -70,7 +70,7 @@ export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
     setStep('type');
     setSelectedType(null);
     setVariableName('');
-    setDifferentForEachPerson(false);
+    setPerRecipient(false);
   };
 
   const handleOpenChange = (isOpen: boolean) => {
@@ -114,8 +114,8 @@ export const VariableDialog = ({ onSelect, trigger }: VariableDialogProps) => {
                 <StyledSwitchContainer>
                   <StyledSwitchLabel>받는 사람마다 다르게 설정</StyledSwitchLabel>
                   <Switch
-                    isSelected={differentForEachPerson}
-                    onSelectedChange={setDifferentForEachPerson}
+                    isSelected={perRecipient}
+                    onSelectedChange={setPerRecipient}
                     size="medium"
                   />
                 </StyledSwitchContainer>

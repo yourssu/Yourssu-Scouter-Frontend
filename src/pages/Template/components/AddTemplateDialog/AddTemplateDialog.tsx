@@ -4,7 +4,7 @@ import { Dialog } from 'radix-ui';
 import { useState } from 'react';
 
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
-import { defaultVariables, Variable } from '@/types/editor';
+import { getDefaultVariables, Variable } from '@/types/editor';
 import { Template } from '@/types/template';
 
 import {
@@ -26,7 +26,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    variables: defaultVariables,
+    variables: getDefaultVariables(),
   });
 
   const handleSave = () => {
@@ -44,7 +44,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     setFormData({
       title: '',
       content: '',
-      variables: defaultVariables,
+      variables: getDefaultVariables(),
     });
     onClose();
   };
