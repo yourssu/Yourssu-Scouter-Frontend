@@ -90,17 +90,17 @@ export const MailEditor = ({ type }: MailEditorProps) => {
         <MailEditorContent ref={editorRef} />
       </EditorContainer>
     );
-  } else if (type === 'tabs') {
-    return (
-      <EditorContainer>
-        <MailHeader onTabChange={handleTabChange} recipients={recipients} type="tabs" />
-        <MailEditorContent
-          initialContent={editorContents[activeRecipient]}
-          key={activeRecipient}
-          onContentChange={handleContentChange}
-          recipientName={activeRecipientName}
-        />
-      </EditorContainer>
-    );
   }
+  // type === 'tabs'
+  return (
+    <EditorContainer>
+      <MailHeader onTabChange={handleTabChange} recipients={recipients} type="tabs" />
+      <MailEditorContent
+        initialContent={editorContents[activeRecipient]}
+        key={activeRecipient}
+        onContentChange={handleContentChange}
+        recipientName={activeRecipientName}
+      />
+    </EditorContainer>
+  );
 };
