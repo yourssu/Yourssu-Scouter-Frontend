@@ -1,11 +1,11 @@
 interface InputFieldProps {
-  textLabel: string;
+  label: string;
 }
 
-export const InputField = ({ textLabel }: InputFieldProps) => {
+export const InputField = ({ label }: InputFieldProps) => {
   return (
     <div className="border-line-basicMedium flex h-[56px] flex-row gap-[12px] border-b-1 px-[20px] py-[16px]">
-      <div className="typo-b1_sb_16 h-[24px] w-[72px]">{textLabel}</div>
+      <div className="typo-b1_sb_16 h-[24px] w-[72px]">{label}</div>
       <input className="typo-b1_rg_16 flex-1 border-0" />
     </div>
   );

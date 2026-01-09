@@ -19,7 +19,7 @@ import {
 } from './MailDropdown.style';
 
 interface PartDropdownProps extends PropsWithChildren {
-  isDisabled?: boolean;
+  disabled?: boolean;
   onSelectPart?: (part: Part) => void;
   selectedPart?: Part;
 }
@@ -28,7 +28,7 @@ export const PartDropdown = ({
   children,
   onSelectPart,
   selectedPart,
-  isDisabled,
+  disabled,
 }: PartDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,11 +43,11 @@ export const PartDropdown = ({
 
   return (
     <DropdownMenu.Root onOpenChange={setIsOpen} open={isOpen}>
-      <StyledTrigger asChild disabled={isDisabled}>
+      <StyledTrigger asChild disabled={disabled}>
         {children || (
           <StyledDropdownContainer>
             <StyledLabel>{selectedPart ? selectedPart.partName : '파트 선택'}</StyledLabel>
-            <IcArrowsChevronDownLine color={isDisabled ? '#B5B9C4' : '#000'} />
+            <IcArrowsChevronDownLine color={disabled ? '#B5B9C4' : '#000'} />
           </StyledDropdownContainer>
         )}
       </StyledTrigger>
@@ -68,7 +68,7 @@ export const PartDropdown = ({
 };
 
 interface TemplateDropdownProps extends PropsWithChildren {
-  isDisabled?: boolean;
+  disabled?: boolean;
   onSelectTemplateId?: (templateId: number) => void;
   selectedTemplateId?: number;
 }
@@ -77,7 +77,7 @@ export const TemplateDropdown = ({
   children,
   selectedTemplateId,
   onSelectTemplateId,
-  isDisabled,
+  disabled,
 }: TemplateDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: templates = [] } = useSuspenseQuery(templateOptions.all());
@@ -92,13 +92,13 @@ export const TemplateDropdown = ({
 
   return (
     <DropdownMenu.Root onOpenChange={setIsOpen} open={isOpen}>
-      <StyledTrigger asChild disabled={isDisabled}>
+      <StyledTrigger asChild disabled={disabled}>
         {children || (
           <StyledDropdownContainer>
-            <StyledSelectedLabel $isDisabled={isDisabled}>
+            <StyledSelectedLabel $disabled={disabled}>
               {selectedTemplate ? selectedTemplate.title : '템플릿 선택'}
             </StyledSelectedLabel>
-            <IcArrowsChevronDownLine color={isDisabled ? '#B5B9C4' : '#000'} />
+            <IcArrowsChevronDownLine color={disabled ? '#B5B9C4' : '#000'} />
           </StyledDropdownContainer>
         )}
       </StyledTrigger>

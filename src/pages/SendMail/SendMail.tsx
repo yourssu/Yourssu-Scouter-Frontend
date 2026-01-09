@@ -16,22 +16,22 @@ export const SendMail = () => {
         <div className="flex w-full flex-col gap-[20px] p-[40px]">
           <div className="flex w-full flex-row gap-[12px]">
             <PartDropdown
-              isDisabled={selectedTemplateId !== undefined}
+              disabled={selectedTemplateId !== undefined}
               onSelectPart={setSelectedPart}
               selectedPart={selectedPart}
             />
             <TemplateDropdown
-              isDisabled={selectedPart === undefined}
+              disabled={selectedPart === undefined}
               onSelectTemplateId={setSelectedTemplateId}
               selectedTemplateId={selectedTemplateId}
             />
           </div>
           <div className="flex h-full w-full flex-col gap-[20px]">
             <div className="gap-0">
-              <InputField textLabel="보내는 사람" />
-              <InputField textLabel="받는 사람" />
-              <InputField textLabel="숨은 참조" />
-              <InputField textLabel="제목" />
+              <InputField label="보내는 사람" />
+              <InputField label="받는 사람" />
+              <InputField label="숨은 참조" />
+              <InputField label="제목" />
             </div>
             <div className="flex h-full w-full">
               <MailEditor type="normal" />

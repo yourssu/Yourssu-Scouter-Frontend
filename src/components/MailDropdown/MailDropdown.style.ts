@@ -1,7 +1,7 @@
 import { DropdownMenu } from 'radix-ui';
 import styled from 'styled-components';
 
-export const StyledTrigger = styled(DropdownMenu.Trigger)<{ $isDisabled?: boolean }>`
+export const StyledTrigger = styled(DropdownMenu.Trigger)<{ $disabled?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,8 +16,8 @@ export const StyledTrigger = styled(DropdownMenu.Trigger)<{ $isDisabled?: boolea
     box-shadow: 0 0 0 2px ${({ theme }) => theme.semantic.color.textBrandPrimary};
   }
 
-  ${({ $isDisabled, theme }) =>
-    $isDisabled &&
+  ${({ $disabled, theme }) =>
+    $disabled &&
     `
     border-color: ${theme.semantic.color.lineBasicMedium};
   `}
@@ -62,13 +62,13 @@ export const StyledItem = styled(DropdownMenu.Item)`
   }
 `;
 
-export const StyledLabel = styled.span<{ $isDisabled?: boolean }>`
+export const StyledLabel = styled.span<{ $disabled?: boolean }>`
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
   ${({ theme }) => theme.typo.B1_Sb_16};
   flex-grow: 1;
 
-  ${({ $isDisabled, theme }) =>
-    $isDisabled &&
+  ${({ $disabled, theme }) =>
+    $disabled &&
     `
     color: ${theme.semantic.color.textBasicDisabled};
   `}
@@ -83,13 +83,13 @@ export const StyledItemText = styled.span`
   }
 `;
 
-export const StyledSelectedLabel = styled.span<{ $isDisabled?: boolean }>`
+export const StyledSelectedLabel = styled.span<{ $disabled?: boolean }>`
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
   ${({ theme }) => theme.typo.B1_Sb_16};
   flex-grow: 1;
 
-  ${({ $isDisabled, theme }) =>
-    $isDisabled &&
+  ${({ $disabled, theme }) =>
+    $disabled &&
     `
     color: ${theme.semantic.color.textBasicDisabled};
   `}
