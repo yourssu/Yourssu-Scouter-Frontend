@@ -1,7 +1,7 @@
 import { DropdownMenu } from 'radix-ui';
 import styled from 'styled-components';
 
-export const StyledTrigger = styled(DropdownMenu.Trigger)`
+export const StyledTrigger = styled(DropdownMenu.Trigger)<{ $disabled?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,13 +9,18 @@ export const StyledTrigger = styled(DropdownMenu.Trigger)`
   padding: 16px 20px;
   background-color: ${({ theme }) => theme.semantic.color.bgBasicDefault};
   border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
-  max-width: 562px;
   width: 100%;
   cursor: pointer;
 
   &:focus {
     box-shadow: 0 0 0 2px ${({ theme }) => theme.semantic.color.textBrandPrimary};
   }
+
+  ${({ $disabled, theme }) =>
+    $disabled &&
+    `
+    border-color: ${theme.semantic.color.lineBasicMedium};
+  `}
 `;
 
 export const StyledDropdownContainer = styled.div`
@@ -57,10 +62,16 @@ export const StyledItem = styled(DropdownMenu.Item)`
   }
 `;
 
-export const StyledLabel = styled.span`
+export const StyledLabel = styled.span<{ $disabled?: boolean }>`
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
   ${({ theme }) => theme.typo.B1_Sb_16};
   flex-grow: 1;
+
+  ${({ $disabled, theme }) =>
+    $disabled &&
+    `
+    color: ${theme.semantic.color.textBasicDisabled};
+  `}
 `;
 
 export const StyledItemText = styled.span`
@@ -72,8 +83,14 @@ export const StyledItemText = styled.span`
   }
 `;
 
-export const StyledSelectedLabel = styled.span`
+export const StyledSelectedLabel = styled.span<{ $disabled?: boolean }>`
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
   ${({ theme }) => theme.typo.B1_Sb_16};
   flex-grow: 1;
+
+  ${({ $disabled, theme }) =>
+    $disabled &&
+    `
+    color: ${theme.semantic.color.textBasicDisabled};
+  `}
 `;

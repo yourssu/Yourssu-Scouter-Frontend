@@ -7,7 +7,7 @@ import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog } from '@/components/VariableDialog/VariableDialog';
 import { Variable, VariableType } from '@/types/editor';
 
-import { HeaderType, Recipient, RecipientId } from '../mail.type';
+import { EditorType, Recipient, RecipientId } from '../mail.type';
 import {
   HeaderContainer,
   HeaderLabel,
@@ -22,7 +22,7 @@ interface MailHeaderProps {
   onVariableClick?: (variable: Variable) => void;
   onVariableDelete?: (variable: Variable) => void;
   recipients?: Recipient[];
-  type: HeaderType;
+  type: EditorType;
   variables?: Variable[];
 }
 

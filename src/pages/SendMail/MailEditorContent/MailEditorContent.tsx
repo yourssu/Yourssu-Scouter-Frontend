@@ -121,12 +121,12 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
     }
 
     return (
-      <>
+      <div className="flex h-full flex-col">
         <EditorWrapper>
           <StyledEditorContent editor={editor} />
         </EditorWrapper>
         <MailToolbar editor={editor} />
-      </>
+      </div>
     );
   },
 );

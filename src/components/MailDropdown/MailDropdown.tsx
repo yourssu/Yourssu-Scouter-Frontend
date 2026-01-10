@@ -5,6 +5,7 @@ import { PropsWithChildren, useState } from 'react';
 
 import { partOptions } from '@/query/part/options.ts';
 import { Part } from '@/query/part/schema';
+import { templateOptions } from '@/query/template/options';
 
 import {
   StyledContent,
@@ -18,17 +19,22 @@ import {
 } from './MailDropdown.style';
 
 interface PartDropdownProps extends PropsWithChildren {
+  disabled?: boolean;
   onSelectPart?: (part: Part) => void;
+  selectedPart?: Part;
 }
 
-export const PartDropdown = ({ children, onSelectPart }: PartDropdownProps) => {
+export const PartDropdown = ({
+  children,
+  onSelectPart,
+  selectedPart,
+  disabled,
+}: PartDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPart, setSelectedPart] = useState<null | Part>(null);
 
   const { data: parts = [] } = useSuspenseQuery(partOptions());
 
   const handleSelect = (part: Part) => {
-    setSelectedPart(part);
     if (onSelectPart) {
       onSelectPart(part);
     }
@@ -37,11 +43,11 @@ export const PartDropdown = ({ children, onSelectPart }: PartDropdownProps) => {
 
   return (
     <DropdownMenu.Root onOpenChange={setIsOpen} open={isOpen}>
-      <StyledTrigger asChild>
+      <StyledTrigger asChild disabled={disabled}>
         {children || (
           <StyledDropdownContainer>
             <StyledLabel>{selectedPart ? selectedPart.partName : '파트 선택'}</StyledLabel>
-            <IcArrowsChevronDownLine />
+            <IcArrowsChevronDownLine color={disabled ? '#B5B9C4' : '#000'} />
           </StyledDropdownContainer>
         )}
       </StyledTrigger>
@@ -61,47 +67,38 @@ export const PartDropdown = ({ children, onSelectPart }: PartDropdownProps) => {
   );
 };
 
-type MailType = '불합격' | '합격';
-type MailLevel = '1차' | '최종';
-
-interface MailTemplate {
-  label: string;
-  level: MailLevel;
-  type: MailType;
-}
-
 interface TemplateDropdownProps extends PropsWithChildren {
-  onSelectTemplate?: (template: MailTemplate) => void;
+  disabled?: boolean;
+  onSelectTemplateId?: (templateId: number) => void;
+  selectedTemplateId?: number;
 }
 
-const templates: MailTemplate[] = [
-  { level: '1차', type: '합격', label: '[1차 서류 합격 메일]' },
-  { level: '1차', type: '불합격', label: '[1차 서류 불합격 메일]' },
-  { level: '최종', type: '합격', label: '[최종 합격 메일]' },
-  { level: '최종', type: '불합격', label: '[최종 불합격 메일]' },
-];
-
-export const TemplateDropdown = ({ children, onSelectTemplate }: TemplateDropdownProps) => {
+export const TemplateDropdown = ({
+  children,
+  selectedTemplateId,
+  onSelectTemplateId,
+  disabled,
+}: TemplateDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<MailTemplate | null>(null);
+  const { data: templates = [] } = useSuspenseQuery(templateOptions.all());
+  const selectedTemplate = templates.find((template) => template.id === selectedTemplateId);
 
-  const handleSelect = (template: MailTemplate) => {
-    setSelectedTemplate(template);
-    if (onSelectTemplate) {
-      onSelectTemplate(template);
+  const handleSelect = (templateId: number) => {
+    if (onSelectTemplateId) {
+      onSelectTemplateId(templateId);
     }
     setIsOpen(false);
   };
 
   return (
     <DropdownMenu.Root onOpenChange={setIsOpen} open={isOpen}>
-      <StyledTrigger asChild>
+      <StyledTrigger asChild disabled={disabled}>
         {children || (
           <StyledDropdownContainer>
-            <StyledSelectedLabel>
-              {selectedTemplate ? selectedTemplate.label : '템플릿 선택'}
+            <StyledSelectedLabel $disabled={disabled}>
+              {selectedTemplate ? selectedTemplate.title : '템플릿 선택'}
             </StyledSelectedLabel>
-            <IcArrowsChevronDownLine />
+            <IcArrowsChevronDownLine color={disabled ? '#B5B9C4' : '#000'} />
           </StyledDropdownContainer>
         )}
       </StyledTrigger>
@@ -110,8 +107,8 @@ export const TemplateDropdown = ({ children, onSelectTemplate }: TemplateDropdow
         <StyledContent align="start" sideOffset={5}>
           <StyledItemsContainer>
             {templates.map((template, index) => (
-              <StyledItem key={index} onClick={() => handleSelect(template)}>
-                <StyledItemText>{template.label}</StyledItemText>
+              <StyledItem key={index} onClick={() => handleSelect(template.id)}>
+                <StyledItemText>{template.title}</StyledItemText>
               </StyledItem>
             ))}
           </StyledItemsContainer>
