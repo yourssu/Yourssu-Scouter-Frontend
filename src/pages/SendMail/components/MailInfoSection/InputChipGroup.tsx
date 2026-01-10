@@ -8,15 +8,16 @@ const chip = tv({
 
 interface InputChipGroupProps {
   items: string[];
+  onDelete: (item: string) => void;
 }
 
-export const InputChipGroup = ({ items }: InputChipGroupProps) => {
+export const InputChipGroup = ({ items, onDelete }: InputChipGroupProps) => {
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="contents items-center gap-2">
       {items.map((item) => (
         <motion.div className={chip()} key={item}>
           {item}
-          <IcCloseFilled height={16} width={16} />
+          <IcCloseFilled height={16} onClick={() => onDelete(item)} width={16} />
         </motion.div>
       ))}
     </div>

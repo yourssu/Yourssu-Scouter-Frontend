@@ -4,8 +4,10 @@ import styled from 'styled-components';
 
 export const StyledWrapper = styled.div`
   position: relative;
-  display: inline-block;
+  display: flex;
   z-index: 1;
+  width: 100%;
+  flex: 1;
 `;
 
 export const StyledContent = styled(Popover.Content)`
