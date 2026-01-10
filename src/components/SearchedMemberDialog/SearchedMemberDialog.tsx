@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { memberOptions } from '@/query/member/options.ts';
+import { Member } from '@/query/member/schema';
 
 import {
   StyledButton,
@@ -49,7 +50,21 @@ export const SearchedMemberDialog = ({
     if (!term) {
       return isExternalMode ? [] : allMembers;
     }
-    return allMembers.filter((member) => member.nickname.toLowerCase().includes(term));
+    const matches = allMembers.filter((member) => member.nickname.toLowerCase().includes(term));
+
+    // a: 검색어로 시작하는 사람들
+    const startsWith = matches.filter((m) => m.nickname.toLowerCase().startsWith(term));
+    // b: 검색어가 중간에 포함된 사람들
+    const contains = matches.filter((m) => !m.nickname.toLowerCase().startsWith(term));
+
+    // 각 그룹 내에서 알파벳/가나다 순 정렬
+    const sortFn = (a: Member, b: Member) => a.nickname.localeCompare(b.nickname);
+
+    startsWith.sort(sortFn);
+    contains.sort(sortFn);
+
+    // a + b 합쳐서 반환
+    return [...startsWith, ...contains];
   }, [allMembers, currentSearchText, isExternalMode]);
 
   // 팝오버 열림 조건 설정
