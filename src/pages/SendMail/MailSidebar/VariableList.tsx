@@ -4,12 +4,12 @@ import { NameVariableCard } from '@/components/VariableCard/NameVariableCard';
 import { TextVariableCard } from '@/components/VariableCard/TextVariableCard';
 import { Variable, VariableKeyType } from '@/types/editor';
 
-interface VariableGroupProps {
+interface VariableListProps {
   onUpdateVariable: (key: VariableKeyType, updatedItems: Variable['items']) => void;
   variables: Variable[];
 }
 
-export const VariableGroup = ({ variables, onUpdateVariable }: VariableGroupProps) => {
+export const VariableList = ({ variables, onUpdateVariable }: VariableListProps) => {
   const renderVariableCard = (v: Variable) => {
     // 공용 핸들러: 아이템의 특정 인덱스 값을 변경
     const handleItemChange = (index: number, newValue: string) => {
