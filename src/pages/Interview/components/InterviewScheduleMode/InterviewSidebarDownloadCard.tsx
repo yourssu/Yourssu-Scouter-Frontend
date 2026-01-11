@@ -43,7 +43,7 @@ export const InterviewSidebarDownloadCard = () => {
     <InterviewSidebarCard>
       <InterviewSidebarCard.Title>면접 일정 저장</InterviewSidebarCard.Title>
       <InterviewSidebarCard.Content>
-        Jpeg로 저장된 면접 일정을 다운로드 할 수 있어요!
+        면접 일정을 이미지로 다운로드 할 수 있어요.
       </InterviewSidebarCard.Content>
       <BoxButton disabled={loading} onClick={onClick} size="small" variant="filledPrimary">
         {loading ? '시간표를 변환하고 있어요...' : '시간표 저장하기'}
