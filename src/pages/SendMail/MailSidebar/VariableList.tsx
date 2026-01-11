@@ -2,6 +2,7 @@ import { DateVariableCard } from '@/components/VariableCard/DateVariableCard';
 import { LinkVariableCard } from '@/components/VariableCard/LinkVariableCard';
 import { NameVariableCard } from '@/components/VariableCard/NameVariableCard';
 import { TextVariableCard } from '@/components/VariableCard/TextVariableCard';
+import { VariableItem } from '@/components/VariableCard/VariableCardType';
 import { Variable, VariableKeyType } from '@/types/editor';
 
 interface VariableListProps {
@@ -11,9 +12,12 @@ interface VariableListProps {
 
 export const VariableList = ({ variables, onUpdateVariable }: VariableListProps) => {
   const renderVariableCard = (v: Variable) => {
+    const itemValues: VariableItem[] = v.items ?? [{ value: '', label: '' }];
+    const nameValues: string[] = v.items?.map((item) => item.value) ?? [];
+
     // 공용 핸들러: 아이템의 특정 인덱스 값을 변경
     const handleItemChange = (index: number, newValue: string) => {
-      const newItems = [...(v.items ?? [])];
+      const newItems = [...itemValues];
       newItems[index] = { ...newItems[index], value: newValue };
       onUpdateVariable(v.key, newItems);
     };
@@ -22,7 +26,7 @@ export const VariableList = ({ variables, onUpdateVariable }: VariableListProps)
       case '날짜':
         return (
           <DateVariableCard
-            dates={v.items ?? []}
+            dates={itemValues}
             onDateChange={handleItemChange}
             title={v.displayName}
           />
@@ -31,7 +35,7 @@ export const VariableList = ({ variables, onUpdateVariable }: VariableListProps)
       case '링크':
         return (
           <LinkVariableCard
-            links={v.items ?? []}
+            links={itemValues}
             onValueChange={handleItemChange}
             title={v.displayName}
           />
@@ -40,7 +44,7 @@ export const VariableList = ({ variables, onUpdateVariable }: VariableListProps)
       case '사람':
         return (
           <NameVariableCard
-            names={v.items?.map((item) => item.value) ?? []}
+            names={nameValues}
             onAddName={(name) => {
               const newItems = [...(v.items ?? []), { value: name }];
               onUpdateVariable(v.key, newItems);
@@ -54,14 +58,15 @@ export const VariableList = ({ variables, onUpdateVariable }: VariableListProps)
         );
 
       case '텍스트':
-      default:
         return (
           <TextVariableCard
             onValueChange={handleItemChange}
-            texts={v.items ?? []}
+            texts={itemValues}
             title={v.displayName}
           />
         );
+      default:
+        return null;
     }
   };
 
