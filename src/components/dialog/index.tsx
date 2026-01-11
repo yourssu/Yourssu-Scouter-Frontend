@@ -92,7 +92,7 @@ export const Dialog = ({
             >
               <motion.div
                 animate="animate"
-                className="bg-bg-basicDefault rounded-2xl will-change-transform"
+                className="bg-bg-basicDefault max-h-screen max-w-screen overflow-y-auto rounded-2xl will-change-transform"
                 exit="initial"
                 initial="initial"
                 transition={{
