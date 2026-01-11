@@ -36,6 +36,7 @@
     "core-js": "^3.45.1",
     "date-fns": "^4.1.0",
     "es-toolkit": "^1.39.10",
+    "html-to-image": "^1.11.13",
     "ky": "^1.7.4",
     "motion": "^12.23.18",
     "overlay-kit": "^1.8.6",
