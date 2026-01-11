@@ -1,6 +1,7 @@
 import { getHours, getMinutes, isSameDay } from 'date-fns';
 
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
+import { useInterviewScheduleCalendarRefContext } from '@/pages/Interview/components/InterviewScheduleMode/context';
 import { InterviewScheduleBlock } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleBlock';
 import { Schedule } from '@/query/schedule/schema';
 
@@ -17,6 +18,8 @@ export const InterviewScheduleCalendar = ({
   week,
   year,
 }: InterviewScheduleCalendarProps) => {
+  const { ref } = useInterviewScheduleCalendarRefContext();
+
   const getSchedulesForCell = (date: Date, hour: number, minute: number) => {
     const targetTotalMinutes = hour * 60 + minute;
 
@@ -35,7 +38,7 @@ export const InterviewScheduleCalendar = ({
   };
 
   return (
-    <InterviewCalendar month={month} week={week} year={year}>
+    <InterviewCalendar month={month} ref={ref} week={week} year={year}>
       {({ date, hour, minute }) =>
         getSchedulesForCell(date, hour, minute).map((schedule) => (
           <InterviewScheduleBlock
