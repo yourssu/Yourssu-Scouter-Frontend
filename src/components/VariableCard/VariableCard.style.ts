@@ -36,12 +36,13 @@ export const InputContainer = styled.div`
   align-items: center;
   margin-bottom: 8px;
   gap: 8px;
+  width: 100%;
 `;
 
 export const TextFieldContainer = styled.div`
   position: relative;
   display: inline-block;
-  width: fit-content;
+  width: 100%;
 `;
 
 export const IconWrapper = styled.div`

@@ -71,7 +71,7 @@ export const VariableList = ({ variables, onUpdateVariable }: VariableListProps)
   };
 
   return (
-    <div className="flex flex-col gap-4 overflow-y-auto p-4">
+    <div className="flex flex-col items-center gap-[10px] overflow-y-scroll p-[20px] pt-0">
       {variables.map((v) => (
         <div key={v.key}>{renderVariableCard(v)}</div>
       ))}

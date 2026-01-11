@@ -65,4 +65,6 @@ export const DatesWrapper = styled.div`
 
 export const StyledWrapper = styled.div`
   display: inline-block;
+  z-index: 2;
+  width: 100%;
 `;
