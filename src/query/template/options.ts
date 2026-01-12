@@ -53,6 +53,9 @@ export const templateOptions = {
             displayName: variable.displayName,
             type: variableTypeMap[variable.type],
             perRecipient: variable.perRecipient,
+            items:
+              variable.items ??
+              (['APPLICANT', 'PERSON'].includes(variable.type) ? [] : [{ value: '' }]),
           };
         });
 

@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 
 import { getChipType } from '@/components/VariableChip/utils';
-import { EditorContainer } from '@/pages/SendMail/MailEditor/MailEditor.style';
+import { EditorContainer } from '@/pages/SendMail/components/MailEditor/MailEditor.style';
 import {
   MailEditorContent,
   MailEditorContentRef,
-} from '@/pages/SendMail/MailEditorContent/MailEditorContent';
-import { MailHeader } from '@/pages/SendMail/MailHeader/MailHeader';
+} from '@/pages/SendMail/components/MailEditorContent/MailEditorContent';
+import { MailHeader } from '@/pages/SendMail/components/MailHeader/MailHeader';
 import { Variable, VariableType } from '@/types/editor';
 
 interface TemplateEditorProps {
@@ -37,6 +37,7 @@ export const TemplateEditor = ({
       type,
       displayName,
       perRecipient,
+      items: type === '사람' ? [] : [{ value: '' }],
     };
 
     onVariablesChange([...templateVariables, newVariable]);

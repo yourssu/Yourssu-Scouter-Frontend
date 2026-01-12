@@ -4,7 +4,7 @@ import { getChipType } from '@/components/VariableChip/utils';
 import { Variable, VariableType } from '@/types/editor';
 import { getDefaultVariables } from '@/types/editor';
 
-import { EditorType, Recipient, RecipientId } from '../mail.type';
+import { EditorType, Recipient, RecipientId } from '../../mail.type';
 import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
@@ -59,6 +59,7 @@ export const MailEditor = ({ type }: MailEditorProps) => {
       type,
       displayName,
       perRecipient,
+      items: type === '사람' ? [] : [{ value: '' }],
     };
 
     setVariables((prev) => [...prev, newVariable]);

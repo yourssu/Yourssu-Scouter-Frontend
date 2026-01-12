@@ -12,11 +12,17 @@ const VariableKeyTypeSchema = z.custom<VariableKeyType>(
   },
 );
 
+const VariableItemSchema = z.object({
+  value: z.string(),
+  label: z.string().optional(),
+});
+
 const VariableSchema = z.object({
   key: VariableKeyTypeSchema,
   type: z.enum(VariableType),
   displayName: z.string(),
   perRecipient: z.boolean(),
+  items: z.array(VariableItemSchema).optional(),
 });
 
 export const VariablePayloadSchema = VariableSchema.extend({
