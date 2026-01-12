@@ -1,6 +1,6 @@
 import { getChipType } from '@/components/VariableChip/utils';
 import { VariableTypeName } from '@/query/template/schema.ts';
-import { Variable } from '@/types/editor.ts';
+import { BaseVariable, Variable } from '@/types/editor.ts';
 import { VariableType } from '@/types/editor.ts';
 
 const variableTypeMap = {
@@ -22,7 +22,7 @@ export const transformContentToBodyHtml = (content: string) => {
 };
 
 // {{key}} -> < ... data-key="key" data-type="..." data-label="label" data-variable-chip></span> 로 변환
-export const transformBodyHtmlToContent = (bodyHtml: string, variables: Variable[]) => {
+export const transformBodyHtmlToContent = (bodyHtml: string, variables: BaseVariable[]) => {
   const curlyBracePattern = /{{(.*?)}}/g; // {{...}} 패턴을 찾는 정규식
 
   return bodyHtml.replace(curlyBracePattern, (match, key) => {

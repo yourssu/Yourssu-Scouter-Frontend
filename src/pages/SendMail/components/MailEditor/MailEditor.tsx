@@ -59,6 +59,7 @@ export const MailEditor = ({ type }: MailEditorProps) => {
       type,
       displayName,
       perRecipient,
+      items: type === '사람' ? [] : [{ value: '' }],
     };
 
     setVariables((prev) => [...prev, newVariable]);

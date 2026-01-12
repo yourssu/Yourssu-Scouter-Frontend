@@ -37,6 +37,7 @@ export const TemplateEditor = ({
       type,
       displayName,
       perRecipient,
+      items: type === '사람' ? [] : [{ value: '' }],
     };
 
     onVariablesChange([...templateVariables, newVariable]);
