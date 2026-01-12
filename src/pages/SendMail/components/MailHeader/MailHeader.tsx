@@ -7,7 +7,7 @@ import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog } from '@/components/VariableDialog/VariableDialog';
 import { Variable, VariableType } from '@/types/editor';
 
-import { EditorType, Recipient, RecipientId } from '../mail.type';
+import { EditorType, Recipient, RecipientId } from '../../mail.type';
 import {
   HeaderContainer,
   HeaderLabel,

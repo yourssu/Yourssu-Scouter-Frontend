@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { VariableList } from '@/pages/SendMail/MailSidebar/VariableList';
+import { VariableList } from '@/pages/SendMail/components/MailSidebar/VariableList';
 import { templateOptions } from '@/query/template/options';
 import { VariableKeyType } from '@/types/editor';
 import { Variable } from '@/types/editor';

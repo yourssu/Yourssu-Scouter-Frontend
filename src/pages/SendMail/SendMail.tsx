@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
 import { InputField } from '@/components/InputField/InputField';
-import { MailDropdownSection } from '@/pages/SendMail/MailDropdownSection/MailDropdownSection';
-import { MailEditor } from '@/pages/SendMail/MailEditor/MailEditor';
-import { MailSidebar } from '@/pages/SendMail/MailSidebar/MailSidebar';
-import { SendMailModeProvider } from '@/pages/SendMail/SendMailMode/SendMailMode';
-import { SendMailPageLayout } from '@/pages/SendMail/SendMailPageLayout/SendMailPageLayout';
+import { MailDropdownSection } from '@/pages/SendMail/components/MailDropdownSection/MailDropdownSection';
+import { MailEditor } from '@/pages/SendMail/components/MailEditor/MailEditor';
+import { MailSidebar } from '@/pages/SendMail/components/MailSidebar/MailSidebar';
+import { SendMailModeProvider } from '@/pages/SendMail/components/SendMailMode/SendMailMode';
+import { SendMailPageLayout } from '@/pages/SendMail/components/SendMailPageLayout/SendMailPageLayout';
 import { Part } from '@/query/part/schema';
 
 export const SendMail = () => {

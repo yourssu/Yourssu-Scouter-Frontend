@@ -1,6 +1,6 @@
 import { BoxButton } from '@yourssu/design-system-react';
 
-import { VariableListContainer } from '@/pages/SendMail/MailSidebar/VariableListContainer';
+import { VariableListContainer } from '@/pages/SendMail/components/MailSidebar/VariableListContainer';
 
 export interface MailSidebarProps {
   templateId?: number;
