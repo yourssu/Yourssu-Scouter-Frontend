@@ -1,6 +1,7 @@
 import { BoxButton } from '@yourssu/design-system-react';
+import { Suspense } from 'react';
 
-import { VariableListContainer } from '@/pages/SendMail/components/MailSidebar/VariableListContainer';
+import { VariableList } from '@/pages/SendMail/components/MailSidebar/VariableList';
 
 export interface MailSidebarProps {
   templateId?: number;
@@ -13,7 +14,11 @@ export const MailSidebar = ({ templateId }: MailSidebarProps) => {
         변수 리스트
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        {templateId && <VariableListContainer key={templateId} templateId={templateId} />}
+        {templateId && (
+          <Suspense fallback={<div className="p-4">로딩 중...</div>}>
+            <VariableList key={templateId} templateId={templateId} />
+          </Suspense>
+        )}
       </div>
       <div className="border-line-basicMedium bg-bg-basicDefault flex-none border-t-1 px-[20px] pt-[16px] pb-[40px]">
         <div className="w-full [&_button]:w-full">

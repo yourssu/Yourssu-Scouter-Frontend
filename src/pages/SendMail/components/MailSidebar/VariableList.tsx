@@ -4,32 +4,35 @@ import { DateVariableCard } from '@/components/VariableCard/DateVariableCard';
 import { LinkVariableCard } from '@/components/VariableCard/LinkVariableCard';
 import { NameVariableCard } from '@/components/VariableCard/NameVariableCard';
 import { TextVariableCard } from '@/components/VariableCard/TextVariableCard';
-import { Variable, VariableKeyType } from '@/types/editor';
+import { useVariableList } from '@/pages/SendMail/hooks/useVariableList';
 
 interface VariableListProps {
-  onUpdateVariable: (key: VariableKeyType, updatedItems: Variable['items']) => void;
-  variables: Variable[];
+  templateId: number;
 }
 
-export const VariableList = ({ variables, onUpdateVariable }: VariableListProps) => {
+export const VariableList = ({ templateId }: VariableListProps) => {
+  const { variables, handleVariableUpdate } = useVariableList(templateId);
+
   const resolvedVariables = variables.map((v) => ({
     ...v,
     items: v.items ?? (v.type === '사람' ? [] : [{ value: '' }]),
   }));
+
   return (
-    <div className="flex flex-col gap-4 overflow-y-auto p-4">
+    <div className="flex flex-col gap-4 p-4">
       {resolvedVariables.map(({ key, items, displayName, type }) => {
         const handleItemChange = (index: number, value: string) => {
           const newItem = { ...items[index], value };
-          onUpdateVariable(key, [...items].toSpliced(index, 1, newItem));
+          handleVariableUpdate(key, [...items].toSpliced(index, 1, newItem));
         };
         const handleItemAdd = (value: string) => {
-          onUpdateVariable(key, [...items, { value }]);
+          handleVariableUpdate(key, [...items, { value }]);
         };
         const handleItemRemove = (value: string) => {
           const newItems = items.filter((item) => item.value !== value);
-          onUpdateVariable(key, newItems);
+          handleVariableUpdate(key, newItems);
         };
+
         return (
           <SwitchCase
             caseBy={{
@@ -49,7 +52,7 @@ export const VariableList = ({ variables, onUpdateVariable }: VariableListProps)
               ),
               사람: () => (
                 <NameVariableCard
-                  names={items.map((item) => item.value)}
+                  names={items.map((i) => i.value)}
                   onAddName={handleItemAdd}
                   onRemoveName={handleItemRemove}
                   title={displayName}
