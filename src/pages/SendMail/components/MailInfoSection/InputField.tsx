@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { SearchedMemberDialog } from '@/components/SearchedMemberDialog/SearchedMemberDialog';
 import { InputChipGroup } from '@/pages/SendMail/components/MailInfoSection/InputChipGroup';
@@ -13,6 +13,14 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const InputField = ({ label, isActive, onActivate, onDeactivate }: InputFieldProps) => {
   const [inputValue, setInputValue] = useState('');
   const [items, setItems] = useState<string[]>([]); // 선택된 멤버 닉네임 배열
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    if (e.target.value.length > 0 && !isActive) {
+      onActivate();
+    }
+  };
 
   const handleSelect = (nickname: string) => {
     if (!items.includes(nickname)) {
@@ -42,8 +50,9 @@ export const InputField = ({ label, isActive, onActivate, onDeactivate }: InputF
             trigger={
               <input
                 className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={handleInputChange}
                 onFocus={onActivate}
+                ref={inputRef}
                 value={inputValue}
               />
             }

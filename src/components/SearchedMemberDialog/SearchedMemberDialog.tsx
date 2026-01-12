@@ -85,38 +85,56 @@ export const SearchedMemberDialog = ({
 
   return (
     <StyledWrapper>
-      <Popover.Root onOpenChange={isExternalMode ? undefined : setOpen} open={isPopoverOpen}>
+      <Popover.Root
+        modal={true}
+        onOpenChange={isExternalMode ? undefined : setOpen}
+        open={isPopoverOpen}
+      >
         <Popover.Anchor asChild>
           <div className="left-0 w-full" onClick={() => !isExternalMode && setOpen(true)}>
             {trigger}
           </div>
         </Popover.Anchor>
-
-        <StyledContent align="start" onOpenAutoFocus={(e) => isExternalMode && e.preventDefault()}>
-          {/* 내부 모드일 때만 서치바 노출 */}
-          {!isExternalMode && (
-            <SearchBar>
-              <SearchBar.Input {...register('searchText')} autoFocus placeholder="사람 변수 검색" />
-            </SearchBar>
-          )}
-
-          <StyledGroup>
-            {filteredMembers.map((member) => (
-              <StyledItem key={member.memberId}>
-                <StyledButton
-                  onClick={() => handleSelectMember(member.nickname)}
-                  size="medium"
-                  variant="textSecondary"
-                >
-                  {member.nickname} [{member.parts.map((p) => p.part).join('/')}]
-                </StyledButton>
-              </StyledItem>
-            ))}
-            {filteredMembers.length === 0 && (
-              <div className="p-4 text-center text-gray-400">검색 결과가 없습니다.</div>
+        <Popover.Portal>
+          <StyledContent
+            align="start"
+            onCloseAutoFocus={(e) => e.preventDefault()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onOpenAutoFocus={(e) => isExternalMode && e.preventDefault()}
+          >
+            {/* 내부 모드일 때만 서치바 노출 */}
+            {!isExternalMode && (
+              <SearchBar>
+                <SearchBar.Input
+                  {...register('searchText')}
+                  autoFocus
+                  placeholder="사람 변수 검색"
+                />
+              </SearchBar>
             )}
-          </StyledGroup>
-        </StyledContent>
+
+            <StyledGroup>
+              {filteredMembers.map((member) => (
+                <StyledItem key={member.memberId}>
+                  <StyledButton
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleSelectMember(member.nickname);
+                    }}
+                    size="medium"
+                    variant="textSecondary"
+                  >
+                    {member.nickname} [{member.parts.map((p) => p.part).join('/')}]
+                  </StyledButton>
+                </StyledItem>
+              ))}
+              {filteredMembers.length === 0 && (
+                <div className="p-4 text-center text-gray-400">검색 결과가 없습니다.</div>
+              )}
+            </StyledGroup>
+          </StyledContent>
+        </Popover.Portal>
       </Popover.Root>
     </StyledWrapper>
   );
