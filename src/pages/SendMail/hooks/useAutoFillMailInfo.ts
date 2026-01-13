@@ -17,7 +17,7 @@ export const useAutoFillMembers = ({ selectedPart }: AutoFillMembers) => {
 
   return useMemo(() => {
     if (!allMembers) {
-      return { leader: [], applicants: [], partMembers: [], hrMembers: [] };
+      return { lead: [], applicants: [], partMembers: [], hrMembers: [] };
     }
 
     // 1. 선택된 파트의 리더

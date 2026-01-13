@@ -4,11 +4,12 @@ import { SearchedMemberDialog } from '@/components/SearchedMemberDialog/Searched
 import { InputChipGroup } from '@/pages/SendMail/components/MailInfoSection/InputChipGroup';
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  defaultItems: string[];
   isActive: boolean;
+  items: string[];
   label: string;
   onActivate: () => void;
   onDeactivate: () => void;
+  onUpdate: (items: string[]) => void;
 }
 
 export const InputField = ({
@@ -16,10 +17,10 @@ export const InputField = ({
   isActive,
   onActivate,
   onDeactivate,
-  defaultItems,
+  items,
+  onUpdate,
 }: InputFieldProps) => {
   const [inputValue, setInputValue] = useState('');
-  const [items, setItems] = useState<string[]>(defaultItems); // 선택된 멤버 닉네임 배열
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,14 +32,17 @@ export const InputField = ({
 
   const handleSelect = (nickname: string) => {
     if (!items.includes(nickname)) {
-      setItems((prevItems) => [...prevItems, nickname]);
+      onUpdate([...items, nickname]);
       setInputValue(''); // 선택 후 입력창 초기화
       onDeactivate();
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
     }
   };
 
   const handleChipDelete = (nickname: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item !== nickname));
+    onUpdate(items.filter((item) => item !== nickname));
   };
 
   return (

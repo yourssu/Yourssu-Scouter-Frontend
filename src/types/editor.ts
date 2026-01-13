@@ -29,3 +29,6 @@ export const getDefaultVariables = (): Variable[] => [
     items: [],
   },
 ];
+
+export const InputFieldTypes = ['받는 사람', '보내는 사람', '숨은 참조', '제목'] as const;
+export type InputFieldKey = (typeof InputFieldTypes)[number];

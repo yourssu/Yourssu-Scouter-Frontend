@@ -3,8 +3,7 @@ import { Suspense, useState } from 'react';
 import { AutoFillInfoContent } from '@/pages/SendMail/components/MailInfoSection/AutoFillInfoContent';
 import { InputField } from '@/pages/SendMail/components/MailInfoSection/InputField';
 import { Part } from '@/query/part/schema';
-
-const InputFieldTypes = ['받는 사람', '보내는 사람', '숨은 참조', '제목'] as const;
+import { InputFieldTypes } from '@/types/editor';
 
 interface InfoSectionProps {
   selectedPart: Part | undefined;
@@ -19,12 +18,13 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
       <div className="gap-0">
         {InputFieldTypes.map((type) => (
           <InputField
-            defaultItems={[]}
             isActive={activeField === type}
+            items={[]}
             key={type}
             label={type}
             onActivate={() => setActiveField(type)}
             onDeactivate={() => setActiveField(null)}
+            onUpdate={() => {}}
           />
         ))}
       </div>
@@ -33,7 +33,7 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
   return (
     <Suspense>
       <AutoFillInfoContent
-        key={`${selectedPart.partId}-${selectedTemplateId}`}
+        key={selectedPart.partId}
         selectedPart={selectedPart}
         selectedTemplateId={selectedTemplateId}
       />
