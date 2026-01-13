@@ -7,17 +7,20 @@ const chip = tv({
 });
 
 interface InputChipGroupProps {
+  deletable: boolean;
   items: string[];
-  onDelete: (item: string) => void;
+  onDelete?: (item: string) => void;
 }
 
-export const InputChipGroup = ({ items, onDelete }: InputChipGroupProps) => {
+export const InputChipGroup = ({ items, deletable, onDelete }: InputChipGroupProps) => {
   return (
     <div className="contents items-center gap-2">
       {items.map((item) => (
         <motion.div className={chip()} key={item}>
           {item}
-          <IcCloseFilled height={16} onClick={() => onDelete(item)} width={16} />
+          {deletable && (
+            <IcCloseFilled height={16} onClick={() => onDelete && onDelete(item)} width={16} />
+          )}
         </motion.div>
       ))}
     </div>

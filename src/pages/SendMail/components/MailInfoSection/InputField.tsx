@@ -40,7 +40,7 @@ export const InputField = ({ label, isActive, onActivate, onDeactivate }: InputF
         {label}
       </div>
       <div className="flex flex-1 flex-wrap items-center gap-x-[8px] gap-y-[6px]">
-        <InputChipGroup items={items} onDelete={handleChipDelete} />
+        <InputChipGroup deletable={true} items={items} onDelete={handleChipDelete} />
         <div className="min-w-[60px] flex-1">
           <SearchedMemberDialog
             externalSearchText={inputValue}
