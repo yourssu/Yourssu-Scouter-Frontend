@@ -1,6 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { useComponentToPng } from '@/hooks/useComponentToPng';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
+import { InterviewScheduleCalendarRefContext } from '@/pages/Interview/components/InterviewScheduleMode/context';
 import { InterviewScheduleCalendar } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScehduleCalendar';
 import { InterviewScheduleHeader } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleHeader';
 import { InterviewScheduleSidebar } from '@/pages/Interview/components/InterviewScheduleMode/InterviewScheduleSidebar';
@@ -14,25 +16,34 @@ export const InterviewScheduleMode = () => {
 
   const { data: schedules } = useSuspenseQuery(scheduleOptions(partId));
 
+  const [ref, convert] = useComponentToPng<HTMLTableElement>();
+
   return (
-    <InterviewPageLayout
-      slots={{
-        header: (
-          <InterviewScheduleHeader
-            indicator={{
-              month,
-              week,
-              onNextWeek: handleNextWeek,
-              onPrevWeek: handlePrevWeek,
-            }}
-          />
-        ),
-        calendar: (
-          <InterviewScheduleCalendar month={month} schedules={schedules} week={week} year={year} />
-        ),
-        sidebar: <InterviewScheduleSidebar schedules={schedules} />,
-      }}
-      title="면접 일정 관리"
-    />
+    <InterviewScheduleCalendarRefContext.Provider value={{ ref, convert }}>
+      <InterviewPageLayout
+        slots={{
+          header: (
+            <InterviewScheduleHeader
+              indicator={{
+                month,
+                week,
+                onNextWeek: handleNextWeek,
+                onPrevWeek: handlePrevWeek,
+              }}
+            />
+          ),
+          calendar: (
+            <InterviewScheduleCalendar
+              month={month}
+              schedules={schedules}
+              week={week}
+              year={year}
+            />
+          ),
+          sidebar: <InterviewScheduleSidebar schedules={schedules} />,
+        }}
+        title="면접 일정 관리"
+      />
+    </InterviewScheduleCalendarRefContext.Provider>
   );
 };
