@@ -4,15 +4,22 @@ import { SearchedMemberDialog } from '@/components/SearchedMemberDialog/Searched
 import { InputChipGroup } from '@/pages/SendMail/components/MailInfoSection/InputChipGroup';
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  defaultItems: string[];
   isActive: boolean;
   label: string;
   onActivate: () => void;
   onDeactivate: () => void;
 }
 
-export const InputField = ({ label, isActive, onActivate, onDeactivate }: InputFieldProps) => {
+export const InputField = ({
+  label,
+  isActive,
+  onActivate,
+  onDeactivate,
+  defaultItems,
+}: InputFieldProps) => {
   const [inputValue, setInputValue] = useState('');
-  const [items, setItems] = useState<string[]>([]); // 선택된 멤버 닉네임 배열
+  const [items, setItems] = useState<string[]>(defaultItems); // 선택된 멤버 닉네임 배열
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
