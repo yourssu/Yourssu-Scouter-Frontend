@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { InputField } from '@/components/InputField/InputField';
 import { MailDropdownSection } from '@/pages/SendMail/components/MailDropdownSection/MailDropdownSection';
 import { MailEditor } from '@/pages/SendMail/components/MailEditor/MailEditor';
+import { InfoSection } from '@/pages/SendMail/components/MailInfoSection/InfoSection';
 import { MailSidebar } from '@/pages/SendMail/components/MailSidebar/MailSidebar';
 import { SendMailModeProvider } from '@/pages/SendMail/components/SendMailMode/SendMailMode';
 import { SendMailPageLayout } from '@/pages/SendMail/components/SendMailPageLayout/SendMailPageLayout';
@@ -24,14 +24,7 @@ export const SendMail = () => {
               setSelectedTemplateId={setSelectedTemplateId}
             />
           ),
-          info: (
-            <div className="gap-0">
-              <InputField label="보내는 사람" />
-              <InputField label="받는 사람" />
-              <InputField label="숨은 참조" />
-              <InputField label="제목" />
-            </div>
-          ),
+          info: <InfoSection />,
           editor: <MailEditor type="normal" />,
           sidebar: <MailSidebar templateId={selectedTemplateId} />,
         }}

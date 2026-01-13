@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export const StyledWrapper = styled.div`
   position: relative;
-  display: inline-block;
+  display: flex;
   z-index: 1;
 `;
 
