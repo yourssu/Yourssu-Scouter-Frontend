@@ -17,7 +17,7 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
     '받는 사람': [],
     '보내는 사람': [],
     '숨은 참조': [],
-    제목: [],
+    제목: [''],
   });
 
   const handleUpdate = (field: InputFieldKey, items: string[]) => {
@@ -33,6 +33,7 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
         {InputFieldTypes.map((type) => (
           <InputField
             isActive={activeField === type}
+            isTitleField={type === '제목'}
             items={formData[type]}
             key={type}
             label={type}
