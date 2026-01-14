@@ -1,36 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { InputField } from '@/pages/SendMail/components/MailInfoSection/InputField';
 import { SendToField } from '@/pages/SendMail/components/MailInfoSection/SendToField';
 import { useAutoFillMembers } from '@/pages/SendMail/hooks/useAutoFillMailInfo';
 import { Part } from '@/query/part/schema';
-import { InputFieldKey, InputFieldTypes } from '@/types/editor';
+import { InputFieldKey } from '@/types/editor';
 
 interface AutoFillInfoContentProps {
+  formData: Record<InputFieldKey, string[]>;
   selectedPart: Part;
   selectedTemplateId: number | undefined;
+  setFormData: React.Dispatch<React.SetStateAction<Record<InputFieldKey, string[]>>>;
 }
 
 export const AutoFillInfoContent = ({
   selectedPart,
   selectedTemplateId,
+  formData,
+  setFormData,
 }: AutoFillInfoContentProps) => {
   const [activeField, setActiveField] = useState<null | string>(null);
 
   const { lead, applicants, partMembers, hrMembers } = useAutoFillMembers({ selectedPart });
 
-  const [formData, setFormData] = useState<Record<(typeof InputFieldTypes)[number], string[]>>({
-    '받는 사람': applicants,
-    '보내는 사람': lead,
-    '숨은 참조': [...hrMembers, ...partMembers],
-    제목: [],
-  });
-
-  const handleUpdate = (field: InputFieldKey, items: string[]) => {
+  useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      [field]: items,
+      '받는 사람': applicants,
+      '보내는 사람': lead,
+      '숨은 참조': Array.from(new Set([...hrMembers, ...partMembers])),
     }));
+  }, [selectedPart.partId, lead, applicants, partMembers, hrMembers, setFormData]);
+
+  const handleUpdate = (field: InputFieldKey, items: string[]) => {
+    setFormData((prev) => ({ ...prev, [field]: items }));
   };
 
   // 템플릿 선택 여부에 따른 분기 로직
