@@ -42,16 +42,8 @@ export const AutoFillInfoContent = ({
       {selectedTemplateId === undefined ? (
         <>
           <InputField
-            isActive={activeField === '받는 사람'}
-            isTitleField={false}
-            items={formData['받는 사람']}
-            label="받는 사람"
-            onActivate={() => setActiveField('받는 사람')}
-            onDeactivate={() => setActiveField(null)}
-            onUpdate={(items) => handleUpdate('받는 사람', items)}
-          />
-          <InputField
             isActive={activeField === '보내는 사람'}
+            isReadOnly={true}
             isTitleField={false}
             items={formData['보내는 사람']}
             label="보내는 사람"
@@ -60,7 +52,18 @@ export const AutoFillInfoContent = ({
             onUpdate={(items) => handleUpdate('보내는 사람', items)}
           />
           <InputField
+            isActive={activeField === '받는 사람'}
+            isReadOnly={false}
+            isTitleField={false}
+            items={formData['받는 사람']}
+            label="받는 사람"
+            onActivate={() => setActiveField('받는 사람')}
+            onDeactivate={() => setActiveField(null)}
+            onUpdate={(items) => handleUpdate('받는 사람', items)}
+          />
+          <InputField
             isActive={activeField === '숨은 참조'}
+            isReadOnly={false}
             isTitleField={false}
             items={formData['숨은 참조']}
             label="숨은 참조"
@@ -77,6 +80,7 @@ export const AutoFillInfoContent = ({
       )}
       <InputField
         isActive={activeField === '제목'}
+        isReadOnly={false}
         isTitleField={true}
         items={formData['제목']}
         label="제목"

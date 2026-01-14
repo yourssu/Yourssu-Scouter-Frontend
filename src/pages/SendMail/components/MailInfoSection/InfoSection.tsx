@@ -33,6 +33,7 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
         {InputFieldTypes.map((type) => (
           <InputField
             isActive={activeField === type}
+            isReadOnly={false}
             isTitleField={type === '제목'}
             items={formData[type]}
             key={type}

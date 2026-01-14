@@ -5,6 +5,7 @@ import { InputChipGroup } from '@/pages/SendMail/components/MailInfoSection/Inpu
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   isActive: boolean;
+  isReadOnly: boolean;
   isTitleField: boolean;
   items: string[];
   label: string;
@@ -21,6 +22,7 @@ export const InputField = ({
   items,
   onUpdate,
   isTitleField,
+  isReadOnly,
 }: InputFieldProps) => {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -74,24 +76,26 @@ export const InputField = ({
         {label}
       </div>
       <div className="flex flex-1 flex-wrap items-center gap-x-[8px] gap-y-[6px]">
-        <InputChipGroup deletable={true} items={items} onDelete={handleChipDelete} />
-        <div className="min-w-[60px] flex-1">
-          <SearchedMemberDialog
-            externalSearchText={inputValue}
-            isActive={isActive}
-            onExternalSearchTextChange={(text) => setInputValue(text)}
-            onSelect={handleSelect}
-            trigger={
-              <input
-                className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"
-                onChange={handleInputChange}
-                onFocus={onActivate}
-                ref={inputRef}
-                value={inputValue}
-              />
-            }
-          />
-        </div>
+        <InputChipGroup deletable={!isReadOnly} items={items} onDelete={handleChipDelete} />
+        {!isReadOnly && (
+          <div className="min-w-[60px] flex-1">
+            <SearchedMemberDialog
+              externalSearchText={inputValue}
+              isActive={isActive}
+              onExternalSearchTextChange={(text) => setInputValue(text)}
+              onSelect={handleSelect}
+              trigger={
+                <input
+                  className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"
+                  onChange={handleInputChange}
+                  onFocus={onActivate}
+                  ref={inputRef}
+                  value={inputValue}
+                />
+              }
+            />
+          </div>
+        )}
       </div>
     </div>
   );
