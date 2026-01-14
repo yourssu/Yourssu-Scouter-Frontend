@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { MailDropdownSection } from '@/pages/SendMail/components/MailDropdownSection/MailDropdownSection';
-import { MailEditor } from '@/pages/SendMail/components/MailEditor/MailEditor';
+import { EditorSection } from '@/pages/SendMail/components/MailEditorSection/EditorSection';
 import { InfoSection } from '@/pages/SendMail/components/MailInfoSection/InfoSection';
 import { MailSidebar } from '@/pages/SendMail/components/MailSidebar/MailSidebar';
 import { SendMailModeProvider } from '@/pages/SendMail/components/SendMailMode/SendMailMode';
@@ -25,7 +25,9 @@ export const SendMail = () => {
             />
           ),
           info: <InfoSection selectedPart={selectedPart} selectedTemplateId={selectedTemplateId} />,
-          editor: <MailEditor type="normal" />,
+          editor: (
+            <EditorSection selectedPart={selectedPart} selectedTemplateId={selectedTemplateId} />
+          ),
           sidebar: <MailSidebar templateId={selectedTemplateId} />,
         }}
       />
