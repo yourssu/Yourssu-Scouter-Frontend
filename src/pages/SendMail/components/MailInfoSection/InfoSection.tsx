@@ -1,9 +1,10 @@
 import { Suspense, useState } from 'react';
 
-import { AutoFillInfoContent } from '@/pages/SendMail/components/MailInfoSection/AutoFillInfoContent';
-import { InputField } from '@/pages/SendMail/components/MailInfoSection/InputField';
+import { AutoFillMembers } from '@/pages/SendMail/components/MailInfoSection/AutoFillIMembers';
+import { MemberInputField } from '@/pages/SendMail/components/MailInfoSection/MemberInputField';
+import { TextInputField } from '@/pages/SendMail/components/MailInfoSection/TextInputField';
 import { Part } from '@/query/part/schema';
-import { InputFieldKey, InputFieldTypes } from '@/types/editor';
+import { MailFormData, MemberInputFieldKey, MemberInputFieldTypes } from '@/types/editor';
 
 interface InfoSectionProps {
   selectedPart: Part | undefined;
@@ -11,50 +12,53 @@ interface InfoSectionProps {
 }
 
 export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionProps) => {
-  const [activeField, setActiveField] = useState<(typeof InputFieldTypes)[number] | null>(null);
-
-  const [formData, setFormData] = useState<Record<InputFieldKey, string[]>>({
-    '받는 사람': [],
-    '보내는 사람': [],
-    '숨은 참조': [],
-    제목: [''],
+  const [formData, setFormData] = useState<MailFormData>({
+    members: {
+      '받는 사람': [],
+      '보내는 사람': [],
+      '숨은 참조': [],
+    },
+    subject: '',
   });
 
-  const handleUpdate = (field: InputFieldKey, items: string[]) => {
+  // 멤버(칩) 업데이트
+  const handleMemberUpdate = (field: MemberInputFieldKey, items: string[]) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: items,
+      members: { ...prev.members, [field]: items },
     }));
   };
 
-  if (!selectedPart) {
-    return (
-      <div className="gap-0">
-        {InputFieldTypes.map((type) => (
-          <InputField
-            isActive={activeField === type}
-            isReadOnly={false}
-            isTitleField={type === '제목'}
-            items={formData[type]}
-            key={type}
-            label={type}
-            onActivate={() => setActiveField(type)}
-            onDeactivate={() => setActiveField(null)}
-            onUpdate={(items) => handleUpdate(type, items)}
-          />
-        ))}
-      </div>
-    );
-  }
+  // 제목 업데이트
+  const handleSubjectUpdate = (value: string) => {
+    setFormData((prev) => ({ ...prev, subject: value }));
+  };
+
   return (
-    <Suspense>
-      <AutoFillInfoContent
-        formData={formData}
-        key={selectedPart.partId}
-        selectedPart={selectedPart}
-        selectedTemplateId={selectedTemplateId}
-        setFormData={setFormData}
-      />
-    </Suspense>
+    <div className="flex flex-col gap-0">
+      {!selectedPart ? (
+        <div className="flex flex-col gap-0">
+          {MemberInputFieldTypes.map((type) => (
+            <MemberInputField
+              items={formData.members[type]}
+              key={type}
+              label={type}
+              onItemsUpdate={(items) => handleMemberUpdate(type, items)}
+            />
+          ))}
+        </div>
+      ) : (
+        <Suspense>
+          <AutoFillMembers
+            formData={formData}
+            key={selectedPart.partId}
+            selectedPart={selectedPart}
+            selectedTemplateId={selectedTemplateId}
+            setFormData={setFormData}
+          />
+        </Suspense>
+      )}
+      <TextInputField label="제목" onUpdate={handleSubjectUpdate} value={formData.subject} />
+    </div>
   );
 };

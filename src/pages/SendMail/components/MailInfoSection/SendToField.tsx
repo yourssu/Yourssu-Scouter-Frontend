@@ -11,9 +11,9 @@ export const SendToField = ({ receivers, sender }: SendToFieldProps) => {
   return (
     <div className="border-line-basicMedium flex min-h-[56px] w-full flex-row flex-wrap items-center gap-[8px] border-b-1 px-[20px] py-[10px]">
       <IcMailFilled height={17} width={20} />
-      <InputChipGroup deletable={false} items={sender} onDelete={() => {}} />
+      <InputChipGroup deletable={false} items={sender} onItemsUpdate={() => {}} />
       <IcArrowRightLine height={20} width={20} />
-      <InputChipGroup deletable={false} items={receivers} onDelete={() => {}} />
+      <InputChipGroup deletable={false} items={receivers} onItemsUpdate={() => {}} />
     </div>
   );
 };
