@@ -29,11 +29,6 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
     }));
   };
 
-  // 제목 업데이트
-  const handleSubjectUpdate = (value: string) => {
-    setFormData((prev) => ({ ...prev, subject: value }));
-  };
-
   return (
     <div className="flex flex-col gap-0">
       {!selectedPart ? (
@@ -59,7 +54,11 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
           />
         </Suspense>
       )}
-      <TextInputField label="제목" onUpdate={handleSubjectUpdate} value={formData.subject} />
+      <TextInputField
+        label="제목"
+        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+        value={formData.subject}
+      />
     </div>
   );
 };
