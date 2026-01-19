@@ -29,3 +29,10 @@ export const getDefaultVariables = (): Variable[] => [
     items: [],
   },
 ];
+
+export const MemberInputFieldTypes = ['보내는 사람', '받는 사람', '숨은 참조'] as const;
+export type MemberInputFieldKey = (typeof MemberInputFieldTypes)[number];
+export interface MailFormData {
+  members: Record<MemberInputFieldKey, string[]>;
+  subject: string;
+}

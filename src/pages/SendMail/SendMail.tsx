@@ -24,7 +24,7 @@ export const SendMail = () => {
               setSelectedTemplateId={setSelectedTemplateId}
             />
           ),
-          info: <InfoSection />,
+          info: <InfoSection selectedPart={selectedPart} selectedTemplateId={selectedTemplateId} />,
           editor: <MailEditor type="normal" />,
           sidebar: <MailSidebar templateId={selectedTemplateId} />,
         }}
