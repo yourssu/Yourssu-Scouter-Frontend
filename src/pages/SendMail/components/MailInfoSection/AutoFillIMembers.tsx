@@ -1,55 +1,62 @@
-import { useSuspenseQueries } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { assert, uniq } from 'es-toolkit';
 
 import { MemberInputField } from '@/pages/SendMail/components/MailInfoSection/MemberInputField';
 import { SendToField } from '@/pages/SendMail/components/MailInfoSection/SendToField';
 import { applicantOptions } from '@/query/applicant/options';
 import { memberOptions } from '@/query/member/options';
+import { partOptions } from '@/query/part/options';
 import { Part } from '@/query/part/schema';
-import { MailFormData, MemberInputFieldKey } from '@/types/editor';
+import { MemberInputFieldKey } from '@/types/editor';
 
 interface AutoFillMembersProps {
-  formData: MailFormData;
+  members: Record<MemberInputFieldKey, string[]>;
+  onMembersUpdate: (members: Record<MemberInputFieldKey, string[]>) => void;
   selectedPart: Part;
   selectedTemplateId: number | undefined;
-  setFormData: React.Dispatch<React.SetStateAction<MailFormData>>;
 }
 
 export const AutoFillMembers = ({
   selectedPart,
   selectedTemplateId,
-  formData,
-  setFormData,
+  members,
+  onMembersUpdate,
 }: AutoFillMembersProps) => {
-  const [{ data: applicants }, { data: partMembers }] = useSuspenseQueries({
+  const {
+    data: { partId: hrPartId },
+  } = useSuspenseQuery({
+    ...partOptions(),
+    select: (data) => {
+      const hrPart = data.find((p) => p.partName === 'HR');
+      assert(!!hrPart, 'HR 파트 정보를 불러올 수 없어요.');
+      return hrPart;
+    },
+  });
+
+  const [{ data: applicants }, { data: partMembers }, { data: hrMembers }] = useSuspenseQueries({
     queries: [
       applicantOptions({ partId: selectedPart.partId }),
       memberOptions('액티브', {
         partId: selectedPart.partId,
         search: '',
       }),
+      memberOptions('액티브', {
+        partId: hrPartId,
+        search: '',
+      }),
     ],
   });
 
-  useEffect(() => {
-    const sender = partMembers.filter((m) => m.role === 'Lead').map((m) => m.nickname);
-    const applicantsNames = applicants.map((a) => a.name);
-    const partMemberNames = partMembers.map((m) => m.nickname);
-    // TODO: hr멤버들만 불러와서 숨은 참조에 추가
+  const mailingList = {
+    '보내는 사람': partMembers.filter((m) => m.role === 'Lead').map((m) => m.nickname),
+    '받는 사람': uniq(applicants.map((a) => a.name).concat(members['받는 사람'])),
+    '숨은 참조': uniq(
+      [...partMembers, ...hrMembers].map((m) => m.nickname).concat(members['숨은 참조']),
+    ),
+  };
 
-    setFormData((prev) => ({
-      ...prev,
-      members: {
-        ...prev.members,
-        '보내는 사람': sender,
-        '받는 사람': Array.from(new Set([...applicantsNames, ...prev.members['받는 사람']])),
-        '숨은 참조': Array.from(new Set([...partMemberNames, ...prev.members['숨은 참조']])),
-      },
-    }));
-  }, [selectedPart.partId, applicants, partMembers, setFormData]);
-
-  const handleUpdate = (field: MemberInputFieldKey, members: string[]) => {
-    setFormData((prev) => ({ ...prev, members: { ...prev.members, [field]: members } }));
+  const handleMembersUpdate = (field: MemberInputFieldKey, memberNames: string[]) => {
+    onMembersUpdate({ ...mailingList, [field]: memberNames });
   };
 
   return (
@@ -57,25 +64,25 @@ export const AutoFillMembers = ({
       {selectedTemplateId === undefined ? (
         <>
           <MemberInputField
-            items={formData.members['보내는 사람']}
+            items={mailingList['보내는 사람']}
             label="보내는 사람"
-            onItemsUpdate={(items: string[]) => handleUpdate('보내는 사람', items)}
+            onItemsUpdate={(items: string[]) => handleMembersUpdate('보내는 사람', items)}
           />
           <MemberInputField
-            items={formData.members['받는 사람']}
+            items={mailingList['받는 사람']}
             label="받는 사람"
-            onItemsUpdate={(items: string[]) => handleUpdate('받는 사람', items)}
+            onItemsUpdate={(items: string[]) => handleMembersUpdate('받는 사람', items)}
           />
           <MemberInputField
-            items={formData.members['숨은 참조']}
+            items={mailingList['숨은 참조']}
             label="숨은 참조"
-            onItemsUpdate={(items: string[]) => handleUpdate('숨은 참조', items)}
+            onItemsUpdate={(items: string[]) => handleMembersUpdate('숨은 참조', items)}
           />
         </>
       ) : (
         <SendToField
-          receivers={[...formData.members['받는 사람'], ...formData.members['숨은 참조']]}
-          sender={formData.members['보내는 사람']}
+          receivers={[...mailingList['받는 사람'], ...mailingList['숨은 참조']]}
+          sender={mailingList['보내는 사람']}
         />
       )}
     </div>

@@ -50,11 +50,12 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
       ) : (
         <Suspense>
           <AutoFillMembers
-            formData={formData}
-            key={selectedPart.partId}
+            members={formData.members}
+            onMembersUpdate={(members) => {
+              setFormData((prev) => ({ ...prev, members }));
+            }}
             selectedPart={selectedPart}
             selectedTemplateId={selectedTemplateId}
-            setFormData={setFormData}
           />
         </Suspense>
       )}
