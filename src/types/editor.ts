@@ -36,3 +36,8 @@ export interface MailFormData {
   members: Record<MemberInputFieldKey, string[]>;
   subject: string;
 }
+
+export interface VariableState {
+  common: Record<string, string>; // 변수 키, 변수 값
+  perApplicant: Record<number, Record<string, string>>; // 지원자 ID, 변수 키, 변수 값
+}
