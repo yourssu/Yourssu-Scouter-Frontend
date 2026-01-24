@@ -4,19 +4,20 @@ import { Suspense } from 'react';
 import { VariableList } from '@/pages/SendMail/components/MailSidebar/VariableList';
 
 export interface MailSidebarProps {
+  partId?: number;
   templateId?: number;
 }
 
-export const MailSidebar = ({ templateId }: MailSidebarProps) => {
+export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
   return (
     <div className="bg-bg-basicLight flex size-full min-h-0 flex-col justify-between">
       <div className="typo-t4_sb_18 bg-bg-basicDefault border-line-basicMedium flex w-full flex-none justify-center border-b-1 px-[16px] py-[12px]">
         변수 리스트
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        {templateId && (
+        {templateId && partId && (
           <Suspense fallback={<div className="p-4">로딩 중...</div>}>
-            <VariableList key={templateId} templateId={templateId} />
+            <VariableList key={templateId} partId={partId} templateId={templateId} />
           </Suspense>
         )}
       </div>

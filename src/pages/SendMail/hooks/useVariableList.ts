@@ -1,24 +1,22 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useSuspenseQueries } from '@tanstack/react-query';
 
+import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { applicantOptions } from '@/query/applicant/options';
 import { templateOptions } from '@/query/template/options';
-import { Variable, VariableKeyType } from '@/types/editor';
+import { Variable } from '@/types/editor';
 
-export const useVariableList = (templateId: number) => {
-  const { data: template } = useSuspenseQuery(templateOptions.detail(templateId));
+export const useVariableList = (templateId: number, partId: number) => {
+  const [{ data: template }, { data: applicants }] = useSuspenseQueries({
+    queries: [templateOptions.detail(templateId), applicantOptions({ partId })],
+  });
 
-  const [variables, setVariables] = useState<Variable[]>(template.variables);
-
-  const handleVariableUpdate = (key: VariableKeyType, updatedItems: Variable['items']) => {
-    setVariables((prevVariables) =>
-      prevVariables.map((variable) =>
-        variable.key === key ? { ...variable, items: updatedItems } : variable,
-      ),
-    );
-  };
+  const { variableValue, actions } = useMailVariables();
+  const templateVariables: Variable[] = template.variables;
 
   return {
-    variables,
-    handleVariableUpdate,
+    templateVariables,
+    applicants,
+    variableValue,
+    actions,
   };
 };

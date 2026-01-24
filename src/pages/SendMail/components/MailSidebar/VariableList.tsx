@@ -7,70 +7,67 @@ import { TextVariableCard } from '@/components/VariableCard/TextVariableCard';
 import { useVariableList } from '@/pages/SendMail/hooks/useVariableList';
 
 interface VariableListProps {
+  partId: number;
   templateId: number;
 }
 
-export const VariableList = ({ templateId }: VariableListProps) => {
-  const { variables, handleVariableUpdate } = useVariableList(templateId);
-
-  const resolvedVariables = variables.map((v) => ({
-    ...v,
-    items: v.items ?? (v.type === '사람' ? [] : [{ value: '' }]),
-  }));
+export const VariableList = ({ templateId, partId }: VariableListProps) => {
+  const { templateVariables, applicants, variableValue, actions } = useVariableList(
+    templateId,
+    partId,
+  );
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      {resolvedVariables.map(({ key, items, displayName, type }) => {
-        const handleItemChange = (index: number, value: string) => {
-          const newItem = { ...items[index], value };
-          handleVariableUpdate(key, [...items].toSpliced(index, 1, newItem));
-        };
-        const handleItemAdd = (value: string) => {
-          if (!value.trim()) {
-            return;
+      {templateVariables.map((v) => {
+        const isIndividual = v.perRecipient;
+
+        const items = isIndividual
+          ? applicants.map((a) => ({
+              label: a.name,
+              value: variableValue.perApplicant[a.applicantId]?.[v.key] ?? '',
+            }))
+          : [{ value: variableValue.common[v.key] ?? '' }];
+
+        const handleUpdate = (idx: number, newValue: string) => {
+          if (isIndividual) {
+            const applicantId = applicants[idx].applicantId;
+            actions.updateIndividualValue(String(applicantId), v.key, newValue);
+          } else {
+            actions.updateCommonValue(v.key, newValue);
           }
-          handleVariableUpdate(key, [...items, { value }]);
-        };
-        const handleItemRemove = (value: string) => {
-          const newItems = items.filter((item) => item.value !== value);
-          handleVariableUpdate(key, newItems);
         };
 
         return (
           <SwitchCase
             caseBy={{
               날짜: () => (
-                <DateVariableCard
-                  dates={items}
-                  onDateChange={handleItemChange}
-                  title={displayName}
-                />
+                <DateVariableCard dates={items} onDateChange={handleUpdate} title={v.displayName} />
               ),
               링크: () => (
                 <LinkVariableCard
                   links={items}
-                  onValueChange={handleItemChange}
-                  title={displayName}
+                  onValueChange={handleUpdate}
+                  title={v.displayName}
                 />
               ),
               사람: () => (
                 <NameVariableCard
-                  names={items.map((i) => i.value)}
-                  onAddName={handleItemAdd}
-                  onRemoveName={handleItemRemove}
-                  title={displayName}
+                  names={items.map((i) => i.value).filter(Boolean)}
+                  onAddName={(val) => (isIndividual ? null : actions.updateCommonValue(v.key, val))}
+                  title={v.displayName}
                 />
               ),
               텍스트: () => (
                 <TextVariableCard
-                  onValueChange={handleItemChange}
+                  onValueChange={handleUpdate}
                   texts={items}
-                  title={displayName}
+                  title={v.displayName}
                 />
               ),
             }}
-            key={key}
-            value={type}
+            key={v.key}
+            value={v.type}
           />
         );
       })}

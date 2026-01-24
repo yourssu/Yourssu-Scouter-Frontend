@@ -3,6 +3,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
 import { VariableChip } from '@/components/VariableChip/VariableChip';
+import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
 
 export interface VariableChipOptions {
   htmlAttributes: Record<string, any>;
@@ -67,6 +68,18 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
           };
         },
       },
+      perRecipient: {
+        default: false,
+        parseHTML: (element) => element.getAttribute('data-per-recipient') === 'true',
+        renderHTML: (attributes) => {
+          if (attributes.perRecipient === undefined) {
+            return {};
+          }
+          return {
+            'data-per-recipient': attributes.perRecipient,
+          };
+        },
+      },
     };
   },
 
@@ -105,8 +118,23 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
   },
 });
 
-const VariableChipNodeView: React.FC<NodeViewProps> = ({ deleteNode, node }) => {
-  const { type, label } = node.attrs as { label: string; type: string };
+const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
+  const { variableValue, activeApplicantId } = useMailVariables();
+  const { key, type, label, perRecipient } = node.attrs as {
+    key: string;
+    label: string;
+    perRecipient: boolean;
+    type: string;
+  };
+
+  const getDisplayValue = () => {
+    if (perRecipient && activeApplicantId) {
+      return variableValue.perApplicant[String(activeApplicantId)]?.[key];
+    }
+    return variableValue.common[key];
+  };
+
+  const displayValue = getDisplayValue();
 
   return (
     <NodeViewWrapper
@@ -116,7 +144,11 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ deleteNode, node }) => 
         display: 'inline-block',
       }}
     >
-      <VariableChip label={label} onDelete={deleteNode} size="small" type={type as any} />
+      {displayValue ? (
+        <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
+      ) : (
+        <VariableChip label={label} size="small" type={type as any} />
+      )}
     </NodeViewWrapper>
   );
 };
