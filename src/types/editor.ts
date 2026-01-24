@@ -1,3 +1,5 @@
+import { RecipientId } from '@/pages/SendMail/mail.type';
+
 export type VariableType = '날짜' | '링크' | '사람' | '사람/지원자' | '텍스트' | '텍스트/파트명';
 export type VariableKeyType = `var-${string}`;
 
@@ -39,5 +41,5 @@ export interface MailFormData {
 
 export interface VariableState {
   common: Record<string, string>; // 변수 키, 변수 값
-  perApplicant: Record<number, Record<string, string>>; // 지원자 ID, 변수 키, 변수 값
+  perApplicant: Record<RecipientId, Record<string, string>>; // 지원자 ID, 변수 키, 변수 값
 }

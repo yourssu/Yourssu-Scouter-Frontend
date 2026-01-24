@@ -1,16 +1,17 @@
 import { assert } from 'es-toolkit';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
+import { RecipientId } from '@/pages/SendMail/mail.type';
 import { VariableState } from '@/types/editor';
 
 interface VariableContextProps {
   actions: {
     resetVariables: () => void;
-    setActiveApplicantId: (id: number | undefined) => void;
+    setActiveApplicantId: (id: RecipientId | undefined) => void;
     updateCommonValue: (key: string, value: string) => void;
-    updateIndividualValue: (applicantId: number, key: string, value: string) => void;
+    updateIndividualValue: (applicantId: RecipientId, key: string, value: string) => void;
   };
-  activeApplicantId: number | undefined;
+  activeApplicantId: RecipientId | undefined;
   variableValue: VariableState;
 }
 
@@ -21,15 +22,15 @@ export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
     common: {},
     perApplicant: {},
   });
-  const [activeApplicantId, setActiveApplicantId] = useState<number | undefined>(undefined);
+  const [activeApplicantId, setActiveApplicantId] = useState<RecipientId | undefined>(undefined);
 
   const actions = useMemo(
     () => ({
-      setActiveApplicantId: (id: number | undefined) => setActiveApplicantId(id),
+      setActiveApplicantId: (id: RecipientId | undefined) => setActiveApplicantId(id),
       updateCommonValue: (key: string, value: string) => {
         setVariableValue((prev) => ({ ...prev, common: { ...prev.common, [key]: value } }));
       },
-      updateIndividualValue: (applicantId: number, key: string, value: string) => {
+      updateIndividualValue: (applicantId: RecipientId, key: string, value: string) => {
         setVariableValue((prev) => ({
           ...prev,
           perApplicant: {
