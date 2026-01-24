@@ -23,7 +23,7 @@ export const useConfilctScheduleGroups = (schedules: Schedule[]): ConflictSchedu
 
       for (let j = i + 1; j < sortedSchedules.length; j++) {
         const target = sortedSchedules[j];
-        if (seed.endTime < target.startTime) {
+        if (seed.endTime <= target.startTime) {
           break;
         }
         group.push(target);
