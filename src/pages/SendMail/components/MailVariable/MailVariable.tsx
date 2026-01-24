@@ -36,7 +36,7 @@ export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
           perApplicant: {
             ...prev.perApplicant,
             [applicantId]: {
-              ...(prev.perApplicant[applicantId] ?? {}),
+              ...prev.perApplicant[applicantId],
               [key]: value,
             },
           },
@@ -52,6 +52,10 @@ export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </VariableContext.Provider>
   );
+};
+
+export const useOptionalMailVariables = () => {
+  return useContext(VariableContext); // context가 없으면 null 반환
 };
 
 export const useMailVariables = () => {
