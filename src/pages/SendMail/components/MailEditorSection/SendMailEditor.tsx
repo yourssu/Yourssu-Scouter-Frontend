@@ -1,5 +1,5 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { MailEditorContent } from '@/pages/SendMail/components/MailEditorContent/MailEditorContent';
 import { MailHeader } from '@/pages/SendMail/components/MailHeader/MailHeader';
@@ -45,12 +45,19 @@ export const SendMailEditor = ({
 
   return (
     <div className="border-line-basicMedium bg-bg-basicDefault mx-auto flex h-full max-h-[690px] w-full flex-col rounded-xl border-[1px]">
-      <MailHeader onTabChange={(id) => setActiveTabId(id)} recipients={recipients} type="tabs" />
-      <MailEditorContent
-        initialContent={templateDetail?.content || ''}
-        key={selectedTemplateId || 'default'}
-        recipientName={activeRecipientName}
+      <MailHeader
+        activeTabId={activeTabId}
+        onTabChange={(id) => setActiveTabId(id)}
+        recipients={recipients}
+        type="tabs"
       />
+      <Suspense>
+        <MailEditorContent
+          initialContent={templateDetail?.content || ''}
+          key={activeTabId}
+          recipientName={activeRecipientName}
+        />
+      </Suspense>
     </div>
   );
 };
