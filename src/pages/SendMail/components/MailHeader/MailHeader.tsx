@@ -1,5 +1,4 @@
 import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
-import { useState } from 'react';
 
 import { Tab } from '@/components/Tab';
 import { getChipType } from '@/components/VariableChip/utils';
@@ -18,6 +17,7 @@ import {
 } from './MailHeader.style';
 
 interface MailHeaderProps {
+  activeTabId?: RecipientId;
   onTabChange?: (id: RecipientId) => void;
   onVariableAdd?: (type: VariableType, name: string, perRecipient: boolean) => void;
   onVariableClick?: (variable: Variable) => void;
@@ -35,16 +35,10 @@ export const MailHeader = ({
   onVariableAdd,
   onVariableClick,
   onVariableDelete,
+  activeTabId,
 }: MailHeaderProps) => {
-  const [activeTabId, setActiveTabId] = useState<RecipientId>('recipient-0');
+  const activeTabName = recipients.find((r) => r.id === activeTabId)?.name || recipients[0]?.name;
   const openAlertDialog = useAlertDialog();
-
-  const handleTabClick = (id: RecipientId) => {
-    setActiveTabId(id);
-    if (onTabChange) {
-      onTabChange(id);
-    }
-  };
 
   const handleVariableChipAdd = (type: VariableType, name: string, perRecipient: boolean) => {
     if (onVariableAdd) {
@@ -107,13 +101,16 @@ export const MailHeader = ({
     return (
       <TabsContainer>
         <Tab
-          defaultTab={activeTabId}
-          onTabChange={handleTabClick}
+          defaultTab={activeTabName}
+          onTabChange={(name) => {
+            const target = recipients.find((r) => r.name === name);
+            if (target) {
+              onTabChange?.(target.id);
+            }
+          }}
           tabs={recipients.map(({ name }) => name)}
         >
-          {() => {
-            return undefined;
-          }}
+          {() => undefined}
         </Tab>
       </TabsContainer>
     );
