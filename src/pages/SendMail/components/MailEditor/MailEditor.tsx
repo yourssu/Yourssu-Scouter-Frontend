@@ -1,113 +1,69 @@
-import { useRef, useState } from 'react';
+import { useSuspenseQueries } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import { useMemo } from 'react';
 
-import { getChipType } from '@/components/VariableChip/utils';
-import { Variable, VariableType } from '@/types/editor';
-import { getDefaultVariables } from '@/types/editor';
+import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { applicantOptions } from '@/query/applicant/options';
+import { Part } from '@/query/part/schema';
+import { templateOptions } from '@/query/template/options';
 
-import { EditorType, Recipient, RecipientId } from '../../mail.type';
-import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
+import { Recipient } from '../../mail.type';
+import { MailEditorContent } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
 
 interface MailEditorProps {
-  type: EditorType;
+  selectedPart: Part;
+  selectedTemplateId?: number;
 }
 
-export const MailEditor = ({ type }: MailEditorProps) => {
-  const [editorContents, setEditorContents] = useState<Record<RecipientId, string>>({
-    'recipient-0': '',
-    'recipient-1': '',
-    'recipient-2': '',
+export const MailEditor = ({ selectedPart, selectedTemplateId }: MailEditorProps) => {
+  const { activeApplicantId, actions } = useMailVariables();
+
+  const results = useSuspenseQueries({
+    queries: [
+      applicantOptions({ partId: selectedPart.partId }),
+      ...(selectedTemplateId ? [templateOptions.detail(selectedTemplateId)] : []),
+    ],
   });
 
-  const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
+  const applicants = results[0].data;
+  const templateDetail = results[1]?.data;
 
-  const [variables, setVariables] = useState<Variable[]>(getDefaultVariables()); // 메일 페이지 작업 시 수정
+  // 지원자 목록 생성
+  const recipients: Recipient[] = useMemo(
+    () =>
+      Array.isArray(applicants)
+        ? applicants.map((a) => ({ id: String(a.applicantId), name: a.name }))
+        : [],
+    [applicants],
+  );
 
-  const editorRef = useRef<MailEditorContentRef>(null);
+  // 현재 선택된 ID (없으면 1번 지원자)
+  const currentId = activeApplicantId ?? recipients[0]?.id;
+  const activeRecipientName = recipients.find((r) => r.id === currentId)?.name;
 
-  // 나중에 api로 데이터 받아옴
-  const recipients: Recipient[] = [
-    { id: 'recipient-0', name: '김솔미' },
-    { id: 'recipient-1', name: '김지은' },
-    { id: 'recipient-2', name: '이수빈' },
-  ];
-
-  const handleTabChange = (id: RecipientId) => {
-    setActiveRecipient(id);
+  // 탭 변경 시 컨텍스트 상태 업데이트
+  const handleTabChange = (id: string) => {
+    actions.setActiveApplicantId(id);
   };
 
-  const activeRecipientName = recipients.find((r) => r.id === activeRecipient)?.name;
-
-  const handleContentChange = (html: string) => {
-    setEditorContents((prev) => ({
-      ...prev,
-      [activeRecipient]: html,
-    }));
-  };
-
-  const handleVariableClick = (variable: Variable) => {
-    if (editorRef.current) {
-      const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(
-        variable.key,
-        chipType,
-        variable.displayName,
-        variable.perRecipient,
-      );
-    }
-  };
-
-  const handleVariableAdd = (type: VariableType, displayName: string, perRecipient: boolean) => {
-    const newVariable: Variable = {
-      key: `var-${crypto.randomUUID()}`,
-      type,
-      displayName,
-      perRecipient,
-      items: type === '사람' ? [] : [{ value: '' }],
-    };
-
-    setVariables((prev) => [...prev, newVariable]);
-
-    editorRef.current?.insertVariable(
-      newVariable.key,
-      getChipType(newVariable.type),
-      newVariable.displayName,
-      newVariable.perRecipient,
-    );
-  };
-
-  const handleVariableDelete = (variable: Variable) => {
-    if (editorRef.current) {
-      setVariables((prev) => prev.filter((v) => v.key !== variable.key));
-      editorRef.current.deleteVariable(variable.key);
-    }
-  };
-
-  if (type === 'normal') {
-    return (
-      <EditorContainer>
-        <MailHeader
-          onVariableAdd={handleVariableAdd}
-          onVariableClick={handleVariableClick}
-          onVariableDelete={handleVariableDelete}
-          type="normal"
-          variables={variables}
-        />
-        <MailEditorContent ref={editorRef} />
-      </EditorContainer>
-    );
-  }
-  // type === 'tabs'
   return (
     <EditorContainer>
-      <MailHeader onTabChange={handleTabChange} recipients={recipients} type="tabs" />
-      <MailEditorContent
-        initialContent={editorContents[activeRecipient]}
-        key={activeRecipient}
-        onContentChange={handleContentChange}
-        recipientName={activeRecipientName}
+      <MailHeader
+        activeTabId={currentId}
+        onTabChange={handleTabChange}
+        recipients={recipients}
+        type="tabs"
       />
+      <Suspense fallback={<div>에디터 로딩 중...</div>}>
+        <MailEditorContent
+          // 사용자가 수정한 내용이 있으면 그걸 보여주고, 없으면 템플릿 기본값 사용
+          initialContent={templateDetail?.content || ''}
+          key={currentId} // ID가 바뀔 때마다 에디터를 새로 그려서 내용을 교체함
+          recipientName={activeRecipientName}
+        />
+      </Suspense>
     </EditorContainer>
   );
 };
