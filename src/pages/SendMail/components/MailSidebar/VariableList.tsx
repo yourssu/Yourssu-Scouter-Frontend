@@ -25,7 +25,7 @@ export const VariableList = ({ templateId, partId }: VariableListProps) => {
         const items = isIndividual
           ? applicants.map((a) => ({
               label: a.name,
-              value: variableValue.perApplicant[a.applicantId]?.[v.key] ?? '',
+              value: variableValue.perApplicant[String(a.applicantId)]?.[v.key] ?? '',
             }))
           : [{ value: variableValue.common[v.key] ?? '' }];
 
