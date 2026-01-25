@@ -4,6 +4,7 @@ import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
 import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { useOptionalMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useVariableValue } from '@/pages/SendMail/hooks/useVariableValue';
 
 export interface VariableChipOptions {
   htmlAttributes: Record<string, any>;
@@ -121,6 +122,7 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
 
 const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
   const context = useOptionalMailVariables();
+  const { getVariableValue } = useVariableValue();
 
   const { key, type, label, perRecipient } = node.attrs as {
     key: string;
@@ -137,17 +139,7 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
     );
   }
 
-  const { variableValue, activeApplicantId } = context;
-
-  const getDisplayValue = () => {
-    const recipientId = activeApplicantId ?? Object.keys(variableValue.perApplicant)[0];
-    if (perRecipient && recipientId) {
-      return variableValue.perApplicant[String(recipientId)]?.[key];
-    }
-    return variableValue.common[key];
-  };
-
-  const displayValue = getDisplayValue();
+  const displayValue = getVariableValue(key, perRecipient, label);
 
   return (
     <NodeViewWrapper

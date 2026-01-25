@@ -2,6 +2,7 @@ import { assert } from 'es-toolkit';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { RecipientId } from '@/pages/SendMail/mail.type';
+import { Part } from '@/query/part/schema';
 import { VariableState } from '@/types/editor';
 
 interface VariableContextProps {
@@ -12,12 +13,19 @@ interface VariableContextProps {
     updateIndividualValue: (applicantId: RecipientId, key: string, value: string) => void;
   };
   activeApplicantId: RecipientId | undefined;
+  currentPart: Part | undefined;
   variableValue: VariableState;
 }
 
 const VariableContext = createContext<null | VariableContextProps>(null);
 
-export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
+export const MailVariableProvider = ({
+  children,
+  currentPart,
+}: {
+  children: ReactNode;
+  currentPart: Part | undefined;
+}) => {
   const [variableValue, setVariableValue] = useState<VariableState>({
     common: {},
     perApplicant: {},
@@ -47,8 +55,19 @@ export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
     [],
   );
 
+  if (!currentPart) {
+    return <>{children}</>;
+  }
+
   return (
-    <VariableContext.Provider value={{ variableValue, activeApplicantId, actions }}>
+    <VariableContext.Provider
+      value={{
+        variableValue,
+        activeApplicantId,
+        currentPart,
+        actions,
+      }}
+    >
       {children}
     </VariableContext.Provider>
   );
