@@ -12,7 +12,11 @@ export interface VariableChipOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     variableChip: {
-      insertVariableChip: (options: { label: string; type: string }) => ReturnType;
+      insertVariableChip: (options: {
+        label: string;
+        perRecipient: boolean;
+        type: string;
+      }) => ReturnType;
     };
   }
 }
@@ -72,9 +76,6 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
         default: false,
         parseHTML: (element) => element.getAttribute('data-per-recipient') === 'true',
         renderHTML: (attributes) => {
-          if (attributes.perRecipient === undefined) {
-            return {};
-          }
           return {
             'data-per-recipient': attributes.perRecipient,
           };
@@ -139,8 +140,9 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
   const { variableValue, activeApplicantId } = context;
 
   const getDisplayValue = () => {
-    if (perRecipient && activeApplicantId) {
-      return variableValue.perApplicant[String(activeApplicantId)]?.[key];
+    const recipientId = activeApplicantId ?? Object.keys(variableValue.perApplicant)[0];
+    if (perRecipient && recipientId) {
+      return variableValue.perApplicant[String(recipientId)]?.[key];
     }
     return variableValue.common[key];
   };
