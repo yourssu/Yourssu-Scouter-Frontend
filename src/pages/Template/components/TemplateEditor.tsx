@@ -26,7 +26,12 @@ export const TemplateEditor = ({
   const handleVariableClick = (variable: Variable) => {
     if (editorRef.current) {
       const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(variable.key, chipType, variable.displayName);
+      editorRef.current.insertVariable(
+        variable.key,
+        chipType,
+        variable.displayName,
+        variable.perRecipient,
+      );
     }
   };
 
@@ -40,6 +45,12 @@ export const TemplateEditor = ({
     };
 
     onVariablesChange([...templateVariables, newVariable]);
+    editorRef.current?.insertVariable(
+      newVariable.key,
+      getChipType(newVariable.type),
+      newVariable.displayName,
+      newVariable.perRecipient,
+    );
   };
 
   const handleVariableDelete = (variable: Variable) => {
