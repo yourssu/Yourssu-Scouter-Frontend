@@ -9,7 +9,6 @@ export const useVariableList = (templateId: number, partId: number) => {
   const [{ data: template }, { data: applicants }] = useSuspenseQueries({
     queries: [templateOptions.detail(templateId), applicantOptions({ partId })],
   });
-
   const { variableValue, actions } = useMailVariables();
   const templateVariables: Variable[] = template.variables;
 
