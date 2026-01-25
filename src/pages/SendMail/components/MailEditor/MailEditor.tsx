@@ -16,9 +16,12 @@ interface MailEditorProps {
 export const MailEditor = ({ selectedPart, selectedTemplateId }: MailEditorProps) => {
   const { recipients, currentRecipientId, currentRecipientName, setCurrentRecipientId } =
     useRecipientData(selectedPart);
-  const { defaultContent } = useMailData(selectedTemplateId!);
 
-  // 탭 변경 시 컨텍스트 상태 업데이트
+  const { currentContent, handleContentChange } = useMailData(
+    selectedTemplateId,
+    currentRecipientId,
+  );
+
   const handleTabChange = (id: string) => {
     setCurrentRecipientId(id);
   };
@@ -33,9 +36,9 @@ export const MailEditor = ({ selectedPart, selectedTemplateId }: MailEditorProps
       />
       <Suspense fallback={<div>에디터 로딩 중...</div>}>
         <MailEditorContent
-          // 사용자가 수정한 내용이 있으면 그걸 보여주고, 없으면 템플릿 기본값 사용
-          initialContent={defaultContent}
-          key={currentRecipientId} // ID가 바뀔 때마다 에디터를 새로 그려서 내용을 교체함
+          initialContent={currentContent}
+          key={currentRecipientId} // 탭 변경 시 컴포넌트 리렌더링을 위한 key 설정
+          onContentChange={handleContentChange}
           recipientName={currentRecipientName}
         />
       </Suspense>

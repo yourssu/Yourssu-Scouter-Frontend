@@ -8,7 +8,8 @@ import { Part } from '@/query/part/schema';
 
 export const useRecipientData = (selectedPart: Part) => {
   const { activeApplicantId, actions } = useMailVariables();
-  const applicants = useSuspenseQuery(applicantOptions({ partId: selectedPart.partId }));
+
+  const { data: applicants } = useSuspenseQuery(applicantOptions({ partId: selectedPart.partId }));
 
   const recipients: Recipient[] = useMemo(
     () =>
