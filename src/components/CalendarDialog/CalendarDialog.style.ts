@@ -9,7 +9,6 @@ export const CalendarDialogContainer = styled.div`
   display: grid;
   padding: 12px;
   justify-items: center;
-  z-index: 1;
   max-height: 438px;
   gap: 20px;
 `;
