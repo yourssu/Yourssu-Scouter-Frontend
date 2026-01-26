@@ -33,4 +33,5 @@ export const TabsContainer = styled.div`
   margin-left: 10px;
   width: 100%;
   border-bottom: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
+  padding-left: 8px;
 `;
