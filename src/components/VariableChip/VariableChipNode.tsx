@@ -3,6 +3,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
 import { VariableChip } from '@/components/VariableChip/VariableChip';
+import { useOptionalMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
 
 export interface VariableChipOptions {
   htmlAttributes: Record<string, any>;
@@ -11,7 +12,11 @@ export interface VariableChipOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     variableChip: {
-      insertVariableChip: (options: { label: string; type: string }) => ReturnType;
+      insertVariableChip: (options: {
+        label: string;
+        perRecipient: boolean;
+        type: string;
+      }) => ReturnType;
     };
   }
 }
@@ -67,6 +72,15 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
           };
         },
       },
+      perRecipient: {
+        default: false,
+        parseHTML: (element) => element.getAttribute('data-per-recipient') === 'true',
+        renderHTML: (attributes) => {
+          return {
+            'data-per-recipient': attributes.perRecipient,
+          };
+        },
+      },
     };
   },
 
@@ -106,7 +120,34 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
 });
 
 const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
-  const { type, label } = node.attrs as { label: string; type: string };
+  const context = useOptionalMailVariables();
+
+  const { key, type, label, perRecipient } = node.attrs as {
+    key: string;
+    label: string;
+    perRecipient: boolean;
+    type: string;
+  };
+
+  if (!context) {
+    return (
+      <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
+        <VariableChip label={label} size="small" type={type as any} />
+      </NodeViewWrapper>
+    );
+  }
+
+  const { variableValue, activeApplicantId } = context;
+
+  const getDisplayValue = () => {
+    const recipientId = activeApplicantId ?? Object.keys(variableValue.perApplicant)[0];
+    if (perRecipient && recipientId) {
+      return variableValue.perApplicant[String(recipientId)]?.[key];
+    }
+    return variableValue.common[key];
+  };
+
+  const displayValue = getDisplayValue();
 
   return (
     <NodeViewWrapper
@@ -116,7 +157,11 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
         display: 'inline-block',
       }}
     >
-      <VariableChip label={label} size="small" type={type as any} />
+      {displayValue ? (
+        <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
+      ) : (
+        <VariableChip label={label} size="small" type={type as any} />
+      )}
     </NodeViewWrapper>
   );
 };
