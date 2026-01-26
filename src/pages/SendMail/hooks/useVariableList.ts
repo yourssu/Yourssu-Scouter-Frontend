@@ -49,7 +49,11 @@ export const useVariableList = (templateId: number, partId: number) => {
   });
   const { variableValue, actions } = useMailVariables();
 
-  const variableCardData = (template.variables as Variable[]).map((v) =>
+  const templateVariables: Variable[] = template.variables.filter(
+    (v) => v.displayName !== '지원자' && v.displayName !== '파트명',
+  );
+
+  const variableCardData = templateVariables.map((v) =>
     transformToVariableCard(v, applicants, variableValue, actions),
   );
 
