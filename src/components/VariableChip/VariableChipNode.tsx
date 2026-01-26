@@ -4,6 +4,7 @@ import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
 import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { useOptionalMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useVariableValue } from '@/pages/SendMail/hooks/useVariableValue';
 
 export interface VariableChipOptions {
   htmlAttributes: Record<string, any>;
@@ -122,13 +123,9 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
 const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
   const context = useOptionalMailVariables();
 
-  const { key, type, label, perRecipient } = node.attrs as {
-    key: string;
-    label: string;
-    perRecipient: boolean;
-    type: string;
-  };
+  const { label, type } = node.attrs;
 
+  // 컨텍스트가 없으면 훅 사용 없이 기본 렌더링
   if (!context) {
     return (
       <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
@@ -137,26 +134,17 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
     );
   }
 
-  const { variableValue, activeApplicantId } = context;
+  // 컨텍스트가 있을 때만 훅을 사용하는 렌더링
+  return <ConnectedVariableChip node={node} />;
+};
 
-  const getDisplayValue = () => {
-    const recipientId = activeApplicantId ?? Object.keys(variableValue.perApplicant)[0];
-    if (perRecipient && recipientId) {
-      return variableValue.perApplicant[String(recipientId)]?.[key];
-    }
-    return variableValue.common[key];
-  };
-
-  const displayValue = getDisplayValue();
+const ConnectedVariableChip = ({ node }: { node: any }) => {
+  const { getVariableValue } = useVariableValue();
+  const { key, type, label, perRecipient } = node.attrs;
+  const displayValue = getVariableValue(key, perRecipient, label);
 
   return (
-    <NodeViewWrapper
-      as="span"
-      className="variable-chip-node"
-      style={{
-        display: 'inline-block',
-      }}
-    >
+    <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
       {displayValue ? (
         <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
       ) : (
