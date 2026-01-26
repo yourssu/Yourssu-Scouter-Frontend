@@ -1,6 +1,6 @@
 import { Chip, IcCalenderLine, TextField } from '@yourssu/design-system-react';
 
-import { formatTemplates } from '@/utils/date';
+import { formatTemplates, parseDate } from '@/utils/date';
 
 import { CalendarDialog } from '../CalendarDialog/CalendarDialog';
 import { VariableCard } from './VariableCard';
@@ -36,6 +36,7 @@ export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCar
             onSelect={(selectedDate) =>
               handleDateSelection(index, formatTemplates['01/01(월) 00:00'](selectedDate))
             }
+            selectedDate={date.value ? parseDate(date.value) : undefined}
             trigger={
               <TextFieldContainer
                 onClick={(e) => {
