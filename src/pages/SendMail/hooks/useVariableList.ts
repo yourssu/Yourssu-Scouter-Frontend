@@ -10,7 +10,9 @@ export const useVariableList = (templateId: number, partId: number) => {
     queries: [templateOptions.detail(templateId), applicantOptions({ partId })],
   });
   const { variableValue, actions } = useMailVariables();
-  const templateVariables: Variable[] = template.variables;
+  const templateVariables: Variable[] = template.variables.filter(
+    (v) => v.displayName !== '지원자' && v.displayName !== '파트명',
+  );
 
   return {
     templateVariables,
