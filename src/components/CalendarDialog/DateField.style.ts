@@ -64,6 +64,8 @@ export const StyledContent = styled(DropdownMenu.Content)`
   border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
   max-height: 300px;
   overflow-y: auto;
+  position: relative;
+  z-index: 50;
 `;
 
 export const StyledItemsContainer = styled.div`
