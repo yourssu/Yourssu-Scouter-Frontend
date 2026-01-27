@@ -41,7 +41,7 @@ interface MailContentContextProps {
 interface MailInfoData {
   bcc: string[];
   cc: string[];
-  receivers: string[];
+  receiver: string[];
 }
 
 interface MailInfoContextProps {
@@ -133,7 +133,7 @@ export const MailContentProvider = ({ children }: { children: ReactNode }) => {
 
 // 3. 메일 인포 Provider
 export const MailInfoProvider = ({ children }: { children: ReactNode }) => {
-  const [mailInfo, setMailInfo] = useState<MailInfoData>({ receivers: [], cc: [], bcc: [] });
+  const [mailInfo, setMailInfo] = useState<MailInfoData>({ receiver: [], cc: [], bcc: [] });
 
   const actions = useMemo(
     () => ({
