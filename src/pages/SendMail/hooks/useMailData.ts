@@ -1,7 +1,7 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { useCallback, useMemo, useState } from 'react';
 
-import { useOptionalMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useOptionalMailVariables } from '@/pages/SendMail/context';
 import { templateOptions } from '@/query/template/options';
 
 export const useMailData = (

@@ -50,7 +50,12 @@ export const MiniTimeField = ({ date, onDateChange }: MiniTimeFieldProps) => {
         <MiniDateFieldContainer>
           <IcClockLine color="#6E7687" height={24} width={24} />
           {time}
-          <IcArrowsChevronDownFilled color="#6E7687" height={15} width={15} />
+          <IcArrowsChevronDownFilled
+            color="#6E7687"
+            height={15}
+            style={{ marginLeft: 'auto' }}
+            width={15}
+          />
         </MiniDateFieldContainer>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>

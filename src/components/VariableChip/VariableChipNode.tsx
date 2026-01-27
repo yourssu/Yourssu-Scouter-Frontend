@@ -3,7 +3,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
 import { VariableChip } from '@/components/VariableChip/VariableChip';
-import { useOptionalMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useOptionalMailVariables } from '@/pages/SendMail/context';
 import { useVariableValue } from '@/pages/SendMail/hooks/useVariableValue';
 
 export interface VariableChipOptions {

@@ -1,13 +1,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useMailVariableContext } from '@/pages/SendMail/context';
 import { Recipient } from '@/pages/SendMail/mail.type';
 import { applicantOptions } from '@/query/applicant/options';
 import { Part } from '@/query/part/schema';
 
 export const useRecipientData = (selectedPart: Part) => {
-  const { activeApplicantId, actions } = useMailVariables();
+  const { activeApplicantId, actions } = useMailVariableContext();
 
   const { data: applicants } = useSuspenseQuery(applicantOptions({ partId: selectedPart.partId }));
 

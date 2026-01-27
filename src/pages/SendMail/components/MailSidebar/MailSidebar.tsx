@@ -1,6 +1,7 @@
 import { BoxButton } from '@yourssu/design-system-react';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 
+import { MailReservationDialog } from '@/pages/SendMail/components/MailReservationDialog/MailReservationDialog';
 import { VariableList } from '@/pages/SendMail/components/MailSidebar/VariableList';
 
 export interface MailSidebarProps {
@@ -9,6 +10,7 @@ export interface MailSidebarProps {
 }
 
 export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (
     <div className="bg-bg-basicLight flex size-full min-h-0 flex-col justify-between">
       <div className="typo-t4_sb_18 bg-bg-basicDefault border-line-basicMedium flex w-full flex-none justify-center border-b-1 px-[16px] py-[12px]">
@@ -23,11 +25,23 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
       </div>
       <div className="border-line-basicMedium bg-bg-basicDefault flex-none border-t-1 px-[20px] pt-[16px] pb-[40px]">
         <div className="w-full [&_button]:w-full">
-          <BoxButton disabled={false} size="large" variant="filledPrimary">
+          <BoxButton
+            disabled={false}
+            onClick={() => setIsDialogOpen(true)}
+            size="large"
+            variant="filledPrimary"
+          >
             메일 예약하기
           </BoxButton>
         </div>
       </div>
+      {isDialogOpen && (
+        <MailReservationDialog
+          onClose={() => setIsDialogOpen(false)}
+          onReserve={() => {}}
+          open={isDialogOpen}
+        />
+      )}
     </div>
   );
 };

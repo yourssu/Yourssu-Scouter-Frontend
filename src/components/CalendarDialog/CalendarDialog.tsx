@@ -31,20 +31,6 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
   const [open, setOpen] = useState(false);
   const today = new Date();
   const displayDate = selectedDate ?? today;
-  const [currentDate, setCurrentDate] = useState<{
-    month: number;
-    year: number;
-  }>({
-    year: today.getFullYear(),
-    month: today.getMonth(),
-  });
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-  const dates = generateCalendarDates(currentDate);
-
-  const handleMonthChange = (amount: number) => {
-    const newDate = addMonths(new Date(currentDate.year, currentDate.month, 1), amount);
-    setCurrentDate({ year: newDate.getFullYear(), month: newDate.getMonth() });
-  };
 
   const handleDateChange = (date: Date) => {
     if (selectedDate) {
@@ -78,34 +64,7 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
         <Popover.Trigger asChild>{trigger}</Popover.Trigger>
         <Popover.Content>
           <CalendarDialogContainer>
-            <CalendarContainer>
-              <CalendarHeader>
-                <IcArrowsChevronLeftLine height={20} onClick={() => handleMonthChange(-1)} />
-                <CalendarHeaderText>
-                  {`${currentDate.year}년 ${currentDate.month + 1}월`}
-                </CalendarHeaderText>
-                <IcArrowsChevronRightLine height={20} onClick={() => handleMonthChange(1)} />
-              </CalendarHeader>
-              <CalendarBody>
-                <DayRow>
-                  {weekdays.map((day) => (
-                    <DayCell key={day}>{day}</DayCell>
-                  ))}
-                </DayRow>
-                <DatesWrapper>
-                  {dates.map((date) => (
-                    <DateCell
-                      currentMonth={currentDate.month}
-                      date={date}
-                      isToday={isSameDay(date, today)}
-                      key={date.toISOString()}
-                      onClick={() => handleDateChange(date)}
-                      selectedDate={selectedDate}
-                    />
-                  ))}
-                </DatesWrapper>
-              </CalendarBody>
-            </CalendarContainer>
+            <CalendarContent onSelect={handleDateChange} selectedDate={selectedDate} />
             <DateFieldWrapper>
               <MiniDateField date={displayDate} />
               <MiniTimeField date={displayDate} onDateChange={handleTimeChange} />
@@ -114,5 +73,80 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
         </Popover.Content>
       </Popover.Root>
     </StyledWrapper>
+  );
+};
+
+interface CalendarContentProps {
+  onSelect: (date: Date) => void;
+  selectedDate?: Date | undefined;
+}
+
+export const CalendarContent = ({ onSelect, selectedDate }: CalendarContentProps) => {
+  const today = new Date();
+  const [currentDate, setCurrentDate] = useState({
+    year: today.getFullYear(),
+    month: today.getMonth(),
+  });
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const dates = generateCalendarDates(currentDate);
+
+  const handleMonthChange = (amount: number) => {
+    const newDate = addMonths(new Date(currentDate.year, currentDate.month, 1), amount);
+    setCurrentDate({ year: newDate.getFullYear(), month: newDate.getMonth() });
+  };
+
+  const handleDateChange = (date: Date) => {
+    if (selectedDate) {
+      const updatedDate = setHours(
+        setMinutes(date, selectedDate.getMinutes()),
+        selectedDate.getHours(),
+      );
+      onSelect(updatedDate);
+    } else {
+      const now = new Date();
+      const nextHour = startOfHour(addHours(now, 1));
+      let targetHour = nextHour.getHours();
+      if (targetHour < 9 || targetHour > 22) {
+        targetHour = 9;
+      }
+      onSelect(setHours(date, targetHour));
+    }
+  };
+
+  return (
+    <CalendarContainer>
+      <CalendarHeader>
+        <IcArrowsChevronLeftLine
+          className="cursor-pointer"
+          height={20}
+          onClick={() => handleMonthChange(-1)}
+        />
+        <CalendarHeaderText>{`${currentDate.year}년 ${currentDate.month + 1}월`}</CalendarHeaderText>
+        <IcArrowsChevronRightLine
+          className="cursor-pointer"
+          height={20}
+          onClick={() => handleMonthChange(1)}
+        />
+      </CalendarHeader>
+      <CalendarBody>
+        <DayRow>
+          {weekdays.map((day) => (
+            <DayCell key={day}>{day}</DayCell>
+          ))}
+        </DayRow>
+        <DatesWrapper>
+          {dates.map((date) => (
+            <DateCell
+              currentMonth={currentDate.month}
+              date={date}
+              isToday={isSameDay(date, today)}
+              key={date.toISOString()}
+              onClick={() => handleDateChange(date)}
+              selectedDate={selectedDate}
+            />
+          ))}
+        </DatesWrapper>
+      </CalendarBody>
+    </CalendarContainer>
   );
 };
