@@ -4,10 +4,22 @@ import { CalendarContent } from '@/components/CalendarDialog/CalendarDialog';
 import { MiniDateField } from '@/components/CalendarDialog/MiniDateField';
 import { MiniTimeField } from '@/components/CalendarDialog/MiniTimeField';
 import { Dialog } from '@/components/dialog';
+import { useMailActions } from '@/pages/SendMail/hooks/useMailReservation';
 
-export const MailReservationDialog = ({ open, onClose, onReserve }: any) => {
+interface MailReservationDialogProps {
+  onClose: () => void;
+  open: boolean;
+}
+
+export const MailReservationDialog = ({ open, onClose }: MailReservationDialogProps) => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const { sendReservation } = useMailActions();
+
+  const handleReserve = async () => {
+    await sendReservation(selectedDate); // 예약 발송 함수 호출
+    onClose();
+  };
 
   return (
     <Dialog onClose={onClose} open={open}>
@@ -28,7 +40,7 @@ export const MailReservationDialog = ({ open, onClose, onReserve }: any) => {
       <Dialog.ButtonGroup>
         <Dialog.Button
           className="h-[52px] w-[95px]"
-          onClick={() => onReserve(selectedDate)}
+          onClick={handleReserve}
           size="large"
           variant="filledPrimary"
         >
