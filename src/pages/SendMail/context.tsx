@@ -24,7 +24,6 @@ interface MailContentData {
   body: Record<string, string>; // 지원자 id, 본문 내용
   bodyFormat: 'HTML' | 'PLAIN_TEXT';
   inlineImages: string;
-  subject: string;
 }
 
 interface MailContentContextProps {
@@ -39,10 +38,11 @@ interface MailContentContextProps {
 }
 
 // 3. 메일 인포 관련 타입 (받는사람, 참조, 숨은참조)
-interface MailInfoData {
+export interface MailInfoData {
   bcc: string[];
   cc: string[];
   receiver: string[];
+  subject: string;
 }
 
 interface MailInfoContextProps {
@@ -105,7 +105,6 @@ export const MailVariableProvider = ({
 // 2. 메일 내용 Provider
 export const MailContentProvider = ({ children }: { children: ReactNode }) => {
   const [mailContent, setMailContent] = useState<MailContentData>({
-    subject: '',
     body: {},
     bodyFormat: 'HTML',
     inlineImages: '',
@@ -143,7 +142,12 @@ export const MailContentProvider = ({ children }: { children: ReactNode }) => {
 
 // 3. 메일 인포 Provider
 export const MailInfoProvider = ({ children }: { children: ReactNode }) => {
-  const [mailInfo, setMailInfo] = useState<MailInfoData>({ receiver: [], cc: [], bcc: [] });
+  const [mailInfo, setMailInfo] = useState<MailInfoData>({
+    receiver: [],
+    cc: [],
+    bcc: [],
+    subject: '',
+  });
 
   const actions = useMemo(
     () => ({

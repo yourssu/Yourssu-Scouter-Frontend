@@ -1,11 +1,12 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 
 import { AutoFillMembers } from '@/pages/SendMail/components/MailInfoSection/AutoFillIMembers';
 import { MemberInputField } from '@/pages/SendMail/components/MailInfoSection/MemberInputField';
 import { TextInputField } from '@/pages/SendMail/components/MailInfoSection/TextInputField';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { Part } from '@/query/part/schema';
-import { MailFormData, MemberInputFieldKey, MemberInputFieldTypes } from '@/types/editor';
+import { MailFormData, MemberInputFieldTypes } from '@/types/editor';
+import { MemberInputFieldKey } from '@/types/editor';
 
 interface InfoSectionProps {
   selectedPart: Part | undefined;
@@ -27,13 +28,39 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
   } = useMailInfoContext();
 
   // 멤버(칩) 업데이트
-  const handleMemberUpdate = (field: MemberInputFieldKey, items: string[]) => {
+  const handleMemberUpdate = useCallback(
+    (updates: Partial<Record<MemberInputFieldKey, string[]>>) => {
+      // 1. 로컬 상태 업데이트
+      setFormData((prev) => ({
+        ...prev,
+        members: { ...prev.members, ...updates },
+      }));
+
+      // 2. 컨텍스트 상태 업데이트
+      const mailUpdate: Parameters<typeof updateMailInfo>[0] = {};
+
+      if (updates['받는 사람']) {
+        mailUpdate.receiver = updates['받는 사람'];
+      }
+      if (updates['숨은 참조']) {
+        mailUpdate.bcc = updates['숨은 참조'];
+      }
+
+      if (Object.keys(mailUpdate).length > 0) {
+        updateMailInfo(mailUpdate);
+      }
+    },
+    [updateMailInfo],
+  );
+
+  const handleSubjectUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSubject = e.target.value;
     setFormData((prev) => ({
       ...prev,
-      members: { ...prev.members, [field]: items },
+      subject: newSubject,
     }));
     updateMailInfo({
-      [field === '받는 사람' ? 'receiver' : field === '보내는 사람' ? 'cc' : 'bcc']: items,
+      subject: newSubject,
     });
   };
 
@@ -46,13 +73,14 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
               items={formData.members[type]}
               key={type}
               label={type}
-              onItemsUpdate={(items) => handleMemberUpdate(type, items)}
+              onItemsUpdate={(items) => handleMemberUpdate({ [type]: items })}
             />
           ))}
         </div>
       ) : (
         <Suspense>
           <AutoFillMembers
+            key={selectedPart.partId}
             members={formData.members}
             onMembersUpdate={handleMemberUpdate}
             selectedPart={selectedPart}
@@ -60,13 +88,12 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
           />
         </Suspense>
       )}
-      <TextInputField
+      {/* <TextInputField
         label="제목"
-        onChange={(e) => {
-          setFormData({ ...formData, subject: e.target.value });
-        }}
+        onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
         value={formData.subject}
-      />
+      /> */}
+      <TextInputField label="제목" onChange={handleSubjectUpdate} value={formData.subject} />
     </div>
   );
 };

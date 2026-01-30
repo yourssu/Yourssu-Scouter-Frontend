@@ -12,7 +12,7 @@ interface InputChipGroupProps {
   onItemsUpdate: (items: string[]) => void;
 }
 
-export const InputChipGroup = ({ items, deletable, onItemsUpdate }: InputChipGroupProps) => {
+export const InputChipGroup = ({ items = [], deletable, onItemsUpdate }: InputChipGroupProps) => {
   return (
     <div className="contents items-center gap-2">
       {items.map((item) => (

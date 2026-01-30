@@ -6,12 +6,12 @@ interface BuildMailRequestParams {
     body: string;
     bodyFormat: MailBodyFormatType;
     inlineImages: string;
-    subject: string;
   };
   mailInfo: {
     bcc: string[];
     cc: string[];
     receiver: string[];
+    subject: string;
   };
   reservedDate: Date | null;
 }
@@ -26,7 +26,7 @@ export const buildMailRequest = ({
       receiverEmailAddresses: mailInfo.receiver,
       ccEmailAddresses: mailInfo.cc,
       bccEmailAddresses: mailInfo.bcc,
-      mailSubject: mailContent.subject,
+      mailSubject: mailInfo.subject,
       mailBody: mailContent.body,
       bodyFormat: mailContent.bodyFormat,
       reservationTime: reservedDate ? reservedDate.toISOString() : null,
