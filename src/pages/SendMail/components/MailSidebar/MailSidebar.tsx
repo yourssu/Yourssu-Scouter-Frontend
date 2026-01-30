@@ -1,8 +1,12 @@
 import { BoxButton } from '@yourssu/design-system-react';
-import { Suspense, useState } from 'react';
+import { overlay } from 'overlay-kit';
+import { Suspense } from 'react';
 
 import { MailReservationDialog } from '@/pages/SendMail/components/MailReservationDialog/MailReservationDialog';
 import { VariableList } from '@/pages/SendMail/components/MailSidebar/VariableList';
+import { useMailData } from '@/pages/SendMail/hooks/useMailData';
+import { useMailActions } from '@/pages/SendMail/hooks/useMailReservation';
+import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 
 export interface MailSidebarProps {
   partId?: number;
@@ -10,7 +14,25 @@ export interface MailSidebarProps {
 }
 
 export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { currentRecipientId } = useRecipientData();
+  const { currentContent } = useMailData(templateId, currentRecipientId);
+  const { sendReservation } = useMailActions();
+  const handleReservationClick = () => {
+    overlay.open(
+      ({ isOpen, close }) => (
+        <MailReservationDialog
+          body={currentContent}
+          onClose={close}
+          onReserve={async (date: Date) => {
+            await sendReservation(currentContent, date);
+          }}
+          open={isOpen}
+        />
+      ),
+      { overlayId: 'mail-reservation-dialog' },
+    );
+  };
+
   return (
     <div className="bg-bg-basicLight flex size-full min-h-0 flex-col justify-between">
       <div className="typo-t4_sb_18 bg-bg-basicDefault border-line-basicMedium flex w-full flex-none justify-center border-b-1 px-[16px] py-[12px]">
@@ -27,7 +49,7 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
         <div className="w-full [&_button]:w-full">
           <BoxButton
             disabled={false}
-            onClick={() => setIsDialogOpen(true)}
+            onClick={handleReservationClick}
             size="large"
             variant="filledPrimary"
           >
@@ -35,13 +57,6 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
           </BoxButton>
         </div>
       </div>
-      {isDialogOpen && (
-        <MailReservationDialog
-          onClose={() => setIsDialogOpen(false)}
-          open={isDialogOpen}
-          templateId={templateId}
-        />
-      )}
     </div>
   );
 };

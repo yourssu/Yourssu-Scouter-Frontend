@@ -28,7 +28,6 @@ interface MailContentData {
 
 interface MailContentContextProps {
   actions: {
-    sendReservation: () => Promise<void>;
     setReservationTime: (date: Date | null) => void;
     updateBody: (id: string, html: string) => void;
     updateMailContent: (data: Partial<MailContentData>) => void;
@@ -89,10 +88,6 @@ export const MailVariableProvider = ({
     [],
   );
 
-  if (!currentPart) {
-    return <>{children}</>;
-  }
-
   return (
     <MailVariableContext.Provider
       value={{ variableValue, currentApplicantId, currentPart, actions }}
@@ -124,11 +119,7 @@ export const MailContentProvider = ({ children }: { children: ReactNode }) => {
             [id]: html,
           },
         })),
-
       setReservationTime,
-      sendReservation: async () => {
-        // TODO: 메일 발송 로직
-      },
     }),
     [],
   );
