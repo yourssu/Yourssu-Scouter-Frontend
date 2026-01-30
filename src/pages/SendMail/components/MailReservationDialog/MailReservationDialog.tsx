@@ -4,20 +4,29 @@ import { CalendarContent } from '@/components/CalendarDialog/CalendarDialog';
 import { MiniDateField } from '@/components/CalendarDialog/MiniDateField';
 import { MiniTimeField } from '@/components/CalendarDialog/MiniTimeField';
 import { Dialog } from '@/components/dialog';
+import { useMailData } from '@/pages/SendMail/hooks/useMailData';
 import { useMailActions } from '@/pages/SendMail/hooks/useMailReservation';
+import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 
 interface MailReservationDialogProps {
   onClose: () => void;
   open: boolean;
+  templateId?: number | undefined;
 }
 
-export const MailReservationDialog = ({ open, onClose }: MailReservationDialogProps) => {
+export const MailReservationDialog = ({
+  open,
+  onClose,
+  templateId,
+}: MailReservationDialogProps) => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const { currentRecipientId } = useRecipientData();
+  const { currentContent } = useMailData(templateId, currentRecipientId);
   const { sendReservation } = useMailActions();
 
   const handleReserve = async () => {
-    await sendReservation(selectedDate); // 예약 발송 함수 호출
+    await sendReservation(currentContent, selectedDate);
     onClose();
   };
 

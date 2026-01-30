@@ -38,8 +38,8 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
       {isDialogOpen && (
         <MailReservationDialog
           onClose={() => setIsDialogOpen(false)}
-          onReserve={() => alert('메일이 예약되었습니다!')}
           open={isDialogOpen}
+          templateId={templateId}
         />
       )}
     </div>

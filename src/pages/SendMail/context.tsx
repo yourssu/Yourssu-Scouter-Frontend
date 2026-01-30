@@ -9,11 +9,11 @@ import { VariableState } from '@/types/editor';
 interface MailVariableContextProps {
   actions: {
     resetVariables: () => void;
-    setActiveApplicantId: (id: RecipientId | undefined) => void;
+    setCurrentApplicantId: (id: RecipientId | undefined) => void;
     updateCommonValue: (key: string, value: string) => void;
     updateIndividualValue: (applicantId: RecipientId, key: string, value: string) => void;
   };
-  activeApplicantId: RecipientId | undefined;
+  currentApplicantId: RecipientId | undefined;
   currentPart: Part | undefined;
   variableValue: VariableState;
 }
@@ -21,7 +21,7 @@ interface MailVariableContextProps {
 // 2. 메일 내용 관련 타입 (제목, 본문, 이미지, 파일)
 interface MailContentData {
   attachments: string;
-  body: string;
+  body: Record<string, string>; // 지원자 id, 본문 내용
   bodyFormat: 'HTML' | 'PLAIN_TEXT';
   inlineImages: string;
   subject: string;
@@ -31,13 +31,14 @@ interface MailContentContextProps {
   actions: {
     sendReservation: () => Promise<void>;
     setReservationTime: (date: Date | null) => void;
+    updateBody: (id: string, html: string) => void;
     updateMailContent: (data: Partial<MailContentData>) => void;
   };
   mailContent: MailContentData;
   reservationTime: Date | null;
 }
 
-// 3. 메일 인포 관련 타입 (받는사람, 참š, 숨은참조)
+// 3. 메일 인포 관련 타입 (받는사람, 참조, 숨은참조)
 interface MailInfoData {
   bcc: string[];
   cc: string[];
@@ -68,11 +69,11 @@ export const MailVariableProvider = ({
     common: {},
     perApplicant: {},
   });
-  const [activeApplicantId, setActiveApplicantId] = useState<RecipientId | undefined>(undefined);
+  const [currentApplicantId, setCurrentApplicantId] = useState<RecipientId | undefined>(undefined);
 
   const actions = useMemo(
     () => ({
-      setActiveApplicantId,
+      setCurrentApplicantId,
       updateCommonValue: (key: string, value: string) =>
         setVariableValue((prev) => ({ ...prev, common: { ...prev.common, [key]: value } })),
       updateIndividualValue: (applicantId: RecipientId, key: string, value: string) =>
@@ -94,7 +95,7 @@ export const MailVariableProvider = ({
 
   return (
     <MailVariableContext.Provider
-      value={{ variableValue, activeApplicantId, currentPart, actions }}
+      value={{ variableValue, currentApplicantId, currentPart, actions }}
     >
       {children}
     </MailVariableContext.Provider>
@@ -105,7 +106,7 @@ export const MailVariableProvider = ({
 export const MailContentProvider = ({ children }: { children: ReactNode }) => {
   const [mailContent, setMailContent] = useState<MailContentData>({
     subject: '',
-    body: '',
+    body: {},
     bodyFormat: 'HTML',
     inlineImages: '',
     attachments: '',
@@ -116,9 +117,18 @@ export const MailContentProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       updateMailContent: (data: Partial<MailContentData>) =>
         setMailContent((prev) => ({ ...prev, ...data })),
+      updateBody: (id: string, html: string) =>
+        setMailContent((prev) => ({
+          ...prev,
+          body: {
+            ...prev.body,
+            [id]: html,
+          },
+        })),
+
       setReservationTime,
       sendReservation: async () => {
-        // TODO: 예약 발송 로직 구현
+        // TODO: 메일 발송 로직
       },
     }),
     [],

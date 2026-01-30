@@ -2,42 +2,38 @@ import { Suspense } from 'react';
 
 import { useMailData } from '@/pages/SendMail/hooks/useMailData';
 import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
-import { Part } from '@/query/part/schema';
 
 import { MailEditorContent } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
 
 interface MailEditorProps {
-  selectedPart: Part;
   selectedTemplateId?: number;
 }
 
-export const MailEditor = ({ selectedPart, selectedTemplateId }: MailEditorProps) => {
+export const MailEditor = ({ selectedTemplateId }: MailEditorProps) => {
+  // 메일 받을 지원자 정보
   const { recipients, currentRecipientId, currentRecipientName, setCurrentRecipientId } =
-    useRecipientData(selectedPart);
+    useRecipientData();
 
+  // 현재 선택된 지원자에 맞는 본문과 변경 핸들러
   const { currentContent, handleContentChange } = useMailData(
     selectedTemplateId,
     currentRecipientId,
   );
 
-  const handleTabChange = (id: string) => {
-    setCurrentRecipientId(id);
-  };
-
   return (
     <EditorContainer>
       <MailHeader
         activeTabId={currentRecipientId}
-        onTabChange={handleTabChange}
+        onTabChange={setCurrentRecipientId}
         recipients={recipients}
         type="tabs"
       />
       <Suspense fallback={<div>에디터 로딩 중...</div>}>
         <MailEditorContent
+          currentApplicantId={currentRecipientId}
           initialContent={currentContent}
-          key={currentRecipientId} // 탭 변경 시 컴포넌트 리렌더링을 위한 key 설정
           onContentChange={handleContentChange}
           recipientName={currentRecipientName}
         />

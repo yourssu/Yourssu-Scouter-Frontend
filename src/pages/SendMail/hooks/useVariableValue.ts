@@ -5,13 +5,13 @@ import { useMailVariableContext } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options';
 
 export const useVariableValue = () => {
-  const { activeApplicantId, variableValue, currentPart } = useMailVariableContext();
+  const { currentApplicantId, variableValue, currentPart } = useMailVariableContext();
 
   const { data: applicants } = useSuspenseQuery(applicantOptions({ partId: currentPart?.partId }));
 
   // 선택된 ID가 없으면 이 파트의 첫 번째 지원자
   const currentId =
-    activeApplicantId ?? (applicants?.[0] ? String(applicants[0].applicantId) : undefined);
+    currentApplicantId ?? (applicants?.[0] ? String(applicants[0].applicantId) : undefined);
 
   // 현재 지원자 찾기
   const currentApplicant = useMemo(() => {

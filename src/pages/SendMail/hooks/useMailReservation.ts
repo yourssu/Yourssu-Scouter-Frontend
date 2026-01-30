@@ -18,15 +18,18 @@ export const useMailActions = () => {
     },
   });
 
-  const sendReservation = async (reservedDate?: Date) => {
+  const sendReservation = async (body: string, reservedDate?: Date) => {
     const requestBody = buildMailRequest({
       mailInfo,
-      mailContent,
+      mailContent: {
+        ...mailContent,
+        body: body || '',
+      },
       reservedDate: reservedDate || null,
     });
 
-    // console.log('발송 데이터:', requestBody);
-    await mutatePostMailReservation(requestBody);
+    console.log('발송 데이터:', requestBody);
+    // await mutatePostMailReservation(requestBody);
   };
 
   return { sendReservation, isPending };

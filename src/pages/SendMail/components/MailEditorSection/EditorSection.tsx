@@ -13,7 +13,6 @@ export const EditorSection = ({ selectedPart, selectedTemplateId }: EditorSectio
       {selectedPart && (
         <MailEditor
           key={selectedPart.partId && selectedTemplateId}
-          selectedPart={selectedPart}
           selectedTemplateId={selectedTemplateId}
         />
       )}

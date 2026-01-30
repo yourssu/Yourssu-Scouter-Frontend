@@ -11,7 +11,7 @@ import { MemberInputFieldKey } from '@/types/editor';
 
 interface AutoFillMembersProps {
   members: Record<MemberInputFieldKey, string[]>;
-  onMembersUpdate: (members: Record<MemberInputFieldKey, string[]>) => void;
+  onMembersUpdate: (field: MemberInputFieldKey, memberNames: string[]) => void;
   selectedPart: Part;
   selectedTemplateId: number | undefined;
 }
@@ -62,7 +62,7 @@ export const AutoFillMembers = ({
   };
 
   const handleMembersUpdate = (field: MemberInputFieldKey, memberNames: string[]) => {
-    onMembersUpdate({ ...mailingList, [field]: memberNames });
+    onMembersUpdate(field, memberNames);
   };
 
   return (
