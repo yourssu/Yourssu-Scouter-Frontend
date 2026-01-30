@@ -6,17 +6,34 @@ import { MailReservationDialog } from '@/pages/SendMail/components/MailReservati
 import { VariableList } from '@/pages/SendMail/components/MailSidebar/VariableList';
 import { useMailData } from '@/pages/SendMail/hooks/useMailData';
 import { useMailActions } from '@/pages/SendMail/hooks/useMailReservation';
+import { useMailValidation } from '@/pages/SendMail/hooks/useMailValidation';
 import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 
 export interface MailSidebarProps {
-  partId?: number;
-  templateId?: number;
+  partId: number | undefined;
+  templateId: number | undefined;
 }
 
 export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
   const { currentRecipientId } = useRecipientData();
   const { currentContent } = useMailData(templateId, currentRecipientId);
   const { sendReservation } = useMailActions();
+  // const { variableValue } = useMailVariableContext();
+  // const { currentApplicantId } = useCurrentApplicant();
+  // const { templateVariables } = useVariableList(templateId, partId); // templateId와 partId가 있을 때만 호출되게 하려면...
+
+  // const isReady =
+  //   templateVariables.length > 0 &&
+  //   currentApplicantId &&
+  //   templateVariables.every((v) => {
+  //     const value = v.perRecipient
+  //       ? variableValue.perApplicant[currentApplicantId]?.[v.key]
+  //       : variableValue.common[v.key];
+  //     return value && value.trim() !== '';
+  //   });
+
+  const { isReadyForReservation } = useMailValidation(templateId);
+
   const handleReservationClick = () => {
     overlay.open(
       ({ isOpen, close }) => (
@@ -48,7 +65,7 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
       <div className="border-line-basicMedium bg-bg-basicDefault flex-none border-t-1 px-[20px] pt-[16px] pb-[40px]">
         <div className="w-full [&_button]:w-full">
           <BoxButton
-            disabled={false}
+            disabled={!templateId || !partId || !isReadyForReservation}
             onClick={handleReservationClick}
             size="large"
             variant="filledPrimary"

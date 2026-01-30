@@ -56,8 +56,7 @@ export const useMailActions = () => {
     });
 
     console.log('발송 데이터:', requestBody);
-    // await mutatePostMailReservation(requestBody);
+    await mutatePostMailReservation(requestBody);
   };
-
   return { sendReservation, isPending };
 };
