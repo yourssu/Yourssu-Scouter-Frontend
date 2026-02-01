@@ -40,6 +40,7 @@ export const MemberInputField = ({ items, label, onItemsUpdate }: MemberInputFie
         {!readOnly && (
           <div className="min-w-[60px] flex-1">
             <SearchedMemberDialog
+              excludeItems={items}
               externalSearchText={inputValue}
               isActive={isActive}
               onExternalSearchTextChange={(text) => setInputValue(text)}
