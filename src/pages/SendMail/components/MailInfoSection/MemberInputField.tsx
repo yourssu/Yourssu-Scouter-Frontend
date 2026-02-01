@@ -23,6 +23,13 @@ export const MemberInputField = ({ items, label, onItemsUpdate }: MemberInputFie
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    if (!isActive) {
+      setIsActive(true);
+    }
+  };
+
   return (
     <div className="border-line-basicMedium flex min-h-[56px] w-full flex-row gap-[12px] border-b-1 px-[20px] py-[10px]">
       <div className="typo-b1_sb_16 text-text-basicPrimary flex min-w-[72px] items-center">
@@ -40,7 +47,7 @@ export const MemberInputField = ({ items, label, onItemsUpdate }: MemberInputFie
               trigger={
                 <input
                   className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"
-                  onChange={(e) => setInputValue(e.target.value)}
+                  onChange={handleInputChange}
                   onFocus={() => setIsActive(true)}
                   ref={inputRef}
                   value={inputValue}
