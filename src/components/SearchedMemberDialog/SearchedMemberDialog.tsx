@@ -83,6 +83,18 @@ export const SearchedMemberDialog = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) {
+      return; // 한글 입력 중일 때 엔터가 두 번 인식되는 문제 방지
+    }
+    if (e.key === 'Enter') {
+      if (filteredMembers.length > 0) {
+        e.preventDefault();
+        handleSelectMember(filteredMembers[0].nickname);
+      }
+    }
+  };
+
   return (
     <StyledWrapper>
       <Popover.Root
@@ -91,7 +103,11 @@ export const SearchedMemberDialog = ({
         open={isPopoverOpen}
       >
         <Popover.Anchor asChild>
-          <div className="left-0 w-full" onClick={() => !isExternalMode && setOpen(true)}>
+          <div
+            className="left-0 w-full"
+            onClick={() => !isExternalMode && setOpen(true)}
+            onKeyDown={isExternalMode ? handleKeyDown : undefined}
+          >
             {trigger}
           </div>
         </Popover.Anchor>
@@ -108,6 +124,7 @@ export const SearchedMemberDialog = ({
                 <SearchBar.Input
                   {...register('searchText')}
                   autoFocus
+                  onKeyDown={handleKeyDown}
                   placeholder="사람 변수 검색"
                 />
               </SearchBar>
