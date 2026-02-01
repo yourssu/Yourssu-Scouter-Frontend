@@ -55,6 +55,7 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
     } else {
       onSelect(getCloseHour(date));
     }
+    setOpen(false);
   };
 
   const handleTimeChange = (date: Date) => {
