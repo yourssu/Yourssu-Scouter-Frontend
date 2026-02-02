@@ -7,73 +7,51 @@ import { TextVariableCard } from '@/components/VariableCard/TextVariableCard';
 import { useVariableList } from '@/pages/SendMail/hooks/useVariableList';
 
 interface VariableListProps {
+  partId: number;
   templateId: number;
 }
 
-export const VariableList = ({ templateId }: VariableListProps) => {
-  const { variables, handleVariableUpdate } = useVariableList(templateId);
-
-  const resolvedVariables = variables.map((v) => ({
-    ...v,
-    items: v.items ?? (v.type === '사람' ? [] : [{ value: '' }]),
-  }));
+export const VariableList = ({ templateId, partId }: VariableListProps) => {
+  const { variableCardData } = useVariableList(templateId, partId);
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      {resolvedVariables.map(({ key, items, displayName, type }) => {
-        const handleItemChange = (index: number, value: string) => {
-          const newItem = { ...items[index], value };
-          handleVariableUpdate(key, [...items].toSpliced(index, 1, newItem));
-        };
-        const handleItemAdd = (value: string) => {
-          if (!value.trim()) {
-            return;
-          }
-          handleVariableUpdate(key, [...items, { value }]);
-        };
-        const handleItemRemove = (value: string) => {
-          const newItems = items.filter((item) => item.value !== value);
-          handleVariableUpdate(key, newItems);
-        };
-
-        return (
-          <SwitchCase
-            caseBy={{
-              날짜: () => (
-                <DateVariableCard
-                  dates={items}
-                  onDateChange={handleItemChange}
-                  title={displayName}
-                />
-              ),
-              링크: () => (
-                <LinkVariableCard
-                  links={items}
-                  onValueChange={handleItemChange}
-                  title={displayName}
-                />
-              ),
-              사람: () => (
-                <NameVariableCard
-                  names={items.map((i) => i.value)}
-                  onAddName={handleItemAdd}
-                  onRemoveName={handleItemRemove}
-                  title={displayName}
-                />
-              ),
-              텍스트: () => (
-                <TextVariableCard
-                  onValueChange={handleItemChange}
-                  texts={items}
-                  title={displayName}
-                />
-              ),
-            }}
-            key={key}
-            value={type}
-          />
-        );
-      })}
+      {variableCardData.map((card) => (
+        <SwitchCase
+          caseBy={{
+            날짜: () => (
+              <DateVariableCard
+                dates={card.items}
+                onDateChange={card.handleUpdate}
+                title={card.title}
+              />
+            ),
+            링크: () => (
+              <LinkVariableCard
+                links={card.items}
+                onValueChange={card.handleUpdate}
+                title={card.title}
+              />
+            ),
+            사람: () => (
+              <NameVariableCard
+                names={card.names}
+                onAddName={(val) => !card.isIndividual && card.handleUpdate(0, val)}
+                title={card.title}
+              />
+            ),
+            텍스트: () => (
+              <TextVariableCard
+                onValueChange={card.handleUpdate}
+                texts={card.items}
+                title={card.title}
+              />
+            ),
+          }}
+          key={card.key}
+          value={card.type}
+        />
+      ))}
     </div>
   );
 };

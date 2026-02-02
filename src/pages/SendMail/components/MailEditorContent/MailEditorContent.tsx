@@ -25,7 +25,12 @@ interface MailEditorContentProps {
 
 export interface MailEditorContentRef {
   deleteVariable: (key: VariableKeyType) => void;
-  insertVariable: (key: VariableKeyType, type: string, label: string) => void;
+  insertVariable: (
+    key: VariableKeyType,
+    type: string,
+    label: string,
+    perRecipient: boolean,
+  ) => void;
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
@@ -83,12 +88,20 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
     useImperativeHandle(
       ref,
       () => ({
-        insertVariable: (key: VariableKeyType, type: string, label: string) => {
+        insertVariable: (
+          key: VariableKeyType,
+          type: string,
+          label: string,
+          perRecipient: boolean,
+        ) => {
           if (editor) {
             editor
               .chain()
               .focus()
-              .insertContent({ type: 'variableChip', attrs: { key, type, label } })
+              .insertContent({
+                type: 'variableChip',
+                attrs: { key, type, label, perRecipient },
+              })
               .insertContent(' ') // 변수칩 뒤에 공백 추가(가독성 향상 및 커서 줄바꿈 현상 방지)
               .run();
           }

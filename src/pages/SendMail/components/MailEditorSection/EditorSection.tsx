@@ -1,7 +1,6 @@
-import { Suspense } from 'react';
-
-import { SendMailEditor } from '@/pages/SendMail/components/MailEditorSection/SendMailEditor';
 import { Part } from '@/query/part/schema';
+
+import { MailEditor } from '../MailEditor/MailEditor';
 
 interface EditorSectionProps {
   selectedPart: Part | undefined;
@@ -12,9 +11,11 @@ export const EditorSection = ({ selectedPart, selectedTemplateId }: EditorSectio
   return (
     <div className="border-line-basicMedium bg-bg-basicDefault mx-auto flex h-full max-h-[690px] w-full flex-col rounded-xl border">
       {selectedPart && (
-        <Suspense>
-          <SendMailEditor selectedPart={selectedPart} selectedTemplateId={selectedTemplateId} />
-        </Suspense>
+        <MailEditor
+          key={selectedPart.partId && selectedTemplateId}
+          selectedPart={selectedPart}
+          selectedTemplateId={selectedTemplateId}
+        />
       )}
     </div>
   );

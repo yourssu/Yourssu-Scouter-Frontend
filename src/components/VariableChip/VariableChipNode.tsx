@@ -3,6 +3,8 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 
 import { VariableChip } from '@/components/VariableChip/VariableChip';
+import { useOptionalMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useMailData } from '@/pages/SendMail/hooks/useMailData';
 
 export interface VariableChipOptions {
   htmlAttributes: Record<string, any>;
@@ -11,7 +13,11 @@ export interface VariableChipOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     variableChip: {
-      insertVariableChip: (options: { label: string; type: string }) => ReturnType;
+      insertVariableChip: (options: {
+        label: string;
+        perRecipient: boolean;
+        type: string;
+      }) => ReturnType;
     };
   }
 }
@@ -67,6 +73,15 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
           };
         },
       },
+      perRecipient: {
+        default: false,
+        parseHTML: (element) => element.getAttribute('data-per-recipient') === 'true',
+        renderHTML: (attributes) => {
+          return {
+            'data-per-recipient': attributes.perRecipient,
+          };
+        },
+      },
     };
   },
 
@@ -105,8 +120,26 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
   },
 });
 
-const VariableChipNodeView: React.FC<NodeViewProps> = ({ deleteNode, node }) => {
-  const { type, label } = node.attrs as { label: string; type: string };
+const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
+  const context = useOptionalMailVariables();
+  const { getDisplayVariableValue } = useMailData(context?.selectedTemplateId);
+
+  const { key, type, label, perRecipient } = node.attrs as {
+    key: string;
+    label: string;
+    perRecipient: boolean;
+    type: string;
+  };
+
+  if (!context) {
+    return (
+      <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
+        <VariableChip label={label} size="small" type={type as any} />
+      </NodeViewWrapper>
+    );
+  }
+
+  const displayValue = getDisplayVariableValue(key, perRecipient);
 
   return (
     <NodeViewWrapper
@@ -116,7 +149,11 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ deleteNode, node }) => 
         display: 'inline-block',
       }}
     >
-      <VariableChip label={label} onDelete={deleteNode} size="small" type={type as any} />
+      {displayValue ? (
+        <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
+      ) : (
+        <VariableChip label={label} size="small" type={type as any} />
+      )}
     </NodeViewWrapper>
   );
 };

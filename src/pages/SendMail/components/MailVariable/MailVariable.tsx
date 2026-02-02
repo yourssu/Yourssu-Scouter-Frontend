@@ -12,12 +12,19 @@ interface VariableContextProps {
     updateIndividualValue: (applicantId: RecipientId, key: string, value: string) => void;
   };
   activeApplicantId: RecipientId | undefined;
+  selectedTemplateId: number | undefined;
   variableValue: VariableState;
 }
 
 const VariableContext = createContext<null | VariableContextProps>(null);
 
-export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
+export const MailVariableProvider = ({
+  children,
+  selectedTemplateId,
+}: {
+  children: ReactNode;
+  selectedTemplateId: number | undefined;
+}) => {
   const [variableValue, setVariableValue] = useState<VariableState>({
     common: {},
     perApplicant: {},
@@ -36,7 +43,7 @@ export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
           perApplicant: {
             ...prev.perApplicant,
             [applicantId]: {
-              ...(prev.perApplicant[applicantId] ?? {}),
+              ...prev.perApplicant[applicantId],
               [key]: value,
             },
           },
@@ -48,10 +55,16 @@ export const MailVariableProvider = ({ children }: { children: ReactNode }) => {
   );
 
   return (
-    <VariableContext.Provider value={{ variableValue, activeApplicantId, actions }}>
+    <VariableContext.Provider
+      value={{ variableValue, activeApplicantId, selectedTemplateId, actions }}
+    >
       {children}
     </VariableContext.Provider>
   );
+};
+
+export const useOptionalMailVariables = () => {
+  return useContext(VariableContext); // context가 없으면 null 반환
 };
 
 export const useMailVariables = () => {

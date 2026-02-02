@@ -15,7 +15,7 @@ export const SendMail = () => {
 
   return (
     <SendMailModeProvider>
-      <MailVariableProvider>
+      <MailVariableProvider selectedTemplateId={selectedTemplateId}>
         <SendMailPageLayout
           slots={{
             dropdown: (
@@ -32,7 +32,7 @@ export const SendMail = () => {
             editor: (
               <EditorSection selectedPart={selectedPart} selectedTemplateId={selectedTemplateId} />
             ),
-            sidebar: <MailSidebar templateId={selectedTemplateId} />,
+            sidebar: <MailSidebar partId={selectedPart?.partId} templateId={selectedTemplateId} />,
           }}
         />
       </MailVariableProvider>

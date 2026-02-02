@@ -1,24 +1,57 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useSuspenseQueries } from '@tanstack/react-query';
 
+import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { applicantOptions } from '@/query/applicant/options';
+import { Applicant } from '@/query/applicant/schema';
 import { templateOptions } from '@/query/template/options';
-import { Variable, VariableKeyType } from '@/types/editor';
+import { Variable, VariableState } from '@/types/editor';
 
-export const useVariableList = (templateId: number) => {
-  const { data: template } = useSuspenseQuery(templateOptions.detail(templateId));
+const transformToVariableCard = (
+  v: Variable,
+  applicants: Applicant[],
+  variableValue: VariableState,
+  actions: ReturnType<typeof useMailVariables>['actions'],
+) => {
+  const isIndividual = v.perRecipient;
 
-  const [variables, setVariables] = useState<Variable[]>(template.variables);
+  const items = isIndividual
+    ? applicants.map((a) => ({
+        label: a.name,
+        value: variableValue.perApplicant[String(a.applicantId)]?.[v.key] ?? '',
+      }))
+    : [{ value: variableValue.common[v.key] ?? '' }];
 
-  const handleVariableUpdate = (key: VariableKeyType, updatedItems: Variable['items']) => {
-    setVariables((prevVariables) =>
-      prevVariables.map((variable) =>
-        variable.key === key ? { ...variable, items: updatedItems } : variable,
-      ),
-    );
+  const handleUpdate = (idx: number, newValue: string) => {
+    if (!newValue.trim()) {
+      return;
+    }
+    if (isIndividual) {
+      actions.updateIndividualValue(String(applicants[idx].applicantId), v.key, newValue);
+    } else {
+      actions.updateCommonValue(v.key, newValue);
+    }
   };
 
   return {
-    variables,
-    handleVariableUpdate,
+    key: v.key,
+    type: v.type,
+    title: v.displayName,
+    isIndividual,
+    items,
+    names: items.map((i) => i.value).filter(Boolean),
+    handleUpdate,
   };
+};
+
+export const useVariableList = (templateId: number, partId: number) => {
+  const [{ data: template }, { data: applicants }] = useSuspenseQueries({
+    queries: [templateOptions.detail(templateId), applicantOptions({ partId })],
+  });
+  const { variableValue, actions } = useMailVariables();
+
+  const variableCardData = (template.variables as Variable[]).map((v) =>
+    transformToVariableCard(v, applicants, variableValue, actions),
+  );
+
+  return { variableCardData };
 };

@@ -32,7 +32,7 @@ export const transformBodyHtmlToContent = (bodyHtml: string, variables: BaseVari
       return match;
     }
 
-    return `<span data-key="${variable.key}" data-type="${getChipType(variable.type)}" data-label="${variable.displayName}" data-variable-chip=""></span>`;
+    return `<span data-key="${variable.key}" data-type="${getChipType(variable.type)}" data-label="${variable.displayName}" data-per-recipient="${variable.perRecipient}" data-variable-chip=""></span>`;
   });
 };
 

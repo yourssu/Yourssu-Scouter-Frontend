@@ -1,107 +1,44 @@
-import { useRef, useState } from 'react';
+import { Suspense } from 'react';
 
-import { getChipType } from '@/components/VariableChip/utils';
-import { Variable, VariableType } from '@/types/editor';
-import { getDefaultVariables } from '@/types/editor';
+import { useMailData } from '@/pages/SendMail/hooks/useMailData';
+import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
+import { Part } from '@/query/part/schema';
 
-import { EditorType, Recipient, RecipientId } from '../../mail.type';
-import { MailEditorContent, MailEditorContentRef } from '../MailEditorContent/MailEditorContent';
+import { MailEditorContent } from '../MailEditorContent/MailEditorContent';
 import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
 
 interface MailEditorProps {
-  type: EditorType;
+  selectedPart: Part;
+  selectedTemplateId?: number;
 }
 
-export const MailEditor = ({ type }: MailEditorProps) => {
-  const [editorContents, setEditorContents] = useState<Record<RecipientId, string>>({
-    'recipient-0': '',
-    'recipient-1': '',
-    'recipient-2': '',
-  });
+export const MailEditor = ({ selectedPart, selectedTemplateId }: MailEditorProps) => {
+  const { recipients, currentRecipientId, currentRecipientName, setCurrentRecipientId } =
+    useRecipientData(selectedPart);
+  const { defaultContent } = useMailData(selectedTemplateId!);
 
-  const [activeRecipient, setActiveRecipient] = useState<RecipientId>('recipient-0');
-
-  const [variables, setVariables] = useState<Variable[]>(getDefaultVariables()); // 메일 페이지 작업 시 수정
-
-  const editorRef = useRef<MailEditorContentRef>(null);
-
-  // 나중에 api로 데이터 받아옴
-  const recipients: Recipient[] = [
-    { id: 'recipient-0', name: '김솔미' },
-    { id: 'recipient-1', name: '김지은' },
-    { id: 'recipient-2', name: '이수빈' },
-  ];
-
-  const handleTabChange = (id: RecipientId) => {
-    setActiveRecipient(id);
+  // 탭 변경 시 컨텍스트 상태 업데이트
+  const handleTabChange = (id: string) => {
+    setCurrentRecipientId(id);
   };
 
-  const activeRecipientName = recipients.find((r) => r.id === activeRecipient)?.name;
-
-  const handleContentChange = (html: string) => {
-    setEditorContents((prev) => ({
-      ...prev,
-      [activeRecipient]: html,
-    }));
-  };
-
-  const handleVariableClick = (variable: Variable) => {
-    if (editorRef.current) {
-      const chipType = getChipType(variable.type);
-      editorRef.current.insertVariable(variable.key, chipType, variable.displayName);
-    }
-  };
-
-  const handleVariableAdd = (type: VariableType, displayName: string, perRecipient: boolean) => {
-    const newVariable: Variable = {
-      key: `var-${crypto.randomUUID()}`,
-      type,
-      displayName,
-      perRecipient,
-      items: type === '사람' ? [] : [{ value: '' }],
-    };
-
-    setVariables((prev) => [...prev, newVariable]);
-
-    editorRef.current?.insertVariable(
-      newVariable.key,
-      getChipType(newVariable.type),
-      newVariable.displayName,
-    );
-  };
-
-  const handleVariableDelete = (variable: Variable) => {
-    if (editorRef.current) {
-      setVariables((prev) => prev.filter((v) => v.key !== variable.key));
-      editorRef.current.deleteVariable(variable.key);
-    }
-  };
-
-  if (type === 'normal') {
-    return (
-      <EditorContainer>
-        <MailHeader
-          onVariableAdd={handleVariableAdd}
-          onVariableClick={handleVariableClick}
-          onVariableDelete={handleVariableDelete}
-          type="normal"
-          variables={variables}
-        />
-        <MailEditorContent ref={editorRef} />
-      </EditorContainer>
-    );
-  }
-  // type === 'tabs'
   return (
     <EditorContainer>
-      <MailHeader onTabChange={handleTabChange} recipients={recipients} type="tabs" />
-      <MailEditorContent
-        initialContent={editorContents[activeRecipient]}
-        key={activeRecipient}
-        onContentChange={handleContentChange}
-        recipientName={activeRecipientName}
+      <MailHeader
+        activeTabId={currentRecipientId}
+        onTabChange={handleTabChange}
+        recipients={recipients}
+        type="tabs"
       />
+      <Suspense fallback={<div>에디터 로딩 중...</div>}>
+        <MailEditorContent
+          // 사용자가 수정한 내용이 있으면 그걸 보여주고, 없으면 템플릿 기본값 사용
+          initialContent={defaultContent}
+          key={currentRecipientId} // ID가 바뀔 때마다 에디터를 새로 그려서 내용을 교체함
+          recipientName={currentRecipientName}
+        />
+      </Suspense>
     </EditorContainer>
   );
 };
