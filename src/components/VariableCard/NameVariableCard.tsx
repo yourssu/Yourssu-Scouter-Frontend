@@ -26,16 +26,14 @@ export const NameVariableCard = ({
   return (
     <VariableCard title={title}>
       <NameTagsContainer>
-        {names
-          .filter((name) => name.trim() !== '')
-          .map((name) => (
-            <div key={name}>
-              <Chip data-chip={name} role="input" size="medium">
-                <Chip.Content>{name}</Chip.Content>
-                {onRemoveName && <Chip.Remove onClick={() => handleRemoveName(name)} />}
-              </Chip>
-            </div>
-          ))}
+        {names.map((name) => (
+          <div key={name}>
+            <Chip data-chip={name} role="input" size="medium">
+              <Chip.Content>{name}</Chip.Content>
+              {onRemoveName && <Chip.Remove onClick={() => handleRemoveName(name)} />}
+            </Chip>
+          </div>
+        ))}
       </NameTagsContainer>
 
       <SearchedMemberDialog
