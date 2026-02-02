@@ -2,20 +2,56 @@ import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
 import { applicantOptions } from '@/query/applicant/options';
+import { Applicant } from '@/query/applicant/schema';
 import { templateOptions } from '@/query/template/options';
-import { Variable } from '@/types/editor';
+import { Variable, VariableState } from '@/types/editor';
+
+const transformToVariableCard = (
+  v: Variable,
+  applicants: Applicant[],
+  variableValue: VariableState,
+  actions: ReturnType<typeof useMailVariables>['actions'],
+) => {
+  const isIndividual = v.perRecipient;
+
+  const items = isIndividual
+    ? applicants.map((a) => ({
+        label: a.name,
+        value: variableValue.perApplicant[String(a.applicantId)]?.[v.key] ?? '',
+      }))
+    : [{ value: variableValue.common[v.key] ?? '' }];
+
+  const handleUpdate = (idx: number, newValue: string) => {
+    if (!newValue.trim()) {
+      return;
+    }
+    if (isIndividual) {
+      actions.updateIndividualValue(String(applicants[idx].applicantId), v.key, newValue);
+    } else {
+      actions.updateCommonValue(v.key, newValue);
+    }
+  };
+
+  return {
+    key: v.key,
+    type: v.type,
+    title: v.displayName,
+    isIndividual,
+    items,
+    names: items.map((i) => i.value).filter(Boolean),
+    handleUpdate,
+  };
+};
 
 export const useVariableList = (templateId: number, partId: number) => {
   const [{ data: template }, { data: applicants }] = useSuspenseQueries({
     queries: [templateOptions.detail(templateId), applicantOptions({ partId })],
   });
   const { variableValue, actions } = useMailVariables();
-  const templateVariables: Variable[] = template.variables;
 
-  return {
-    templateVariables,
-    applicants,
-    variableValue,
-    actions,
-  };
+  const variableCardData = (template.variables as Variable[]).map((v) =>
+    transformToVariableCard(v, applicants, variableValue, actions),
+  );
+
+  return { variableCardData };
 };

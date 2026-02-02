@@ -12,65 +12,46 @@ interface VariableListProps {
 }
 
 export const VariableList = ({ templateId, partId }: VariableListProps) => {
-  const { templateVariables, applicants, variableValue, actions } = useVariableList(
-    templateId,
-    partId,
-  );
+  const { variableCardData } = useVariableList(templateId, partId);
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      {templateVariables.map((v) => {
-        const isIndividual = v.perRecipient;
-
-        const items = isIndividual
-          ? applicants.map((a) => ({
-              label: a.name,
-              value: variableValue.perApplicant[String(a.applicantId)]?.[v.key] ?? '',
-            }))
-          : [{ value: variableValue.common[v.key] ?? '' }];
-
-        const handleUpdate = (idx: number, newValue: string) => {
-          if (isIndividual) {
-            const applicantId = applicants[idx].applicantId;
-            actions.updateIndividualValue(String(applicantId), v.key, newValue);
-          } else {
-            actions.updateCommonValue(v.key, newValue);
-          }
-        };
-
-        return (
-          <SwitchCase
-            caseBy={{
-              날짜: () => (
-                <DateVariableCard dates={items} onDateChange={handleUpdate} title={v.displayName} />
-              ),
-              링크: () => (
-                <LinkVariableCard
-                  links={items}
-                  onValueChange={handleUpdate}
-                  title={v.displayName}
-                />
-              ),
-              사람: () => (
-                <NameVariableCard
-                  names={items.map((i) => i.value).filter(Boolean)}
-                  onAddName={(val) => (isIndividual ? null : actions.updateCommonValue(v.key, val))}
-                  title={v.displayName}
-                />
-              ),
-              텍스트: () => (
-                <TextVariableCard
-                  onValueChange={handleUpdate}
-                  texts={items}
-                  title={v.displayName}
-                />
-              ),
-            }}
-            key={v.key}
-            value={v.type}
-          />
-        );
-      })}
+      {variableCardData.map((card) => (
+        <SwitchCase
+          caseBy={{
+            날짜: () => (
+              <DateVariableCard
+                dates={card.items}
+                onDateChange={card.handleUpdate}
+                title={card.title}
+              />
+            ),
+            링크: () => (
+              <LinkVariableCard
+                links={card.items}
+                onValueChange={card.handleUpdate}
+                title={card.title}
+              />
+            ),
+            사람: () => (
+              <NameVariableCard
+                names={card.names}
+                onAddName={(val) => !card.isIndividual && card.handleUpdate(0, val)}
+                title={card.title}
+              />
+            ),
+            텍스트: () => (
+              <TextVariableCard
+                onValueChange={card.handleUpdate}
+                texts={card.items}
+                title={card.title}
+              />
+            ),
+          }}
+          key={card.key}
+          value={card.type}
+        />
+      ))}
     </div>
   );
 };
