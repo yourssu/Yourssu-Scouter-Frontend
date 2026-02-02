@@ -105,7 +105,7 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
   },
 });
 
-const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
+const VariableChipNodeView: React.FC<NodeViewProps> = ({ deleteNode, node }) => {
   const { type, label } = node.attrs as { label: string; type: string };
 
   return (
@@ -116,7 +116,7 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
         display: 'inline-block',
       }}
     >
-      <VariableChip label={label} size="small" type={type as any} />
+      <VariableChip label={label} onDelete={deleteNode} size="small" type={type as any} />
     </NodeViewWrapper>
   );
 };
