@@ -18,36 +18,19 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
   const { currentRecipientId } = useRecipientData();
   const { currentContent } = useMailData(templateId, currentRecipientId);
   const { sendReservation } = useMailActions();
-  // const { variableValue } = useMailVariableContext();
-  // const { currentApplicantId } = useCurrentApplicant();
-  // const { templateVariables } = useVariableList(templateId, partId); // templateId와 partId가 있을 때만 호출되게 하려면...
-
-  // const isReady =
-  //   templateVariables.length > 0 &&
-  //   currentApplicantId &&
-  //   templateVariables.every((v) => {
-  //     const value = v.perRecipient
-  //       ? variableValue.perApplicant[currentApplicantId]?.[v.key]
-  //       : variableValue.common[v.key];
-  //     return value && value.trim() !== '';
-  //   });
 
   const { isReadyForReservation } = useMailValidation(templateId);
 
   const handleReservationClick = () => {
-    overlay.open(
-      ({ isOpen, close }) => (
-        <MailReservationDialog
-          body={currentContent}
-          onClose={close}
-          onReserve={async (date: Date) => {
-            await sendReservation(currentContent, date);
-          }}
-          open={isOpen}
-        />
-      ),
-      { overlayId: 'mail-reservation-dialog' },
-    );
+    overlay.open(({ isOpen, close }) => (
+      <MailReservationDialog
+        onClose={close}
+        onReserve={async (date: Date) => {
+          await sendReservation(currentContent, date);
+        }}
+        open={isOpen}
+      />
+    ));
   };
 
   return (

@@ -6,7 +6,6 @@ import { MiniTimeField } from '@/components/CalendarDialog/MiniTimeField';
 import { Dialog } from '@/components/dialog';
 
 interface MailReservationDialogProps {
-  body: string;
   onClose: () => void;
   onReserve: (date: Date) => Promise<void>;
   open: boolean;
@@ -17,8 +16,13 @@ export const MailReservationDialog = ({ open, onClose, onReserve }: MailReservat
   const [selectedDate, setSelectedDate] = useState<Date>(today);
 
   const handleReserve = async () => {
-    await onReserve(selectedDate);
-    onClose();
+    try {
+      await onReserve(selectedDate);
+    } catch (error) {
+      console.error('예약 실패:', error);
+    } finally {
+      onClose();
+    }
   };
 
   return (

@@ -69,18 +69,9 @@ export const useMailData = (
     [currentId, defaultContent, mailContent.body, actions],
   );
 
-  // 수정된 내용, 변수 값이 반영된 최종 본문
-  const resolvedBody = useMemo(() => {
-    if (!currentId) {
-      return defaultContent;
-    }
-    return mailContent.body[currentId] ?? defaultContent;
-  }, [currentId, mailContent.body, defaultContent]);
-
   return {
     templateDetail,
     currentContent,
-    resolvedBody,
     handleContentChange,
     getDisplayVariableValue,
     defaultContent,
