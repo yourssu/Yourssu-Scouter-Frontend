@@ -26,6 +26,9 @@ export const VariableList = ({ templateId }: VariableListProps) => {
           handleVariableUpdate(key, [...items].toSpliced(index, 1, newItem));
         };
         const handleItemAdd = (value: string) => {
+          if (!value.trim()) {
+            return;
+          }
           handleVariableUpdate(key, [...items, { value }]);
         };
         const handleItemRemove = (value: string) => {

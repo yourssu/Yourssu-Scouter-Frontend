@@ -3,9 +3,7 @@
 export const EDITOR_TYPES = ['normal', 'tabs'] as const;
 export type EditorType = (typeof EDITOR_TYPES)[number];
 
-export const RECIPIENT_IDS = ['recipient-0', 'recipient-1', 'recipient-2'] as const;
-
-export type RecipientId = (typeof RECIPIENT_IDS)[number];
+export type RecipientId = string;
 
 export interface Recipient {
   id: RecipientId;

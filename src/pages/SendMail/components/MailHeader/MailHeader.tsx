@@ -35,7 +35,7 @@ export const MailHeader = ({
   onVariableClick,
   onVariableDelete,
 }: MailHeaderProps) => {
-  const [activeTabId, setActiveTabId] = useState<RecipientId>('recipient-0');
+  const [activeTabId, setActiveTabId] = useState<RecipientId>(recipients[0]?.id);
 
   const handleTabClick = (id: RecipientId) => {
     setActiveTabId(id);
@@ -99,7 +99,7 @@ export const MailHeader = ({
         <Tab
           defaultTab={activeTabId}
           onTabChange={handleTabClick}
-          tabs={recipients.map(({ id }) => id)}
+          tabs={recipients.map(({ name }) => name)}
         >
           {() => {
             return undefined;
