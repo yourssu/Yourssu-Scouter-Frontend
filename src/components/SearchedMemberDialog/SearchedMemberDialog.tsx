@@ -16,6 +16,7 @@ import {
 } from './SearchedMemberDialog.style';
 
 interface SearchedMemberDialogProps {
+  excludeItems?: string[]; // 제외할 멤버 목록(이미 추가된 멤버들)
   externalSearchText?: string; // 외부 검색 모드
   isActive?: boolean;
   onExternalSearchTextChange?: (text: string) => void; // 외부 검색 모드
@@ -28,6 +29,7 @@ export const SearchedMemberDialog = ({
   trigger,
   externalSearchText,
   onExternalSearchTextChange,
+  excludeItems = [],
   isActive = true,
 }: SearchedMemberDialogProps) => {
   const [open, setOpen] = useState(false);
@@ -46,11 +48,21 @@ export const SearchedMemberDialog = ({
 
   // 필터링
   const filteredMembers = useMemo(() => {
+    // 제외할 멤버들을 먼저 걸러냄
+    const availableMembers = allMembers.filter((member) => !excludeItems.includes(member.nickname));
+
+    // 검색어 전처리 (공백 제거 및 소문자 변환)
     const term = currentSearchText.trim().toLowerCase();
+
+    // 걸러진 멤버들 중에서 검색어와 매칭되는 멤버들만 필터링
     if (!term) {
-      return isExternalMode ? [] : allMembers;
+      return isExternalMode ? [] : availableMembers;
     }
-    const matches = allMembers.filter((member) => member.nickname.toLowerCase().includes(term));
+
+    // 검색어가 포함된 멤버들 찾기
+    const matches = availableMembers.filter((member) =>
+      member.nickname.toLowerCase().includes(term),
+    );
 
     // a: 검색어로 시작하는 사람들
     const startsWith = matches.filter((m) => m.nickname.toLowerCase().startsWith(term));
@@ -65,7 +77,7 @@ export const SearchedMemberDialog = ({
 
     // a + b 합쳐서 반환
     return [...startsWith, ...contains];
-  }, [allMembers, currentSearchText, isExternalMode]);
+  }, [allMembers, currentSearchText, isExternalMode, excludeItems]);
 
   // 팝오버 열림 조건 설정
   // 외부 검색 모드: 입력값이 있고 && 검색 결과가 1개 이상일 때만 자동으로 열림
@@ -83,6 +95,18 @@ export const SearchedMemberDialog = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) {
+      return; // 한글 입력 중일 때 엔터가 두 번 인식되는 문제 방지
+    }
+    if (e.key === 'Enter') {
+      if (filteredMembers.length > 0) {
+        e.preventDefault();
+        handleSelectMember(filteredMembers[0].nickname);
+      }
+    }
+  };
+
   return (
     <StyledWrapper>
       <Popover.Root
@@ -91,7 +115,11 @@ export const SearchedMemberDialog = ({
         open={isPopoverOpen}
       >
         <Popover.Anchor asChild>
-          <div className="left-0 w-full" onClick={() => !isExternalMode && setOpen(true)}>
+          <div
+            className="left-0 w-full"
+            onClick={() => !isExternalMode && setOpen(true)}
+            onKeyDown={isExternalMode ? handleKeyDown : undefined}
+          >
             {trigger}
           </div>
         </Popover.Anchor>
@@ -108,6 +136,7 @@ export const SearchedMemberDialog = ({
                 <SearchBar.Input
                   {...register('searchText')}
                   autoFocus
+                  onKeyDown={handleKeyDown}
                   placeholder="사람 변수 검색"
                 />
               </SearchBar>

@@ -37,6 +37,7 @@ export const NameVariableCard = ({
       </NameTagsContainer>
 
       <SearchedMemberDialog
+        excludeItems={names}
         onSelect={handleSelectMember}
         trigger={
           <StyledBoxButton rightIcon={<IcPlusLine width={12} />} size="xsmall" variant="outlined">

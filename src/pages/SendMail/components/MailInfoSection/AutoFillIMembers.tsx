@@ -47,12 +47,18 @@ export const AutoFillMembers = ({
     ],
   });
 
+  // 부모에서 받은 members가 비어있으면 초기값 사용, 아니면 부모 값 사용
   const mailingList = {
-    '보내는 사람': partMembers.filter((m) => m.role === 'Lead').map((m) => m.nickname),
-    '받는 사람': uniq(applicants.map((a) => a.name).concat(members['받는 사람'])),
-    '숨은 참조': uniq(
-      [...partMembers, ...hrMembers].map((m) => m.nickname).concat(members['숨은 참조']),
-    ),
+    '보내는 사람':
+      members['보내는 사람'].length > 0
+        ? members['보내는 사람']
+        : partMembers.filter((m) => m.role === 'Lead').map((m) => m.nickname),
+    '받는 사람':
+      members['받는 사람'].length > 0 ? members['받는 사람'] : uniq(applicants.map((a) => a.name)),
+    '숨은 참조':
+      members['숨은 참조'].length > 0
+        ? members['숨은 참조']
+        : uniq([...partMembers, ...hrMembers].map((m) => m.nickname)),
   };
 
   const handleMembersUpdate = (field: MemberInputFieldKey, memberNames: string[]) => {
