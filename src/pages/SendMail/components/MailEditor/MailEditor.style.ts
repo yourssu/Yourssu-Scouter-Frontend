@@ -6,7 +6,7 @@ export const EditorContainer = styled.div`
   background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
   border-radius: ${({ theme }) => theme.semantic.radius.xl}px;
   border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
-  width: 1160px;
+  width: 100%;
   max-height: 690px;
   height: 100%;
   margin: 0 auto;
