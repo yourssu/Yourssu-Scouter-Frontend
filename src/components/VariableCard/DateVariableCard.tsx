@@ -1,6 +1,8 @@
 import { Chip, IcCalenderLine, TextField } from '@yourssu/design-system-react';
+import { parse, setYear } from 'date-fns';
+import { ko } from 'date-fns/locale/ko';
 
-import { formatTemplates, parseDate } from '@/utils/date';
+import { formatTemplates } from '@/utils/date';
 
 import { CalendarDialog } from '../CalendarDialog/CalendarDialog';
 import { VariableCard } from './VariableCard';
@@ -34,9 +36,16 @@ export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCar
           )}
           <CalendarDialog
             onSelect={(selectedDate) =>
-              handleDateSelection(index, formatTemplates['01/01(월) 00:00'](selectedDate))
+              handleDateSelection(
+                index,
+                formatTemplates['01/01(월) 00:00'](setYear(selectedDate, new Date().getFullYear())),
+              )
             }
-            selectedDate={date.value ? parseDate(date.value) : undefined}
+            selectedDate={
+              date.value
+                ? parse(date.value, 'MM/dd(E) HH:mm', new Date(), { locale: ko })
+                : undefined
+            }
             trigger={
               <TextFieldContainer
                 onClick={(e) => {

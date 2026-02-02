@@ -1,5 +1,4 @@
 import { addDays, DateArg, endOfMonth, endOfWeek, isBefore, startOfWeek } from 'date-fns';
-import { parse } from 'date-fns';
 import { formatWithOptions } from 'date-fns/fp';
 import { enUS, ko } from 'date-fns/locale';
 
@@ -44,14 +43,4 @@ export const isInRange = (
   },
 ) => {
   return isBefore(from, target) && isBefore(target, to);
-};
-
-export const parseDate = (dateString: string) => {
-  if (!dateString) {
-    return undefined;
-  }
-  // 현재 년도 기준
-  const referenceDate = new Date();
-
-  return parse(dateString, 'MM/dd(E) HH:mm', referenceDate, { locale: ko });
 };
