@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import { getChipType } from '@/components/VariableChip/utils';
+import { EditorContainer } from '@/pages/SendMail/components/MailEditor/MailEditor.style';
 import {
   MailEditorContent,
   MailEditorContentRef,
@@ -50,19 +51,21 @@ export const TemplateEditor = ({
   };
 
   return (
-    <div className="border-line-basicMedium bg-bg-basicDefault mx-auto flex h-[690px] w-[1160px] flex-col rounded-xl border">
-      <MailHeader
-        onVariableAdd={handleVariableAdd}
-        onVariableClick={handleVariableClick}
-        onVariableDelete={handleVariableDelete}
-        type="normal"
-        variables={templateVariables}
-      />
-      <MailEditorContent
-        initialContent={templateContent}
-        onContentChange={onContentChange}
-        ref={editorRef}
-      />
-    </div>
+    <>
+      <EditorContainer>
+        <MailHeader
+          onVariableAdd={handleVariableAdd}
+          onVariableClick={handleVariableClick}
+          onVariableDelete={handleVariableDelete}
+          type="normal"
+          variables={templateVariables}
+        />
+        <MailEditorContent
+          initialContent={templateContent}
+          onContentChange={onContentChange}
+          ref={editorRef}
+        />
+      </EditorContainer>
+    </>
   );
 };

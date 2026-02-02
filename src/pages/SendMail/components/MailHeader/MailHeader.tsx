@@ -5,7 +5,6 @@ import { Tab } from '@/components/Tab';
 import { getChipType } from '@/components/VariableChip/utils';
 import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { VariableDialog } from '@/components/VariableDialog/VariableDialog';
-import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { Variable, VariableType } from '@/types/editor';
 
 import { EditorType, Recipient, RecipientId } from '../../mail.type';
@@ -36,8 +35,7 @@ export const MailHeader = ({
   onVariableClick,
   onVariableDelete,
 }: MailHeaderProps) => {
-  const [activeTabId, setActiveTabId] = useState<RecipientId>('recipient-0');
-  const openAlertDialog = useAlertDialog();
+  const [activeTabId, setActiveTabId] = useState<RecipientId>(recipients[0]?.id);
 
   const handleTabClick = (id: RecipientId) => {
     setActiveTabId(id);
@@ -58,17 +56,9 @@ export const MailHeader = ({
     }
   };
 
-  const handleVariableChipDelete = async (variable: Variable) => {
+  const handleVariableChipDelete = (variable: Variable) => {
     if (onVariableDelete) {
-      const answer = await openAlertDialog({
-        title: `${variable.displayName} 변수를 삭제하시겠습니까?`,
-        content: '변수를 삭제하면 본문 내 해당 변수도 함께 삭제됩니다.',
-        primaryButtonText: '삭제',
-        secondaryButtonText: '취소',
-      });
-      if (answer) {
-        onVariableDelete(variable);
-      }
+      onVariableDelete(variable);
     }
   };
 
