@@ -15,7 +15,7 @@ export const SendMail = () => {
 
   return (
     <SendMailModeProvider>
-      <MailVariableProvider selectedTemplateId={selectedTemplateId}>
+      <MailVariableProvider currentPart={selectedPart}>
         <SendMailPageLayout
           slots={{
             dropdown: (

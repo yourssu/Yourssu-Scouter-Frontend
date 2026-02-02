@@ -73,11 +73,6 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
       ],
       content: initialContent || '',
       editable: true,
-      onCreate: ({ editor }) => {
-        if (onContentChange) {
-          onContentChange(editor.getHTML());
-        }
-      },
       onUpdate: ({ editor }) => {
         if (onContentChange) {
           onContentChange(editor.getHTML());

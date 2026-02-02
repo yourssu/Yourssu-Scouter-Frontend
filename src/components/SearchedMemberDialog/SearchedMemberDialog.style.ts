@@ -19,6 +19,8 @@ export const StyledContent = styled(Popover.Content)`
   border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicLight};
   background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
   box-shadow: 0 0 10px 0 rgba(110, 118, 135, 0.25);
+  position: relative;
+  z-index: 99;
 `;
 
 export const StyledGroup = styled.div`
