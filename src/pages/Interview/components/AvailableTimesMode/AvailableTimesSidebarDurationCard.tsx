@@ -97,7 +97,15 @@ export const AvailableTimesSidebarDurationCard = () => {
           {/* // Todo: Divider, VerticalDivider 컴포넌트로 공통화? */}
           <div className="bg-line-basicMedium h-[1px] w-full" />
           {interviewDurationOptions.map((v) => (
-            <SelectItem key={v} onSelect={setDuration} selected={duration === v} value={v} />
+            <SelectItem
+              key={v}
+              onSelect={(v) => {
+                setDuration(v);
+                setOpen(false);
+              }}
+              selected={duration === v}
+              value={v}
+            />
           ))}
         </>
       )}
