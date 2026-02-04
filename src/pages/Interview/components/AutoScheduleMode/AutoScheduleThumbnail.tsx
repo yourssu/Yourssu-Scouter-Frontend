@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { addMinutes, compareAsc, getHours, getMonth, getWeek, getYear } from 'date-fns';
+import { addMinutes, getHours, getMonth, getWeekOfMonth, getYear } from 'date-fns';
 import { range } from 'es-toolkit';
 import { useMemo } from 'react';
 
@@ -14,7 +14,9 @@ interface AutoScheduleThumbnailProps {
 
 export const AutoScheduleThumbnail = ({ schedules }: AutoScheduleThumbnailProps) => {
   const { duration } = useInterviewAutoScheduleContext();
-  const sortedSchedules = schedules.toSorted((a, b) => compareAsc(a.startTime, b.startTime));
+  const sortedSchedules = schedules
+    .toSorted((a, b) => getHours(a.startTime) - getHours(b.startTime))
+    .filter(({ startTime }) => getHours(startTime) >= 9 && getHours(startTime) <= 22);
 
   const [map] = useDateMap({
     initialEntries: sortedSchedules.map((v) => [new Date(v.startTime), v]),
@@ -23,7 +25,7 @@ export const AutoScheduleThumbnail = ({ schedules }: AutoScheduleThumbnailProps)
 
   const weekDates = useCalendarWeekDates({
     month: getMonth(sortedSchedules[0].startTime) + 1,
-    week: getWeek(sortedSchedules[0].startTime) - 1,
+    week: getWeekOfMonth(sortedSchedules[0].startTime) - 1,
     year: getYear(sortedSchedules[0].startTime),
   });
 
@@ -31,9 +33,11 @@ export const AutoScheduleThumbnail = ({ schedules }: AutoScheduleThumbnailProps)
     const lowerBoundTime = sortedSchedules[0].startTime;
     const upperBoundTime = sortedSchedules[sortedSchedules.length - 1].endTime;
     const padding = 1;
+    const startHour = getHours(lowerBoundTime) - padding - 1;
+    const endHour = getHours(upperBoundTime) + padding + 1;
     return {
-      startHour: getHours(lowerBoundTime) - padding,
-      endHour: getHours(upperBoundTime) + padding + 1,
+      startHour: Math.max(9, startHour),
+      endHour: startHour > endHour ? 22 : Math.min(endHour, 22),
     };
   }, [sortedSchedules]);
 
@@ -44,7 +48,7 @@ export const AutoScheduleThumbnail = ({ schedules }: AutoScheduleThumbnailProps)
           const targetDate = addMinutes(date, minutes);
           const schedule = map.get(targetDate);
           return (
-            <div className="h-5 w-full">
+            <div className="h-5 w-full" key={targetDate.toISOString()}>
               <div className={clsx('size-full', !!schedule && 'bg-bg-brandPrimary rounded-xs')} />
             </div>
           );
