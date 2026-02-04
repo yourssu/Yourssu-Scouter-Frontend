@@ -1,4 +1,4 @@
-import { DateArg, getMonth, getWeekOfMonth, getYear } from 'date-fns';
+import { DateArg, getMonth, getWeekOfMonth, getWeeksInMonth, getYear } from 'date-fns';
 import { useState } from 'react';
 
 interface UseWeekIndicatorProps {
@@ -12,21 +12,23 @@ export const useWeekIndicator = ({ initialDate }: UseWeekIndicatorProps = {}) =>
   const [month, setMonth] = useState(getMonth(currentDate) + 1);
   const [week, setWeek] = useState(getWeekOfMonth(currentDate) - 1);
 
+  const maxWeeksInMonth = getWeeksInMonth(currentDate);
+
   const handlePrevWeek = () => {
     if (week > 0) {
       setWeek(week - 1);
     } else if (month > 1) {
       setMonth(month - 1);
-      setWeek(4);
+      setWeek(maxWeeksInMonth - 1);
     } else {
       setYear(year - 1);
       setMonth(12);
-      setWeek(4);
+      setWeek(maxWeeksInMonth - 1);
     }
   };
 
   const handleNextWeek = () => {
-    if (week < 4) {
+    if (week < maxWeeksInMonth - 1) {
       setWeek(week + 1);
     } else if (month < 12) {
       setMonth(month + 1);
