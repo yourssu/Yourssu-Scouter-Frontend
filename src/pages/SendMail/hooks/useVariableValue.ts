@@ -1,17 +1,21 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { useMailVariableContext } from '@/pages/SendMail/context';
+import { useOptionalMailVariables } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options';
 
 export const useVariableValue = () => {
-  const { currentApplicantId, variableValue, currentPart } = useMailVariableContext();
+  const context = useOptionalMailVariables();
 
-  const { data: applicants } = useSuspenseQuery(applicantOptions({ partId: currentPart?.partId }));
+  const results = useSuspenseQueries({
+    queries: [...(context ? [applicantOptions({ partId: context.currentPart?.partId })] : [])],
+  });
+  const applicants = results[0]?.data;
 
   // 선택된 ID가 없으면 이 파트의 첫 번째 지원자
   const currentId =
-    currentApplicantId ?? (applicants?.[0] ? String(applicants[0].applicantId) : undefined);
+    context?.currentApplicantId ??
+    (applicants?.[0] ? String(applicants[0].applicantId) : undefined);
 
   // 현재 지원자 찾기
   const currentApplicant = useMemo(() => {
@@ -23,6 +27,10 @@ export const useVariableValue = () => {
 
   // 변수 값 채우기
   const getVariableValue = (key: string, perRecipient: boolean, label: string) => {
+    if (!context) {
+      return '';
+    }
+    const { variableValue, currentPart } = context;
     // 특수 변수 처리(지원자, 파트명)
     if (label === '지원자') {
       return currentApplicant?.name ?? label;
