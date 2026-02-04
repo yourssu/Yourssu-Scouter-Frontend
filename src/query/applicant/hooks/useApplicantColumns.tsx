@@ -66,6 +66,9 @@ export const useApplicantColumns = (handlePatchApplicant?: PatchApplicantHandler
       cell: (info) => (
         <Cell>
           <ApplicantStateButton
+            contentProps={{
+              align: 'start',
+            }}
             onStateChange={(state) => {
               if (handlePatchApplicant) {
                 handlePatchApplicant(info.row.original.applicantId, 'state', state);

@@ -12,14 +12,6 @@ const PeriodSchema = z.object({
   endSemester: z.string(),
 });
 
-const NicknameSchema = z
-  .string()
-  .regex(/^[a-zA-Z]+\([가-힣]+\)$/, '영어(한글) 형식으로 입력해주세요');
-
-const YourssuEmailSchema = z
-  .string()
-  .regex(/^[a-zA-Z0-9._-]+\.urssu@gmail\.com$/, '~.urssu@gmail.com 형식으로 입력해주세요');
-
 const MemberRoleSchema = z.enum(['Lead', 'ViceLead', 'Member']);
 
 const MemberStateSchema = z.enum(['액티브', '비액티브', '졸업', '탈퇴']);
@@ -29,8 +21,8 @@ const BaseMemberSchema = z.object({
   parts: z.array(PartSchema),
   role: MemberRoleSchema,
   name: z.string(),
-  nickname: NicknameSchema,
-  email: YourssuEmailSchema,
+  nickname: z.string(),
+  email: z.email(),
   phoneNumber: PhoneNumberSchema,
   department: z.string(),
   studentId: z.string(),

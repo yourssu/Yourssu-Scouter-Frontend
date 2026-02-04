@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 
 import { GoogleCallback } from '@/components/Auth/GoogleCallback';
 import Main from '@/components/Main/Main.tsx';
@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route element={<GoogleCallback />} path="/oauth/callback/google" />
           <Route element={<Main />} path="*">
-            <Route element={<>응애</>} index />
+            <Route element={<Navigate replace to="/members" />} index />
             <Route element={<InterviewPage />} path="interview" />
             <Route element={<CalendarTestPage />} path="test" />
             <Route element={<Members />} path="members" />

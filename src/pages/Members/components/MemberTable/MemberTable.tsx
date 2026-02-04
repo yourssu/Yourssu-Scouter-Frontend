@@ -88,6 +88,10 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
 
   const totalPage = table.getPageCount();
 
+  if (table.getRowModel().rows.length === 0) {
+    return <div>멤버 목록이 비어있어요.</div>;
+  }
+
   return (
     <>
       <Table>

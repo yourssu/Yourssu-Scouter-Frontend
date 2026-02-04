@@ -16,7 +16,7 @@ import { ApplicantState } from '@/query/applicant/schema.ts';
 interface ApplicantTableProps {
   name: string;
   partId: null | number;
-  semesterId: number;
+  semesterId?: number;
   state: ApplicantState;
 }
 
@@ -103,6 +103,10 @@ const ApplicantTable = ({ state, semesterId, name, partId }: ApplicantTableProps
   };
 
   const totalPage = table.getPageCount();
+
+  if (table.getRowModel().rows.length === 0) {
+    return <div>지원자 목록이 비어있어요.</div>;
+  }
 
   return (
     <>

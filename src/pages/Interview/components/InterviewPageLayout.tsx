@@ -25,7 +25,7 @@ export const InterviewPageLayout = ({
             <div className="border-line-basicMedium border-b pr-6">{header}</div>
             <div className="flex flex-[1_1_0] flex-col pt-12 pr-6">{calendar}</div>
           </div>
-          <div className="border-line-basicMedium w-100 min-w-100 border-t border-l">{sidebar}</div>
+          <div className="border-line-basicMedium w-120 min-w-120 border-t border-l">{sidebar}</div>
         </div>
       </PageLayout>
     );
