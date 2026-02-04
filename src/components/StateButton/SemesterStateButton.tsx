@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
 
+import { semesterNowOptions } from '@/query/semester/now/options';
 import { semesterOptions } from '@/query/semester/options.ts';
 
 import { StateButton } from './StateButton';
@@ -15,7 +16,16 @@ export const SemesterStateButton = ({
   size?: 'medium' | 'small';
 }) => {
   const { data: semesters } = useSuspenseQuery(semesterOptions());
-  const options = semesters.map((semester) => ({ label: semester.semester }));
+  const { data: currentSemester } = useSuspenseQuery(semesterNowOptions());
+  // const options = semesters.map((semester) => ({ label: semester.semester }));
+
+  const sortedSemesters = semesters
+    .toSorted((a, b) => b.semester.localeCompare(a.semester))
+    .map((semester) => ({ label: semester.semester }));
+
+  const options = sortedSemesters.slice(
+    sortedSemesters.findIndex((option) => option.label === currentSemester.semester),
+  );
 
   return (
     <StateButton
