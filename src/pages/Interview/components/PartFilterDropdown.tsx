@@ -32,11 +32,13 @@ export const PartFilterDropdown = () => {
     <Popover.Root onOpenChange={setIsDropdownOpen} open={isDropdownOpen}>
       <Popover.Trigger asChild>
         <button
-          className="border-line-basicMedium text-text-basicPrimary flex h-[40px] min-w-40 items-center gap-2 rounded-xl border bg-white px-4 py-2 text-sm hover:bg-gray-50 data-[state=open]:rounded-b-none"
+          className="border-line-basicMedium text-text-basicPrimary flex h-[40px] min-w-40 cursor-pointer items-center justify-between gap-2 rounded-xl border bg-white px-4 py-2 text-sm hover:bg-gray-50 data-[state=open]:rounded-b-none"
           type="button"
         >
-          <div className="size-2.5 rounded-full" style={{ backgroundColor: selectedColor }} />
-          <span>{displayName}</span>
+          <div className="flex items-center gap-2">
+            <div className="size-2.5 rounded-full" style={{ backgroundColor: selectedColor }} />
+            <span>{displayName}</span>
+          </div>
           <IcArrowsChevronDownLine size="16px" />
         </button>
       </Popover.Trigger>
@@ -46,10 +48,10 @@ export const PartFilterDropdown = () => {
           className="border-line-basicMedium bg-bg-basicDefault z-50 min-w-40 rounded-b-xl border"
           sideOffset={0}
         >
-          <div className="flex w-40 flex-col px-4 py-0">
+          <div className="flex w-40 flex-col py-0">
             {/* 전체일정 보기 */}
             <button
-              className="flex items-center justify-between py-2.5"
+              className="hover:bg-gray100/50 flex h-11 cursor-pointer items-center justify-between px-4 py-1"
               onClick={() => {
                 onPartChange('전체일정 보기');
                 setIsDropdownOpen(false);
@@ -65,7 +67,7 @@ export const PartFilterDropdown = () => {
             {/* 파트 목록 */}
             {parts.map((part) => (
               <button
-                className="flex items-center gap-1.5 py-0"
+                className="hover:bg-gray100/50 flex cursor-pointer items-center justify-between px-4 py-1"
                 key={part.partId}
                 onClick={() => {
                   onPartChange(part.partName);
