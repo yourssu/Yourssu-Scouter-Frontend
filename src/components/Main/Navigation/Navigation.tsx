@@ -1,7 +1,7 @@
+import { BoxButton } from '@yourssu/design-system-react';
+
 import { authService } from '@/apis/auth.service';
 import { tokenService } from '@/apis/token.service';
-
-import { StyledContainer, StyledProfileImage } from './Navigation.style';
 
 const Navigation = () => {
   const handleClick = () => {
@@ -13,11 +13,13 @@ const Navigation = () => {
   };
 
   return (
-    <StyledContainer>
-      <StyledProfileImage onClick={handleClick}>
-        <p>{tokenService.hasTokens() ? '로그인됨' : '로그인필요'}</p>
-      </StyledProfileImage>
-    </StyledContainer>
+    <div className="flex w-full items-center justify-end p-2">
+      {tokenService.hasTokens() && (
+        <BoxButton onClick={handleClick} size="small" variant="filledPrimary">
+          로그아웃
+        </BoxButton>
+      )}
+    </div>
   );
 };
 
