@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useDateMap } from '@/hooks/useDateMap';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
@@ -13,17 +13,42 @@ import {
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { applicantOptions } from '@/query/applicant/options';
 import { Applicant } from '@/query/applicant/schema';
+import { scheduleOptions } from '@/query/schedule/options';
 
 export const ManualScheduleMode = () => {
   const { duration } = useInterviewAutoScheduleContext();
   const { partId } = useInterviewPartSelectionContext();
 
   const { data: applicants } = useSuspenseQuery(applicantOptions({ partId }));
+  const { data: existingSchedules } = useSuspenseQuery(scheduleOptions(partId));
+
+  // 기존 스케줄을 Applicant와 매칭하여 초기 엔트리로 변환
+  const initialScheduleEntries = useMemo(() => {
+    const entries: [Date, Applicant][] = [];
+
+    existingSchedules.forEach((schedule) => {
+      // 이름으로 지원자 매칭
+      const matchedApplicant = applicants.find(
+        (applicant) => applicant.name === schedule.name && applicant.part === schedule.part,
+      );
+
+      if (matchedApplicant) {
+        entries.push([new Date(schedule.startTime), matchedApplicant]);
+      }
+    });
+
+    return entries;
+  }, [existingSchedules, applicants]);
+
   const [selectedApplicant, setSelectedApplicant] = useState(applicants[0]);
   const { year, month, week, handlePrevWeek, handleNextWeek, jump } = useWeekIndicator({
-    initialDate: selectedApplicant?.availableTimes[0],
+    initialDate:
+      existingSchedules.length > 0
+        ? existingSchedules[0].startTime
+        : selectedApplicant?.availableTimes[0],
   });
   const [completedScheduleMap, completedScheduleMapAction] = useDateMap<Applicant>({
+    initialEntries: initialScheduleEntries,
     precision: duration === '1시간' ? '시간' : '분',
   });
 
