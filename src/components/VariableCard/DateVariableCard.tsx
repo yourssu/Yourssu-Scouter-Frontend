@@ -28,7 +28,7 @@ export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCar
   return (
     <VariableCard count={count} title={title}>
       {dates.map((date, index) => (
-        <InputContainer key={index} style={{ zIndex: dates.length - index, position: 'relative' }}>
+        <InputContainer key={index}>
           {date.label && (
             <Chip role="input" size="medium" style={{ whiteSpace: 'nowrap' }}>
               {date.label}

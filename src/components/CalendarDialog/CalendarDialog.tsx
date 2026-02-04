@@ -62,15 +62,17 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
     <StyledWrapper>
       <Popover.Root onOpenChange={setOpen} open={open}>
         <Popover.Trigger asChild>{trigger}</Popover.Trigger>
-        <Popover.Content>
-          <CalendarDialogContainer>
-            <CalendarContent onSelect={handleDateChange} selectedDate={selectedDate} />
-            <DateFieldWrapper>
-              <MiniDateField date={displayDate} />
-              <MiniTimeField date={displayDate} onDateChange={handleTimeChange} />
-            </DateFieldWrapper>
-          </CalendarDialogContainer>
-        </Popover.Content>
+        <Popover.Portal>
+          <Popover.Content style={{ zIndex: 50 }}>
+            <CalendarDialogContainer>
+              <CalendarContent onSelect={handleDateChange} selectedDate={selectedDate} />
+              <DateFieldWrapper>
+                <MiniDateField date={displayDate} />
+                <MiniTimeField date={displayDate} onDateChange={handleTimeChange} />
+              </DateFieldWrapper>
+            </CalendarDialogContainer>
+          </Popover.Content>
+        </Popover.Portal>
       </Popover.Root>
     </StyledWrapper>
   );
