@@ -90,6 +90,9 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
         return (
           <Cell>
             <RoleStateButton
+              contentProps={{
+                align: 'start',
+              }}
               onStateChange={(state) => {
                 if (handlePatchMember) {
                   handlePatchMember(info.row.original.memberId, 'role', state);
@@ -142,6 +145,9 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
       cell: (info) => (
         <Cell>
           <MemberStateButton
+            contentProps={{
+              align: 'start',
+            }}
             onStateChange={(value) => {
               if (handlePatchMember) {
                 handlePatchMember(info.row.original.memberId, 'state', value);
@@ -347,6 +353,9 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
                 return (
                   <Cell>
                     <SemesterStateButton
+                      contentProps={{
+                        align: 'start',
+                      }}
                       onStateChange={(value) => {
                         const semesterId = semesters.find((s) => s.semester === value)?.semesterId;
                         if (semesterId && handlePatchMember) {

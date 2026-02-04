@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { Popover } from 'radix-ui';
 
 import { memberStateOptions } from '@/query/member/memberState/options.ts';
 
@@ -7,7 +8,9 @@ import { StateButton } from './StateButton';
 export const MemberStateButton = ({
   selectedValue,
   onStateChange,
+  contentProps,
 }: {
+  contentProps?: Popover.PopoverContentProps;
   onStateChange: (value: string) => void;
   selectedValue: string;
 }) => {
@@ -16,6 +19,7 @@ export const MemberStateButton = ({
 
   return (
     <StateButton
+      contentProps={contentProps}
       onSelect={onStateChange}
       options={options}
       selectedValue={selectedValue}

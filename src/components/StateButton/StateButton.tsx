@@ -11,6 +11,7 @@ export type DialogOption = {
 };
 
 interface StateButtonProps {
+  contentProps?: Popover.PopoverContentProps;
   leftIcon?: ReactNode;
   onSelect: (value: string) => void;
   options: DialogOption[];
@@ -30,9 +31,10 @@ export const StateButton = ({
   rightIcon = <IcArrowsChevronDownLine />,
   leftIcon,
   width,
+  contentProps,
 }: StateButtonProps) => {
   return (
-    <GenericDialog onSelect={onSelect} options={options} width={width}>
+    <GenericDialog contentProps={contentProps} onSelect={onSelect} options={options} width={width}>
       <Popover.Trigger asChild>
         <StyledBoxButton
           $selectedValue={selectedValue}

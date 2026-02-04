@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { IcArrowsChevronDownLine } from '@yourssu/design-system-react';
+import { Popover } from 'radix-ui';
 
 import { semesterNowOptions } from '@/query/semester/now/options';
 import { semesterOptions } from '@/query/semester/options.ts';
@@ -10,7 +11,9 @@ export const SemesterStateButton = ({
   selectedValue,
   onStateChange,
   size = 'small',
+  contentProps,
 }: {
+  contentProps?: Popover.PopoverContentProps;
   onStateChange: (value: string) => void;
   selectedValue: string;
   size?: 'medium' | 'small';
@@ -29,6 +32,7 @@ export const SemesterStateButton = ({
 
   return (
     <StateButton
+      contentProps={contentProps}
       onSelect={onStateChange}
       options={options}
       rightIcon={<IcArrowsChevronDownLine />}
