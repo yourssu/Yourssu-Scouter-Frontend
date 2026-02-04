@@ -16,7 +16,7 @@ import { ApplicantState } from '@/query/applicant/schema.ts';
 interface ApplicantTableProps {
   name: string;
   partId: null | number;
-  semesterId: number;
+  semesterId?: number;
   state: ApplicantState;
 }
 

@@ -88,6 +88,19 @@ const MemberTab = ({ state }: MemberTabProps) => {
           <div>
             <PartStateButton onStateChange={onPartChange} selectedValue={partName ?? '파트 선택'} />
           </div>
+          {partId !== null && (
+            <div>
+              <BoxButton
+                onClick={() => {
+                  onPartChange(null);
+                }}
+                size="medium"
+                variant="filledSecondary"
+              >
+                필터 초기화
+              </BoxButton>
+            </div>
+          )}
         </StyledTopLeftContainer>
         <StyledLastUpdate>
           {lastUpdatedTime && (

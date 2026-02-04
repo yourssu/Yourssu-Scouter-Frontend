@@ -43,16 +43,23 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [semesterId, setSemesterId] = useState(
-    Number(searchParams.get('semesterId') ?? semesterNow.semesterId),
+    searchParams.get('semesterId') !== null ? Number(searchParams.get('semesterId')) : null,
   );
 
   useEffect(() => {
-    setSemesterId(Number(searchParams.get('semesterId') ?? semesterNow.semesterId));
+    setImmediate(() => {
+      setSemesterId(
+        searchParams.get('semesterId') !== null ? Number(searchParams.get('semesterId')) : null,
+      );
+    });
   }, [searchParams, semesterNow]);
 
-  const onSemesterChange = (semester: string) => {
+  const onSemesterChange = (semester: null | string) => {
+    if (!semester) {
+      setSearchParams({});
+      return;
+    }
     const semesterId = semesters.find((s) => s.semester === semester)?.semesterId.toString();
-
     if (semesterId) {
       setSearchParams({ semesterId });
     }
@@ -83,6 +90,8 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
 
   const { data: lastUpdatedTime } = useSuspenseQuery(applicantLastUpdatedTimeOptions());
 
+  const filterSelected = semesterId !== null || partId !== null;
+
   return (
     <FormProvider {...methods}>
       <StyledContainer>
@@ -92,7 +101,9 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
             <div>
               <SemesterStateButton
                 onStateChange={onSemesterChange}
-                selectedValue={semesters.find((s) => semesterId === s.semesterId)?.semester ?? ''}
+                selectedValue={
+                  semesters.find((s) => semesterId === s.semesterId)?.semester ?? '학기 선택'
+                }
                 size="medium"
               />
             </div>
@@ -102,6 +113,20 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
                 selectedValue={partName ?? '파트 선택'}
               />
             </div>
+            {filterSelected && (
+              <div>
+                <BoxButton
+                  onClick={() => {
+                    onPartChange(null);
+                    onSemesterChange(null);
+                  }}
+                  size="medium"
+                  variant="filledSecondary"
+                >
+                  필터 초기화
+                </BoxButton>
+              </div>
+            )}
           </StyledTopLeftContainer>
           <StyledLastUpdate>
             {lastUpdatedTime && (
@@ -126,7 +151,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
             <ApplicantTable
               name={methods.watch('search')}
               partId={partId}
-              semesterId={semesterId}
+              semesterId={semesterId ?? undefined}
               state={state}
             />
           </Suspense>
