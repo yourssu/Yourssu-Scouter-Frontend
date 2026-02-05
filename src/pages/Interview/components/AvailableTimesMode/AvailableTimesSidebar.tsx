@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { BoxButton } from '@yourssu/design-system-react';
 
 import { useAlertDialog } from '@/hooks/useAlertDialog';
@@ -8,10 +9,18 @@ import {
   useInterviewPartSelectionContext,
 } from '@/pages/Interview/context';
 import { CalendarModeType } from '@/pages/Interview/type';
+import { applicantOptions } from '@/query/applicant/options';
+import { semesterNowOptions } from '@/query/semester/now/options';
 
 export const AvailableTimesSidebar = () => {
-  const { partName } = useInterviewPartSelectionContext();
+  const { partId, partName } = useInterviewPartSelectionContext();
   const { setCalendarMode } = useInterviewCalendarModeContext();
+
+  const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
+  const { data: applicants } = useSuspenseQuery(
+    applicantOptions({ partId, semesterId: semesterNow.semesterId }),
+  );
+
   const openAlertDialog = useAlertDialog();
 
   const onScheduleModeButtonClick = (mode: Extract<CalendarModeType, '수동생성' | '자동생성'>) => {
@@ -24,6 +33,15 @@ export const AvailableTimesSidebar = () => {
             <img src="/imgs/part-selection-guide.webp" />
           </>
         ),
+        primaryButtonText: '확인',
+      });
+      return;
+    }
+
+    if (applicants.length === 0) {
+      openAlertDialog({
+        title: '선택한 파트에 지원자가 없어요',
+        content: '지원자가 있는 파트를 선택해주세요.',
         primaryButtonText: '확인',
       });
       return;

@@ -14,12 +14,16 @@ import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { applicantOptions } from '@/query/applicant/options';
 import { Applicant } from '@/query/applicant/schema';
 import { scheduleOptions } from '@/query/schedule/options';
+import { semesterNowOptions } from '@/query/semester/now/options';
 
 export const ManualScheduleMode = () => {
   const { duration } = useInterviewAutoScheduleContext();
   const { partId } = useInterviewPartSelectionContext();
 
-  const { data: applicants } = useSuspenseQuery(applicantOptions({ partId }));
+  const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
+  const { data: applicants } = useSuspenseQuery(
+    applicantOptions({ partId, semesterId: semesterNow.semesterId }),
+  );
   const { data: existingSchedules } = useSuspenseQuery(scheduleOptions(partId));
 
   // 기존 스케줄을 Applicant와 매칭하여 초기 엔트리로 변환
