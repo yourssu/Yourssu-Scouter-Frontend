@@ -9,7 +9,7 @@ interface EditorSectionProps {
 
 export const EditorSection = ({ selectedPart, selectedTemplateId }: EditorSectionProps) => {
   return (
-    <div className="border-line-basicMedium bg-bg-basicDefault mx-auto flex h-full max-h-[690px] w-full flex-col rounded-xl border">
+    <div className="border-line-basicMedium bg-bg-basicDefault mx-auto flex h-full w-full flex-col overflow-hidden rounded-xl border">
       {selectedPart && (
         <MailEditor
           key={`${selectedPart.partId}-${selectedTemplateId}`}
