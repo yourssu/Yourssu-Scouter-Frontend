@@ -2,10 +2,10 @@ export type MailBodyFormatType = 'HTML' | 'PLAIN_TEXT';
 
 interface BuildMailRequestParams {
   mailContent: {
-    attachments: string;
+    attachments: string[];
     body: string;
     bodyFormat: MailBodyFormatType;
-    inlineImages: string;
+    inlineImages: string[];
   };
   mailInfo: {
     bcc: string[];
@@ -31,7 +31,5 @@ export const buildMailRequest = ({
       bodyFormat: mailContent.bodyFormat,
       reservationTime: reservedDate ? reservedDate.toISOString() : null,
     },
-    inlineImages: mailContent.inlineImages, // 에디터 내 이미지 업로드 로직 확인 필요
-    attachments: mailContent.attachments, // 파일 첨부 로직 확인 필요
   };
 };

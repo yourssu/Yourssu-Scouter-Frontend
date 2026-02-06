@@ -20,10 +20,10 @@ interface MailVariableContextProps {
 
 // 2. 메일 내용 관련 타입 (제목, 본문, 이미지, 파일)
 interface MailContentData {
-  attachments: string;
+  attachments: string[];
   body: Record<string, string>; // 지원자 id, 본문 내용
   bodyFormat: 'HTML' | 'PLAIN_TEXT';
-  inlineImages: string;
+  inlineImages: string[];
 }
 
 interface MailContentContextProps {
@@ -102,8 +102,8 @@ export const MailContentProvider = ({ children }: { children: ReactNode }) => {
   const [mailContent, setMailContent] = useState<MailContentData>({
     body: {},
     bodyFormat: 'HTML',
-    inlineImages: '',
-    attachments: '',
+    inlineImages: [],
+    attachments: [],
   });
   const [reservationTime, setReservationTime] = useState<Date | null>(null);
 
@@ -125,7 +125,13 @@ export const MailContentProvider = ({ children }: { children: ReactNode }) => {
   );
 
   return (
-    <MailContentContext.Provider value={{ mailContent, reservationTime, actions }}>
+    <MailContentContext.Provider
+      value={{
+        mailContent,
+        reservationTime,
+        actions,
+      }}
+    >
       {children}
     </MailContentContext.Provider>
   );
