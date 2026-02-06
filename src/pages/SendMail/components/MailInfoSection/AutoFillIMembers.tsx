@@ -56,8 +56,11 @@ export const AutoFillMembers = ({
   });
 
   useEffect(() => {
+    const hasData = mailInfo.receiver?.length > 0 || mailInfo.bcc?.length > 0;
+
     // 초기화가 이미 된 경우에는 실행하지 않음
-    if (isInitialized.current) {
+    if (isInitialized.current || hasData) {
+      isInitialized.current = true;
       return;
     }
 
@@ -67,7 +70,7 @@ export const AutoFillMembers = ({
     });
 
     isInitialized.current = true;
-  }, [applicants, partMembers, hrMembers, onMembersUpdate]);
+  }, [applicants, partMembers, hrMembers, onMembersUpdate, mailInfo]);
 
   return (
     <div className="gap-0">
@@ -91,7 +94,7 @@ export const AutoFillMembers = ({
         </>
       ) : (
         <SendToField
-          receivers={[...mailInfo.receiver, ...mailInfo.bcc]}
+          receivers={[...(mailInfo.receiver || []), ...(mailInfo.bcc || [])]}
           sender={members['보내는 사람']}
         />
       )}
