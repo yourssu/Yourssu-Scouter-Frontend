@@ -14,18 +14,19 @@ interface InfoSectionProps {
 }
 
 export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionProps) => {
+  const {
+    mailInfo,
+    actions: { updateMailInfo },
+  } = useMailInfoContext();
+
   const [formData, setFormData] = useState<MailFormData>({
     members: {
       '받는 사람': [],
       '보내는 사람': [],
       '숨은 참조': [],
     },
-    subject: '',
+    subject: mailInfo.subject || '',
   });
-
-  const {
-    actions: { updateMailInfo },
-  } = useMailInfoContext();
 
   // 멤버(칩) 업데이트
   const handleMemberUpdate = useCallback(
@@ -88,11 +89,6 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
           />
         </Suspense>
       )}
-      {/* <TextInputField
-        label="제목"
-        onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
-        value={formData.subject}
-      /> */}
       <TextInputField label="제목" onChange={handleSubjectUpdate} value={formData.subject} />
     </div>
   );

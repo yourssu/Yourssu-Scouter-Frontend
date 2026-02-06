@@ -56,11 +56,8 @@ export const AutoFillMembers = ({
   });
 
   useEffect(() => {
-    const hasData = mailInfo.receiver?.length > 0 || mailInfo.bcc?.length > 0;
-
     // 초기화가 이미 된 경우에는 실행하지 않음
-    if (isInitialized.current || hasData) {
-      isInitialized.current = true;
+    if (isInitialized.current) {
       return;
     }
 
