@@ -16,6 +16,10 @@ export const useMailData = (
   const defaultContent = templateDetail?.content || '';
   const mailVariables = useOptionalMailVariables();
 
+  // console.log('선택된 템플릿 ID:', selectedTemplateId);
+  // console.log('가져온 템플릿:', defaultContent);
+  // console.log('현재 저장된 본문:', mailContent.body[currentId || '']);
+
   // 변수 값 치환 함수
   const getDisplayVariableValue = useCallback(
     (key: string, perRecipient: boolean) => {

@@ -34,6 +34,7 @@ export const MailEditor = ({ selectedTemplateId }: MailEditorProps) => {
         <MailEditorContent
           currentApplicantId={currentRecipientId}
           initialContent={currentContent}
+          key={`${selectedTemplateId}-${currentRecipientId}`}
           onContentChange={handleContentChange}
           recipientName={currentRecipientName}
         />

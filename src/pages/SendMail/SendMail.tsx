@@ -20,7 +20,7 @@ export const SendMail = () => {
   return (
     <SendMailModeProvider>
       <MailInfoProvider>
-        <MailContentProvider>
+        <MailContentProvider key={`${selectedPart?.partId}-${selectedTemplateId}`}>
           <MailVariableProvider currentPart={selectedPart}>
             <SendMailPageLayout
               slots={{

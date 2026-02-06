@@ -9,7 +9,7 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 
 import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
 import { VariableKeyType } from '@/types/editor';
@@ -35,7 +35,7 @@ export interface MailEditorContentRef {
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
-  ({ recipientName, initialContent, onContentChange, currentApplicantId }, ref) => {
+  ({ recipientName, initialContent, onContentChange }, ref) => {
     const placeholderText = recipientName
       ? `${recipientName}님에게 보낼 내용`
       : '내용을 입력하세요';
@@ -81,12 +81,6 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
         }
       },
     });
-
-    useEffect(() => {
-      if (editor && !editor.isDestroyed) {
-        editor.commands.setContent(initialContent || '');
-      }
-    }, [currentApplicantId, editor, initialContent]);
 
     useImperativeHandle(
       ref,
