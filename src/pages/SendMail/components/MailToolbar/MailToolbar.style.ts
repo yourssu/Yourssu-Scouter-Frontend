@@ -4,7 +4,9 @@ export const ToolbarContainer = styled.div`
   display: flex;
   padding: 8px;
   align-items: center;
-  max-height: 44px;
+  min-height: 44px;
+  overflow-x: auto;
+  max-width: 100%;
   background: ${({ theme }) => theme.semantic.color.bgBasicStrong};
   border-radius: 0 0 ${({ theme }) => theme.semantic.radius.xl}px
     ${({ theme }) => theme.semantic.radius.xl}px;
