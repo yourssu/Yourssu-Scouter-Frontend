@@ -1,14 +1,38 @@
 import { BoxButton } from '@yourssu/design-system-react';
+import { overlay } from 'overlay-kit';
 import { Suspense } from 'react';
 
+import { MailReservationDialog } from '@/pages/SendMail/components/MailReservationDialog/MailReservationDialog';
 import { VariableList } from '@/pages/SendMail/components/MailSidebar/VariableList';
+import { useMailData } from '@/pages/SendMail/hooks/useMailData';
+import { useMailActions } from '@/pages/SendMail/hooks/useMailReservation';
+import { useMailValidation } from '@/pages/SendMail/hooks/useMailValidation';
+import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 
 export interface MailSidebarProps {
-  partId?: number;
-  templateId?: number;
+  partId: number | undefined;
+  templateId: number | undefined;
 }
 
 export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
+  const { currentRecipientId } = useRecipientData();
+  const { currentContent, defaultContent } = useMailData(templateId, currentRecipientId);
+  const { sendReservation } = useMailActions();
+
+  const { isReadyForReservation } = useMailValidation(templateId);
+
+  const handleReservationClick = () => {
+    overlay.open(({ isOpen, close }) => (
+      <MailReservationDialog
+        onClose={close}
+        onReserve={async (date: Date) => {
+          await sendReservation(currentContent, defaultContent, date);
+        }}
+        open={isOpen}
+      />
+    ));
+  };
+
   return (
     <div className="bg-bg-basicLight flex size-full min-h-0 flex-col justify-between">
       <div className="typo-t4_sb_18 bg-bg-basicDefault border-line-basicMedium flex w-full flex-none justify-center border-b-1 px-[16px] py-[12px]">
@@ -23,7 +47,12 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
       </div>
       <div className="border-line-basicMedium bg-bg-basicDefault flex-none border-t-1 px-[20px] pt-[16px] pb-[40px]">
         <div className="w-full [&_button]:w-full">
-          <BoxButton disabled={false} size="large" variant="filledPrimary">
+          <BoxButton
+            disabled={!templateId || !partId || !isReadyForReservation}
+            onClick={handleReservationClick}
+            size="large"
+            variant="filledPrimary"
+          >
             메일 예약하기
           </BoxButton>
         </div>

@@ -1,15 +1,14 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useMailVariableContext } from '@/pages/SendMail/context';
 import { Recipient } from '@/pages/SendMail/mail.type';
 import { applicantOptions } from '@/query/applicant/options';
-import { Part } from '@/query/part/schema';
 
-export const useRecipientData = (selectedPart: Part) => {
-  const { activeApplicantId, actions } = useMailVariables();
+export const useRecipientData = () => {
+  const { currentApplicantId, currentPart, actions } = useMailVariableContext();
 
-  const { data: applicants } = useSuspenseQuery(applicantOptions({ partId: selectedPart.partId }));
+  const { data: applicants } = useSuspenseQuery(applicantOptions({ partId: currentPart?.partId }));
 
   const recipients: Recipient[] = useMemo(
     () =>
@@ -19,13 +18,14 @@ export const useRecipientData = (selectedPart: Part) => {
     [applicants],
   );
 
-  const currentRecipientId = activeApplicantId ?? recipients[0]?.id;
+  const currentRecipientId = currentApplicantId ?? recipients[0]?.id;
   const currentRecipient = recipients.find((r) => r.id === currentRecipientId);
 
   return {
-    recipients,
+    applicants, // 원본 지원자 객체 리스트
+    recipients, // Recipient 타입(ID/Name) 리스트
     currentRecipientId,
     currentRecipientName: currentRecipient?.name,
-    setCurrentRecipientId: actions.setActiveApplicantId,
+    setCurrentRecipientId: actions.setCurrentApplicantId,
   };
 };

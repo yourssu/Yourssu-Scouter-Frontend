@@ -1,13 +1,14 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { useOptionalMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useMailContentContext, useOptionalMailVariables } from '@/pages/SendMail/context';
 import { templateOptions } from '@/query/template/options';
 
 export const useMailData = (
   selectedTemplateId: number | undefined,
   currentId: string | undefined,
 ) => {
+  const { mailContent, actions } = useMailContentContext();
   const results = useSuspenseQueries({
     queries: [...(selectedTemplateId ? [templateOptions.detail(selectedTemplateId)] : [])],
   });
@@ -15,8 +16,9 @@ export const useMailData = (
   const defaultContent = templateDetail?.content || '';
   const mailVariables = useOptionalMailVariables();
 
-  // 에디터 내용 상태 관리
-  const [editorContents, setEditorContents] = useState<Record<string, string>>({});
+  // console.log('선택된 템플릿 ID:', selectedTemplateId);
+  // console.log('가져온 템플릿:', defaultContent);
+  // console.log('현재 저장된 본문:', mailContent.body[currentId || '']);
 
   // 변수 값 치환 함수
   const getDisplayVariableValue = useCallback(
@@ -25,7 +27,7 @@ export const useMailData = (
         return '';
       }
 
-      const { variableValue, activeApplicantId } = mailVariables;
+      const { variableValue, currentApplicantId } = mailVariables;
 
       if (!variableValue) {
         return '';
@@ -33,7 +35,7 @@ export const useMailData = (
 
       if (perRecipient) {
         const firstId = Object.keys(variableValue.perApplicant)[0];
-        const recipientId = activeApplicantId ?? firstId;
+        const recipientId = currentApplicantId ?? firstId;
         return recipientId ? (variableValue.perApplicant[String(recipientId)]?.[key] ?? '') : '';
       }
       return variableValue.common[key] ?? '';
@@ -46,8 +48,8 @@ export const useMailData = (
     if (!currentId) {
       return defaultContent;
     }
-    return editorContents[currentId] ?? defaultContent;
-  }, [currentId, editorContents, defaultContent]);
+    return mailContent.body[currentId] ?? defaultContent;
+  }, [currentId, mailContent.body, defaultContent]);
 
   // 내용 변경 핸들러
   const handleContentChange = useCallback(
@@ -56,7 +58,7 @@ export const useMailData = (
         return;
       }
 
-      const saved = editorContents[currentId];
+      const saved = mailContent.body[currentId];
       const base = saved ?? defaultContent;
 
       const isEffectivelyEmpty =
@@ -66,14 +68,9 @@ export const useMailData = (
         return;
       }
 
-      setEditorContents((prev) => {
-        if (prev[currentId] === html) {
-          return prev;
-        }
-        return { ...prev, [currentId]: html };
-      });
+      actions.updateBody(currentId, html);
     },
-    [currentId, defaultContent, editorContents],
+    [currentId, defaultContent, mailContent.body, actions],
   );
 
   return {

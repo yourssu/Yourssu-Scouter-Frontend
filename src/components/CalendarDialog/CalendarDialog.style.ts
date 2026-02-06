@@ -54,6 +54,7 @@ export const DateFieldWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  width: 342px;
 `;
 
 export const DatesWrapper = styled.div`

@@ -28,7 +28,7 @@ export const DateFieldContainer = styled.div`
 export const MiniDateFieldContainer = styled(DateFieldContainer)<{
   $isError?: boolean;
 }>`
-  width: 166px;
+  width: 100%;
   height: 56px;
   background: ${({ $isError, theme }) =>
     $isError ? theme.semantic.color.snackbarError : theme.semantic.color.buttonOutlinedEnabled};

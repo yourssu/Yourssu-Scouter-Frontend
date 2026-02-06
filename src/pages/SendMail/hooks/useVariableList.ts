@@ -1,6 +1,6 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
-import { useMailVariables } from '@/pages/SendMail/components/MailVariable/MailVariable';
+import { useMailVariableContext } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options';
 import { Applicant } from '@/query/applicant/schema';
 import { templateOptions } from '@/query/template/options';
@@ -10,7 +10,7 @@ const transformToVariableCard = (
   v: Variable,
   applicants: Applicant[],
   variableValue: VariableState,
-  actions: ReturnType<typeof useMailVariables>['actions'],
+  actions: ReturnType<typeof useMailVariableContext>['actions'],
 ) => {
   const isIndividual = v.perRecipient;
 
@@ -47,8 +47,7 @@ export const useVariableList = (templateId: number, partId: number) => {
   const [{ data: template }, { data: applicants }] = useSuspenseQueries({
     queries: [templateOptions.detail(templateId), applicantOptions({ partId })],
   });
-  const { variableValue, actions } = useMailVariables();
-
+  const { variableValue, actions } = useMailVariableContext();
   const templateVariables: Variable[] = template.variables.filter(
     (v) => v.displayName !== '지원자' && v.displayName !== '파트명',
   );

@@ -4,9 +4,13 @@ import { MailDropdownSection } from '@/pages/SendMail/components/MailDropdownSec
 import { EditorSection } from '@/pages/SendMail/components/MailEditorSection/EditorSection';
 import { InfoSection } from '@/pages/SendMail/components/MailInfoSection/InfoSection';
 import { MailSidebar } from '@/pages/SendMail/components/MailSidebar/MailSidebar';
-import { MailVariableProvider } from '@/pages/SendMail/components/MailVariable/MailVariable';
 import { SendMailModeProvider } from '@/pages/SendMail/components/SendMailMode/SendMailMode';
 import { SendMailPageLayout } from '@/pages/SendMail/components/SendMailPageLayout/SendMailPageLayout';
+import {
+  MailContentProvider,
+  MailInfoProvider,
+  MailVariableProvider,
+} from '@/pages/SendMail/context';
 import { Part } from '@/query/part/schema';
 
 export const SendMail = () => {
@@ -15,27 +19,39 @@ export const SendMail = () => {
 
   return (
     <SendMailModeProvider>
-      <MailVariableProvider currentPart={selectedPart}>
-        <SendMailPageLayout
-          slots={{
-            dropdown: (
-              <MailDropdownSection
-                selectedPart={selectedPart}
-                selectedTemplateId={selectedTemplateId}
-                setSelectedPart={setSelectedPart}
-                setSelectedTemplateId={setSelectedTemplateId}
-              />
-            ),
-            info: (
-              <InfoSection selectedPart={selectedPart} selectedTemplateId={selectedTemplateId} />
-            ),
-            editor: (
-              <EditorSection selectedPart={selectedPart} selectedTemplateId={selectedTemplateId} />
-            ),
-            sidebar: <MailSidebar partId={selectedPart?.partId} templateId={selectedTemplateId} />,
-          }}
-        />
-      </MailVariableProvider>
+      <MailInfoProvider>
+        <MailContentProvider key={`${selectedPart?.partId}-${selectedTemplateId}`}>
+          <MailVariableProvider currentPart={selectedPart}>
+            <SendMailPageLayout
+              slots={{
+                dropdown: (
+                  <MailDropdownSection
+                    selectedPart={selectedPart}
+                    selectedTemplateId={selectedTemplateId}
+                    setSelectedPart={setSelectedPart}
+                    setSelectedTemplateId={setSelectedTemplateId}
+                  />
+                ),
+                info: (
+                  <InfoSection
+                    selectedPart={selectedPart}
+                    selectedTemplateId={selectedTemplateId}
+                  />
+                ),
+                editor: (
+                  <EditorSection
+                    selectedPart={selectedPart}
+                    selectedTemplateId={selectedTemplateId}
+                  />
+                ),
+                sidebar: (
+                  <MailSidebar partId={selectedPart?.partId} templateId={selectedTemplateId} />
+                ),
+              }}
+            />
+          </MailVariableProvider>
+        </MailContentProvider>
+      </MailInfoProvider>
     </SendMailModeProvider>
   );
 };

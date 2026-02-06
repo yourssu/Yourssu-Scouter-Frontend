@@ -18,6 +18,7 @@ import { MailToolbar } from '../MailToolbar/MailToolbar';
 import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
 
 interface MailEditorContentProps {
+  currentApplicantId?: string;
   initialContent?: string;
   onContentChange?: (html: string) => void;
   recipientName?: string;
@@ -73,6 +74,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
       ],
       content: initialContent || '',
       editable: true,
+      immediatelyRender: false,
       onUpdate: ({ editor }) => {
         if (onContentChange) {
           onContentChange(editor.getHTML());
