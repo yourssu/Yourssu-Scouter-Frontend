@@ -1,9 +1,11 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useCallback, useState } from 'react';
 
 import { AutoFillMembers } from '@/pages/SendMail/components/MailInfoSection/AutoFillIMembers';
 import { MemberInputField } from '@/pages/SendMail/components/MailInfoSection/MemberInputField';
 import { TextInputField } from '@/pages/SendMail/components/MailInfoSection/TextInputField';
 import { useMailInfoContext } from '@/pages/SendMail/context';
+import { meOption } from '@/query/member/me/options';
 import { Part } from '@/query/part/schema';
 import { MailFormData, MemberInputFieldTypes } from '@/types/editor';
 import { MemberInputFieldKey } from '@/types/editor';
@@ -19,10 +21,12 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
     actions: { updateMailInfo },
   } = useMailInfoContext();
 
+  const { data: me } = useSuspenseQuery(meOption());
+
   const [formData, setFormData] = useState<MailFormData>({
     members: {
       '받는 사람': [],
-      '보내는 사람': [],
+      '보내는 사람': [me.nickname],
       '숨은 참조': [],
     },
     subject: mailInfo.subject || '',

@@ -31,6 +31,13 @@ const BaseMemberSchema = z.object({
   note: z.string(),
 });
 
+export const MeSchema = BaseMemberSchema.omit({
+  note: true,
+}).extend({
+  profileImageUrl: z.url(),
+  stateUpdatedTime: z.iso.datetime(),
+});
+
 const ActiveMemberSchema = BaseMemberSchema.extend({
   membershipFee: z.boolean(),
   state: z.literal('액티브'),
