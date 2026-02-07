@@ -1,5 +1,6 @@
 import { Editor } from '@tiptap/react';
 import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
+import { useRef } from 'react';
 
 import { IcChangeBold } from '@/components/Icons/Editor/IcChangeBold';
 import { IcChangeItalic } from '@/components/Icons/Editor/IcChangeItalic';
@@ -28,9 +29,28 @@ interface MailToolbarProps {
 }
 
 export const MailToolbar = ({ editor }: MailToolbarProps) => {
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   if (!editor) {
     return null;
   }
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      editor.chain().focus().setImage({ src: dataUrl }).run();
+    };
+    reader.readAsDataURL(file);
+
+    // input 초기화 (같은 파일 다시 선택 가능하도록)
+    event.target.value = '';
+  };
 
   const colors = ['#000000', '#334155', '#5736F5'];
   const fontSizes = ['12px', '14px', '16px', '18px', '20px', '24px'];
@@ -191,14 +211,15 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
       <Divider />
 
       <ToolbarGroup>
+        <input
+          accept="image/png,image/jpeg,image/gif,image/webp"
+          onChange={handleImageUpload}
+          ref={imageInputRef}
+          style={{ display: 'none' }}
+          type="file"
+        />
         <ToolbarButton
-          onClick={() => {
-            // 이미지 업로드 로직 구현 필요
-            const url = window.prompt('이미지 URL 입력:');
-            if (url) {
-              editor.chain().focus().setImage({ src: url }).run();
-            }
-          }}
+          onClick={() => imageInputRef.current?.click()}
           title="Insert Img"
           type="button"
         >

@@ -55,7 +55,9 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
         Underline,
         FontFamily,
         FontSize,
-        Image,
+        Image.configure({
+          allowBase64: true,
+        }),
         Link.configure({
           openOnClick: true,
           linkOnPaste: true,
