@@ -18,6 +18,7 @@ const container = tv({
       Marketing: 'bg-table-marketingBackground',
       PM: 'bg-table-pmBackground',
       HR: 'bg-table-hrBackground',
+      Finance: 'bg-table-hrBackground',
     } satisfies Record<(typeof partNames)[number], string>,
   },
 });
