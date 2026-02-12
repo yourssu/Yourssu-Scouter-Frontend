@@ -1,8 +1,7 @@
-import { BoxButton } from '@yourssu/design-system-react';
 import { assert } from 'es-toolkit';
-import { CgArrowsExchange } from 'react-icons/cg';
 
 import { useAlertDialog } from '@/hooks/useAlertDialog';
+import { SegmentedControl } from '@/pages/Interview/components/SegmentedControl';
 import { useInterviewCalendarModeContext } from '@/pages/Interview/context';
 
 export const ScheduleModeToggleButton = () => {
@@ -14,23 +13,28 @@ export const ScheduleModeToggleButton = () => {
 
   const openAlertDialog = useAlertDialog();
 
-  const nextMode = calendarMode === '수동생성' ? '자동생성' : '수동생성';
+  const handleModeChange = async (nextMode: typeof calendarMode) => {
+    if (nextMode === calendarMode) {
+      return;
+    }
 
-  const onClick = async () => {
     const answer = await openAlertDialog({
       title: `시간표 ${nextMode} 모드로 변경할까요?`,
       content: '변경한 내용은 저장되지 않아요.',
       primaryButtonText: '변경하기',
       secondaryButtonText: '취소',
     });
+
     if (answer) {
       setCalendarMode(nextMode);
     }
   };
 
   return (
-    <BoxButton leftIcon={<CgArrowsExchange />} onClick={onClick} size="small" variant="outlined">
-      시간표 {nextMode} 하기
-    </BoxButton>
+    <SegmentedControl
+      onChange={(value) => handleModeChange(value)}
+      options={['수동생성', '자동생성']}
+      value={calendarMode as '수동생성' | '자동생성'}
+    />
   );
 };

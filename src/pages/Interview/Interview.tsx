@@ -3,7 +3,6 @@ import { SwitchCase } from 'react-simplikit';
 
 import { usePartFilter } from '@/hooks/usePartFilter';
 import { AutoScheduleMode } from '@/pages/Interview/components/AutoScheduleMode';
-import { AvailableTimesMode } from '@/pages/Interview/components/AvailableTimesMode';
 import { InterviewScheduleMode } from '@/pages/Interview/components/InterviewScheduleMode';
 import { ManualScheduleMode } from '@/pages/Interview/components/ManualScheduleMode';
 import {
@@ -32,7 +31,7 @@ export const InterviewPage = () => {
           <SwitchCase
             caseBy={{
               면접일정: () => <InterviewScheduleMode />,
-              희망일정: () => <AvailableTimesMode />,
+              // 희망일정: () => <AvailableTimesMode />,
               수동생성: () => <ManualScheduleMode />,
               자동생성: () => (
                 <Suspense>
