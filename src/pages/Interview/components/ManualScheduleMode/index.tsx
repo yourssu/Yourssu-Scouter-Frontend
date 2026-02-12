@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { IcInfoCircleLine } from '@yourssu/design-system-react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useDateMap } from '@/hooks/useDateMap';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
@@ -56,6 +57,16 @@ export const ManualScheduleMode = () => {
     precision: duration === '1시간' ? '시간' : '분',
   });
 
+  useEffect(() => {
+    completedScheduleMapAction.reset();
+    setSelectedApplicant(applicants[0]);
+    // eslint-disable-next-line
+  }, [initialScheduleEntries]);
+
+  useEffect(() => {
+    setSelectedApplicant(applicants[0]);
+  }, [applicants]);
+
   return (
     <InterviewPageLayout
       slots={{
@@ -78,7 +89,7 @@ export const ManualScheduleMode = () => {
             selectedApplicant={selectedApplicant}
           />
         ),
-        calendar: (
+        calendar: partId ? (
           <ManualScheduleCalendar
             completedScheduleMap={completedScheduleMap}
             completedScheduleMapAction={completedScheduleMapAction}
@@ -88,6 +99,11 @@ export const ManualScheduleMode = () => {
             week={week}
             year={year}
           />
+        ) : (
+          <div className="text-text-basicSecondary flex w-full items-center justify-center gap-1">
+            <IcInfoCircleLine className="size-5" />
+            <span className="typo-b2_sb_16">우측에서 파트를 선택하고 일정을 생성하세요.</span>
+          </div>
         ),
         sidebar: (
           <ManualScheduleSidebar

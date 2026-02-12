@@ -1,6 +1,7 @@
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeaderLayout';
 import { ManualScheduleHeaderChipGroup } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeaderChipGroup';
 import { ScheduleModeToggleButton } from '@/pages/Interview/components/ScheduleModeToggleButton';
+import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { Applicant } from '@/query/applicant/schema';
 
 interface ManualScheduleHeaderProps {
@@ -23,6 +24,8 @@ export const ManualScheduleHeader = ({
   onSelectedApplicantChange,
   indicator: { month, week, onNextWeek, onPrevWeek },
 }: ManualScheduleHeaderProps) => {
+  const { partName } = useInterviewPartSelectionContext();
+
   return (
     <InterviewHeaderLayout>
       <InterviewHeaderLayout.Row>
@@ -31,15 +34,17 @@ export const ManualScheduleHeader = ({
           onNextWeek={onNextWeek}
           onPrevWeek={onPrevWeek}
         />
-        <ScheduleModeToggleButton />
+        {partName && <ScheduleModeToggleButton />}
       </InterviewHeaderLayout.Row>
       <InterviewHeaderLayout.Row>
-        <ManualScheduleHeaderChipGroup
-          applicants={applicants}
-          completedApplicants={completedApplicants}
-          onSelectedApplicantChange={onSelectedApplicantChange}
-          selectedApplicant={selectedApplicant}
-        />
+        {partName && (
+          <ManualScheduleHeaderChipGroup
+            applicants={applicants}
+            completedApplicants={completedApplicants}
+            onSelectedApplicantChange={onSelectedApplicantChange}
+            selectedApplicant={selectedApplicant}
+          />
+        )}
       </InterviewHeaderLayout.Row>
     </InterviewHeaderLayout>
   );
