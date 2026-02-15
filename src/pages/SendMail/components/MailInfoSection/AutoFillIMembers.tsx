@@ -2,7 +2,6 @@ import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { assert, uniq } from 'es-toolkit';
 import { useEffect, useRef } from 'react';
 
-import { SendToField } from '@/pages/SendMail/components/MailInfoSection/SendToField';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options.ts';
 import { memberOptions } from '@/query/member/options.ts';
@@ -21,7 +20,6 @@ interface AutoFillMembersProps {
 
 export const AutoFillMembers = ({
   selectedPart,
-  selectedTemplateId,
   members,
   onMembersUpdate,
 }: AutoFillMembersProps) => {
@@ -71,30 +69,21 @@ export const AutoFillMembers = ({
 
   return (
     <div className="gap-0">
-      {selectedTemplateId === undefined ? (
-        <>
-          <MemberInputField
-            items={members['보내는 사람']}
-            label="보내는 사람"
-            onItemsUpdate={(items: string[]) => onMembersUpdate({ '보내는 사람': items })}
-          />
-          <MemberInputField
-            items={mailInfo.receiver || []}
-            label="받는 사람"
-            onItemsUpdate={(items: string[]) => onMembersUpdate({ '받는 사람': items })}
-          />
-          <MemberInputField
-            items={mailInfo.bcc || []}
-            label="숨은 참조"
-            onItemsUpdate={(items: string[]) => onMembersUpdate({ '숨은 참조': items })}
-          />
-        </>
-      ) : (
-        <SendToField
-          receivers={[...(mailInfo.receiver || []), ...(mailInfo.bcc || [])]}
-          sender={members['보내는 사람']}
-        />
-      )}
+      <MemberInputField
+        items={members['보내는 사람']}
+        label="보내는 사람"
+        onItemsUpdate={(items: string[]) => onMembersUpdate({ '보내는 사람': items })}
+      />
+      <MemberInputField
+        items={mailInfo.receiver || []}
+        label="받는 사람"
+        onItemsUpdate={(items: string[]) => onMembersUpdate({ '받는 사람': items })}
+      />
+      <MemberInputField
+        items={mailInfo.bcc || []}
+        label="숨은 참조"
+        onItemsUpdate={(items: string[]) => onMembersUpdate({ '숨은 참조': items })}
+      />
     </div>
   );
 };
