@@ -1,4 +1,8 @@
-import { IcArrowsChevronLeftLine, IcArrowsChevronRightLine } from '@yourssu/design-system-react';
+import {
+  BoxButton,
+  IcArrowsChevronLeftLine,
+  IcArrowsChevronRightLine,
+} from '@yourssu/design-system-react';
 import { addHours, addMonths, isSameDay, setHours, setMinutes, startOfHour } from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
@@ -29,23 +33,39 @@ interface CalendarDialogProps {
 
 export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
+  const [tempDate, setTempDate] = useState<Date | undefined>(selectedDate); // 내부에서만 사용하는 임시 날짜 상태
   const today = new Date();
-  const displayDate = selectedDate ?? today;
+  const displayDate = tempDate ?? selectedDate ?? today;
+
+  // 팝업이 열릴 때마다 임시 상태를 현재 선택된 값으로 초기화 (취소 후 재진입 대비)
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      setTempDate(selectedDate);
+    }
+    setOpen(nextOpen);
+  };
 
   const handleDateChange = (date: Date) => {
-    if (selectedDate) {
-      const selectedHours = selectedDate.getHours();
-      const selectedMinutes = selectedDate.getMinutes();
+    if (tempDate) {
+      const selectedHours = tempDate.getHours();
+      const selectedMinutes = tempDate.getMinutes();
       const updatedDate = setHours(setMinutes(date, selectedMinutes), selectedHours);
-      onSelect(updatedDate);
+      setTempDate(updatedDate);
     } else {
-      onSelect(getCloseHour(date));
+      setTempDate(getCloseHour(date));
     }
-    setOpen(false);
   };
 
   const handleTimeChange = (date: Date) => {
-    onSelect(date);
+    setTempDate(date);
+  };
+
+  // 확인 버튼을 눌렀을 때만 부모의 onSelect 호출
+  const handleConfirm = () => {
+    if (tempDate) {
+      onSelect(tempDate);
+      setOpen(false);
+    }
   };
 
   const getCloseHour = (date: Date) => {
@@ -60,16 +80,25 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
 
   return (
     <StyledWrapper>
-      <Popover.Root onOpenChange={setOpen} open={open}>
+      <Popover.Root onOpenChange={handleOpenChange} open={open}>
         <Popover.Trigger asChild>{trigger}</Popover.Trigger>
         <Popover.Portal>
           <Popover.Content style={{ zIndex: 50 }}>
             <CalendarDialogContainer>
-              <CalendarContent onSelect={handleDateChange} selectedDate={selectedDate} />
+              <CalendarContent onSelect={handleDateChange} selectedDate={tempDate} />
               <DateFieldWrapper>
                 <MiniDateField date={displayDate} />
                 <MiniTimeField date={displayDate} onDateChange={handleTimeChange} />
               </DateFieldWrapper>
+              <BoxButton
+                className="w-full"
+                disabled={!tempDate} // 임시 선택된 값이 없으면 비활성화
+                onClick={handleConfirm}
+                size="large"
+                variant="filledPrimary"
+              >
+                확인
+              </BoxButton>
             </CalendarDialogContainer>
           </Popover.Content>
         </Popover.Portal>
