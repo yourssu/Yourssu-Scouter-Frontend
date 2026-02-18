@@ -59,6 +59,17 @@ export const AutoFillMembers = ({
       return;
     }
 
+    // 이미 컨텍스트(mailInfo)에 받는 사람이나 숨은 참조 데이터가 있다면
+    // 사용자가 수정한 것으로 간주하고 자동 채우기를 건너뜀
+    const hasData =
+      (mailInfo.receiver && mailInfo.receiver.length > 0) ||
+      (mailInfo.bcc && mailInfo.bcc.length > 0);
+
+    if (hasData) {
+      isInitialized.current = true;
+      return;
+    }
+
     onMembersUpdate({
       '받는 사람': applicants.map((a) => a.name),
       '숨은 참조': uniq([...partMembers, ...hrMembers].map((m) => m.nickname)),
