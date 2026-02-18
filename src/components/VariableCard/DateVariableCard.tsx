@@ -47,21 +47,42 @@ export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCar
                 : undefined
             }
             trigger={
-              <TextFieldContainer
-                onClick={(e) => {
-                  if (date.value) {
-                    e.stopPropagation();
-                  }
-                }}
-              >
-                <TextField
-                  key={`date-field-${index}-${date.value}`}
-                  onClearButtonClick={() => handleDateClear(index)}
-                  placeholder="MM/DD(D) HH:MM"
-                  readOnly
-                  type="text"
-                  value={date.value}
-                />
+              <TextFieldContainer>
+                {/* 트리거와 TextField 사이에 이벤트를 가로채기 위한 div 사용 */}
+                <div
+                  className="w-full"
+                  onClick={(e) => {
+                    const target = e.target as HTMLElement;
+                    // 삭제 버튼(button, svg, path)을 클릭한 경우에만 부모 트리거로 이벤트가 가지 않게 막음
+                    if (
+                      target.closest('button') ||
+                      target.tagName === 'svg' ||
+                      target.tagName === 'path'
+                    ) {
+                      e.stopPropagation();
+                    }
+                  }}
+                  onPointerDown={(e) => {
+                    const target = e.target as HTMLElement;
+                    if (
+                      target.closest('button') ||
+                      target.tagName === 'svg' ||
+                      target.tagName === 'path'
+                    ) {
+                      e.stopPropagation();
+                    }
+                  }}
+                >
+                  <TextField
+                    key={`date-field-${index}-${date.value}`}
+                    onClearButtonClick={() => handleDateClear(index)}
+                    placeholder="MM/DD(D) HH:MM"
+                    readOnly
+                    type="text"
+                    value={date.value}
+                  />
+                </div>
+
                 {!date.value && (
                   <IconWrapper>
                     <IcCalenderLine width={20} />

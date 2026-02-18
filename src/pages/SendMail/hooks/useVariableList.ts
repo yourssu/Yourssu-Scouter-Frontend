@@ -22,9 +22,6 @@ const transformToVariableCard = (
     : [{ value: variableValue.common[v.key] ?? '' }];
 
   const handleUpdate = (idx: number, newValue: string) => {
-    if (!newValue.trim()) {
-      return;
-    }
     if (isIndividual) {
       actions.updateIndividualValue(String(applicants[idx].applicantId), v.key, newValue);
     } else {
