@@ -20,7 +20,7 @@ interface InterviewCalendarHeadProps {
 */
 const cell = tv({
   slots: {
-    cellContainer: 'h-[44px] min-w-[150px] flex-[1_1] first:min-w-[72px]',
+    cellContainer: 'h-[44px] min-w-[150px] first:w-[72px] first:min-w-[72px]',
     cellBorder: 'border-line-basicMedium h-full w-[calc(100%+1px/2)] border-y border-r',
     cellContent: 'typo-b1_rg_16 text-text-basicTertiary flex size-full items-center justify-center',
   },
