@@ -13,8 +13,8 @@ interface VariableListProps {
   templateId: number;
 }
 
-export const VariableList = ({ templateId, partId }: VariableListProps) => {
-  const { variableCardData } = useVariableList(templateId, partId);
+export const VariableList = ({ templateId }: VariableListProps) => {
+  const { variableCardData } = useVariableList(templateId);
   const { currentRecipientId } = useRecipientData(); // 현재 선택된 지원자 ID
   const { currentContent } = useMailData(templateId, currentRecipientId); // 현재 본문 데이터
 

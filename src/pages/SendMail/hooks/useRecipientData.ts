@@ -23,17 +23,18 @@ export const useRecipientData = () => {
       .map((a) => ({ id: String(a.applicantId), name: a.name }));
   }, [applicants, mailInfo.receiver]);
 
-  // 탭이 지워져서 현재 선택된 ID가 리스트에 없으면 첫 번째 사람으로 변경
-  const currentRecipientId = recipients.some((r) => r.id === currentApplicantId)
-    ? currentApplicantId
-    : recipients[0]?.id;
+  // currentApplicantId가 recipients에 존재하는지 확인하고, 없으면 첫 번째 지원자의 ID로 설정
+  const validId = useMemo(() => {
+    const isValid = recipients.some((r) => r.id === currentApplicantId);
+    return isValid ? currentApplicantId : recipients[0]?.id;
+  }, [recipients, currentApplicantId]);
 
-  const currentRecipient = recipients.find((r) => r.id === currentRecipientId);
+  const currentRecipient = recipients.find((r) => r.id === validId);
 
   return {
-    applicants, // 원본 지원자 객체 리스트
-    recipients, // Recipient 타입(ID/Name) 리스트
-    currentRecipientId,
+    applicants,
+    recipients,
+    currentRecipientId: validId,
     currentRecipientName: currentRecipient?.name,
     setCurrentRecipientId: actions.setCurrentApplicantId,
   };
