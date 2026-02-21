@@ -8,6 +8,7 @@ interface IndicatorProps {
   disabled?: boolean;
   onNextWeek: () => void;
   onPrevWeek: () => void;
+  rightAddon?: React.ReactNode;
 }
 
 const Row = ({ children }: React.PropsWithChildren) => {
@@ -18,7 +19,7 @@ const ButtonGroup = ({ children }: React.PropsWithChildren) => {
   return <div className="flex gap-2">{children}</div>;
 };
 
-const Indicator = ({ onNextWeek, onPrevWeek, date, disabled }: IndicatorProps) => {
+const Indicator = ({ onNextWeek, onPrevWeek, date, disabled, rightAddon }: IndicatorProps) => {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex items-center gap-[15px]">
@@ -42,6 +43,7 @@ const Indicator = ({ onNextWeek, onPrevWeek, date, disabled }: IndicatorProps) =
           >
             <IcArrowsChevronRightLine color="#000000" size="12px" />
           </button>
+          {rightAddon}
         </div>
       </div>
     </div>

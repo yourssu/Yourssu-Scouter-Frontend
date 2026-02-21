@@ -9,10 +9,12 @@ interface InterviewScheduleHeaderProps {
     onPrevWeek: () => void;
     week: number;
   };
+  onJumpToLastSchedule?: () => void;
 }
 
 export const InterviewScheduleHeader = ({
   indicator: { month, week, onNextWeek, onPrevWeek },
+  onJumpToLastSchedule,
 }: InterviewScheduleHeaderProps) => {
   return (
     <InterviewHeaderLayout>
@@ -21,6 +23,17 @@ export const InterviewScheduleHeader = ({
           date={{ month, week }}
           onNextWeek={onNextWeek}
           onPrevWeek={onPrevWeek}
+          rightAddon={
+            onJumpToLastSchedule ? (
+              <button
+                className="text-text-brandPrimary px-2 py-1 text-[14px] font-medium underline transition-opacity hover:opacity-80"
+                onClick={onJumpToLastSchedule}
+                type="button"
+              >
+                마지막 일정 보기
+              </button>
+            ) : null
+          }
         />
         <InterviewHeaderLayout.ButtonGroup>
           <PartFilterDropdown />

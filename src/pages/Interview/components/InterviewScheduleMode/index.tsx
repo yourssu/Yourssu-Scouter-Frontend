@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { getMonth, getWeekOfMonth, getYear } from 'date-fns';
 
 import { useComponentToPng } from '@/hooks/useComponentToPng';
 import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageLayout';
@@ -12,11 +13,28 @@ import { scheduleOptions } from '@/query/schedule/options';
 
 export const InterviewScheduleMode = () => {
   const { partId } = useInterviewPartSelectionContext();
-  const { year, month, week, handlePrevWeek, handleNextWeek } = useWeekIndicator();
+  const { year, month, week, handlePrevWeek, handleNextWeek, jump } = useWeekIndicator();
 
   const { data: schedules } = useSuspenseQuery(scheduleOptions(partId));
 
   const [ref, convert] = useComponentToPng<HTMLTableElement>();
+
+  const lastSchedule =
+    schedules.length > 0
+      ? schedules.reduce((latest, current) =>
+          new Date(current.startTime) > new Date(latest.startTime) ? current : latest,
+        )
+      : null;
+
+  const lastScheduleDate = lastSchedule ? new Date(lastSchedule.startTime) : null;
+
+  const isCurrentWeekLastScheduleWeek =
+    lastScheduleDate &&
+    getYear(lastScheduleDate) === year &&
+    getMonth(lastScheduleDate) + 1 === month &&
+    getWeekOfMonth(lastScheduleDate) - 1 === week;
+
+  const showLastScheduleBtn = lastScheduleDate && !isCurrentWeekLastScheduleWeek;
 
   return (
     <InterviewScheduleCalendarRefContext.Provider value={{ ref, convert }}>
@@ -30,6 +48,7 @@ export const InterviewScheduleMode = () => {
                 onNextWeek: handleNextWeek,
                 onPrevWeek: handlePrevWeek,
               }}
+              onJumpToLastSchedule={showLastScheduleBtn ? () => jump(lastScheduleDate!) : undefined}
             />
           ),
           calendar: (
