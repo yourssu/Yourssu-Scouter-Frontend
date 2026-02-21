@@ -1,5 +1,7 @@
-import { IcArrowsChevronDownLine, IcClockFilled } from '@yourssu/design-system-react';
+import * as Popover from '@radix-ui/react-popover';
+import { BoxButton, IcArrowsChevronDownLine, IcClockFilled } from '@yourssu/design-system-react';
 import { differenceInMinutes } from 'date-fns';
+import { useState } from 'react';
 
 import { Schedule } from '@/query/schedule/schema';
 import { formatTemplates } from '@/utils/date';
@@ -18,12 +20,100 @@ function formatDuration(startTime: string, endTime: string) {
   return `${diff}분`;
 }
 
+const LOCATIONS = ['동아리방', '강의실', '비대면', '기타'] as const;
+type LocationType = (typeof LOCATIONS)[number];
+
+interface ScheduleLocationState {
+  detail: string;
+  type: LocationType;
+}
+
+function LocationSelect({
+  type,
+  detail,
+  onChangeType,
+  onChangeDetail,
+}: {
+  detail: string;
+  onChangeDetail: (detail: string) => void;
+  onChangeType: (type: LocationType) => void;
+  type: LocationType;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="flex w-full flex-col gap-1">
+      <Popover.Root onOpenChange={setOpen} open={open}>
+        <Popover.Trigger asChild>
+          <button className="bg-bg-basicDefault border-line-basicMedium aria-expanded:border-line-brandSecondary focus-visible:border-line-brandSecondary flex h-12 w-full shrink-0 items-center justify-between gap-1 rounded-xl border px-4 transition-colors outline-none">
+            <p className="typo-b1_sb_16 text-text-basicPrimary">{type}</p>
+            <IcArrowsChevronDownLine className="text-icon-basicPrimary size-5" />
+          </button>
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Content
+            align="start"
+            className="bg-bg-basicDefault border-line-basicMedium z-50 flex w-[var(--radix-popover-trigger-width)] flex-col overflow-hidden rounded-xl border p-1 shadow-md"
+            sideOffset={4}
+          >
+            {LOCATIONS.map((loc) => (
+              <button
+                className="hover:bg-bg-basicLight focus-visible:bg-bg-basicLight typo-b1_rg_16 flex h-10 w-full items-center justify-start rounded-lg px-3 text-left transition-colors outline-none"
+                key={loc}
+                onClick={() => {
+                  onChangeType(loc);
+                  setOpen(false);
+                }}
+              >
+                <span className="text-text-basicPrimary">{loc}</span>
+              </button>
+            ))}
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+
+      {type !== '동아리방' && (
+        <div className="bg-bg-basicLight focus-within:border-line-brandPrimary flex h-12 w-full items-center overflow-hidden rounded-xl border border-transparent transition-colors">
+          <input
+            className="typo-b1_rg_16 text-text-basicPrimary placeholder:text-text-basicTertiary size-full bg-transparent px-4 outline-none"
+            onChange={(e) => onChangeDetail(e.target.value)}
+            placeholder={
+              type === '강의실'
+                ? '장소를 상세히 입력해주세요. ex) 진리관 404호'
+                : type === '기타'
+                  ? '장소를 상세히 입력해주세요.'
+                  : '(선택) Google Meet 링크 등을 입력해주세요.'
+            }
+            value={detail}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConflictCardProps) => {
+  const [locations, setLocations] = useState<Record<number, ScheduleLocationState>>(() =>
+    schedules.reduce((acc, s) => ({ ...acc, [s.id]: { type: '동아리방', detail: '' } }), {}),
+  );
+
   if (!schedules.length) {
     return null;
   }
 
   const dateStr = formatTemplates['01/01(월)'](schedules[0].startTime);
+
+  const locValues = Object.values(locations);
+  const hasDiff =
+    schedules.length > 1 &&
+    locValues.some((v) => v.type !== locValues[0].type || v.detail !== locValues[0].detail);
+
+  const isSaveEnabled = locValues.every((loc) => {
+    if (loc.type === '강의실' || loc.type === '기타') {
+      return loc.detail.trim().length > 0;
+    }
+    return true;
+  });
 
   return (
     <div className="bg-bg-basicDefault border-line-basicMedium flex w-full flex-col gap-4 rounded-[14px] border p-4">
@@ -57,15 +147,36 @@ export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConf
                 </div>
               </div>
             </div>
-            <div className="bg-bg-basicDefault border-line-basicMedium flex h-12 w-full shrink-0 items-center gap-1 rounded-xl border px-4">
-              <p className="typo-b1_sb_16 text-text-basicPrimary flex-1 whitespace-pre-wrap">
-                동아리방
-              </p>
-              <IcArrowsChevronDownLine className="size-5" />
-            </div>
+            <LocationSelect
+              detail={locations[schedule.id]?.detail ?? ''}
+              onChangeDetail={(detail) =>
+                setLocations((prev) => ({
+                  ...prev,
+                  [schedule.id]: { ...prev[schedule.id], detail },
+                }))
+              }
+              onChangeType={(type) =>
+                setLocations((prev) => ({
+                  ...prev,
+                  [schedule.id]: { ...prev[schedule.id], type, detail: '' },
+                }))
+              }
+              type={locations[schedule.id]?.type ?? '동아리방'}
+            />
           </div>
         ))}
       </div>
+
+      {hasDiff && (
+        <BoxButton
+          className="w-fit self-end"
+          disabled={!isSaveEnabled}
+          size="large"
+          variant="filledPrimary"
+        >
+          저장하기
+        </BoxButton>
+      )}
     </div>
   );
 };
