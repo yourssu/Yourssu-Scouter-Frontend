@@ -9,12 +9,21 @@ import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageL
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 
 export const AutoScheduleMode = () => {
-  const { handleNextWeek, handlePrevWeek, month, week, year } = useWeekIndicator();
-
   const scheduleCandidates = useAutoScheduleCandidates();
-  const [selectedCandidate, setSelectedCandidate] = useState<AutoScheduleCandidate>(
-    scheduleCandidates[0],
-  );
+  const initialCandidate = scheduleCandidates[0];
+  const initialDateStr =
+    initialCandidate?.schedules.length > 0
+      ? initialCandidate.schedules.reduce((prev, curr) =>
+          new Date(prev.startTime).getTime() < new Date(curr.startTime).getTime() ? prev : curr,
+        ).startTime
+      : undefined;
+
+  const { handleNextWeek, handlePrevWeek, month, week, year, jump } = useWeekIndicator({
+    initialDate: initialDateStr ? new Date(initialDateStr) : undefined,
+  });
+
+  const [selectedCandidate, setSelectedCandidate] =
+    useState<AutoScheduleCandidate>(initialCandidate);
 
   return (
     <InterviewPageLayout
@@ -40,7 +49,17 @@ export const AutoScheduleMode = () => {
         ),
         sidebar: (
           <AutoScheduleSidebar
-            onCandidateChange={setSelectedCandidate}
+            onCandidateChange={(candidate) => {
+              if (candidate.schedules.length > 0) {
+                const earliestSchedule = candidate.schedules.reduce((prev, curr) =>
+                  new Date(prev.startTime).getTime() < new Date(curr.startTime).getTime()
+                    ? prev
+                    : curr,
+                );
+                jump(new Date(earliestSchedule.startTime));
+              }
+              setSelectedCandidate(candidate);
+            }}
             scheduleCandidates={scheduleCandidates}
             selectedCandidate={selectedCandidate}
           />
