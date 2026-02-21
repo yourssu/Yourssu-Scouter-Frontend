@@ -24,6 +24,7 @@ export const AutoScheduleMode = () => {
 
   const [selectedCandidate, setSelectedCandidate] =
     useState<AutoScheduleCandidate>(initialCandidate);
+  const [interviewMethod, setInterviewMethod] = useState<'대면' | '비대면'>('대면');
 
   return (
     <InterviewPageLayout
@@ -49,6 +50,7 @@ export const AutoScheduleMode = () => {
         ),
         sidebar: (
           <AutoScheduleSidebar
+            method={interviewMethod}
             onCandidateChange={(candidate) => {
               if (candidate.schedules.length > 0) {
                 const earliestSchedule = candidate.schedules.reduce((prev, curr) =>
@@ -60,6 +62,7 @@ export const AutoScheduleMode = () => {
               }
               setSelectedCandidate(candidate);
             }}
+            onChangeMethod={setInterviewMethod}
             scheduleCandidates={scheduleCandidates}
             selectedCandidate={selectedCandidate}
           />

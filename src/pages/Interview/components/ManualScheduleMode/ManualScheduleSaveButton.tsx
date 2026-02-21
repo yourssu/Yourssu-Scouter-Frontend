@@ -16,11 +16,13 @@ import { postSchedule } from '@/query/schedule/mutations/postSchedule';
 
 interface ManualScheduleSaveButtonProps {
   completedApplicants: [Date, Applicant][];
+  method: '대면' | '비대면';
   totalApplicantCount: number;
 }
 
 export const ManualScheduleSaveButton = ({
   completedApplicants,
+  method,
   totalApplicantCount,
 }: ManualScheduleSaveButtonProps) => {
   const openAlertDialog = useAlertDialog();
@@ -58,9 +60,10 @@ export const ManualScheduleSaveButton = ({
       await mutatePostSchedule({
         schedules: completedApplicants.map(([date, applicant]) => ({
           applicantId: applicant.applicantId,
+          endTime: (duration === '1시간' ? addHours(date, 1) : addMinutes(date, 30)).toISOString(),
+          locationType: method === '대면' ? '동방' : '비대면',
           partId,
           startTime: date.toISOString(),
-          endTime: (duration === '1시간' ? addHours(date, 1) : addMinutes(date, 30)).toISOString(),
         })),
       });
       await invalidateSchedule();

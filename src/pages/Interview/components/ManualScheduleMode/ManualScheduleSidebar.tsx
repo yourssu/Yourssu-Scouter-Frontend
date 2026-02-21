@@ -37,6 +37,7 @@ export const ManualScheduleSidebar = ({
       <InterviewSidebarLayout.BottomArea>
         <ManualScheduleSaveButton
           completedApplicants={completedApplicants}
+          method={method}
           totalApplicantCount={totalApplicantCount}
         />
       </InterviewSidebarLayout.BottomArea>
