@@ -31,7 +31,6 @@ export const InterviewPage = () => {
           <SwitchCase
             caseBy={{
               면접일정: () => <InterviewScheduleMode />,
-              // 희망일정: () => <AvailableTimesMode />,
               수동생성: () => <ManualScheduleMode />,
               자동생성: () => (
                 <Suspense>
