@@ -1,13 +1,14 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useCallback, useState } from 'react';
 
+import { ApplicantInputField } from '@/pages/SendMail/components/MailInfoSection/ApplicantInputField';
 import { AutoFillMembers } from '@/pages/SendMail/components/MailInfoSection/AutoFillIMembers';
 import { MemberInputField } from '@/pages/SendMail/components/MailInfoSection/MemberInputField';
 import { TextInputField } from '@/pages/SendMail/components/MailInfoSection/TextInputField';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { meOption } from '@/query/member/me/options';
 import { Part } from '@/query/part/schema';
-import { MailFormData, MemberInputFieldTypes } from '@/types/editor';
+import { MailFormData } from '@/types/editor';
 import { MemberInputFieldKey } from '@/types/editor';
 
 interface InfoSectionProps {
@@ -73,14 +74,24 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
     <div className="flex flex-col gap-0">
       {!selectedPart ? (
         <div className="flex flex-col gap-0">
-          {MemberInputFieldTypes.map((type) => (
-            <MemberInputField
-              items={formData.members[type]}
-              key={type}
-              label={type}
-              onItemsUpdate={(items) => handleMemberUpdate({ [type]: items })}
-            />
-          ))}
+          <MemberInputField
+            items={formData.members['보내는 사람']}
+            key="보내는 사람"
+            label="보내는 사람"
+            onItemsUpdate={(items) => handleMemberUpdate({ '보내는 사람': items })}
+          />
+          <ApplicantInputField
+            items={formData.members['받는 사람']}
+            key="받는 사람"
+            label="받는 사람"
+            onItemsUpdate={(items) => handleMemberUpdate({ '받는 사람': items })}
+          />
+          <MemberInputField
+            items={formData.members['숨은 참조']}
+            key="숨은 참조"
+            label="숨은 참조"
+            onItemsUpdate={(items) => handleMemberUpdate({ '숨은 참조': items })}
+          />
         </div>
       ) : (
         <Suspense>

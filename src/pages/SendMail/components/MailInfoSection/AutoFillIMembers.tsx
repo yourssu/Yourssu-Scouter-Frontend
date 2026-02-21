@@ -2,6 +2,7 @@ import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { assert, uniq } from 'es-toolkit';
 import { useEffect, useRef } from 'react';
 
+import { ApplicantInputField } from '@/pages/SendMail/components/MailInfoSection/ApplicantInputField';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options.ts';
 import { memberOptions } from '@/query/member/options.ts';
@@ -84,7 +85,7 @@ export const AutoFillMembers = ({
         label="보내는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '보내는 사람': items })}
       />
-      <MemberInputField
+      <ApplicantInputField
         items={mailInfo.receiver || []}
         label="받는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '받는 사람': items })}
