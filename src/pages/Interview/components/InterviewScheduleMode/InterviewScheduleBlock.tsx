@@ -6,7 +6,7 @@ import { partNames } from '@/types/part';
 import { formatTemplates } from '@/utils/date';
 
 const container = tv({
-  base: 'size-full min-h-[56px] rounded-lg px-3 py-2',
+  base: 'size-full min-h-[56px] min-w-0 rounded-lg px-3 py-2',
   variants: {
     part: {
       'Product Design': 'bg-table-productDesignBackground',
@@ -36,11 +36,11 @@ export const InterviewScheduleBlock = ({
     <div className={container({ part: schedule.part })}>
       {isFirstBlock && (
         <>
-          <div className="mb-1">
+          <div className="mb-1 truncate">
             <span className="typo-c1_sb_13">{schedule.name} 님</span>{' '}
             <span className="typo-c3_sb_11 text-text-basicTertiary">{schedule.part}</span>
           </div>
-          <div className="typo-c3_rg_11 text-text-basicTertiary">
+          <div className="typo-c3_rg_11 text-text-basicTertiary truncate">
             {formatTemplates['23:59'](schedule.startTime)}
           </div>
         </>
