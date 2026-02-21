@@ -82,8 +82,17 @@ export const ManualScheduleMode = () => {
               week,
             }}
             onSelectedApplicantChange={(v) => {
-              if (v.availableTimes.length > 0) {
-                jump(v.availableTimes[0]);
+              const settedApplicantEntry = completedScheduleMap
+                .entries()
+                .find(([, applicant]) => applicant.applicantId === v.applicantId);
+
+              if (settedApplicantEntry) {
+                jump(settedApplicantEntry[0]);
+              } else if (v.availableTimes.length > 0) {
+                const earliest = Math.min(
+                  ...v.availableTimes.map((time) => new Date(time).getTime()),
+                );
+                jump(new Date(earliest));
               }
               setSelectedApplicant(v);
             }}

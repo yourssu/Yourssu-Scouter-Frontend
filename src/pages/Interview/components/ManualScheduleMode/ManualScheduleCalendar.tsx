@@ -35,6 +35,12 @@ export const ManualScheduleCalendar = ({
     .entries()
     .find(([, { applicantId }]) => applicantId === selectedApplicant.applicantId)?.[0];
 
+  const targetScrollTime =
+    meAlreadySettedAt?.getTime() ??
+    (selectedApplicant.availableTimes.length > 0
+      ? Math.min(...selectedApplicant.availableTimes.map((time) => new Date(time).getTime()))
+      : null);
+
   return (
     <InterviewCalendar month={month} week={week} year={year}>
       {({ date, hour, minute }) => {
@@ -68,6 +74,7 @@ export const ManualScheduleCalendar = ({
                   return;
                 }
               }}
+              shouldScrollIntoView={targetScrollTime === targetDate.getTime()}
             />
           )
         );
