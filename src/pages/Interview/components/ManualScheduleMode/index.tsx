@@ -22,9 +22,10 @@ export const ManualScheduleMode = () => {
   const { partId } = useInterviewPartSelectionContext();
 
   const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
-  const { data: applicants } = useSuspenseQuery(
-    applicantOptions({ partId, semesterId: semesterNow.semesterId }),
-  );
+  const { data: applicants } = useSuspenseQuery({
+    ...applicantOptions({ partId, semesterId: semesterNow.semesterId }),
+    select: (v) => v.filter(({ state }) => state === '심사 진행 중'),
+  });
   const { data: existingSchedules } = useSuspenseQuery(scheduleOptions(partId));
 
   // 기존 스케줄을 Applicant와 매칭하여 초기 엔트리로 변환
