@@ -2,6 +2,7 @@ import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { assert, uniq } from 'es-toolkit';
 import { useEffect, useRef } from 'react';
 
+import { ApplicantInputField } from '@/pages/SendMail/components/MailInfoSection/ApplicantInputField';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options.ts';
 import { memberOptions } from '@/query/member/options.ts';
@@ -39,33 +40,43 @@ export const AutoFillMembers = ({
     },
   });
 
-  const [{ data: applicants }, { data: partMembers }, { data: hrMembers }] = useSuspenseQueries({
+  const isSelectedPartHR = selectedPart.partId === hrPartId;
+
+  const results = useSuspenseQueries({
     queries: [
-      applicantOptions({ partId: selectedPart.partId }),
-      memberOptions('액티브', {
-        partId: selectedPart.partId,
-        search: '',
-      }),
-      memberOptions('액티브', {
-        partId: hrPartId,
-        search: '',
-      }),
+      applicantOptions({ partId: selectedPart.partId }), // 지원자
+      memberOptions('액티브', { partId: selectedPart.partId, search: '' }), // 선택 파트 멤버
+      // 선택된 파트가 HR이 아닐 때만 별도로 HR 멤버를 불러옴
+      ...(isSelectedPartHR ? [] : [memberOptions('액티브', { partId: hrPartId, search: '' })]), // HR 멤버
     ],
   });
 
   useEffect(() => {
-    // 초기화가 이미 된 경우에는 실행하지 않음
     if (isInitialized.current) {
       return;
     }
 
-    onMembersUpdate({
-      '받는 사람': applicants.map((a) => a.name),
-      '숨은 참조': uniq([...partMembers, ...hrMembers].map((m) => m.nickname)),
-    });
+    const hasData =
+      (mailInfo.receiver && mailInfo.receiver.length > 0) ||
+      (mailInfo.bcc && mailInfo.bcc.length > 0);
 
-    isInitialized.current = true;
-  }, [applicants, partMembers, hrMembers, onMembersUpdate, mailInfo]);
+    if (hasData) {
+      isInitialized.current = true;
+      return;
+    }
+
+    const applicantsData = results[0].data;
+    const partMembersData = results[1].data;
+    const hrMembersData = isSelectedPartHR ? partMembersData : (results[2]?.data ?? []);
+
+    if (applicantsData && partMembersData) {
+      onMembersUpdate({
+        '받는 사람': applicantsData.map((a) => a.name),
+        '숨은 참조': uniq([...partMembersData, ...hrMembersData].map((m) => m.nickname)),
+      });
+      isInitialized.current = true;
+    }
+  }, [results, isSelectedPartHR, onMembersUpdate, mailInfo]);
 
   return (
     <div className="gap-0">
@@ -74,7 +85,7 @@ export const AutoFillMembers = ({
         label="보내는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '보내는 사람': items })}
       />
-      <MemberInputField
+      <ApplicantInputField
         items={mailInfo.receiver || []}
         label="받는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '받는 사람': items })}

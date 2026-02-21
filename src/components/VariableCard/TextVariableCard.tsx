@@ -25,6 +25,7 @@ export const TextVariableCard = ({ title, texts, onValueChange }: TextVariableCa
           )}
           <TextField
             onChange={(e) => handleValueChange(index, e.target.value)}
+            onClearButtonClick={() => handleValueChange(index, '')}
             placeholder={'텍스트 변수 입력'}
             type="text"
             value={text.value}

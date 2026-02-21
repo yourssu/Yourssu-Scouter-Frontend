@@ -1,6 +1,7 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { useOptionalMailVariables } from '@/pages/SendMail/context';
+import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 import { applicantOptions } from '@/query/applicant/options';
 
 export const useVariableValue = () => {
@@ -10,11 +11,7 @@ export const useVariableValue = () => {
     queries: [...(context ? [applicantOptions({ partId: context.currentPart?.partId })] : [])],
   });
   const applicants = results[0]?.data;
-
-  // 선택된 ID가 없으면 이 파트의 첫 번째 지원자
-  const currentId =
-    context?.currentApplicantId ??
-    (applicants?.[0] ? String(applicants[0].applicantId) : undefined);
+  const { currentRecipientId } = useRecipientData();
 
   // 변수 값 채우기
   const getVariableValue = (
@@ -27,7 +24,7 @@ export const useVariableValue = () => {
       return '';
     }
     const { variableValue, currentPart } = context;
-    const id = targetId || currentId;
+    const id = targetId || currentRecipientId;
     const targetApplicant = applicants?.find((a) => String(a.applicantId) === id);
 
     // 특수 변수 처리(지원자, 파트명)
