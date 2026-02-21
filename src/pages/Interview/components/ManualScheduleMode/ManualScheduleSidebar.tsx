@@ -29,7 +29,7 @@ export const ManualScheduleSidebar = ({
         <ManualScheduleSidebarDurationCard />
         {partId && (
           <ManualScheduleSidebarProgressCard
-            completedApplicants={completedApplicants.map(([, applicants]) => applicants)}
+            completedApplicants={completedApplicants}
             totalApplicantCount={totalApplicantCount}
           />
         )}
