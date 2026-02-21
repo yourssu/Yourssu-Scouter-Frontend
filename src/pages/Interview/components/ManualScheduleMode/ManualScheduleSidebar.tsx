@@ -1,6 +1,6 @@
-import { AvailableTimesSidebarDurationCard } from '@/pages/Interview/components/AvailableTimesMode/AvailableTimesSidebarDurationCard';
 import { InterviewSidebarLayout } from '@/pages/Interview/components/InterviewSidebarLayout';
 import { ManualScheduleSaveButton } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSaveButton';
+import { ManualScheduleSidebarDurationCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarDurationCard';
 import { ManualScheduleSidebarPartCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarPartCard';
 import { ManualScheduleSidebarProgressCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarProgressCard';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
@@ -20,7 +20,7 @@ export const ManualScheduleSidebar = ({
     <InterviewSidebarLayout>
       <InterviewSidebarLayout.CardList>
         <ManualScheduleSidebarPartCard />
-        <AvailableTimesSidebarDurationCard />
+        <ManualScheduleSidebarDurationCard />
         {partId && (
           <ManualScheduleSidebarProgressCard
             completedApplicants={completedApplicants.map(([, applicants]) => applicants)}

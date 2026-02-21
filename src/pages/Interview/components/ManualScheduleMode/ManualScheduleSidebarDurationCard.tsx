@@ -85,7 +85,7 @@ const SelectItem = <TValue extends InterviewDurationType>({
   );
 };
 
-export const AvailableTimesSidebarDurationCard = () => {
+export const ManualScheduleSidebarDurationCard = () => {
   const [open, setOpen] = useState(false);
   const { duration, setDuration } = useInterviewAutoScheduleContext();
 
