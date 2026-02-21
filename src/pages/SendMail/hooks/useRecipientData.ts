@@ -6,22 +6,22 @@ import { Recipient } from '@/pages/SendMail/mail.type';
 import { applicantOptions } from '@/query/applicant/options';
 
 export const useRecipientData = () => {
-  const { currentApplicantId, currentPart, actions } = useMailVariableContext();
+  const { currentApplicantId, actions } = useMailVariableContext();
   const { mailInfo } = useMailInfoContext();
-  const { data: applicants } = useSuspenseQuery(applicantOptions({ partId: currentPart?.partId }));
+  const { data: allApplicants } = useSuspenseQuery(applicantOptions());
 
   const recipients: Recipient[] = useMemo(() => {
-    if (!Array.isArray(applicants)) {
+    if (!Array.isArray(allApplicants)) {
       return [];
     }
 
     // 받는 사람 리스트(이름들)에 포함된 지원자만 필터링합니다.
     const receiverNames = mailInfo.receiver || [];
 
-    return applicants
+    return allApplicants
       .filter((a) => receiverNames.includes(a.name))
       .map((a) => ({ id: String(a.applicantId), name: a.name }));
-  }, [applicants, mailInfo.receiver]);
+  }, [allApplicants, mailInfo.receiver]);
 
   // currentApplicantId가 recipients에 존재하는지 확인하고, 없으면 첫 번째 지원자의 ID로 설정
   const validId = useMemo(() => {
@@ -32,7 +32,7 @@ export const useRecipientData = () => {
   const currentRecipient = recipients.find((r) => r.id === validId);
 
   return {
-    applicants,
+    allApplicants,
     recipients,
     currentRecipientId: validId,
     currentRecipientName: currentRecipient?.name,
