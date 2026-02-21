@@ -26,6 +26,11 @@ export const AutoScheduleCalendar = ({
     precision: duration === '1시간' ? '시간' : '분',
   });
 
+  const earliestScheduleTime =
+    scheduleCandidate.schedules.length > 0
+      ? Math.min(...scheduleCandidate.schedules.map((s) => new Date(s.startTime).getTime()))
+      : null;
+
   return (
     <InterviewCalendar month={month} week={week} year={year}>
       {({ date, hour, minute }) => {
@@ -38,6 +43,7 @@ export const AutoScheduleCalendar = ({
               date={targetDate}
               isFirstBlock={duration === '30분' || (duration === '1시간' && minute === 0)}
               schedule={schedule}
+              shouldScrollIntoView={earliestScheduleTime === targetDate.getTime()}
             />
           )
         );
