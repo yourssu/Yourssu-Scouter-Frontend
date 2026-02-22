@@ -65,6 +65,11 @@ export const templateOptions = {
           title: response.title,
           content: transformBodyHtmlToContent(response.bodyHtml, templateVariables),
           variables: templateVariables,
+          attachments:
+            response.attachmentReferences?.map((att) => ({
+              fileId: att.fileId,
+              name: att.fileName,
+            })) || [],
           date: response.updatedAt,
         };
         return templateDetail;
