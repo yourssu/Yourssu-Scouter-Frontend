@@ -29,7 +29,7 @@ interface SelectItemProps {
 const item = tv({
   slots: {
     container: 'flex w-full cursor-pointer items-center justify-between',
-    content: 'flex w-full items-center gap-2 rounded-lg px-2',
+    content: 'flex w-full items-center gap-2 rounded-lg pr-2',
     title: 'typo-b1_sb_16 text-text-basicSecondary',
     valueContainer: 'flex items-center',
     icon: 'text-icon-brandPrimary invisible size-4',

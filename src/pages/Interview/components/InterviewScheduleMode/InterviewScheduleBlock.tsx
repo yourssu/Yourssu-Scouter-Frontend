@@ -32,16 +32,28 @@ export const InterviewScheduleBlock = ({
   schedule,
   isFirstBlock = true,
 }: InterviewScheduleBlockProps) => {
+  const locationLabel = (() => {
+    const { locationType, locationDetail } = schedule;
+    if (locationType === '동방') {
+      return '동아리방';
+    }
+    if (locationType === '비대면') {
+      return locationDetail || '비대면';
+    }
+    return locationDetail || '';
+  })();
+
   return (
     <div className={container({ part: schedule.part })}>
       {isFirstBlock && (
         <>
           <div className="mb-1 truncate">
-            <span className="typo-c1_sb_13">{schedule.name} 님</span>{' '}
-            <span className="typo-c3_sb_11 text-text-basicTertiary">{schedule.part}</span>
+            <span className="typo-c1_sb_13">{schedule.name} 님</span>
+            <span className="typo-c3_sb_11 text-text-basicTertiary ml-1.5">{schedule.part}</span>
           </div>
           <div className="typo-c3_rg_11 text-text-basicTertiary truncate">
-            {formatTemplates['23:59'](schedule.startTime)}
+            <span>{formatTemplates['23:59'](schedule.startTime)}</span>
+            {locationLabel && <span className="ml-1.5">{locationLabel}</span>}
           </div>
         </>
       )}

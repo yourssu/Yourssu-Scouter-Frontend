@@ -14,8 +14,8 @@ interface AutoScheduleSidebarProps {
 }
 
 export const AutoScheduleSidebar = ({
-  scheduleCandidates,
   onCandidateChange,
+  scheduleCandidates,
   selectedCandidate,
 }: AutoScheduleSidebarProps) => {
   const onValueChange = (value: string) => {

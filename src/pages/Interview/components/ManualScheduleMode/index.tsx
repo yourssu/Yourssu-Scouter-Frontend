@@ -57,6 +57,7 @@ export const ManualScheduleMode = () => {
     initialEntries: initialScheduleEntries,
     precision: duration === '1시간' ? '시간' : '분',
   });
+  const [interviewMethod, setInterviewMethod] = useState<'대면' | '비대면'>('대면');
 
   useEffect(() => {
     completedScheduleMapAction.reset();
@@ -118,6 +119,8 @@ export const ManualScheduleMode = () => {
         sidebar: (
           <ManualScheduleSidebar
             completedApplicants={completedScheduleMap.entries()}
+            method={interviewMethod}
+            onChangeMethod={setInterviewMethod}
             totalApplicantCount={applicants.length}
           />
         ),
