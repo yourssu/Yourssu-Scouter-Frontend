@@ -3,6 +3,7 @@ import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useState } from 'react';
 
+import { MailContentProvider } from '@/pages/SendMail/context';
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
 import { getDefaultVariables, Variable } from '@/types/editor';
 import { Template } from '@/types/template';
@@ -88,12 +89,14 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
           <StyledBody>
-            <TemplateEditor
-              onContentChange={handleContentChange}
-              onVariablesChange={handleVariablesChange}
-              templateContent={formData.content}
-              templateVariables={formData.variables}
-            />
+            <MailContentProvider>
+              <TemplateEditor
+                onContentChange={handleContentChange}
+                onVariablesChange={handleVariablesChange}
+                templateContent={formData.content}
+                templateVariables={formData.variables}
+              />
+            </MailContentProvider>
           </StyledBody>
           <StyledFooter>
             <BoxButton

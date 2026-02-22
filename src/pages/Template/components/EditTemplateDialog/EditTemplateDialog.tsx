@@ -4,6 +4,7 @@ import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
+import { MailContentProvider } from '@/pages/SendMail/context';
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
 import { templateOptions } from '@/query/template/options';
 import { Variable } from '@/types/editor';
@@ -106,12 +107,14 @@ export const EditTemplateDialog = ({
           </StyledHeader>
 
           <StyledBody>
-            <TemplateEditor
-              onContentChange={handleContentChange}
-              onVariablesChange={handleVariablesChange}
-              templateContent={formData.content}
-              templateVariables={formData.variables}
-            />
+            <MailContentProvider>
+              <TemplateEditor
+                onContentChange={handleContentChange}
+                onVariablesChange={handleVariablesChange}
+                templateContent={formData.content}
+                templateVariables={formData.variables}
+              />
+            </MailContentProvider>
           </StyledBody>
 
           <StyledFooter>

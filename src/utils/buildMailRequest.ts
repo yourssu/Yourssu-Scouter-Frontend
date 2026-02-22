@@ -1,8 +1,13 @@
 export type MailBodyFormatType = 'HTML' | 'PLAIN_TEXT';
 
+export interface AttachmentType {
+  fileId: number;
+  name: string;
+}
+
 interface BuildMailRequestParams {
   mailContent: {
-    attachments: string[];
+    attachments: AttachmentType[];
     body: string;
     bodyFormat: MailBodyFormatType;
     inlineImages: string[];
@@ -23,7 +28,7 @@ export const buildMailRequest = ({
 }: BuildMailRequestParams) => {
   return {
     request: {
-      attachmentReferences: [],
+      attachmentReferences: mailContent.attachments.map((file) => ({ fileId: file.fileId })),
       bccEmailAddresses: mailInfo.bcc,
       bodyFormat: mailContent.bodyFormat,
       ccEmailAddresses: mailInfo.cc,
