@@ -36,59 +36,67 @@ function LocationSelect({
   detail,
   onChangeType,
   onChangeDetail,
+  renderSaveButton,
 }: {
   detail: string;
   onChangeDetail: (detail: string) => void;
   onChangeType: (type: LocationType) => void;
+  renderSaveButton: () => React.ReactNode;
   type: LocationType;
 }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="flex w-full flex-col gap-1">
-      <Popover.Root onOpenChange={setOpen} open={open}>
-        <Popover.Trigger asChild>
-          <button className="bg-bg-basicDefault border-line-basicMedium aria-expanded:border-line-brandSecondary focus-visible:border-line-brandSecondary flex h-12 w-full shrink-0 items-center justify-between gap-1 rounded-xl border px-4 transition-colors outline-none">
-            <p className="typo-b1_sb_16 text-text-basicPrimary">{type}</p>
-            <IcArrowsChevronDownLine className="text-icon-basicPrimary size-5" />
-          </button>
-        </Popover.Trigger>
-        <Popover.Portal>
-          <Popover.Content
-            align="start"
-            className="bg-bg-basicDefault border-line-basicMedium z-50 flex w-[var(--radix-popover-trigger-width)] flex-col overflow-hidden rounded-xl border p-1 shadow-md"
-            sideOffset={4}
-          >
-            {LOCATIONS.map((loc) => (
-              <button
-                className="hover:bg-bg-basicLight focus-visible:bg-bg-basicLight typo-b1_rg_16 flex h-10 w-full items-center justify-start rounded-lg px-3 text-left transition-colors outline-none"
-                key={loc}
-                onClick={() => {
-                  onChangeType(loc);
-                  setOpen(false);
-                }}
-              >
-                <span className="text-text-basicPrimary">{loc}</span>
-              </button>
-            ))}
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
+      <div className="flex w-full gap-2">
+        <Popover.Root onOpenChange={setOpen} open={open}>
+          <Popover.Trigger asChild>
+            <button className="bg-bg-basicDefault border-line-basicMedium aria-expanded:border-line-brandSecondary focus-visible:border-line-brandSecondary flex h-12 w-full shrink-0 items-center justify-between gap-1 rounded-xl border px-4 transition-colors outline-none">
+              <p className="typo-b1_sb_16 text-text-basicPrimary">{type}</p>
+              <IcArrowsChevronDownLine className="text-icon-basicPrimary size-5" />
+            </button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content
+              align="start"
+              className="bg-bg-basicDefault border-line-basicMedium z-50 flex w-[var(--radix-popover-trigger-width)] flex-col overflow-hidden rounded-xl border p-1 shadow-md"
+              sideOffset={4}
+            >
+              {LOCATIONS.map((loc) => (
+                <button
+                  className="hover:bg-bg-basicLight focus-visible:bg-bg-basicLight typo-b1_rg_16 flex h-10 w-full items-center justify-start rounded-lg px-3 text-left transition-colors outline-none"
+                  key={loc}
+                  onClick={() => {
+                    onChangeType(loc);
+                    setOpen(false);
+                  }}
+                >
+                  <span className="text-text-basicPrimary">{loc}</span>
+                </button>
+              ))}
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
+        {type === '동아리방' && renderSaveButton()}
+      </div>
 
       {type !== '동아리방' && (
-        <div className="bg-bg-basicLight focus-within:border-line-brandPrimary flex h-12 w-full items-center overflow-hidden rounded-xl border border-transparent transition-colors">
-          <input
-            className="typo-b1_rg_16 text-text-basicPrimary placeholder:text-text-basicTertiary size-full bg-transparent px-4 outline-none"
-            onChange={(e) => onChangeDetail(e.target.value)}
-            placeholder={
-              type === '강의실'
-                ? '장소를 상세히 입력해주세요. ex) 진리관 404호'
-                : type === '기타'
-                  ? '장소를 상세히 입력해주세요.'
-                  : '(선택) Google Meet 링크 등을 입력해주세요.'
-            }
-            value={detail}
-          />
+        <div className="flex w-full gap-2">
+          <div className="bg-bg-basicLight focus-within:border-line-brandPrimary flex h-12 w-full items-center overflow-hidden rounded-xl border border-transparent transition-colors">
+            <input
+              className="typo-b1_rg_16 text-text-basicPrimary placeholder:text-text-basicTertiary size-full bg-transparent px-4 outline-none"
+              onChange={(e) => onChangeDetail(e.target.value)}
+              placeholder={
+                type === '강의실'
+                  ? '장소를 상세히 입력해주세요. ex) 진리관 404호'
+                  : type === '기타'
+                    ? '장소를 상세히 입력해주세요.'
+                    : '(선택) Google Meet 링크 등을 입력해주세요.'
+              }
+              value={detail}
+            />
+          </div>
+          {renderSaveButton()}
         </div>
       )}
     </div>
@@ -112,16 +120,18 @@ export const InterviewSidebarClassroomCard = ({
     ),
   );
 
+  const [editedSchedules, setEditedSchedules] = useState<Record<number, boolean>>({});
+
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (paramsList: Parameters<typeof patchScheduleLocation>[0][]) => {
-      return Promise.all(paramsList.map((p) => patchScheduleLocation(p)));
+    mutationFn: async (params: Parameters<typeof patchScheduleLocation>[0]) => {
+      return patchScheduleLocation(params);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: scheduleOptions(null).queryKey });
     },
   });
 
-  const handleSave = async () => {
+  const handleSave = async (scheduleId: number) => {
     const locMap = {
       동아리방: '동방',
       강의실: '강의실',
@@ -129,13 +139,14 @@ export const InterviewSidebarClassroomCard = ({
       비대면: '비대면',
     } as const;
 
-    const paramsList = schedules.map((s) => ({
-      scheduleId: s.id,
-      locationType: locMap[locations[s.id].type as LocationType],
-      locationDetail: locations[s.id].detail,
-    }));
+    const loc = locations[scheduleId];
+    await mutateAsync({
+      scheduleId,
+      locationType: locMap[loc.type as LocationType],
+      locationDetail: loc.detail,
+    });
 
-    await mutateAsync(paramsList);
+    setEditedSchedules((prev) => ({ ...prev, [scheduleId]: false }));
   };
 
   if (!schedules.length) {
@@ -144,20 +155,30 @@ export const InterviewSidebarClassroomCard = ({
 
   const dateStr = formatTemplates['01/01(월)'](schedules[0].startTime);
 
-  const locValues = Object.values(locations);
-  const hasChanges = schedules.some((s) => {
-    const loc = locations[s.id];
-    const initialType = s.locationType === '동방' ? '동아리방' : (s.locationType as LocationType);
-    const initialDetail = s.locationDetail ?? '';
-    return loc.type !== initialType || loc.detail !== initialDetail;
+  const getInitialState = (s: Schedule) => ({
+    type: s.locationType === '동방' ? '동아리방' : (s.locationType as LocationType),
+    detail: s.locationDetail ?? '',
   });
 
-  const isSaveEnabled = locValues.every((loc) => {
-    if (loc.type === '강의실' || loc.type === '기타') {
-      return loc.detail.trim().length > 0;
+  const checkIsChanged = (s: Schedule) => {
+    const current = locations[s.id];
+    if (!current) {
+      return false;
+    }
+    const initial = getInitialState(s);
+    return current.type !== initial.type || current.detail !== initial.detail;
+  };
+
+  const checkIsValid = (s: Schedule) => {
+    const current = locations[s.id];
+    if (!current) {
+      return false;
+    }
+    if (current.type === '강의실' || current.type === '기타') {
+      return current.detail.trim().length > 0;
     }
     return true;
-  });
+  };
 
   return (
     <div className="bg-bg-basicDefault border-line-basicMedium flex w-full flex-col gap-4 rounded-[14px] border p-4">
@@ -166,67 +187,77 @@ export const InterviewSidebarClassroomCard = ({
       </div>
 
       <div className="flex w-full flex-col items-center gap-5">
-        {schedules.map((schedule) => (
-          <div className="flex w-full flex-col items-start gap-2" key={schedule.id}>
-            <div className="flex w-full items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="bg-bg-basicLight flex h-8 shrink-0 items-center justify-center rounded-[40px] px-3">
-                  <span className="typo-b3_rg_14 text-text-basicSecondary text-center">
-                    {schedule.name}
-                  </span>
-                </div>
-                <p className="typo-b3_sb_14 text-text-basicTertiary truncate">{schedule.part}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="typo-b2_rg_15 text-text-basicTertiary truncate">
-                  {formatTemplates['23:59'](schedule.startTime)}~
-                  {formatTemplates['23:59'](schedule.endTime)}
-                </p>
-                <div className="bg-line-basicMedium h-[14px] w-px shrink-0" />
-                <div className="flex shrink-0 items-center gap-1">
-                  <IcClockFilled className="text-text-basicSecondary size-4" />
-                  <p className="typo-b3_sb_14 text-text-basicSecondary">
-                    {formatDuration(schedule.startTime, schedule.endTime)}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <LocationSelect
-              detail={locations[schedule.id]?.detail ?? ''}
-              onChangeDetail={(detail) =>
-                setLocations((prev) => ({
-                  ...prev,
-                  [schedule.id]: { ...prev[schedule.id], detail },
-                }))
-              }
-              onChangeType={(type) =>
-                setLocations((prev) => ({
-                  ...prev,
-                  [schedule.id]: { ...prev[schedule.id], type, detail: '' },
-                }))
-              }
-              type={
-                locations[schedule.id]?.type ??
-                (schedule.locationType === '동방'
-                  ? '동아리방'
-                  : (schedule.locationType as LocationType))
-              }
-            />
-          </div>
-        ))}
-      </div>
+        {schedules.map((schedule) => {
+          const isChanged = checkIsChanged(schedule);
+          const isValid = checkIsValid(schedule);
+          const isEdited = editedSchedules[schedule.id];
+          const isSaveDisabled = !isChanged || !isValid || isPending;
 
-      {hasChanges && (
-        <BoxButton
-          className="w-fit self-end"
-          disabled={!isSaveEnabled || isPending}
-          onClick={handleSave}
-          size="large"
-          variant="filledPrimary"
-        >
-          저장하기
-        </BoxButton>
-      )}
+          return (
+            <div className="flex w-full flex-col items-start gap-2" key={schedule.id}>
+              <div className="flex w-full items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="bg-bg-basicLight flex h-8 shrink-0 items-center justify-center rounded-[40px] px-3">
+                    <span className="typo-b3_rg_14 text-text-basicSecondary text-center">
+                      {schedule.name}
+                    </span>
+                  </div>
+                  <p className="typo-b3_sb_14 text-text-basicTertiary truncate">{schedule.part}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="typo-b2_rg_15 text-text-basicTertiary truncate">
+                    {formatTemplates['23:59'](schedule.startTime)}~
+                    {formatTemplates['23:59'](schedule.endTime)}
+                  </p>
+                  <div className="bg-line-basicMedium h-[14px] w-px shrink-0" />
+                  <div className="flex shrink-0 items-center gap-1">
+                    <IcClockFilled className="text-text-basicSecondary size-4" />
+                    <p className="typo-b3_sb_14 text-text-basicSecondary">
+                      {formatDuration(schedule.startTime, schedule.endTime)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <LocationSelect
+                detail={locations[schedule.id]?.detail ?? ''}
+                onChangeDetail={(detail) => {
+                  setLocations((prev) => ({
+                    ...prev,
+                    [schedule.id]: { ...prev[schedule.id], detail },
+                  }));
+                  setEditedSchedules((prev) => ({ ...prev, [schedule.id]: true }));
+                }}
+                onChangeType={(type) => {
+                  setLocations((prev) => ({
+                    ...prev,
+                    [schedule.id]: { ...prev[schedule.id], type, detail: '' },
+                  }));
+                  setEditedSchedules((prev) => ({ ...prev, [schedule.id]: true }));
+                }}
+                renderSaveButton={() =>
+                  isEdited ? (
+                    <BoxButton
+                      className="shrink-0"
+                      disabled={isSaveDisabled}
+                      onClick={() => handleSave(schedule.id)}
+                      size="medium"
+                      variant="filledPrimary"
+                    >
+                      저장
+                    </BoxButton>
+                  ) : null
+                }
+                type={
+                  locations[schedule.id]?.type ??
+                  (schedule.locationType === '동방'
+                    ? '동아리방'
+                    : (schedule.locationType as LocationType))
+                }
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
