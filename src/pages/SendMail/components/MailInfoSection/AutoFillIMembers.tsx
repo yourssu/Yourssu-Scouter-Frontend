@@ -22,6 +22,7 @@ interface AutoFillMembersProps {
 export const AutoFillMembers = ({
   selectedPart,
   members,
+  selectedTemplateId,
   onMembersUpdate,
 }: AutoFillMembersProps) => {
   const isInitialized = useRef(false); // 초기화 여부 확인용
@@ -61,7 +62,7 @@ export const AutoFillMembers = ({
     const partMembersData = results[1].data;
     const hrMembersData = isSelectedPartHR ? partMembersData : (results[2]?.data ?? []);
 
-    if (applicantsData && partMembersData) {
+    if (applicantsData && partMembersData && !selectedTemplateId) {
       // 1. 현재 컨텍스트에 담긴 '이미 선택된 명단'을 가져옴
       const currentReceivers = mailInfo.receiver || [];
       const currentBcc = mailInfo.bcc || [];
@@ -78,7 +79,15 @@ export const AutoFillMembers = ({
 
       isInitialized.current = true;
     }
-  }, [results, isSelectedPartHR, onMembersUpdate, mailInfo.receiver, mailInfo.bcc]);
+  }, [
+    results,
+    isSelectedPartHR,
+    onMembersUpdate,
+    mailInfo.receiver,
+    mailInfo.bcc,
+    selectedPart.partId,
+    selectedTemplateId,
+  ]);
 
   return (
     <div className="gap-0">
