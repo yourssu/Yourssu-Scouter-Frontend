@@ -6,20 +6,15 @@ import { AutoScheduleSaveButton } from '@/pages/Interview/components/AutoSchedul
 import { AutoScheduleThumbnail } from '@/pages/Interview/components/AutoScheduleMode/AutoScheduleThumbnail';
 import { AutoScheduleCandidate } from '@/pages/Interview/components/AutoScheduleMode/type';
 import { InterviewSidebarLayout } from '@/pages/Interview/components/InterviewSidebarLayout';
-import { ManualScheduleSidebarMethodCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarMethodCard';
 
 interface AutoScheduleSidebarProps {
-  method: '대면' | '비대면';
   onCandidateChange: (v: AutoScheduleCandidate) => void;
-  onChangeMethod: (method: '대면' | '비대면') => void;
   scheduleCandidates: AutoScheduleCandidate[];
   selectedCandidate: AutoScheduleCandidate;
 }
 
 export const AutoScheduleSidebar = ({
-  method,
   onCandidateChange,
-  onChangeMethod,
   scheduleCandidates,
   selectedCandidate,
 }: AutoScheduleSidebarProps) => {
@@ -31,9 +26,6 @@ export const AutoScheduleSidebar = ({
 
   return (
     <InterviewSidebarLayout>
-      <InterviewSidebarLayout.CardList>
-        <ManualScheduleSidebarMethodCard method={method} onChangeMethod={onChangeMethod} />
-      </InterviewSidebarLayout.CardList>
       <InterviewSidebarLayout.CardList title="생성된 시간표">
         <RadioGroup.Root onValueChange={onValueChange} value={selectedCandidate.id}>
           <div className="flex flex-col gap-5">
@@ -63,7 +55,7 @@ export const AutoScheduleSidebar = ({
         </RadioGroup.Root>
       </InterviewSidebarLayout.CardList>
       <InterviewSidebarLayout.BottomArea>
-        <AutoScheduleSaveButton method={method} scheduleCandidate={selectedCandidate} />
+        <AutoScheduleSaveButton scheduleCandidate={selectedCandidate} />
       </InterviewSidebarLayout.BottomArea>
     </InterviewSidebarLayout>
   );

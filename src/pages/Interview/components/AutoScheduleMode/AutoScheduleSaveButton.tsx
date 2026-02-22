@@ -14,14 +14,10 @@ import { deletePartSchedule } from '@/query/schedule/mutations/deletePartSchedul
 import { postSchedule } from '@/query/schedule/mutations/postSchedule';
 
 interface AutoScheduleSaveButtonProps {
-  method: '대면' | '비대면';
   scheduleCandidate: AutoScheduleCandidate;
 }
 
-export const AutoScheduleSaveButton = ({
-  method,
-  scheduleCandidate,
-}: AutoScheduleSaveButtonProps) => {
+export const AutoScheduleSaveButton = ({ scheduleCandidate }: AutoScheduleSaveButtonProps) => {
   const { confirmScheduleSave } = useScheduleConfirmDialog();
   const { setCalendarMode } = useInterviewCalendarModeContext();
   const { partName, partId, onPartChange } = useInterviewPartSelectionContext();
@@ -66,7 +62,7 @@ export const AutoScheduleSaveButton = ({
       schedules: scheduleCandidate.schedules.map((schedule) => ({
         applicantId: schedule.applicantId,
         endTime: schedule.endTime,
-        locationType: method === '대면' ? '동방' : '비대면',
+        locationType: '동방',
         partId,
         startTime: schedule.startTime,
       })),
