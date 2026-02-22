@@ -6,7 +6,8 @@ import { Schedule } from '@/query/schedule/schema';
 type ConflictScheduleGroup = Schedule[];
 
 export const useConfilctScheduleGroups = (schedules: Schedule[]): ConflictScheduleGroup[] => {
-  const makeKey = (e: Schedule) => `${e.startTime}-${e.endTime}`;
+  const makeKey = (e: Schedule) =>
+    `${e.startTime}-${e.endTime}-${e.locationType}-${e.locationDetail || ''}`;
 
   const isSubset = useCallback((small: Schedule[], large: Schedule[]) => {
     const keySet = new Set(large.map((e) => makeKey(e)));
@@ -26,7 +27,14 @@ export const useConfilctScheduleGroups = (schedules: Schedule[]): ConflictSchedu
         if (seed.endTime <= target.startTime) {
           break;
         }
-        group.push(target);
+
+        const isSameLocation =
+          seed.locationType === target.locationType &&
+          (seed.locationDetail || '') === (target.locationDetail || '');
+
+        if (isSameLocation) {
+          group.push(target);
+        }
       }
 
       const hasConflict = group.length > 1;

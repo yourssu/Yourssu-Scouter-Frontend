@@ -13,7 +13,7 @@ interface InterviewCalendarProps {
 export const InterviewCalendar = forwardRef<HTMLTableElement, InterviewCalendarProps>(
   ({ month, week, year, children }, ref) => {
     return (
-      <div className="flex-[1_1_0] overflow-y-auto pl-6">
+      <div className="flex-[1_1_0] overflow-y-auto pb-12 pl-6">
         <table className="w-full table-fixed border-collapse border-spacing-0" ref={ref}>
           <InterviewCalendarHead month={month} week={week} year={year} />
           <InterviewCalendarBody month={month} week={week} year={year}>

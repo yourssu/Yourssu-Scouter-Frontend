@@ -1,8 +1,11 @@
 import * as Popover from '@radix-ui/react-popover';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BoxButton, IcArrowsChevronDownLine, IcClockFilled } from '@yourssu/design-system-react';
 import { differenceInMinutes } from 'date-fns';
 import { useState } from 'react';
 
+import { patchScheduleLocation } from '@/query/schedule/mutations/patchScheduleLocation';
+import { scheduleOptions } from '@/query/schedule/options';
 import { Schedule } from '@/query/schedule/schema';
 import { formatTemplates } from '@/utils/date';
 
@@ -93,9 +96,45 @@ function LocationSelect({
 }
 
 export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConflictCardProps) => {
+  const queryClient = useQueryClient();
   const [locations, setLocations] = useState<Record<number, ScheduleLocationState>>(() =>
-    schedules.reduce((acc, s) => ({ ...acc, [s.id]: { type: '동아리방', detail: '' } }), {}),
+    schedules.reduce(
+      (acc, s) => ({
+        ...acc,
+        [s.id]: {
+          type: s.locationType === '동방' ? '동아리방' : (s.locationType as LocationType),
+          detail: s.locationDetail ?? '',
+        },
+      }),
+      {},
+    ),
   );
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (paramsList: Parameters<typeof patchScheduleLocation>[0][]) => {
+      return Promise.all(paramsList.map((p) => patchScheduleLocation(p)));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: scheduleOptions(null).queryKey });
+    },
+  });
+
+  const handleSave = async () => {
+    const locMap = {
+      동아리방: '동방',
+      강의실: '강의실',
+      기타: '기타',
+      비대면: '비대면',
+    } as const;
+
+    const paramsList = schedules.map((s) => ({
+      scheduleId: s.id,
+      locationType: locMap[locations[s.id].type as LocationType],
+      locationDetail: locations[s.id].detail,
+    }));
+
+    await mutateAsync(paramsList);
+  };
 
   if (!schedules.length) {
     return null;
@@ -161,7 +200,12 @@ export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConf
                   [schedule.id]: { ...prev[schedule.id], type, detail: '' },
                 }))
               }
-              type={locations[schedule.id]?.type ?? '동아리방'}
+              type={
+                locations[schedule.id]?.type ??
+                (schedule.locationType === '동방'
+                  ? '동아리방'
+                  : (schedule.locationType as LocationType))
+              }
             />
           </div>
         ))}
@@ -170,7 +214,8 @@ export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConf
       {hasDiff && (
         <BoxButton
           className="w-fit self-end"
-          disabled={!isSaveEnabled}
+          disabled={!isSaveEnabled || isPending}
+          onClick={handleSave}
           size="large"
           variant="filledPrimary"
         >

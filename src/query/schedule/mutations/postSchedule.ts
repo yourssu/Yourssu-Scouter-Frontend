@@ -1,11 +1,12 @@
 import { api } from '@/apis/api';
+import { LocationType } from '@/types/location';
 
 interface PostScheduleParams {
   schedules: Array<{
     applicantId: number;
     endTime: string;
     locationDetail?: string;
-    locationType: '강의실' | '기타' | '동방' | '비대면';
+    locationType: LocationType;
     partId: number;
     startTime: string;
   }>;
