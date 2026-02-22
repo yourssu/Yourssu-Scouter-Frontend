@@ -23,13 +23,15 @@ export const buildMailRequest = ({
 }: BuildMailRequestParams) => {
   return {
     request: {
-      receiverEmailAddresses: mailInfo.receiver,
-      ccEmailAddresses: mailInfo.cc,
+      attachmentReferences: [],
       bccEmailAddresses: mailInfo.bcc,
-      mailSubject: mailInfo.subject,
-      mailBody: mailContent.body,
       bodyFormat: mailContent.bodyFormat,
-      reservationTime: reservedDate ? reservedDate.toISOString() : null,
+      ccEmailAddresses: mailInfo.cc,
+      inlineImageReferences: [],
+      mailBody: mailContent.body,
+      mailSubject: mailInfo.subject,
+      receiverEmailAddresses: mailInfo.receiver,
+      reservationTime: reservedDate ? reservedDate.toISOString() : new Date().toISOString(),
     },
   };
 };

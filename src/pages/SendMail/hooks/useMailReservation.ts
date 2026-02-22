@@ -64,21 +64,7 @@ export const useMailActions = () => {
     });
   };
 
-  const executeSend = async (
-    requestData: FormData | ReturnType<typeof buildMailRequest>['request'],
-  ) => {
-    const hasFiles =
-      (mailContent.inlineImages?.length ?? 0) > 0 || (mailContent.attachments?.length ?? 0) > 0;
-    if (hasFiles) {
-      const formData = new FormData();
-      formData.append(
-        'request',
-        new Blob([JSON.stringify(requestData)], { type: 'application/json' }),
-      );
-      mailContent.inlineImages?.forEach((f) => formData.append('inlineImages', f));
-      mailContent.attachments?.forEach((f) => formData.append('attachments', f));
-      return mutatePostMailReservation(formData);
-    }
+  const executeSend = async (requestData: ReturnType<typeof buildMailRequest>['request']) => {
     return mutatePostMailReservation(requestData);
   };
 
