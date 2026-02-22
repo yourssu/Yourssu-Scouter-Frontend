@@ -1,5 +1,6 @@
 import { Editor } from '@tiptap/react';
 import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
+import ky from 'ky';
 import { useRef } from 'react';
 
 import { IcChangeBold } from '@/components/Icons/Editor/IcChangeBold';
@@ -13,6 +14,9 @@ import { IcChangeTextAlignLeft } from '@/components/Icons/Editor/IcChangeTextAli
 import { IcChangeTextAlignRight } from '@/components/Icons/Editor/IcChangeTextAlignRight';
 import { IcChangeUnderline } from '@/components/Icons/Editor/IcChangeUnderline';
 import { IcChangeUnorderedList } from '@/components/Icons/Editor/IcChangeUnorderedList';
+import { API_CONFIG } from '@/constants/config';
+import { postMailFileConfirm } from '@/query/mail/mutation/postMailFileConfirm';
+import { postMailFilePresign } from '@/query/mail/mutation/postMailFilePresign';
 
 import {
   ColorButton,
@@ -35,21 +39,56 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
     return null;
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result as string;
-      editor.chain().focus().setImage({ src: dataUrl }).run();
-    };
-    reader.readAsDataURL(file);
+    try {
+      const presignResponse = await postMailFilePresign({
+        files: [
+          {
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            usage: 'INLINE',
+          },
+        ],
+      });
 
-    // input 초기화 (같은 파일 다시 선택 가능하도록)
-    event.target.value = '';
+      const { putUrl, s3Key } = presignResponse.uploads[0];
+
+      await ky.put(putUrl, {
+        body: file,
+        headers: {
+          'Content-Type': file.type || 'application/octet-stream',
+        },
+      });
+
+      const confirmResponse = await postMailFileConfirm({
+        files: [
+          {
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            s3Key,
+            usage: 'INLINE',
+          },
+        ],
+      });
+
+      const { fileId, s3Key: confirmedS3Key } = confirmResponse.files[0];
+      const storageKey = encodeURIComponent(confirmedS3Key);
+
+      const apiBaseUrl = API_CONFIG.BASE_URL;
+      const src = `${apiBaseUrl}/api/mails/images/${fileId}?storageKey=${storageKey}`;
+
+      editor.chain().focus().setImage({ src }).run();
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      alert('이미지 업로드에 실패했습니다.');
+    } finally {
+      event.target.value = '';
+    }
   };
 
   const colors = ['#000000', '#334155', '#5736F5'];
