@@ -8,9 +8,9 @@ export const useVariableValue = () => {
   const context = useOptionalMailVariables();
 
   const results = useSuspenseQueries({
-    queries: [...(context ? [applicantOptions({ partId: context.currentPart?.partId })] : [])],
+    queries: [...(context ? [applicantOptions()] : [])],
   });
-  const applicants = results[0]?.data;
+  const allApplicants = results[0]?.data;
   const { currentRecipientId } = useRecipientData();
 
   // 변수 값 채우기
@@ -25,14 +25,14 @@ export const useVariableValue = () => {
     }
     const { variableValue, currentPart } = context;
     const id = targetId || currentRecipientId;
-    const targetApplicant = applicants?.find((a) => String(a.applicantId) === id);
+    const targetApplicant = allApplicants?.find((a) => String(a.applicantId) === id);
 
     // 특수 변수 처리(지원자, 파트명)
     if (label === '지원자') {
       return targetApplicant?.name ?? label;
     }
     if (label === '파트명') {
-      return currentPart?.partName;
+      return targetApplicant?.part ?? currentPart?.partName;
     }
 
     // 일반 변수 처리
