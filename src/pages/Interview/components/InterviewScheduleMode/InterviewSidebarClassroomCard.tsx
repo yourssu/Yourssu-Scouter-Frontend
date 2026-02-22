@@ -9,7 +9,7 @@ import { scheduleOptions } from '@/query/schedule/options';
 import { Schedule } from '@/query/schedule/schema';
 import { formatTemplates } from '@/utils/date';
 
-interface InterviewSidebarConflictCardProps {
+interface InterviewSidebarClassroomCardProps {
   schedules: Schedule[];
 }
 
@@ -95,7 +95,9 @@ function LocationSelect({
   );
 }
 
-export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConflictCardProps) => {
+export const InterviewSidebarClassroomCard = ({
+  schedules,
+}: InterviewSidebarClassroomCardProps) => {
   const queryClient = useQueryClient();
   const [locations, setLocations] = useState<Record<number, ScheduleLocationState>>(() =>
     schedules.reduce(
