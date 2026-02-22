@@ -10,17 +10,24 @@ export const useRecipientData = () => {
   const { mailInfo } = useMailInfoContext();
   const { data: allApplicants } = useSuspenseQuery(applicantOptions());
 
+  // mailInfo.receiver의 이름과 allApplicants의 이름을 비교하여 recipients 배열 생성
   const recipients: Recipient[] = useMemo(() => {
     if (!Array.isArray(allApplicants)) {
       return [];
     }
 
-    // 받는 사람 리스트(이름들)에 포함된 지원자만 필터링합니다.
     const receiverNames = mailInfo.receiver || [];
 
-    return allApplicants
-      .filter((a) => receiverNames.includes(a.name))
-      .map((a) => ({ id: String(a.applicantId), name: a.name }));
+    return receiverNames
+      .map((name) => {
+        const found = allApplicants.find((a) => name.startsWith(a.name));
+
+        if (found) {
+          return { id: String(found.applicantId), name: found.name };
+        }
+        return null;
+      })
+      .filter((r): r is Recipient => r !== null);
   }, [allApplicants, mailInfo.receiver]);
 
   // currentApplicantId가 recipients에 존재하는지 확인하고, 없으면 첫 번째 지원자의 ID로 설정
