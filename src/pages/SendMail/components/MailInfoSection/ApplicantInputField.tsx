@@ -2,14 +2,21 @@ import { useRef, useState } from 'react';
 
 import { SearchedApplicantDialog } from '@/components/SearchedMemberDialog/SearchedApplicantDialog';
 import { InputChipGroup } from '@/pages/SendMail/components/MailInfoSection/InputChipGroup';
+import { Part } from '@/query/part/schema';
 
 interface ApplicantInputFieldProps {
   items: string[];
   label: string;
   onItemsUpdate: (items: string[]) => void;
+  selectedPart?: Part;
 }
 
-export const ApplicantInputField = ({ items, label, onItemsUpdate }: ApplicantInputFieldProps) => {
+export const ApplicantInputField = ({
+  items,
+  label,
+  onItemsUpdate,
+  selectedPart,
+}: ApplicantInputFieldProps) => {
   const [inputValue, setInputValue] = useState('');
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,6 +50,7 @@ export const ApplicantInputField = ({ items, label, onItemsUpdate }: ApplicantIn
             onSearchTextChange={setInputValue} // 검색어 변경 핸들러 전달
             onSelect={handleSelect}
             searchText={inputValue} // 외부 검색어 전달
+            selectedPart={selectedPart}
             trigger={
               <input
                 className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"

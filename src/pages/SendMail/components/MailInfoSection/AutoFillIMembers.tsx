@@ -71,10 +71,18 @@ export const AutoFillMembers = ({
       const partReceivers = applicantsData.map((a) => a.name);
       const partBcc = [...partMembersData, ...hrMembersData].map((m) => m.nickname);
 
-      // 3. [기존 명단 + 새 명단]을 합치고 중복을 제거
+      // 3. 해당 파트가 아닌 지원자, 멤버는 삭제
+      const filteredReceivers = currentReceivers.filter((receiver) => {
+        return partReceivers.includes(receiver);
+      });
+      const filteredBcc = currentBcc.filter((bcc) => {
+        return partBcc.includes(bcc) || hrMembersData.some((hr) => hr.nickname === bcc); // HR 멤버는 항상 유지
+      });
+
+      // 4. [기존 명단 + 새 명단]을 합치고 중복을 제거
       onMembersUpdate({
-        '받는 사람': uniq([...currentReceivers, ...partReceivers]),
-        '숨은 참조': uniq([...currentBcc, ...partBcc]),
+        '받는 사람': uniq([...filteredReceivers, ...partReceivers]),
+        '숨은 참조': uniq([...filteredBcc, ...partBcc]),
       });
 
       isInitialized.current = true;
@@ -85,7 +93,7 @@ export const AutoFillMembers = ({
     onMembersUpdate,
     mailInfo.receiver,
     mailInfo.bcc,
-    selectedPart.partId,
+    selectedPart.partName,
     selectedTemplateId,
   ]);
 
@@ -100,6 +108,7 @@ export const AutoFillMembers = ({
         items={mailInfo.receiver || []}
         label="받는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '받는 사람': items })}
+        selectedPart={selectedPart}
       />
       <MemberInputField
         items={mailInfo.bcc || []}

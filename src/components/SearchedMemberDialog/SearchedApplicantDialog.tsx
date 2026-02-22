@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { orderBy } from 'es-toolkit';
 import { Popover } from 'radix-ui';
 import { useMemo } from 'react';
 
@@ -10,6 +11,8 @@ import {
   StyledWrapper,
 } from '@/components/SearchedMemberDialog/SearchedMemberDialog.style';
 import { applicantOptions } from '@/query/applicant/options';
+import { Part } from '@/query/part/schema';
+import { getChosung } from '@/utils/hangul';
 
 interface SearchedApplicantDialogProps {
   excludeItems?: string[];
@@ -17,6 +20,7 @@ interface SearchedApplicantDialogProps {
   onSearchTextChange: (text: string) => void;
   onSelect: (name: string) => void;
   searchText: string; // 외부에서 관리되는 검색어
+  selectedPart?: Part;
   trigger: React.ReactNode;
 }
 
@@ -27,33 +31,53 @@ export const SearchedApplicantDialog = ({
   onSearchTextChange,
   excludeItems = [],
   isActive = true,
+  selectedPart,
 }: SearchedApplicantDialogProps) => {
   // 1. 지원자 전체 데이터 가져오기
   const { data: allApplicants } = useSuspenseQuery(applicantOptions());
 
   // 2. 검색 및 필터링 로직
   const filteredApplicants = useMemo(() => {
-    // 이미 추가된 지원자 제외
-    const available = allApplicants.filter((applicant) => !excludeItems.includes(applicant.name));
+    // 1. 기본 필터링 (중복 제외 & 파트 필터링)
+    const baseList = allApplicants.filter((a) => {
+      const isExcluded = excludeItems.includes(a.name);
+      const isCorrectPart = !selectedPart || a.part === selectedPart.partName;
+      return !isExcluded && isCorrectPart;
+    });
 
     const term = searchText.trim().toLowerCase();
-    if (!term) {
-      return [];
-    } // 항상 외부 모드이므로 입력값이 없으면 결과도 없음
+    const termCho = getChosung(term);
 
-    const matches = available.filter((applicant) => applicant.name.toLowerCase().includes(term));
+    // 2. 가중치 부여 및 정렬(검색어 일치 > 포함 > 초성 포함 > 가나다순)
+    return orderBy(
+      baseList,
+      [
+        (a) => {
+          if (!term) {
+            return 0;
+          } // 검색어 없으면 모두 동일 점수
+          const name = a.name.toLowerCase();
+          const nameCho = getChosung(name);
 
-    // 정렬: 이름 시작점 매칭 -> 중간 매칭 -> 가나다순
-    const startsWith = matches.filter((m) => m.name.toLowerCase().startsWith(term));
-    const contains = matches.filter((m) => !m.name.toLowerCase().startsWith(term));
+          if (name.startsWith(term)) {
+            return -3;
+          } // 검색어로 시작하면 1순위
+          if (name.includes(term)) {
+            return -2;
+          } // 검색어 포함하면 2순위
+          if (nameCho.includes(termCho)) {
+            return -1;
+          } // 초성 포함하면 3순위
+          return 0; // 관련 없으면 꼴찌
+        },
+        (a) => a.name, // 점수가 같다면 이름 가나다순 정렬
+      ],
+      ['asc', 'asc'], // 점수는 낮은 순(음수 사용), 이름은 오름차순
+    );
+  }, [allApplicants, searchText, excludeItems, selectedPart]);
 
-    const sortFn = (a: any, b: any) => a.name.localeCompare(b.name);
-
-    return [...startsWith.sort(sortFn), ...contains.sort(sortFn)];
-  }, [allApplicants, searchText, excludeItems]);
-
-  // 3. 팝오버 열림 조건: 활성화 상태 && 검색어 존재 && 결과 존재
-  const isPopoverOpen = isActive && searchText.length > 0 && filteredApplicants.length > 0;
+  // 3. 팝오버 열림 조건: 활성화 상태 && 필터링된 지원자 존재 && 검색어가 비어있지 않음
+  const isPopoverOpen = isActive && filteredApplicants.length > 0 && searchText.trim() !== '';
 
   const handleSelectApplicant = (name: string) => {
     onSelect(name);
