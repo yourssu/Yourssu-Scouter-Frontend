@@ -5,6 +5,7 @@ type BaseKey =
   | 'applicants'
   | 'applicantStates'
   | 'departments'
+  | 'mailReservations'
   | 'memberLastUpdatedTime'
   | 'memberRoles'
   | 'members'
