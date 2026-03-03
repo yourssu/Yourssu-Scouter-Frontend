@@ -14,7 +14,6 @@ import { IcChangeTextAlignLeft } from '@/components/Icons/Editor/IcChangeTextAli
 import { IcChangeTextAlignRight } from '@/components/Icons/Editor/IcChangeTextAlignRight';
 import { IcChangeUnderline } from '@/components/Icons/Editor/IcChangeUnderline';
 import { IcChangeUnorderedList } from '@/components/Icons/Editor/IcChangeUnorderedList';
-import { API_CONFIG } from '@/constants/config';
 import { useMailContentContext } from '@/pages/SendMail/context';
 import { postMailFileConfirm } from '@/query/mail/mutation/postMailFileConfirm';
 import { postMailFilePresign } from '@/query/mail/mutation/postMailFilePresign';
@@ -62,7 +61,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
         ],
       });
 
-      const { putUrl, s3Key } = presignResponse.uploads[0];
+      const { putUrl, s3Key, cid } = presignResponse.uploads[0];
 
       await ky.put(putUrl, {
         body: file,
@@ -74,6 +73,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
       const confirmResponse = await postMailFileConfirm({
         files: [
           {
+            cid,
             fileName: file.name,
             contentType: file.type || 'application/octet-stream',
             s3Key,
@@ -119,7 +119,7 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
         ],
       });
 
-      const { putUrl, s3Key } = presignResponse.uploads[0];
+      const { putUrl, s3Key, cid } = presignResponse.uploads[0];
 
       await ky.put(putUrl, {
         body: file,
@@ -128,9 +128,12 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
         },
       });
 
+      const contentId = cid || `cid_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
       const confirmResponse = await postMailFileConfirm({
         files: [
           {
+            cid: contentId,
             fileName: file.name,
             contentType: file.type || 'application/octet-stream',
             s3Key,
@@ -139,13 +142,23 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
         ],
       });
 
-      const { fileId, s3Key: confirmedS3Key } = confirmResponse.files[0];
-      const storageKey = encodeURIComponent(confirmedS3Key);
+      const { fileId } = confirmResponse.files[0];
 
-      const apiBaseUrl = API_CONFIG.BASE_URL;
-      const src = `${apiBaseUrl}/api/mails/images/${fileId}?storageKey=${storageKey}`;
+      const s3ImageBaseUrl = import.meta.env.VITE_S3_IMAGE_BASE_URL;
+      const src = `${s3ImageBaseUrl}/${encodeURIComponent(contentId)}`;
 
-      editor.chain().focus().setImage({ src }).run();
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'image',
+          attrs: {
+            src,
+            'data-file-id': fileId,
+            'data-content-id': contentId,
+          },
+        })
+        .run();
     } catch (error) {
       console.error('Failed to upload image:', error);
       alert('이미지 업로드에 실패했습니다.');

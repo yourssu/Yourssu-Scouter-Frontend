@@ -6,11 +6,11 @@ export interface AttachmentType {
 }
 
 interface BuildMailRequestParams {
+  inlineImageReferences?: { contentId: string; fileId: number }[];
   mailContent: {
     attachments: AttachmentType[];
     body: string;
     bodyFormat: MailBodyFormatType;
-    inlineImages: string[];
   };
   mailInfo: {
     bcc: string[];
@@ -22,8 +22,9 @@ interface BuildMailRequestParams {
 }
 
 export const buildMailRequest = ({
-  mailInfo,
+  inlineImageReferences = [],
   mailContent,
+  mailInfo,
   reservedDate,
 }: BuildMailRequestParams) => {
   return {
@@ -32,7 +33,7 @@ export const buildMailRequest = ({
       bccEmailAddresses: mailInfo.bcc,
       bodyFormat: mailContent.bodyFormat,
       ccEmailAddresses: mailInfo.cc,
-      inlineImageReferences: [],
+      inlineImageReferences,
       mailBody: mailContent.body,
       mailSubject: mailInfo.subject,
       receiverEmailAddresses: mailInfo.receiver,

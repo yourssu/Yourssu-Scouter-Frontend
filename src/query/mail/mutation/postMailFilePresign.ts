@@ -10,6 +10,7 @@ export interface MailFilePresignRequest {
 
 export interface MailFilePresignResponse {
   uploads: {
+    cid?: string;
     contentType: string;
     expiresAt: string;
     putUrl: string;

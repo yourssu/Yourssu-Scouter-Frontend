@@ -2,6 +2,7 @@ import { api } from '@/apis/api.ts';
 
 export interface MailFileConfirmRequest {
   files: {
+    cid?: string;
     contentType: string;
     fileName: string;
     s3Key: string;

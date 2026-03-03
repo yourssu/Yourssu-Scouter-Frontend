@@ -64,6 +64,31 @@ export const useMailActions = () => {
     });
   };
 
+  const extractInlineImages = (html: string) => {
+    let resultHtml = html;
+    const inlineImageReferences: { contentId: string; fileId: number }[] = [];
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const images = doc.querySelectorAll('img');
+
+    images.forEach((img) => {
+      const fileIdAttr = img.getAttribute('data-file-id');
+      const contentIdAttr = img.getAttribute('data-content-id');
+
+      if (fileIdAttr && contentIdAttr) {
+        const fileId = parseInt(fileIdAttr, 10);
+        if (!isNaN(fileId)) {
+          inlineImageReferences.push({ fileId, contentId: contentIdAttr });
+          img.setAttribute('src', `cid:${contentIdAttr}`);
+        }
+      }
+    });
+
+    resultHtml = doc.body.innerHTML;
+    return { resultHtml, inlineImageReferences };
+  };
+
   const executeSend = async (requestData: ReturnType<typeof buildMailRequest>['request']) => {
     return mutatePostMailReservation(requestData);
   };
@@ -96,9 +121,12 @@ export const useMailActions = () => {
         }
 
         const targetMailBody = replaceChips(specificBody, targetId);
+        const { resultHtml: finalBody, inlineImageReferences } =
+          extractInlineImages(targetMailBody);
 
         // 이메일로 지원자 ID 찾기
         const requestBody = buildMailRequest({
+          inlineImageReferences,
           mailInfo: {
             receiver: [targetEmail],
             cc: mailInfo.cc.map(convertNameToEmail),
@@ -107,7 +135,7 @@ export const useMailActions = () => {
           },
           mailContent: {
             ...mailContent,
-            body: targetMailBody,
+            body: finalBody,
           },
           reservedDate: reservedDate || null,
         }).request;
@@ -118,7 +146,11 @@ export const useMailActions = () => {
       return;
     }
 
+    const targetMailBody = replaceChips(rawBody);
+    const { resultHtml: finalBody, inlineImageReferences } = extractInlineImages(targetMailBody);
+
     const requestBody = buildMailRequest({
+      inlineImageReferences,
       mailInfo: {
         receiver: mailInfo.receiver.map(convertNameToEmail),
         cc: mailInfo.cc.map(convertNameToEmail),
@@ -127,7 +159,7 @@ export const useMailActions = () => {
       },
       mailContent: {
         ...mailContent,
-        body: replaceChips(rawBody),
+        body: finalBody,
       },
       reservedDate: reservedDate || null,
     }).request;

@@ -55,7 +55,19 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
         Underline,
         FontFamily,
         FontSize,
-        Image.configure({
+        Image.extend({
+          addAttributes() {
+            return {
+              ...this.parent?.(),
+              'data-file-id': {
+                default: null,
+              },
+              'data-content-id': {
+                default: null,
+              },
+            };
+          },
+        }).configure({
           allowBase64: true,
         }),
         Link.configure({
