@@ -21,6 +21,7 @@ interface MailEditorContentProps {
   currentApplicantId?: string;
   initialContent?: string;
   onContentChange?: (html: string) => void;
+  readOnly?: boolean;
   recipientName?: string;
 }
 
@@ -35,7 +36,7 @@ export interface MailEditorContentRef {
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
-  ({ recipientName, initialContent, onContentChange }, ref) => {
+  ({ recipientName, initialContent, onContentChange, readOnly }, ref) => {
     const placeholderText = recipientName
       ? `${recipientName}님에게 보낼 내용`
       : '내용을 입력하세요';
@@ -87,7 +88,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
         }),
       ],
       content: initialContent || '',
-      editable: true,
+      editable: !readOnly,
       immediatelyRender: false,
       onUpdate: ({ editor }) => {
         if (onContentChange) {
@@ -149,7 +150,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
         <EditorWrapper>
           <StyledEditorContent editor={editor} />
         </EditorWrapper>
-        <MailToolbar editor={editor} />
+        {!readOnly && <MailToolbar editor={editor} />}
       </div>
     );
   },

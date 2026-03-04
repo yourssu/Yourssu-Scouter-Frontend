@@ -8,10 +8,11 @@ import { MailHeader } from '../MailHeader/MailHeader';
 import { EditorContainer } from './MailEditor.style';
 
 interface MailEditorProps {
+  readOnly?: boolean;
   selectedTemplateId?: number;
 }
 
-export const MailEditor = ({ selectedTemplateId }: MailEditorProps) => {
+export const MailEditor = ({ readOnly, selectedTemplateId }: MailEditorProps) => {
   // 메일 받을 지원자 정보
   const { recipients, currentRecipientId, currentRecipientName, setCurrentRecipientId } =
     useRecipientData();
@@ -32,15 +33,18 @@ export const MailEditor = ({ selectedTemplateId }: MailEditorProps) => {
           type="tabs"
         />
       )}
-      <Suspense fallback={<div>에디터 로딩 중...</div>}>
-        <MailEditorContent
-          currentApplicantId={currentRecipientId}
-          initialContent={currentContent}
-          key={`${selectedTemplateId}-${currentRecipientId}`}
-          onContentChange={handleContentChange}
-          recipientName={currentRecipientName}
-        />
-      </Suspense>
+      <div className="flex min-h-0 flex-1 flex-col">
+        <Suspense fallback={<div>에디터 로딩 중...</div>}>
+          <MailEditorContent
+            currentApplicantId={currentRecipientId}
+            initialContent={currentContent}
+            key={`${selectedTemplateId}-${currentRecipientId}`}
+            onContentChange={handleContentChange}
+            readOnly={readOnly}
+            recipientName={currentRecipientName}
+          />
+        </Suspense>
+      </div>
     </EditorContainer>
   );
 };

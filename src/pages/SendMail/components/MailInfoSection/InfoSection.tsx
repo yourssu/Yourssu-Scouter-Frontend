@@ -12,11 +12,12 @@ import { MailFormData } from '@/types/editor';
 import { MemberInputFieldKey } from '@/types/editor';
 
 interface InfoSectionProps {
+  readOnly?: boolean;
   selectedPart: Part | undefined;
   selectedTemplateId: number | undefined;
 }
 
-export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionProps) => {
+export const InfoSection = ({ readOnly, selectedPart, selectedTemplateId }: InfoSectionProps) => {
   const {
     mailInfo,
     actions: { updateMailInfo },
@@ -79,18 +80,21 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
             key="보내는 사람"
             label="보내는 사람"
             onItemsUpdate={(items) => handleMemberUpdate({ '보내는 사람': items })}
+            readOnly={readOnly}
           />
           <ApplicantInputField
             items={formData.members['받는 사람']}
             key="받는 사람"
             label="받는 사람"
             onItemsUpdate={(items) => handleMemberUpdate({ '받는 사람': items })}
+            readOnly={readOnly}
           />
           <MemberInputField
             items={formData.members['숨은 참조']}
             key="숨은 참조"
             label="숨은 참조"
             onItemsUpdate={(items) => handleMemberUpdate({ '숨은 참조': items })}
+            readOnly={readOnly}
           />
         </div>
       ) : (
@@ -104,7 +108,7 @@ export const InfoSection = ({ selectedPart, selectedTemplateId }: InfoSectionPro
           />
         </Suspense>
       )}
-      <TextInputField label="제목" onChange={handleSubjectUpdate} value={formData.subject} />
+      <TextInputField label="제목" onChange={handleSubjectUpdate} readOnly={readOnly} value={formData.subject} />
     </div>
   );
 };

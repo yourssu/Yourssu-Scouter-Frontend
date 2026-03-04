@@ -7,13 +7,19 @@ interface MemberInputFieldProps {
   items: string[];
   label: string;
   onItemsUpdate: (items: string[]) => void;
+  readOnly?: boolean;
 }
 
-export const MemberInputField = ({ items, label, onItemsUpdate }: MemberInputFieldProps) => {
+export const MemberInputField = ({
+  items,
+  label,
+  onItemsUpdate,
+  readOnly: isInfoReadOnly,
+}: MemberInputFieldProps) => {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const [isActive, setIsActive] = useState(false);
-  const readOnly = label === '보내는 사람' && items.length >= 1; // 파트 선택 전에는 보내는 사람 수정 가능 > 파트 선택 이후엔 고정
+  const readOnly = isInfoReadOnly || (label === '보내는 사람' && items.length >= 1); // 파트 선택 전에는 보내는 사람 수정 가능 > 파트 선택 이후엔 고정
 
   const handleSelect = (nickname: string) => {
     if (!items.includes(nickname)) {
