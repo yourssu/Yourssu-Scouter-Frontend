@@ -41,7 +41,17 @@ export const MailTab = ({ onCompose, readOnly, statuses }: MailTabProps) => {
       }
       map.get(mail.mailSubject)!.push(mail);
     }
-    return [...map.values()];
+    return [...map.values()].sort((a, b) => {
+      const aFailed = a.some((m) => m.status === 'PENDING_SEND');
+      const bFailed = b.some((m) => m.status === 'PENDING_SEND');
+      if (aFailed !== bFailed) {
+        return aFailed ? -1 : 1;
+      }
+      if (aFailed && bFailed) {
+        return new Date(a[0].reservationTime).getTime() - new Date(b[0].reservationTime).getTime();
+      }
+      return 0;
+    });
   }, [filteredMails]);
 
   return (
@@ -59,16 +69,27 @@ export const MailTab = ({ onCompose, readOnly, statuses }: MailTabProps) => {
       </div>
 
       <div className="flex flex-col gap-3">
-        {groupedMails.map((group) => (
-          <TemplateList
-            date={formatTemplates['01/01(월) 00:00'](group[0].reservationTime)}
-            key={group[0].mailSubject}
-            onClick={() => setSelectedMailIds(group.map((m) => m.reservationId))}
-            onDelete={() => console.log('메일 삭제')}
-            text={readOnly ? '' : '에 예약됨'}
-            title={group[0].mailSubject}
-          />
-        ))}
+        {groupedMails.map((group) => {
+          const isPendingSend = group.some((m) => m.status === 'PENDING_SEND');
+          return (
+            <TemplateList
+              action={
+                isPendingSend ? (
+                  <BoxButton onClick={() => {}} size="small" variant="outlined">
+                    재전송하기
+                  </BoxButton>
+                ) : undefined
+              }
+              date={formatTemplates['01/01(월) 00:00'](group[0].reservationTime)}
+              key={group[0].mailSubject}
+              onClick={() => setSelectedMailIds(group.map((m) => m.reservationId))}
+              onDelete={() => {}}
+              text={isPendingSend ? '에 전송 실패' : readOnly ? '' : '에 예약됨'}
+              title={group[0].mailSubject}
+              variant={isPendingSend ? 'error' : undefined}
+            />
+          );
+        })}
       </div>
 
       {selectedMailIds && (
