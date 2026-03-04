@@ -13,12 +13,22 @@ export interface TemplateListProps {
   date: string;
   onClick?: () => void;
   onDelete: () => void;
+  readonly?: boolean;
   text: string;
   title: string;
   variant?: 'error';
 }
 
-export const TemplateList = ({ action, title, date, onDelete, onClick, text, variant }: TemplateListProps) => {
+export const TemplateList = ({
+  action,
+  title,
+  date,
+  onDelete,
+  onClick,
+  text,
+  variant,
+  readonly,
+}: TemplateListProps) => {
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete();
@@ -36,9 +46,11 @@ export const TemplateList = ({ action, title, date, onDelete, onClick, text, var
       {action ? (
         <div onClick={(e) => e.stopPropagation()}>{action}</div>
       ) : (
-        <TrashIconButton onClick={handleDelete}>
-          <IcTrashLine />
-        </TrashIconButton>
+        !readonly && (
+          <TrashIconButton onClick={handleDelete}>
+            <IcTrashLine />
+          </TrashIconButton>
+        )
       )}
     </TemplateItemContainer>
   );

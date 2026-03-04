@@ -20,7 +20,7 @@ export const useRecipientData = () => {
 
     return receiverNames
       .map((name) => {
-        const found = allApplicants.find((a) => name.startsWith(a.name));
+        const found = allApplicants.find((a) => name === a.name);
 
         if (found) {
           return { id: String(found.applicantId), name: found.name };

@@ -1,5 +1,5 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { Suspense, useMemo } from 'react';
@@ -17,9 +17,13 @@ import {
   MailContentProvider,
   MailInfoProvider,
   MailVariableProvider,
+  useMailContentContext,
+  useMailInfoContext,
 } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options';
-import { mailOptions } from '@/query/mail/options';
+import { putMailReservation } from '@/query/mail/mutation/putMailReservation';
+import { mailOptions, MailReservationKeys } from '@/query/mail/options';
+import { MailDetail } from '@/query/mail/schema';
 import { memberOptions } from '@/query/member/options';
 
 interface MailEditDialogProps {
@@ -28,6 +32,69 @@ interface MailEditDialogProps {
   onClose: () => void;
   readOnly?: boolean;
 }
+
+const MailDialogSaveButton = ({
+  allApplicants,
+  allMembers,
+  mailDetails,
+  onClose,
+}: {
+  allApplicants: { applicantId: number; email: string; name: string }[];
+  allMembers: { email: string; nickname: string }[];
+  mailDetails: MailDetail[];
+  onClose: () => void;
+}) => {
+  const { mailInfo } = useMailInfoContext();
+  const { mailContent } = useMailContentContext();
+  const queryClient = useQueryClient();
+
+  const convertNameToEmail = (name: string) => {
+    const applicant = allApplicants.find((a) => a.name === name);
+    if (applicant) {
+      return applicant.email;
+    }
+    const member = allMembers.find((m) => m.nickname === name);
+    if (member) {
+      return member.email;
+    }
+    return name;
+  };
+
+  const handleSave = async () => {
+    await Promise.all(
+      mailDetails.map((detail) => {
+        const applicant = allApplicants.find((a) =>
+          detail.receiverEmailAddresses.includes(a.email),
+        );
+        const body = applicant
+          ? (mailContent.body[String(applicant.applicantId)] ?? detail.mailBody)
+          : detail.mailBody;
+
+        return putMailReservation({
+          reservationId: detail.reservationId,
+          mailSubject: mailInfo.subject,
+          mailBody: body,
+          bodyFormat: detail.bodyFormat as 'HTML' | 'TEXT',
+          receiverEmailAddresses: detail.receiverEmailAddresses,
+          ccEmailAddresses: mailInfo.cc.map(convertNameToEmail),
+          bccEmailAddresses: mailInfo.bcc.map(convertNameToEmail),
+          reservationTime: detail.reservationTime,
+          attachmentReferences: [],
+        });
+      }),
+    );
+    queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
+    onClose();
+  };
+
+  return (
+    <StyledFooter>
+      <BoxButton onClick={handleSave} size="large" variant="filledPrimary">
+        저장하기
+      </BoxButton>
+    </StyledFooter>
+  );
+};
 
 const MailDialogContent = ({
   mailIds,
@@ -43,12 +110,10 @@ const MailDialogContent = ({
   });
   const { data: allApplicants } = useSuspenseQuery(applicantOptions());
   const { data: allMembers } = useSuspenseQuery(memberOptions('액티브'));
-
   const mailDetails = results.map((r) => r.data);
   const subject = mailDetails[0]?.mailSubject ?? '';
   const cc = mailDetails[0]?.ccEmailAddresses ?? [];
 
-  // email → applicant.name (한글 이름)
   const allReceivers = useMemo(
     () =>
       [...new Set(mailDetails.flatMap((d) => d.receiverEmailAddresses))].map(
@@ -57,7 +122,6 @@ const MailDialogContent = ({
     [allApplicants, mailDetails],
   );
 
-  // email → member.nickname (영어 닉네임)
   const bcc = useMemo(
     () =>
       (mailDetails[0]?.bccEmailAddresses ?? []).map(
@@ -66,7 +130,6 @@ const MailDialogContent = ({
     [allMembers, mailDetails],
   );
 
-  // applicant.email 기준으로 applicantId → mailBody 매핑
   const initialBody = useMemo(() => {
     const body: Record<string, string> = {};
     mailDetails.forEach((detail) => {
@@ -89,17 +152,22 @@ const MailDialogContent = ({
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
 
-          <InfoSection readOnly={readOnly} selectedPart={undefined} selectedTemplateId={undefined} />
-          <div className="border-line-basicMedium bg-bg-basicDefault min-h-0 flex flex-1 flex-col overflow-hidden rounded-xl border">
+          <InfoSection
+            readOnly={readOnly}
+            selectedPart={undefined}
+            selectedTemplateId={undefined}
+          />
+          <div className="border-line-basicMedium bg-bg-basicDefault flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border">
             <MailEditor readOnly={readOnly} />
           </div>
 
           {!readOnly && (
-            <StyledFooter>
-              <BoxButton onClick={onClose} size="large" variant="filledPrimary">
-                저장하기
-              </BoxButton>
-            </StyledFooter>
+            <MailDialogSaveButton
+              allApplicants={allApplicants}
+              allMembers={allMembers}
+              mailDetails={mailDetails}
+              onClose={onClose}
+            />
           )}
         </MailVariableProvider>
       </MailContentProvider>
