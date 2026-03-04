@@ -1,11 +1,16 @@
 export type MailBodyFormatType = 'HTML' | 'PLAIN_TEXT';
 
+export interface AttachmentType {
+  fileId: number;
+  name: string;
+}
+
 interface BuildMailRequestParams {
+  inlineImageReferences?: { contentId: string; fileId: number }[];
   mailContent: {
-    attachments: string[];
+    attachments: AttachmentType[];
     body: string;
     bodyFormat: MailBodyFormatType;
-    inlineImages: string[];
   };
   mailInfo: {
     bcc: string[];
@@ -17,19 +22,22 @@ interface BuildMailRequestParams {
 }
 
 export const buildMailRequest = ({
-  mailInfo,
+  inlineImageReferences = [],
   mailContent,
+  mailInfo,
   reservedDate,
 }: BuildMailRequestParams) => {
   return {
     request: {
-      receiverEmailAddresses: mailInfo.receiver,
-      ccEmailAddresses: mailInfo.cc,
+      attachmentReferences: mailContent.attachments.map((file) => ({ fileId: file.fileId })),
       bccEmailAddresses: mailInfo.bcc,
-      mailSubject: mailInfo.subject,
-      mailBody: mailContent.body,
       bodyFormat: mailContent.bodyFormat,
-      reservationTime: reservedDate ? reservedDate.toISOString() : null,
+      ccEmailAddresses: mailInfo.cc,
+      inlineImageReferences,
+      mailBody: mailContent.body,
+      mailSubject: mailInfo.subject,
+      receiverEmailAddresses: mailInfo.receiver,
+      reservationTime: reservedDate ? reservedDate.toISOString() : new Date().toISOString(),
     },
   };
 };

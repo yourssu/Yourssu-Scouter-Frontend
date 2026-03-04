@@ -1,4 +1,3 @@
-import * as Popover from '@radix-ui/react-popover';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BoxButton, IcArrowsChevronDownLine, IcClockFilled } from '@yourssu/design-system-react';
 import { differenceInMinutes } from 'date-fns';
@@ -23,8 +22,7 @@ function formatDuration(startTime: string, endTime: string) {
   return `${diff}분`;
 }
 
-const LOCATIONS = ['동아리방', '강의실', '비대면', '기타'] as const;
-type LocationType = (typeof LOCATIONS)[number];
+export type LocationType = '강의실' | '기타' | '동아리방' | '비대면';
 
 interface ScheduleLocationState {
   detail: string;
@@ -34,49 +32,24 @@ interface ScheduleLocationState {
 function LocationSelect({
   type,
   detail,
-  onChangeType,
   onChangeDetail,
   renderSaveButton,
 }: {
   detail: string;
   onChangeDetail: (detail: string) => void;
-  onChangeType: (type: LocationType) => void;
   renderSaveButton: () => React.ReactNode;
   type: LocationType;
 }) {
-  const [open, setOpen] = useState(false);
-
   return (
     <div className="flex w-full flex-col gap-1">
       <div className="flex w-full gap-2">
-        <Popover.Root onOpenChange={setOpen} open={open}>
-          <Popover.Trigger asChild>
-            <button className="bg-bg-basicDefault border-line-basicMedium aria-expanded:border-line-brandSecondary focus-visible:border-line-brandSecondary flex h-12 w-full shrink-0 items-center justify-between gap-1 rounded-xl border px-4 transition-colors outline-none">
-              <p className="typo-b1_sb_16 text-text-basicPrimary">{type}</p>
-              <IcArrowsChevronDownLine className="text-icon-basicPrimary size-5" />
-            </button>
-          </Popover.Trigger>
-          <Popover.Portal>
-            <Popover.Content
-              align="start"
-              className="bg-bg-basicDefault border-line-basicMedium z-50 flex w-[var(--radix-popover-trigger-width)] flex-col overflow-hidden rounded-xl border p-1 shadow-md"
-              sideOffset={4}
-            >
-              {LOCATIONS.map((loc) => (
-                <button
-                  className="hover:bg-bg-basicLight focus-visible:bg-bg-basicLight typo-b1_rg_16 flex h-10 w-full items-center justify-start rounded-lg px-3 text-left transition-colors outline-none"
-                  key={loc}
-                  onClick={() => {
-                    onChangeType(loc);
-                    setOpen(false);
-                  }}
-                >
-                  <span className="text-text-basicPrimary">{loc}</span>
-                </button>
-              ))}
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
+        <button
+          className="bg-bg-basicDefault border-line-basicMedium flex h-12 w-full shrink-0 cursor-not-allowed items-center justify-between gap-1 rounded-xl border px-4 opacity-50 transition-colors outline-none"
+          disabled
+        >
+          <p className="typo-b1_sb_16 text-text-basicPrimary">{type}</p>
+          <IcArrowsChevronDownLine className="text-icon-basicPrimary size-5" />
+        </button>
         {type === '동아리방' && renderSaveButton()}
       </div>
 
@@ -224,13 +197,6 @@ export const InterviewSidebarClassroomCard = ({
                   setLocations((prev) => ({
                     ...prev,
                     [schedule.id]: { ...prev[schedule.id], detail },
-                  }));
-                  setEditedSchedules((prev) => ({ ...prev, [schedule.id]: true }));
-                }}
-                onChangeType={(type) => {
-                  setLocations((prev) => ({
-                    ...prev,
-                    [schedule.id]: { ...prev[schedule.id], type, detail: '' },
                   }));
                   setEditedSchedules((prev) => ({ ...prev, [schedule.id]: true }));
                 }}

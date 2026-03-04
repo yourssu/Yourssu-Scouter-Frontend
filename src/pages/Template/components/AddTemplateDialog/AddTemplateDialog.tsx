@@ -3,9 +3,11 @@ import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useState } from 'react';
 
+import { MailContentProvider } from '@/pages/SendMail/context';
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
 import { getDefaultVariables, Variable } from '@/types/editor';
 import { Template } from '@/types/template';
+import { AttachmentType } from '@/utils/buildMailRequest';
 
 import {
   StyledBody,
@@ -27,6 +29,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     title: '',
     content: '',
     variables: getDefaultVariables(),
+    attachments: [] as AttachmentType[],
   });
 
   const handleSave = () => {
@@ -35,6 +38,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
         title: formData.title.trim(),
         content: formData.content,
         variables: formData.variables,
+        attachments: formData.attachments,
       });
       handleClose();
     }
@@ -45,6 +49,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
       title: '',
       content: '',
       variables: getDefaultVariables(),
+      attachments: [],
     });
     onClose();
   };
@@ -70,6 +75,13 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     }));
   };
 
+  const handleAttachmentsChange = (attachments: AttachmentType[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      attachments,
+    }));
+  };
+
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
@@ -88,12 +100,16 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
             <IcCloseLine onClick={onClose} />
           </StyledHeader>
           <StyledBody>
-            <TemplateEditor
-              onContentChange={handleContentChange}
-              onVariablesChange={handleVariablesChange}
-              templateContent={formData.content}
-              templateVariables={formData.variables}
-            />
+            <MailContentProvider>
+              <TemplateEditor
+                onAttachmentsChange={handleAttachmentsChange}
+                onContentChange={handleContentChange}
+                onVariablesChange={handleVariablesChange}
+                templateAttachments={formData.attachments}
+                templateContent={formData.content}
+                templateVariables={formData.variables}
+              />
+            </MailContentProvider>
           </StyledBody>
           <StyledFooter>
             <BoxButton
