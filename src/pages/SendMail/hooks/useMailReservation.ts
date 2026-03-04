@@ -80,7 +80,6 @@ export const useMailActions = () => {
         const fileId = parseInt(fileIdAttr, 10);
         if (!isNaN(fileId)) {
           inlineImageReferences.push({ fileId, contentId: contentIdAttr });
-          img.setAttribute('src', `cid:${contentIdAttr}`);
         }
       }
     });
