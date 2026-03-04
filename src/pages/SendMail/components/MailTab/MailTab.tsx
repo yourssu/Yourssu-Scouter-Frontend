@@ -47,10 +47,7 @@ export const MailTab = ({ onCompose, readOnly, statuses }: MailTabProps) => {
       if (aFailed !== bFailed) {
         return aFailed ? -1 : 1;
       }
-      if (aFailed && bFailed) {
-        return new Date(a[0].reservationTime).getTime() - new Date(b[0].reservationTime).getTime();
-      }
-      return 0;
+      return new Date(a[0].reservationTime).getTime() - new Date(b[0].reservationTime).getTime();
     });
   }, [filteredMails]);
 

@@ -1,5 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import {
   useMailContentContext,
@@ -10,10 +9,12 @@ import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 import { useVariableValue } from '@/pages/SendMail/hooks/useVariableValue';
 import { applicantOptions } from '@/query/applicant/options';
 import { postMailReservation } from '@/query/mail/mutation/postMailReservation';
+import { MailReservationKeys } from '@/query/mail/options';
 import { memberOptions } from '@/query/member/options';
 import { buildMailRequest } from '@/utils/buildMailRequest';
 
 export const useMailActions = () => {
+  const queryClient = useQueryClient();
   const { mailInfo } = useMailInfoContext();
   const { mailContent } = useMailContentContext();
 
@@ -26,6 +27,9 @@ export const useMailActions = () => {
 
   const { mutateAsync: mutatePostMailReservation, isPending } = useMutation({
     mutationFn: postMailReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
+    },
   });
 
   const convertNameToEmail = (name: string) => {
