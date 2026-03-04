@@ -159,6 +159,7 @@ export const TemplateTab = () => {
             key={template.id}
             onClick={() => handleEditTemplate(template.id)}
             onDelete={() => handleDeleteTemplate(template.id)}
+            text="에 수정됨"
             title={template.title}
           />
         ))}
