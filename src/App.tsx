@@ -7,7 +7,7 @@ import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Applicants } from '@/pages/Applicants/Applicants.tsx';
 import { InterviewPage } from '@/pages/Interview/Interview';
 import { Members } from '@/pages/Members/Members.tsx';
-import { SendMail } from '@/pages/SendMail/SendMail';
+import { MailPage } from '@/pages/SendMail/MailPage';
 import { Templates } from '@/pages/Template/Templates';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
             <Route element={<Members />} path="members" />
             <Route element={<Applicants />} path="recruiting" />
             <Route element={<Templates />} path="templates" />
-            <Route element={<SendMail />} path="send-mail" />
+            <Route element={<MailPage />} path="send-mail" />
           </Route>
         </Routes>
       </Suspense>
