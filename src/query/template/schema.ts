@@ -36,6 +36,16 @@ export const BaseTemplateSchema = z.object({
   title: z.string(),
   bodyHtml: z.string(),
   variables: z.array(VariableSchema),
+  attachmentReferences: z
+    .array(
+      z.object({
+        fileId: z.number(),
+        fileName: z.string(),
+        contentType: z.string(),
+        storageKey: z.string(),
+      }),
+    )
+    .optional(),
   updatedAt: z.string(),
 });
 

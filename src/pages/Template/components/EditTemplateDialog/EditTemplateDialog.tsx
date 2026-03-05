@@ -4,10 +4,12 @@ import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
+import { MailContentProvider } from '@/pages/SendMail/context';
 import { TemplateEditor } from '@/pages/Template/components/TemplateEditor';
 import { templateOptions } from '@/query/template/options';
 import { Variable } from '@/types/editor';
 import { Template } from '@/types/template';
+import { AttachmentType } from '@/utils/buildMailRequest';
 
 import {
   StyledBody,
@@ -37,6 +39,7 @@ export const EditTemplateDialog = ({
     title: templateDetail.title,
     content: templateDetail.content,
     variables: templateDetail.variables,
+    attachments: templateDetail.attachments || [],
   });
 
   // templateDetail이 변경될 때 폼 데이터 업데이트
@@ -45,6 +48,7 @@ export const EditTemplateDialog = ({
       title: templateDetail.title,
       content: templateDetail.content,
       variables: templateDetail.variables,
+      attachments: templateDetail.attachments || [],
     });
   }, [templateDetail]);
 
@@ -57,6 +61,7 @@ export const EditTemplateDialog = ({
       title: formData.title.trim(),
       content: formData.content,
       variables: formData.variables,
+      attachments: formData.attachments,
     });
     onClose();
   };
@@ -87,6 +92,13 @@ export const EditTemplateDialog = ({
     }));
   };
 
+  const handleAttachmentsChange = (attachments: AttachmentType[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      attachments,
+    }));
+  };
+
   return (
     <Dialog.Root onOpenChange={handleClose} open={isOpen}>
       <Dialog.Portal>
@@ -106,12 +118,16 @@ export const EditTemplateDialog = ({
           </StyledHeader>
 
           <StyledBody>
-            <TemplateEditor
-              onContentChange={handleContentChange}
-              onVariablesChange={handleVariablesChange}
-              templateContent={formData.content}
-              templateVariables={formData.variables}
-            />
+            <MailContentProvider>
+              <TemplateEditor
+                onAttachmentsChange={handleAttachmentsChange}
+                onContentChange={handleContentChange}
+                onVariablesChange={handleVariablesChange}
+                templateAttachments={formData.attachments}
+                templateContent={formData.content}
+                templateVariables={formData.variables}
+              />
+            </MailContentProvider>
           </StyledBody>
 
           <StyledFooter>

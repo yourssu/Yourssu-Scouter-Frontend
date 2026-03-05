@@ -1,5 +1,13 @@
 import styled from 'styled-components';
 
+export const ToolbarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: ${({ theme }) => theme.semantic.color.bgBasicStrong};
+  border-radius: 0 0 ${({ theme }) => theme.semantic.radius.xl}px
+    ${({ theme }) => theme.semantic.radius.xl}px;
+`;
+
 export const ToolbarContainer = styled.div`
   display: flex;
   padding: 8px;
@@ -7,9 +15,47 @@ export const ToolbarContainer = styled.div`
   min-height: 44px;
   overflow-x: auto;
   max-width: 100%;
-  background: ${({ theme }) => theme.semantic.color.bgBasicStrong};
-  border-radius: 0 0 ${({ theme }) => theme.semantic.radius.xl}px
-    ${({ theme }) => theme.semantic.radius.xl}px;
+`;
+
+export const AttachmentList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 16px;
+  padding-top: 0;
+  border-top: 1px solid ${({ theme }) => theme.primitive.color.gray100};
+`;
+
+export const AttachmentChip = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: ${({ theme }) => theme.primitive.color.gray200};
+  border-radius: 1000px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: ${({ theme }) => theme.primitive.color.gray700};
+
+  span {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: ${({ theme }) => theme.primitive.color.gray500};
+    padding: 0;
+
+    &:hover {
+      color: ${({ theme }) => theme.primitive.color.gray700};
+    }
+  }
 `;
 
 export const ToolbarGroup = styled.div`

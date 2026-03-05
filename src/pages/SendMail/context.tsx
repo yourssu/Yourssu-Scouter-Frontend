@@ -4,6 +4,7 @@ import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 import { RecipientId } from '@/pages/SendMail/mail.type';
 import { Part } from '@/query/part/schema';
 import { VariableState } from '@/types/editor';
+import { AttachmentType } from '@/utils/buildMailRequest';
 
 // 1. 변수 관리 관련 타입
 interface MailVariableContextProps {
@@ -20,7 +21,7 @@ interface MailVariableContextProps {
 
 // 2. 메일 내용 관련 타입 (제목, 본문, 이미지, 파일)
 interface MailContentData {
-  attachments: string[];
+  attachments: AttachmentType[];
   body: Record<string, string>; // 지원자 id, 본문 내용
   bodyFormat: 'HTML' | 'PLAIN_TEXT';
   inlineImages: string[];

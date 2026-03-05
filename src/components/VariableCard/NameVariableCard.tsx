@@ -41,7 +41,7 @@ export const NameVariableCard = ({
         onSelect={handleSelectMember}
         trigger={
           <StyledBoxButton rightIcon={<IcPlusLine width={12} />} size="xsmall" variant="outlined">
-            사람 변수 추가
+            {names.length === 0 ? '사람 변수 추가' : '사람 변수 수정'}
           </StyledBoxButton>
         }
       />

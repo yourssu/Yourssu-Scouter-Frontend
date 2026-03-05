@@ -1,22 +1,26 @@
 import { api } from '@/apis/api.ts';
-import { MailBodyFormatType } from '@/utils/buildMailRequest';
 
 export interface PostMailReservationParams {
+  attachmentReferences: {
+    fileId: number;
+  }[];
   bccEmailAddresses: string[];
-  bodyFormat: MailBodyFormatType;
+  bodyFormat: 'HTML' | 'PLAIN_TEXT';
   ccEmailAddresses: string[];
+  inlineImageReferences: {
+    contentId: string;
+    fileId: number;
+  }[];
   mailBody: string;
   mailSubject: string;
   receiverEmailAddresses: string[];
-  reservationTime: null | string;
+  reservationTime: string;
 }
 
-export const postMailReservation = (data: FormData | PostMailReservationParams) => {
-  const isFormData = data instanceof FormData;
+export const postMailReservation = (data: PostMailReservationParams) => {
   return api
     .post('api/mails/reservation', {
-      body: isFormData ? data : undefined,
-      json: isFormData ? undefined : data,
+      json: data,
     })
     .json<void>();
 };

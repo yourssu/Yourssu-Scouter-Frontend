@@ -10,7 +10,9 @@ import { tv } from 'tailwind-variants';
 
 import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebarCard';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
+import { applicantOptions } from '@/query/applicant/options';
 import { partOptions } from '@/query/part/options';
+import { semesterNowOptions } from '@/query/semester/now/options';
 
 interface SelectHeaderProps {
   onOpenChange: (open: boolean) => void;
@@ -27,7 +29,7 @@ interface SelectItemProps {
 const item = tv({
   slots: {
     container: 'flex w-full cursor-pointer items-center justify-between',
-    content: 'flex w-full items-center gap-2 rounded-lg px-2',
+    content: 'flex w-full items-center gap-2 rounded-lg pr-2',
     title: 'typo-b1_sb_16 text-text-basicSecondary',
     valueContainer: 'flex items-center',
     icon: 'text-icon-brandPrimary invisible size-4',
@@ -102,6 +104,13 @@ export const ManualScheduleSidebarPartCard = () => {
   const [open, setOpen] = useState(false);
   const { partName, onPartChange } = useInterviewPartSelectionContext();
   const { data: parts } = useSuspenseQuery(partOptions());
+  const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
+  const { data: applicants } = useSuspenseQuery({
+    ...applicantOptions({ semesterId: semesterNow.semesterId }),
+    select: (v) => v.filter(({ state }) => state === '심사 진행 중'),
+  });
+
+  const partsWithApplicants = new Set(applicants.map((a) => a.part));
 
   return (
     <InterviewSidebarCard>
@@ -111,6 +120,7 @@ export const ManualScheduleSidebarPartCard = () => {
           <div className="bg-line-basicMedium h-[1px] w-full" />
           {parts
             .map((v) => v.partName)
+            .filter((v) => partsWithApplicants.has(v))
             .map((v) => (
               <SelectItem
                 key={v}

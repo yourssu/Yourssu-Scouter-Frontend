@@ -22,9 +22,10 @@ export const ManualScheduleMode = () => {
   const { partId } = useInterviewPartSelectionContext();
 
   const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
-  const { data: applicants } = useSuspenseQuery(
-    applicantOptions({ partId, semesterId: semesterNow.semesterId }),
-  );
+  const { data: applicants } = useSuspenseQuery({
+    ...applicantOptions({ partId, semesterId: semesterNow.semesterId }),
+    select: (v) => v.filter(({ state }) => state === '심사 진행 중'),
+  });
   const { data: existingSchedules } = useSuspenseQuery(scheduleOptions(partId));
 
   // 기존 스케줄을 Applicant와 매칭하여 초기 엔트리로 변환
@@ -56,6 +57,7 @@ export const ManualScheduleMode = () => {
     initialEntries: initialScheduleEntries,
     precision: duration === '1시간' ? '시간' : '분',
   });
+  const [interviewMethod, setInterviewMethod] = useState<'대면' | '비대면'>('대면');
 
   useEffect(() => {
     completedScheduleMapAction.reset();
@@ -81,8 +83,17 @@ export const ManualScheduleMode = () => {
               week,
             }}
             onSelectedApplicantChange={(v) => {
-              if (v.availableTimes.length > 0) {
-                jump(v.availableTimes[0]);
+              const settedApplicantEntry = completedScheduleMap
+                .entries()
+                .find(([, applicant]) => applicant.applicantId === v.applicantId);
+
+              if (settedApplicantEntry) {
+                jump(settedApplicantEntry[0]);
+              } else if (v.availableTimes.length > 0) {
+                const earliest = Math.min(
+                  ...v.availableTimes.map((time) => new Date(time).getTime()),
+                );
+                jump(new Date(earliest));
               }
               setSelectedApplicant(v);
             }}
@@ -108,6 +119,8 @@ export const ManualScheduleMode = () => {
         sidebar: (
           <ManualScheduleSidebar
             completedApplicants={completedScheduleMap.entries()}
+            method={interviewMethod}
+            onChangeMethod={setInterviewMethod}
             totalApplicantCount={applicants.length}
           />
         ),

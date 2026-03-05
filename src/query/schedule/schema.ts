@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { locationTypes } from '@/types/location';
 import { partNames } from '@/types/part';
 
 export const ScheduleSchema = z.object({
@@ -8,6 +9,8 @@ export const ScheduleSchema = z.object({
   part: z.enum(partNames),
   startTime: z.string(),
   endTime: z.string(),
+  locationType: z.enum(locationTypes),
+  locationDetail: z.string().nullable(),
 });
 
 export const AutoScheduleSchema = z.object({

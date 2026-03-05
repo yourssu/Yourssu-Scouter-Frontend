@@ -25,6 +25,7 @@ export const LinkVariableCard = ({ title, links, onValueChange }: LinkVariableCa
           )}
           <TextField
             onChange={(e) => handleValueChange(index, e.target.value)}
+            onClearButtonClick={() => handleValueChange(index, '')}
             placeholder={'링크 변수 URL 입력'}
             type="url"
             value={link.value}
