@@ -2,6 +2,7 @@ import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { assert, uniq } from 'es-toolkit';
 import { useEffect, useRef } from 'react';
 
+import { ApplicantInputField } from '@/pages/SendMail/components/MailInfoSection/ApplicantInputField';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options.ts';
 import { memberOptions } from '@/query/member/options.ts';
@@ -21,6 +22,7 @@ interface AutoFillMembersProps {
 export const AutoFillMembers = ({
   selectedPart,
   members,
+  selectedTemplateId,
   onMembersUpdate,
 }: AutoFillMembersProps) => {
   const isInitialized = useRef(false); // 초기화 여부 확인용
@@ -39,33 +41,61 @@ export const AutoFillMembers = ({
     },
   });
 
-  const [{ data: applicants }, { data: partMembers }, { data: hrMembers }] = useSuspenseQueries({
+  const isSelectedPartHR = selectedPart.partId === hrPartId;
+
+  const results = useSuspenseQueries({
     queries: [
-      applicantOptions({ partId: selectedPart.partId }),
-      memberOptions('액티브', {
-        partId: selectedPart.partId,
-        search: '',
-      }),
-      memberOptions('액티브', {
-        partId: hrPartId,
-        search: '',
-      }),
+      applicantOptions({ partId: selectedPart.partId }), // 지원자
+      memberOptions('액티브', { partId: selectedPart.partId, search: '' }), // 선택 파트 멤버
+      // 선택된 파트가 HR이 아닐 때만 별도로 HR 멤버를 불러옴
+      ...(isSelectedPartHR ? [] : [memberOptions('액티브', { partId: hrPartId, search: '' })]), // HR 멤버
     ],
   });
 
   useEffect(() => {
-    // 초기화가 이미 된 경우에는 실행하지 않음
+    // 해당 파트Id에 대해 이미 초기화(병합)를 완료했다면 중복 실행 방지
     if (isInitialized.current) {
       return;
     }
 
-    onMembersUpdate({
-      '받는 사람': applicants.map((a) => a.name),
-      '숨은 참조': uniq([...partMembers, ...hrMembers].map((m) => m.nickname)),
-    });
+    const applicantsData = results[0].data;
+    const partMembersData = results[1].data;
+    const hrMembersData = isSelectedPartHR ? partMembersData : (results[2]?.data ?? []);
 
-    isInitialized.current = true;
-  }, [applicants, partMembers, hrMembers, onMembersUpdate, mailInfo]);
+    if (applicantsData && partMembersData && !selectedTemplateId) {
+      // 1. 현재 컨텍스트에 담긴 '이미 선택된 명단'을 가져옴
+      const currentReceivers = mailInfo.receiver || [];
+      const currentBcc = mailInfo.bcc || [];
+
+      // 2. 선택된 파트의 기본 지원자 명단을 가져옴
+      const partReceivers = applicantsData.map((a) => a.name);
+      const partBcc = [...partMembersData, ...hrMembersData].map((m) => m.nickname);
+
+      // 3. 해당 파트가 아닌 지원자, 멤버는 삭제
+      const filteredReceivers = currentReceivers.filter((receiver) => {
+        return partReceivers.includes(receiver);
+      });
+      const filteredBcc = currentBcc.filter((bcc) => {
+        return partBcc.includes(bcc) || hrMembersData.some((hr) => hr.nickname === bcc); // HR 멤버는 항상 유지
+      });
+
+      // 4. [기존 명단 + 새 명단]을 합치고 중복을 제거
+      onMembersUpdate({
+        '받는 사람': uniq([...filteredReceivers, ...partReceivers]),
+        '숨은 참조': uniq([...filteredBcc, ...partBcc]),
+      });
+
+      isInitialized.current = true;
+    }
+  }, [
+    results,
+    isSelectedPartHR,
+    onMembersUpdate,
+    mailInfo.receiver,
+    mailInfo.bcc,
+    selectedPart.partName,
+    selectedTemplateId,
+  ]);
 
   return (
     <div className="gap-0">
@@ -74,10 +104,11 @@ export const AutoFillMembers = ({
         label="보내는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '보내는 사람': items })}
       />
-      <MemberInputField
+      <ApplicantInputField
         items={mailInfo.receiver || []}
         label="받는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '받는 사람': items })}
+        selectedPart={selectedPart}
       />
       <MemberInputField
         items={mailInfo.bcc || []}

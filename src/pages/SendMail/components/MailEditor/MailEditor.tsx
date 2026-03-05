@@ -24,12 +24,14 @@ export const MailEditor = ({ selectedTemplateId }: MailEditorProps) => {
 
   return (
     <EditorContainer>
-      <MailHeader
-        activeTabId={currentRecipientId}
-        onTabChange={setCurrentRecipientId}
-        recipients={recipients}
-        type="tabs"
-      />
+      {recipients.length > 0 && (
+        <MailHeader
+          activeTabId={currentRecipientId}
+          onTabChange={setCurrentRecipientId}
+          recipients={recipients}
+          type="tabs"
+        />
+      )}
       <Suspense fallback={<div>에디터 로딩 중...</div>}>
         <MailEditorContent
           currentApplicantId={currentRecipientId}

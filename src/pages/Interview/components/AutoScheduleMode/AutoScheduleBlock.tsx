@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 import { AutoSchedule } from '@/query/schedule/schema';
 import { formatTemplates } from '@/utils/date';
 
@@ -5,11 +7,25 @@ interface AutoScheduleBlockProps {
   date: Date;
   isFirstBlock: boolean;
   schedule: AutoSchedule;
+  shouldScrollIntoView?: boolean;
 }
 
-export const AutoScheduleBlock = ({ schedule, date, isFirstBlock }: AutoScheduleBlockProps) => {
+export const AutoScheduleBlock = ({
+  schedule,
+  date,
+  isFirstBlock,
+  shouldScrollIntoView,
+}: AutoScheduleBlockProps) => {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (shouldScrollIntoView && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [shouldScrollIntoView]);
+
   return (
-    <button className="bg-bg-brandPrimary flex size-full flex-col rounded-lg text-white">
+    <button className="bg-bg-brandPrimary flex size-full flex-col rounded-lg text-white" ref={ref}>
       {isFirstBlock && (
         <>
           <div className="typo-c3_sb_11 flex size-full items-end gap-1.5 px-2">

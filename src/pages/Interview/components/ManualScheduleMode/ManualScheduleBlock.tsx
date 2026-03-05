@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useEffect, useRef } from 'react';
 
 import { Applicant } from '@/query/applicant/schema';
 import { formatTemplates } from '@/utils/date';
@@ -8,6 +9,7 @@ interface ManualScheduleBlockProps {
   date: Date;
   isFirstBlock: boolean;
   onClick: () => void;
+  shouldScrollIntoView?: boolean;
 }
 
 export const ManualScheduleBlock = ({
@@ -15,7 +17,16 @@ export const ManualScheduleBlock = ({
   date,
   isFirstBlock,
   onClick,
+  shouldScrollIntoView,
 }: ManualScheduleBlockProps) => {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (shouldScrollIntoView && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [shouldScrollIntoView]);
+
   return (
     <button
       className={clsx(
@@ -23,6 +34,7 @@ export const ManualScheduleBlock = ({
         !applicant && 'opacity-20 hover:opacity-60',
       )}
       onClick={onClick}
+      ref={ref}
     >
       {applicant && isFirstBlock && (
         <>

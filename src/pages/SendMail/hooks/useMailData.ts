@@ -1,5 +1,5 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useMailContentContext, useOptionalMailVariables } from '@/pages/SendMail/context';
 import { templateOptions } from '@/query/template/options';
@@ -15,6 +15,15 @@ export const useMailData = (
   const templateDetail = results[0]?.data;
   const defaultContent = templateDetail?.content || '';
   const mailVariables = useOptionalMailVariables();
+
+  // 템플릿 로드 시 초기 첨부파일 동기화
+  const initialSyncRef = useRef(true);
+  useEffect(() => {
+    if (initialSyncRef.current && templateDetail?.attachments) {
+      actions.updateMailContent({ attachments: templateDetail.attachments });
+      initialSyncRef.current = false;
+    }
+  }, [templateDetail, actions]);
 
   // console.log('선택된 템플릿 ID:', selectedTemplateId);
   // console.log('가져온 템플릿:', defaultContent);

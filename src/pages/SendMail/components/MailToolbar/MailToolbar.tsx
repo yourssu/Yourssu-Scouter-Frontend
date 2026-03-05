@@ -1,5 +1,6 @@
 import { Editor } from '@tiptap/react';
-import { IcArrowsChevronDownFilled } from '@yourssu/design-system-react';
+import { IcArrowsChevronDownFilled, IcCloseLine } from '@yourssu/design-system-react';
+import ky from 'ky';
 import { useRef } from 'react';
 
 import { IcChangeBold } from '@/components/Icons/Editor/IcChangeBold';
@@ -13,8 +14,13 @@ import { IcChangeTextAlignLeft } from '@/components/Icons/Editor/IcChangeTextAli
 import { IcChangeTextAlignRight } from '@/components/Icons/Editor/IcChangeTextAlignRight';
 import { IcChangeUnderline } from '@/components/Icons/Editor/IcChangeUnderline';
 import { IcChangeUnorderedList } from '@/components/Icons/Editor/IcChangeUnorderedList';
+import { useMailContentContext } from '@/pages/SendMail/context';
+import { postMailFileConfirm } from '@/query/mail/mutation/postMailFileConfirm';
+import { postMailFilePresign } from '@/query/mail/mutation/postMailFilePresign';
 
 import {
+  AttachmentChip,
+  AttachmentList,
   ColorButton,
   Divider,
   FontFamilySelect,
@@ -22,6 +28,7 @@ import {
   ToolbarButton,
   ToolbarContainer,
   ToolbarGroup,
+  ToolbarWrapper,
 } from './MailToolbar.style';
 
 interface MailToolbarProps {
@@ -29,27 +36,135 @@ interface MailToolbarProps {
 }
 
 export const MailToolbar = ({ editor }: MailToolbarProps) => {
+  const { mailContent, actions } = useMailContentContext();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   if (!editor) {
     return null;
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result as string;
-      editor.chain().focus().setImage({ src: dataUrl }).run();
-    };
-    reader.readAsDataURL(file);
+    try {
+      const presignResponse = await postMailFilePresign({
+        files: [
+          {
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            usage: 'ATTACHMENT',
+          },
+        ],
+      });
 
-    // input 초기화 (같은 파일 다시 선택 가능하도록)
-    event.target.value = '';
+      const { putUrl, s3Key, cid } = presignResponse.uploads[0];
+
+      await ky.put(putUrl, {
+        body: file,
+        headers: {
+          'Content-Type': file.type || 'application/octet-stream',
+        },
+      });
+
+      const confirmResponse = await postMailFileConfirm({
+        files: [
+          {
+            cid,
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            s3Key,
+            usage: 'ATTACHMENT',
+          },
+        ],
+      });
+
+      const { fileId, fileName } = confirmResponse.files[0];
+      actions.updateMailContent({
+        attachments: [...mailContent.attachments, { fileId, name: fileName }],
+      });
+    } catch (error) {
+      console.error('Failed to upload file:', error);
+      alert('파일 업로드에 실패했습니다.');
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleRemoveAttachment = (fileId: number) => {
+    actions.updateMailContent({
+      attachments: mailContent.attachments.filter((a) => a.fileId !== fileId),
+    });
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const presignResponse = await postMailFilePresign({
+        files: [
+          {
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            usage: 'INLINE',
+          },
+        ],
+      });
+
+      const { putUrl, s3Key, cid } = presignResponse.uploads[0];
+
+      await ky.put(putUrl, {
+        body: file,
+        headers: {
+          'Content-Type': file.type || 'application/octet-stream',
+        },
+      });
+
+      const contentId = cid || `cid_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+      const confirmResponse = await postMailFileConfirm({
+        files: [
+          {
+            cid: contentId,
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            s3Key,
+            usage: 'INLINE',
+          },
+        ],
+      });
+
+      const { fileId } = confirmResponse.files[0];
+
+      const s3ImageBaseUrl = import.meta.env.VITE_S3_IMAGE_BASE_URL;
+      const src = `${s3ImageBaseUrl}/${encodeURIComponent(contentId)}`;
+
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'image',
+          attrs: {
+            src,
+            'data-file-id': fileId,
+            'data-content-id': contentId,
+          },
+        })
+        .run();
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      alert('이미지 업로드에 실패했습니다.');
+    } finally {
+      event.target.value = '';
+    }
   };
 
   const colors = ['#000000', '#334155', '#5736F5'];
@@ -67,192 +182,198 @@ export const MailToolbar = ({ editor }: MailToolbarProps) => {
   };
 
   return (
-    <ToolbarContainer>
-      <ToolbarGroup>
-        <FontSizeSelect onChange={handleFontSizeChange} title="Font Size">
-          <option value="">Size</option>
-          {fontSizes.map((size) => (
-            <option key={size} value={size}>
-              {size}
-            </option>
-          ))}
-        </FontSizeSelect>
-        <IcArrowsChevronDownFilled
-          color={'#98A2B3'}
-          height={16}
-          style={{
-            position: 'absolute',
-            right: '8px',
-            pointerEvents: 'none',
-          }}
-          width={16}
-        />
-      </ToolbarGroup>
-
-      <ToolbarGroup>
-        <FontFamilySelect onChange={handleFontFamilyChange} title="Font Family">
-          <option value="">Font</option>
-          {fontFamilies.map((font) => (
-            <option key={font} value={font}>
-              {font}
-            </option>
-          ))}
-        </FontFamilySelect>
-        <IcArrowsChevronDownFilled
-          color={'#98A2B3'}
-          height={16}
-          style={{
-            position: 'absolute',
-            right: '8px',
-            pointerEvents: 'none',
-          }}
-          width={16}
-        />
-      </ToolbarGroup>
-
-      <Divider />
-
-      <ToolbarGroup>
-        {colors.map((color) => (
-          <ColorButton
-            className={editor.isActive('textStyle', { color }) ? 'is-active' : ''}
-            color={color}
-            key={color}
-            onClick={() => editor.chain().focus().setColor(color).run()}
+    <ToolbarWrapper>
+      <ToolbarContainer>
+        <ToolbarGroup>
+          <FontSizeSelect onChange={handleFontSizeChange} title="Font Size">
+            <option value="">Size</option>
+            {fontSizes.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </FontSizeSelect>
+          <IcArrowsChevronDownFilled
+            color={'#98A2B3'}
+            height={16}
+            style={{
+              position: 'absolute',
+              right: '8px',
+              pointerEvents: 'none',
+            }}
+            width={16}
           />
-        ))}
-      </ToolbarGroup>
+        </ToolbarGroup>
 
-      <ToolbarGroup>
-        <ToolbarButton
-          className={editor.isActive('bold') ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          title="Bold"
-          type="button"
-        >
-          <IcChangeBold />
-        </ToolbarButton>
-        <ToolbarButton
-          className={editor.isActive('italic') ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          title="Italic"
-          type="button"
-        >
-          <IcChangeItalic />
-        </ToolbarButton>
-        <ToolbarButton
-          className={editor.isActive('underline') ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          title="Underline"
-          type="button"
-        >
-          <IcChangeUnderline />
-        </ToolbarButton>
-        <ToolbarButton
-          className={editor.isActive('strike') ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          title="Strike"
-          type="button"
-        >
-          <IcChangeStrike />
-        </ToolbarButton>
-      </ToolbarGroup>
+        <ToolbarGroup>
+          <FontFamilySelect onChange={handleFontFamilyChange} title="Font Family">
+            <option value="">Font</option>
+            {fontFamilies.map((font) => (
+              <option key={font} value={font}>
+                {font}
+              </option>
+            ))}
+          </FontFamilySelect>
+          <IcArrowsChevronDownFilled
+            color={'#98A2B3'}
+            height={16}
+            style={{
+              position: 'absolute',
+              right: '8px',
+              pointerEvents: 'none',
+            }}
+            width={16}
+          />
+        </ToolbarGroup>
 
-      <Divider />
+        <Divider />
 
-      <ToolbarGroup>
-        <ToolbarButton
-          className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          title="Align Left"
-          type="button"
-        >
-          <IcChangeTextAlignLeft />
-        </ToolbarButton>
-        <ToolbarButton
-          className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          title="Align Center"
-          type="button"
-        >
-          <IcChangeTextAlign />
-        </ToolbarButton>
-        <ToolbarButton
-          className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          title="Align Right"
-          type="button"
-        >
-          <IcChangeTextAlignRight />
-        </ToolbarButton>
-      </ToolbarGroup>
+        <ToolbarGroup>
+          {colors.map((color) => (
+            <ColorButton
+              className={editor.isActive('textStyle', { color }) ? 'is-active' : ''}
+              color={color}
+              key={color}
+              onClick={() => editor.chain().focus().setColor(color).run()}
+            />
+          ))}
+        </ToolbarGroup>
 
-      <Divider />
+        <ToolbarGroup>
+          <ToolbarButton
+            className={editor.isActive('bold') ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            title="Bold"
+            type="button"
+          >
+            <IcChangeBold />
+          </ToolbarButton>
+          <ToolbarButton
+            className={editor.isActive('italic') ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            title="Italic"
+            type="button"
+          >
+            <IcChangeItalic />
+          </ToolbarButton>
+          <ToolbarButton
+            className={editor.isActive('underline') ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            title="Underline"
+            type="button"
+          >
+            <IcChangeUnderline />
+          </ToolbarButton>
+          <ToolbarButton
+            className={editor.isActive('strike') ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            title="Strike"
+            type="button"
+          >
+            <IcChangeStrike />
+          </ToolbarButton>
+        </ToolbarGroup>
 
-      <ToolbarGroup>
-        <ToolbarButton
-          className={editor.isActive('orderedList') ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          title="Ordered List"
-          type="button"
-        >
-          <IcChangeOrderedList />
-        </ToolbarButton>
-        <ToolbarButton
-          className={editor.isActive('bulletList') ? 'is-active' : ''}
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          title="Bullet List"
-          type="button"
-        >
-          <IcChangeUnorderedList />
-        </ToolbarButton>
-      </ToolbarGroup>
+        <Divider />
 
-      <Divider />
+        <ToolbarGroup>
+          <ToolbarButton
+            className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().setTextAlign('left').run()}
+            title="Align Left"
+            type="button"
+          >
+            <IcChangeTextAlignLeft />
+          </ToolbarButton>
+          <ToolbarButton
+            className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().setTextAlign('center').run()}
+            title="Align Center"
+            type="button"
+          >
+            <IcChangeTextAlign />
+          </ToolbarButton>
+          <ToolbarButton
+            className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().setTextAlign('right').run()}
+            title="Align Right"
+            type="button"
+          >
+            <IcChangeTextAlignRight />
+          </ToolbarButton>
+        </ToolbarGroup>
 
-      <ToolbarGroup>
-        <input
-          accept="image/png,image/jpeg,image/gif,image/webp"
-          onChange={handleImageUpload}
-          ref={imageInputRef}
-          style={{ display: 'none' }}
-          type="file"
-        />
-        <ToolbarButton
-          onClick={() => imageInputRef.current?.click()}
-          title="Insert Img"
-          type="button"
-        >
-          <IcChangePhoto />
-        </ToolbarButton>
+        <Divider />
 
-        <ToolbarButton
-          className={editor.isActive('link') ? 'is-active' : ''}
-          onClick={() => {
-            const previousUrl = editor.getAttributes('link').href;
-            const url = window.prompt('URL 입력:', previousUrl);
+        <ToolbarGroup>
+          <ToolbarButton
+            className={editor.isActive('orderedList') ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            title="Ordered List"
+            type="button"
+          >
+            <IcChangeOrderedList />
+          </ToolbarButton>
+          <ToolbarButton
+            className={editor.isActive('bulletList') ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            title="Bullet List"
+            type="button"
+          >
+            <IcChangeUnorderedList />
+          </ToolbarButton>
+        </ToolbarGroup>
 
-            if (url === null) {
-              return;
-            }
+        <Divider />
 
-            if (url === '') {
-              editor.chain().focus().extendMarkRange('link').unsetLink().run();
-              return;
-            }
+        <ToolbarGroup>
+          <input
+            onChange={handleFileUpload}
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            type="file"
+          />
+          <ToolbarButton
+            onClick={() => fileInputRef.current?.click()}
+            title="Insert File"
+            type="button"
+          >
+            <IcChangeLink />
+          </ToolbarButton>
 
-            try {
-              editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-            } catch (error) {
-              console.error(error);
-            }
-          }}
-          title="Insert Link"
-          type="button"
-        >
-          <IcChangeLink />
-        </ToolbarButton>
-      </ToolbarGroup>
-    </ToolbarContainer>
+          <input
+            accept="image/png,image/jpeg,image/gif,image/webp"
+            onChange={handleImageUpload}
+            ref={imageInputRef}
+            style={{ display: 'none' }}
+            type="file"
+          />
+          <ToolbarButton
+            onClick={() => imageInputRef.current?.click()}
+            title="Insert Img"
+            type="button"
+          >
+            <IcChangePhoto />
+          </ToolbarButton>
+        </ToolbarGroup>
+      </ToolbarContainer>
+
+      {mailContent.attachments.length > 0 && (
+        <AttachmentList>
+          {mailContent.attachments.map((file) => (
+            <AttachmentChip key={file.fileId}>
+              <span>{file.name}</span>
+              <button
+                aria-label="삭제"
+                onClick={() => handleRemoveAttachment(file.fileId)}
+                type="button"
+              >
+                <IcCloseLine style={{ width: 16, height: 16 }} />
+              </button>
+            </AttachmentChip>
+          ))}
+        </AttachmentList>
+      )}
+    </ToolbarWrapper>
   );
 };

@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React from 'react';
 
 const BottomArea = ({ children }: React.PropsWithChildren<unknown>) => {
@@ -18,9 +17,7 @@ const CardList = ({ title, children }: React.PropsWithChildren<{ title?: string 
         </div>
       )}
       <div className="min-h-0 flex-[1_1_0] overflow-y-auto">
-        <div className={clsx('flex flex-col gap-2.5 px-5', title ? 'py-5' : 'py-12')}>
-          {children}
-        </div>
+        <div className="flex flex-col gap-2.5 px-5 py-5">{children}</div>
       </div>
     </div>
   );

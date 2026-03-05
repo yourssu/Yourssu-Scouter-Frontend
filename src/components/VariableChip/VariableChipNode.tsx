@@ -120,8 +120,8 @@ export const VariableChipNode = Node.create<VariableChipOptions>({
   },
 });
 
-const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
-  const context = useOptionalMailVariables();
+// 실제 변수 값을 보여주는 컴포넌트 (메일 발송 페이지에서만 렌더링)
+const VariableValueContent: React.FC<NodeViewProps> = ({ node }) => {
   const { getVariableValue } = useVariableValue();
 
   const { key, type, label, perRecipient } = node.attrs as {
@@ -131,24 +131,10 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
     type: string;
   };
 
-  if (!context) {
-    return (
-      <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
-        <VariableChip label={label} size="small" type={type as any} />
-      </NodeViewWrapper>
-    );
-  }
-
   const displayValue = getVariableValue(key, perRecipient, label);
 
   return (
-    <NodeViewWrapper
-      as="span"
-      className="variable-chip-node"
-      style={{
-        display: 'inline-block',
-      }}
-    >
+    <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
       {displayValue ? (
         <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
       ) : (
@@ -156,4 +142,22 @@ const VariableChipNodeView: React.FC<NodeViewProps> = ({ node }) => {
       )}
     </NodeViewWrapper>
   );
+};
+
+// Tiptap이 직접 사용하는 변수 칩 노드 뷰 컴포넌트
+const VariableChipNodeView: React.FC<NodeViewProps> = (props) => {
+  const context = useOptionalMailVariables();
+
+  // 템플릿 페이지(Context 없음)일 경우: 하위 컴포넌트를 아예 렌더링하지 않고 즉시 리턴합니다.
+  if (!context) {
+    const { label, type } = props.node.attrs;
+    return (
+      <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
+        <VariableChip label={label} size="small" type={type as any} />
+      </NodeViewWrapper>
+    );
+  }
+
+  // 메일 발송 페이지일 경우에만 하위 컴포넌트를 마운트합니다.
+  return <VariableValueContent {...props} />;
 };

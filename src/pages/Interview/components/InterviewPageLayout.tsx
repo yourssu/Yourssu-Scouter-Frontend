@@ -34,10 +34,10 @@ export const InterviewPageLayout = ({
   return (
     <PageLayout title={title}>
       <div className="border-line-basicMedium border-b">
-        <div className="w-[70%] pr-6">{header}</div>
+        <div className="w-[80%] pr-6">{header}</div>
       </div>
       <div className="flex flex-[1_1_0] overflow-hidden">
-        <div className="flex w-[70%] min-w-0 flex-col pt-12 pr-6">{calendar}</div>
+        <div className="flex w-[80%] min-w-0 flex-col pt-12 pr-6">{calendar}</div>
         <div className="border-line-basicMedium flex-1 border-l">{sidebar}</div>
       </div>
     </PageLayout>

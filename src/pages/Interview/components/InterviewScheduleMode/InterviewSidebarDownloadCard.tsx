@@ -3,7 +3,6 @@ import { useLoading } from 'react-simplikit';
 
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useInterviewScheduleCalendarRefContext } from '@/pages/Interview/components/InterviewScheduleMode/context';
-import { InterviewSidebarCard } from '@/pages/Interview/components/InterviewSidebarCard';
 
 export const InterviewSidebarDownloadCard = () => {
   const openAlertDialog = useAlertDialog();
@@ -40,14 +39,24 @@ export const InterviewSidebarDownloadCard = () => {
   };
 
   return (
-    <InterviewSidebarCard>
-      <InterviewSidebarCard.Title>면접 일정 저장</InterviewSidebarCard.Title>
-      <InterviewSidebarCard.Content>
-        면접 일정을 이미지로 다운로드 할 수 있어요.
-      </InterviewSidebarCard.Content>
-      <BoxButton disabled={loading} onClick={onClick} size="small" variant="filledPrimary">
+    <div className="bg-bg-basicDefault border-line-basicMedium flex w-full shrink-0 flex-col items-start gap-3 rounded-[14px] border p-4">
+      <div className="flex shrink-0 items-center">
+        <p className="typo-b1_sb_16 text-text-basicSecondary text-center">면접 일정 저장</p>
+      </div>
+      <div className="flex w-full shrink-0 flex-col py-2.5">
+        <p className="typo-b1_rg_16 text-text-basicTertiary truncate text-left">
+          Jpeg로 저장된 면접 일정을 다운로드 할 수 있어요!
+        </p>
+      </div>
+      <BoxButton
+        className="w-full"
+        disabled={loading}
+        onClick={onClick}
+        size="small"
+        variant="filledPrimary"
+      >
         {loading ? '시간표를 변환하고 있어요...' : '시간표 저장하기'}
       </BoxButton>
-    </InterviewSidebarCard>
+    </div>
   );
 };
