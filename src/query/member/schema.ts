@@ -56,6 +56,12 @@ const GraduatedMemberSchema = BaseMemberSchema.extend({
   state: z.literal('졸업'),
 });
 
+const CompletedMemberSchema = BaseMemberSchema.extend({
+  activePeriod: PeriodSchema.nullable(),
+  isAdvisorDesired: z.boolean().nullable(),
+  state: z.literal('수료'),
+});
+
 const WithdrawnMemberSchema = BaseMemberSchema.extend({
   state: z.literal('탈퇴'),
 });
@@ -65,6 +71,7 @@ const MemberSchema = z.discriminatedUnion('state', [
   InactiveMemberSchema,
   GraduatedMemberSchema,
   WithdrawnMemberSchema,
+  CompletedMemberSchema,
 ]);
 
 export const PatchMemberSchema = z
@@ -73,6 +80,7 @@ export const PatchMemberSchema = z
   .merge(InactiveMemberSchema)
   .merge(GraduatedMemberSchema)
   .merge(WithdrawnMemberSchema)
+  .merge(CompletedMemberSchema)
   .omit({
     memberId: true,
     state: true,

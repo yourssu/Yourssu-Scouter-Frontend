@@ -10,14 +10,23 @@ import { useElementWidth } from '@/hooks/useElementWidth.ts';
 import { partOptions } from '@/query/part/options.ts';
 
 interface PartsCellProps extends PropsWithChildren {
+  disabled?: boolean;
   onSelect: (value: string) => void;
   tooltipContent: string;
 }
 
-const PartsCell = ({ tooltipContent, children, onSelect }: PartsCellProps) => {
+const PartsCell = ({ tooltipContent, children, onSelect, disabled = false }: PartsCellProps) => {
   const { data: parts } = useSuspenseQuery(partOptions());
   const options = parts.map((part) => ({ label: part.partName }));
   const { width, ref } = useElementWidth();
+
+  if (disabled) {
+    return (
+      <StyledContainer $bold={false} $editable={false}>
+        {children}
+      </StyledContainer>
+    );
+  }
 
   return (
     <GenericDialog onSelect={onSelect} options={options} width={width}>

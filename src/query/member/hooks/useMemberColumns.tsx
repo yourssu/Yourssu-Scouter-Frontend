@@ -57,6 +57,7 @@ export const useMemberColumns = (
         const parts = info.getValue();
         return (
           <PartsCell
+            disabled={isSensitiveMasked}
             onSelect={(value) => {
               const included = parts.some((p) => p.part === value);
               if (handlePatchMember) {
@@ -97,6 +98,7 @@ export const useMemberColumns = (
               contentProps={{
                 align: 'start',
               }}
+              disabled={isSensitiveMasked}
               onStateChange={(state) => {
                 if (handlePatchMember) {
                   handlePatchMember(info.row.original.memberId, 'role', state);
@@ -114,6 +116,7 @@ export const useMemberColumns = (
       cell: (info) => (
         <InputCell
           defaultValue={info.getValue()}
+          disabled={isSensitiveMasked}
           handleSubmit={(value) => {
             if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'name', value);
@@ -132,6 +135,7 @@ export const useMemberColumns = (
         <InputCell
           bold={true}
           defaultValue={info.getValue()}
+          disabled={isSensitiveMasked}
           handleSubmit={(value) => {
             if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'nickname', value);
@@ -152,6 +156,7 @@ export const useMemberColumns = (
             contentProps={{
               align: 'start',
             }}
+            disabled={isSensitiveMasked}
             onStateChange={(value) => {
               if (handlePatchMember) {
                 handlePatchMember(info.row.original.memberId, 'state', value);
@@ -168,6 +173,7 @@ export const useMemberColumns = (
       cell: (info) => (
         <InputCell
           defaultValue={info.getValue()}
+          disabled={isSensitiveMasked}
           handleSubmit={(value) => {
             if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'email', value);
@@ -180,31 +186,29 @@ export const useMemberColumns = (
       ),
       size: 235,
     }),
-    ...(!isSensitiveMasked
-      ? [
-          columnHelper.accessor('phoneNumber', {
-            header: '연락처',
-            cell: (info) => (
-              <InputCell
-                defaultValue={info.getValue() ?? ''}
-                handleSubmit={(value) => {
-                  if (handlePatchMember) {
-                    handlePatchMember(info.row.original.memberId, 'phoneNumber', value);
-                  }
-                }}
-                tooltipContent={`${info.row.original.name} 정보 수정`}
-              >
-                {info.getValue() ?? ''}
-              </InputCell>
-            ),
-            size: 175,
-          }),
-        ]
-      : []),
+    columnHelper.accessor('phoneNumber', {
+      header: '연락처',
+      cell: (info) => (
+        <InputCell
+          defaultValue={info.getValue() ?? '010-****-****'}
+          disabled={isSensitiveMasked}
+          handleSubmit={(value) => {
+            if (handlePatchMember) {
+              handlePatchMember(info.row.original.memberId, 'phoneNumber', value);
+            }
+          }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
+        >
+          {info.getValue() ?? '010-****-****'}
+        </InputCell>
+      ),
+      size: 175,
+    }),
     columnHelper.accessor('department', {
       header: '전공',
       cell: (info) => (
         <DepartmentCell
+          disabled={isSensitiveMasked}
           onSelect={(value) => {
             if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'departmentId', value);
@@ -217,49 +221,48 @@ export const useMemberColumns = (
       ),
       size: 260,
     }),
-    ...(!isSensitiveMasked
-      ? [
-          columnHelper.accessor('studentId', {
-            header: '학번',
-            cell: (info) => (
-              <InputCell
-                defaultValue={info.getValue() ?? ''}
-                handleSubmit={(value) => {
-                  if (handlePatchMember) {
-                    handlePatchMember(info.row.original.memberId, 'studentId', value);
-                  }
-                }}
-                tooltipContent={`${info.row.original.name} 정보 수정`}
-              >
-                {info.getValue() ?? ''}
-              </InputCell>
-            ),
-            size: 136,
-          }),
-          columnHelper.accessor('birthDate', {
-            header: '생년월일',
-            cell: (info) => (
-              <InputCell
-                defaultValue={info.getValue() ?? ''}
-                handleSubmit={(value) => {
-                  if (handlePatchMember) {
-                    handlePatchMember(info.row.original.memberId, 'birthDate', value);
-                  }
-                }}
-                tooltipContent={`${info.row.original.name} 정보 수정`}
-              >
-                {info.getValue() ?? ''}
-              </InputCell>
-            ),
-            size: 142,
-          }),
-        ]
-      : []),
+    columnHelper.accessor('studentId', {
+      header: '학번',
+      cell: (info) => (
+        <InputCell
+          defaultValue={info.getValue() ?? '********'}
+          disabled={isSensitiveMasked}
+          handleSubmit={(value) => {
+            if (handlePatchMember) {
+              handlePatchMember(info.row.original.memberId, 'studentId', value);
+            }
+          }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
+        >
+          {info.getValue() ?? '********'}
+        </InputCell>
+      ),
+      size: 136,
+    }),
+    columnHelper.accessor('birthDate', {
+      header: '생년월일',
+      cell: (info) => (
+        <InputCell
+          defaultValue={info.getValue() ?? '********'}
+          disabled={isSensitiveMasked}
+          handleSubmit={(value) => {
+            if (handlePatchMember) {
+              handlePatchMember(info.row.original.memberId, 'birthDate', value);
+            }
+          }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
+        >
+          {info.getValue() ?? '********'}
+        </InputCell>
+      ),
+      size: 142,
+    }),
     columnHelper.accessor('joinDate', {
       header: '가입일',
       cell: (info) => (
         <InputCell
           defaultValue={info.getValue()}
+          disabled={isSensitiveMasked}
           handleSubmit={(value) => {
             if (handlePatchMember) {
               handlePatchMember(info.row.original.memberId, 'joinDate', value);
@@ -298,6 +301,7 @@ export const useMemberColumns = (
                   }}
                 >
                   <Checkbox
+                    disabled={isSensitiveMasked}
                     onChange={(e) => {
                       if (handlePatchMember) {
                         handlePatchMember(
@@ -319,13 +323,21 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...((state === '비액티브' || state === '졸업') && !isSensitiveMasked
+    ...(state === '비액티브' || state === '졸업' || state === '수료'
       ? [
           columnHelper.accessor('activePeriod', {
             header: '활동 기간',
             cell: (info) => {
               const member = info.row.original;
-              if ((member.state === '비액티브' || member.state === '졸업') && member.activePeriod) {
+              if (
+                member.state === '비액티브' ||
+                member.state === '졸업' ||
+                member.state === '수료'
+              ) {
+                const activePeriod = member.activePeriod || {
+                  startSemester: '****-*',
+                  endSemester: '****-*',
+                };
                 return (
                   <Cell>
                     <div
@@ -336,7 +348,7 @@ export const useMemberColumns = (
                       }}
                     >
                       <ActivePeriod size="small" variant="filledSecondary">
-                        {member.activePeriod.startSemester}
+                        {activePeriod.startSemester}
                       </ActivePeriod>
                       ~
                       <ActivePeriod
@@ -344,7 +356,7 @@ export const useMemberColumns = (
                         style={{ pointerEvents: 'none' }}
                         variant="filledSecondary"
                       >
-                        {member.activePeriod.endSemester}
+                        {activePeriod.endSemester}
                       </ActivePeriod>
                     </div>
                   </Cell>
@@ -355,7 +367,7 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...(state === '비액티브' && !isSensitiveMasked
+    ...(state === '비액티브'
       ? [
           columnHelper.accessor('expectedReturnSemester', {
             header: '복귀 희망 학기',
@@ -368,6 +380,7 @@ export const useMemberColumns = (
                       contentProps={{
                         align: 'start',
                       }}
+                      disabled={isSensitiveMasked}
                       onStateChange={(value) => {
                         const semesterId = semesters.find((s) => s.semester === value)?.semesterId;
                         if (semesterId && handlePatchMember) {
@@ -378,7 +391,7 @@ export const useMemberColumns = (
                           );
                         }
                       }}
-                      selectedValue={member.expectedReturnSemester ?? ''}
+                      selectedValue={member.expectedReturnSemester ?? '****-*'}
                     />
                   </Cell>
                 );
@@ -388,13 +401,17 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...(state === '비액티브' && !isSensitiveMasked
+    ...(state === '비액티브'
       ? [
           columnHelper.accessor('inactivePeriod', {
             header: '비액티브 기간',
             cell: (info) => {
               const member = info.row.original;
-              if (member.state === '비액티브' && member.inactivePeriod) {
+              if (member.state === '비액티브') {
+                const inactivePeriod = member.inactivePeriod || {
+                  startSemester: '****-*',
+                  endSemester: '****-*',
+                };
                 return (
                   <Cell>
                     <div
@@ -405,7 +422,7 @@ export const useMemberColumns = (
                       }}
                     >
                       <InactivePeriod disabled size="small" variant="filledSecondary">
-                        {member.inactivePeriod.startSemester}
+                        {inactivePeriod.startSemester}
                       </InactivePeriod>
                       ~
                       <InactivePeriod
@@ -414,7 +431,7 @@ export const useMemberColumns = (
                         style={{ pointerEvents: 'none' }}
                         variant="filledSecondary"
                       >
-                        {member.inactivePeriod.endSemester}
+                        {inactivePeriod.endSemester}
                       </InactivePeriod>
                     </div>
                   </Cell>
@@ -425,7 +442,7 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...(state === '졸업' && !isSensitiveMasked
+    ...((state === '졸업' || state === '수료') && !isSensitiveMasked
       ? [
           columnHelper.accessor('isAdvisorDesired', {
             header: '어드바이저 희망',
@@ -440,6 +457,7 @@ export const useMemberColumns = (
                   }}
                 >
                   <Checkbox
+                    disabled={isSensitiveMasked}
                     onChange={(e) => {
                       if (handlePatchMember) {
                         handlePatchMember(
@@ -461,26 +479,23 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...(!isSensitiveMasked
-      ? [
-          columnHelper.accessor('note', {
-            header: '비고',
-            cell: (info) => (
-              <InputCell
-                defaultValue={info.getValue() ?? ''}
-                handleSubmit={(value) => {
-                  if (handlePatchMember) {
-                    handlePatchMember(info.row.original.memberId, 'note', value);
-                  }
-                }}
-                tooltipContent={`${info.row.original.name} 정보 수정`}
-              >
-                {info.getValue() ?? ''}
-              </InputCell>
-            ),
-            size: 216,
-          }),
-        ]
-      : []),
+    columnHelper.accessor('note', {
+      header: '비고',
+      cell: (info) => (
+        <InputCell
+          defaultValue={info.getValue() ?? '********'}
+          disabled={isSensitiveMasked}
+          handleSubmit={(value) => {
+            if (handlePatchMember) {
+              handlePatchMember(info.row.original.memberId, 'note', value);
+            }
+          }}
+          tooltipContent={`${info.row.original.name} 정보 수정`}
+        >
+          {info.getValue() ?? '********'}
+        </InputCell>
+      ),
+      size: 216,
+    }),
   ] as any[];
 };

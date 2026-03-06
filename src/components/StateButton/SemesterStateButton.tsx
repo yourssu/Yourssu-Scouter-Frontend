@@ -12,8 +12,10 @@ export const SemesterStateButton = ({
   onStateChange,
   size = 'small',
   contentProps,
+  disabled = false,
 }: {
   contentProps?: Popover.PopoverContentProps;
+  disabled?: boolean;
   onStateChange: (value: string) => void;
   selectedValue: string;
   size?: 'medium' | 'small';
@@ -33,6 +35,7 @@ export const SemesterStateButton = ({
   return (
     <StateButton
       contentProps={contentProps}
+      disabled={disabled}
       onSelect={onStateChange}
       options={options}
       rightIcon={<IcArrowsChevronDownLine />}

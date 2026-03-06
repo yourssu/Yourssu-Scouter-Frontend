@@ -45,11 +45,12 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
         position: 'center',
       });
     },
-    onError: () => {
+    onError: (e: any) => {
+      const message = e?.response?.data?.message ?? '입력 형식이 올바르지 않습니다.';
       snackbar({
         type: 'error',
         width: '400px',
-        message: '입력 형식이 올바르지 않습니다.',
+        message,
         duration: 3000,
         position: 'center',
       });

@@ -12,6 +12,7 @@ export type DialogOption = {
 
 interface StateButtonProps {
   contentProps?: Popover.PopoverContentProps;
+  disabled?: boolean;
   leftIcon?: ReactNode;
   onSelect: (value: string) => void;
   options: DialogOption[];
@@ -32,20 +33,28 @@ export const StateButton = ({
   leftIcon,
   width,
   contentProps,
+  disabled = false,
 }: StateButtonProps) => {
+  const button = (
+    <StyledBoxButton
+      $selectedValue={selectedValue}
+      disabled={disabled}
+      leftIcon={leftIcon}
+      rightIcon={disabled ? undefined : rightIcon}
+      size={size}
+      variant={variant}
+    >
+      {selectedValue}
+    </StyledBoxButton>
+  );
+
+  if (disabled) {
+    return button;
+  }
+
   return (
     <GenericDialog contentProps={contentProps} onSelect={onSelect} options={options} width={width}>
-      <Popover.Trigger asChild>
-        <StyledBoxButton
-          $selectedValue={selectedValue}
-          leftIcon={leftIcon}
-          rightIcon={rightIcon}
-          size={size}
-          variant={variant}
-        >
-          {selectedValue}
-        </StyledBoxButton>
-      </Popover.Trigger>
+      <Popover.Trigger asChild>{button}</Popover.Trigger>
     </GenericDialog>
   );
 };
