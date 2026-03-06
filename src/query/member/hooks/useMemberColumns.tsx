@@ -24,7 +24,11 @@ export type PatchMemberHandler = (
   value: unknown,
 ) => void;
 
-export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMemberHandler) => {
+export const useMemberColumns = (
+  state: MemberState,
+  isSensitiveMasked: boolean,
+  handlePatchMember?: PatchMemberHandler,
+) => {
   const [{ data: partWithIds }, { data: semesters }] = useSuspenseQueries({
     queries: [partOptions(), semesterOptions()],
   });
@@ -176,23 +180,27 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
       ),
       size: 235,
     }),
-    columnHelper.accessor('phoneNumber', {
-      header: '연락처',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'phoneNumber', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-      size: 175,
-    }),
+    ...(!isSensitiveMasked
+      ? [
+          columnHelper.accessor('phoneNumber', {
+            header: '연락처',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue() ?? ''}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'phoneNumber', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue() ?? ''}
+              </InputCell>
+            ),
+            size: 175,
+          }),
+        ]
+      : []),
     columnHelper.accessor('department', {
       header: '전공',
       cell: (info) => (
@@ -209,40 +217,44 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
       ),
       size: 260,
     }),
-    columnHelper.accessor('studentId', {
-      header: '학번',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'studentId', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-      size: 136,
-    }),
-    columnHelper.accessor('birthDate', {
-      header: '생년월일',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'birthDate', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-      size: 142,
-    }),
+    ...(!isSensitiveMasked
+      ? [
+          columnHelper.accessor('studentId', {
+            header: '학번',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue() ?? ''}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'studentId', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue() ?? ''}
+              </InputCell>
+            ),
+            size: 136,
+          }),
+          columnHelper.accessor('birthDate', {
+            header: '생년월일',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue() ?? ''}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'birthDate', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue() ?? ''}
+              </InputCell>
+            ),
+            size: 142,
+          }),
+        ]
+      : []),
     columnHelper.accessor('joinDate', {
       header: '가입일',
       cell: (info) => (
@@ -260,7 +272,7 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
       ),
       size: 142,
     }),
-    ...(state === '액티브'
+    ...(state === '액티브' && !isSensitiveMasked
       ? [
           columnHelper.accessor('membershipFee', {
             header: () => (
@@ -307,13 +319,13 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
           }),
         ]
       : []),
-    ...(state === '비액티브' || state === '졸업'
+    ...((state === '비액티브' || state === '졸업') && !isSensitiveMasked
       ? [
           columnHelper.accessor('activePeriod', {
             header: '활동 기간',
             cell: (info) => {
               const member = info.row.original;
-              if (member.state === '비액티브' || member.state === '졸업') {
+              if ((member.state === '비액티브' || member.state === '졸업') && member.activePeriod) {
                 return (
                   <Cell>
                     <div
@@ -343,7 +355,7 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
           }),
         ]
       : []),
-    ...(state === '비액티브'
+    ...(state === '비액티브' && !isSensitiveMasked
       ? [
           columnHelper.accessor('expectedReturnSemester', {
             header: '복귀 희망 학기',
@@ -366,7 +378,7 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
                           );
                         }
                       }}
-                      selectedValue={member.expectedReturnSemester}
+                      selectedValue={member.expectedReturnSemester ?? ''}
                     />
                   </Cell>
                 );
@@ -376,13 +388,13 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
           }),
         ]
       : []),
-    ...(state === '비액티브'
+    ...(state === '비액티브' && !isSensitiveMasked
       ? [
           columnHelper.accessor('inactivePeriod', {
             header: '비액티브 기간',
             cell: (info) => {
               const member = info.row.original;
-              if (member.state === '비액티브') {
+              if (member.state === '비액티브' && member.inactivePeriod) {
                 return (
                   <Cell>
                     <div
@@ -413,7 +425,7 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
           }),
         ]
       : []),
-    ...(state === '졸업'
+    ...(state === '졸업' && !isSensitiveMasked
       ? [
           columnHelper.accessor('isAdvisorDesired', {
             header: '어드바이저 희망',
@@ -449,22 +461,26 @@ export const useMemberColumns = (state: MemberState, handlePatchMember?: PatchMe
           }),
         ]
       : []),
-    columnHelper.accessor('note', {
-      header: '비고',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue()}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'note', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-      size: 216,
-    }),
-  ];
+    ...(!isSensitiveMasked
+      ? [
+          columnHelper.accessor('note', {
+            header: '비고',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue() ?? ''}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'note', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue() ?? ''}
+              </InputCell>
+            ),
+            size: 216,
+          }),
+        ]
+      : []),
+  ] as any[];
 };

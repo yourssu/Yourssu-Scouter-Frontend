@@ -31,7 +31,7 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
         await queryClient.prefetchQuery(memberOptions(params.state, { partId: null, search: '' }));
       }
 
-      const member = data.find((d) => d.memberId === memberId);
+      const member = data.members.find((d) => d.memberId === memberId);
 
       if (!member) {
         return;
@@ -57,6 +57,7 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
   });
 
   const { data } = useSuspenseQuery(memberOptions(state, { search, partId }));
+  const { members, isSensitiveMasked } = data;
 
   const handlePatchMember: PatchMemberHandler = (memberId, field, value) =>
     patchMemberMutate({
@@ -65,10 +66,10 @@ const MemberTable = ({ state, search, partId }: MemberTableProps) => {
       state,
     });
 
-  const columns = useMemberColumns(state, handlePatchMember);
+  const columns = useMemberColumns(state, isSensitiveMasked, handlePatchMember);
 
   const table = useReactTable({
-    data,
+    data: members,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

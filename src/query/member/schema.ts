@@ -14,7 +14,7 @@ const PeriodSchema = z.object({
 
 const MemberRoleSchema = z.enum(['Lead', 'ViceLead', 'Member']);
 
-const MemberStateSchema = z.enum(['액티브', '비액티브', '졸업', '탈퇴']);
+const MemberStateSchema = z.enum(['액티브', '비액티브', '졸업', '탈퇴', '수료']);
 
 const BaseMemberSchema = z.object({
   memberId: z.number(),
@@ -23,12 +23,12 @@ const BaseMemberSchema = z.object({
   name: z.string(),
   nickname: z.string(),
   email: z.email(),
-  phoneNumber: PhoneNumberSchema,
+  phoneNumber: PhoneNumberSchema.nullable(),
   department: z.string(),
-  studentId: z.string(),
-  birthDate: DateSchema,
+  studentId: z.string().nullable(),
+  birthDate: DateSchema.nullable(),
   joinDate: DateSchema,
-  note: z.string(),
+  note: z.string().nullable(),
 });
 
 export const MeSchema = BaseMemberSchema.omit({
@@ -39,20 +39,20 @@ export const MeSchema = BaseMemberSchema.omit({
 });
 
 const ActiveMemberSchema = BaseMemberSchema.extend({
-  membershipFee: z.boolean(),
+  membershipFee: z.boolean().nullable(),
   state: z.literal('액티브'),
 });
 
 const InactiveMemberSchema = BaseMemberSchema.extend({
-  activePeriod: PeriodSchema,
-  expectedReturnSemester: z.string(),
-  inactivePeriod: PeriodSchema,
+  activePeriod: PeriodSchema.nullable(),
+  expectedReturnSemester: z.string().nullable(),
+  inactivePeriod: PeriodSchema.nullable(),
   state: z.literal('비액티브'),
 });
 
 const GraduatedMemberSchema = BaseMemberSchema.extend({
-  activePeriod: PeriodSchema,
-  isAdvisorDesired: z.boolean(),
+  activePeriod: PeriodSchema.nullable(),
+  isAdvisorDesired: z.boolean().nullable(),
   state: z.literal('졸업'),
 });
 
@@ -88,9 +88,12 @@ export const PatchMemberSchema = z
   .omit({ parts: true })
   .partial();
 
-export const MemberRoleArraySchema = z.array(MemberRoleSchema);
+export const MemberResponseSchema = z.object({
+  isSensitiveMasked: z.boolean(),
+  members: z.array(MemberSchema),
+});
 
-export const MemberArraySchema = z.array(MemberSchema);
+export const MemberRoleArraySchema = z.array(MemberRoleSchema);
 
 export const MemberStateArraySchema = z.array(MemberStateSchema);
 

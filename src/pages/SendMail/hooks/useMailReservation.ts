@@ -36,7 +36,7 @@ export const useMailActions = () => {
     }
 
     // 멤버에서 찾기
-    const member = allMembers?.find((m) => m.nickname === name);
+    const member = allMembers?.members.find((m) => m.nickname === name);
     if (member) {
       return member.email;
     }
