@@ -9,6 +9,7 @@ import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 interface InputCellProps extends PropsWithChildren {
   bold?: boolean;
   defaultValue: string;
+  disabled?: boolean;
   handleSubmit: (value: string) => void;
   tooltipContent: string;
 }
@@ -19,6 +20,7 @@ const InputCell = ({
   defaultValue,
   handleSubmit,
   bold = false,
+  disabled = false,
 }: InputCellProps) => {
   const [editing, setEditing] = useState(false);
   const { register, setFocus, watch } = useForm({
@@ -28,19 +30,22 @@ const InputCell = ({
   });
 
   useEffect(() => {
-    if (editing) {
+    if (editing && !disabled) {
       setFocus('value');
     }
-  }, [editing, setFocus]);
+  }, [editing, setFocus, disabled]);
 
   const onSubmit = () => {
+    if (disabled) {
+      return;
+    }
     handleSubmit(watch('value'));
     setEditing(false);
   };
 
   return (
-    <Cell bold={bold} editable={true}>
-      {editing ? (
+    <Cell bold={bold} editable={!disabled}>
+      {editing && !disabled ? (
         <StyledInput
           {...register('value')}
           $bold={bold}
@@ -55,11 +60,13 @@ const InputCell = ({
       ) : (
         <>
           <span>{children}</span>
-          <StyledEditIcon onClick={() => setEditing(true)}>
-            <Tooltip content={tooltipContent}>
-              <IcEditLine height={20} width={20} />
-            </Tooltip>
-          </StyledEditIcon>
+          {!disabled && (
+            <StyledEditIcon onClick={() => setEditing(true)}>
+              <Tooltip content={tooltipContent}>
+                <IcEditLine height={20} width={20} />
+              </Tooltip>
+            </StyledEditIcon>
+          )}
         </>
       )}
     </Cell>

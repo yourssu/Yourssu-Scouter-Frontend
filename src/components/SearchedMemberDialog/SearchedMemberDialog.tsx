@@ -49,7 +49,9 @@ export const SearchedMemberDialog = ({
   // 필터링
   const filteredMembers = useMemo(() => {
     // 제외할 멤버들을 먼저 걸러냄
-    const availableMembers = allMembers.filter((member) => !excludeItems.includes(member.nickname));
+    const availableMembers = allMembers.members.filter(
+      (member) => !excludeItems.includes(member.nickname),
+    );
 
     // 검색어 전처리 (공백 제거 및 소문자 변환)
     const term = currentSearchText.trim().toLowerCase();
