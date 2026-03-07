@@ -34,6 +34,7 @@ export const SendMail = () => {
                 ),
                 info: (
                   <InfoSection
+                    isTitleIncluded={true}
                     selectedPart={selectedPart}
                     selectedTemplateId={selectedTemplateId}
                   />

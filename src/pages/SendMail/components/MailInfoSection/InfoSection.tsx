@@ -12,12 +12,18 @@ import { MailFormData } from '@/types/editor';
 import { MemberInputFieldKey } from '@/types/editor';
 
 interface InfoSectionProps {
+  isTitleIncluded: boolean;
   readOnly?: boolean;
   selectedPart: Part | undefined;
   selectedTemplateId: number | undefined;
 }
 
-export const InfoSection = ({ readOnly, selectedPart, selectedTemplateId }: InfoSectionProps) => {
+export const InfoSection = ({
+  readOnly,
+  selectedPart,
+  selectedTemplateId,
+  isTitleIncluded,
+}: InfoSectionProps) => {
   const {
     mailInfo,
     actions: { updateMailInfo },
@@ -108,7 +114,14 @@ export const InfoSection = ({ readOnly, selectedPart, selectedTemplateId }: Info
           />
         </Suspense>
       )}
-      <TextInputField label="제목" onChange={handleSubjectUpdate} readOnly={readOnly} value={formData.subject} />
+      {isTitleIncluded && (
+        <TextInputField
+          label="제목"
+          onChange={handleSubjectUpdate}
+          readOnly={readOnly}
+          value={formData.subject}
+        />
+      )}
     </div>
   );
 };

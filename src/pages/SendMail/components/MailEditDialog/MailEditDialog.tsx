@@ -153,6 +153,7 @@ const MailDialogContent = ({
           </StyledHeader>
 
           <InfoSection
+            isTitleIncluded={false}
             readOnly={readOnly}
             selectedPart={undefined}
             selectedTemplateId={undefined}
