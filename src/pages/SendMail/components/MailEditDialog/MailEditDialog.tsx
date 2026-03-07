@@ -125,7 +125,7 @@ const MailDialogContent = ({
   const bcc = useMemo(
     () =>
       (mailDetails[0]?.bccEmailAddresses ?? []).map(
-        (email) => allMembers.find((m) => m.email === email)?.nickname ?? email,
+        (email) => allMembers.members.find((m) => m.email === email)?.nickname ?? email,
       ),
     [allMembers, mailDetails],
   );
@@ -164,7 +164,7 @@ const MailDialogContent = ({
           {!readOnly && (
             <MailDialogSaveButton
               allApplicants={allApplicants}
-              allMembers={allMembers}
+              allMembers={allMembers.members}
               mailDetails={mailDetails}
               onClose={onClose}
             />
