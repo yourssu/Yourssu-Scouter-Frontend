@@ -27,7 +27,8 @@ export const useRecipientData = () => {
         }
         return null;
       })
-      .filter((r): r is Recipient => r !== null);
+      .filter((r): r is Recipient => r !== null)
+      .sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   }, [allApplicants, mailInfo.receiver]);
 
   // currentApplicantId가 recipients에 존재하는지 확인하고, 없으면 첫 번째 지원자의 ID로 설정

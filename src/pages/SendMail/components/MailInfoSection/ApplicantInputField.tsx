@@ -25,7 +25,7 @@ export const ApplicantInputField = ({
 
   const handleSelect = (name: string) => {
     if (!items.includes(name)) {
-      onItemsUpdate([...items, name]);
+      onItemsUpdate([...items, name].sort((a, b) => a.localeCompare(b, 'ko')));
       setInputValue(''); // 선택 후 입력값 초기화
       setIsActive(false);
     }
