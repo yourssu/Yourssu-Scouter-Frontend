@@ -2,7 +2,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useQueryClient, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 
 import {
   StyledContent,
@@ -40,11 +40,13 @@ const MailDialogSaveButton = ({
   allMembers,
   mailDetails,
   onClose,
+  reservationTime,
 }: {
   allApplicants: { applicantId: number; email: string; name: string }[];
   allMembers: { email: string; nickname: string }[];
   mailDetails: MailDetail[];
   onClose: () => void;
+  reservationTime: Date;
 }) => {
   const { mailInfo } = useMailInfoContext();
   const { mailContent } = useMailContentContext();
@@ -79,7 +81,7 @@ const MailDialogSaveButton = ({
     const toCreate = newReceiverEmails.filter((email) => !existingEmails.includes(email));
 
     const defaultBody = mailDetails[0]?.mailBody ?? '';
-    const defaultReservationTime = mailDetails[0]?.reservationTime ?? '';
+    const reservationTimeIso = reservationTime.toISOString();
 
     await Promise.all([
       ...toUpdate.map((detail) => {
@@ -97,7 +99,7 @@ const MailDialogSaveButton = ({
           receiverEmailAddresses: detail.receiverEmailAddresses,
           ccEmailAddresses: ccEmails,
           bccEmailAddresses: bccEmails,
-          reservationTime: detail.reservationTime,
+          reservationTime: reservationTimeIso,
           attachmentReferences: [],
         });
       }),
@@ -114,7 +116,7 @@ const MailDialogSaveButton = ({
           receiverEmailAddresses: [email],
           ccEmailAddresses: ccEmails,
           bccEmailAddresses: bccEmails,
-          reservationTime: defaultReservationTime,
+          reservationTime: reservationTimeIso,
           attachmentReferences: [],
           inlineImageReferences: [],
         });
@@ -180,6 +182,10 @@ const MailDialogContent = ({
     return body;
   }, [allApplicants, mailDetails]);
 
+  const [reservationTime, setReservationTime] = useState<Date>(
+    new Date(mailDetails[0]?.reservationTime),
+  );
+
   return (
     <MailInfoProvider initialMailInfo={{ bcc, cc, receiver: allReceivers, subject }}>
       <MailContentProvider initialBody={initialBody}>
@@ -191,7 +197,9 @@ const MailDialogContent = ({
 
           <InfoSection
             isTitleIncluded={false}
+            onReservationTimeChange={readOnly ? undefined : setReservationTime}
             readOnly={readOnly}
+            reservationTime={reservationTime}
             selectedPart={undefined}
             selectedTemplateId={undefined}
           />
@@ -205,6 +213,7 @@ const MailDialogContent = ({
               allMembers={allMembers.members}
               mailDetails={mailDetails}
               onClose={onClose}
+              reservationTime={reservationTime}
             />
           )}
         </MailVariableProvider>

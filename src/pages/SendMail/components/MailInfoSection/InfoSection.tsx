@@ -1,19 +1,24 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { overlay } from 'overlay-kit';
 import { Suspense, useCallback, useState } from 'react';
 
 import { ApplicantInputField } from '@/pages/SendMail/components/MailInfoSection/ApplicantInputField';
 import { AutoFillMembers } from '@/pages/SendMail/components/MailInfoSection/AutoFillIMembers';
 import { MemberInputField } from '@/pages/SendMail/components/MailInfoSection/MemberInputField';
 import { TextInputField } from '@/pages/SendMail/components/MailInfoSection/TextInputField';
+import { MailReservationDialog } from '@/pages/SendMail/components/MailReservationDialog/MailReservationDialog';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { meOption } from '@/query/member/me/options';
 import { Part } from '@/query/part/schema';
 import { MailFormData } from '@/types/editor';
 import { MemberInputFieldKey } from '@/types/editor';
+import { formatTemplates } from '@/utils/date';
 
 interface InfoSectionProps {
   isTitleIncluded: boolean;
+  onReservationTimeChange?: (date: Date) => void;
   readOnly?: boolean;
+  reservationTime?: Date;
   selectedPart: Part | undefined;
   selectedTemplateId: number | undefined;
 }
@@ -23,6 +28,8 @@ export const InfoSection = ({
   selectedPart,
   selectedTemplateId,
   isTitleIncluded,
+  reservationTime,
+  onReservationTimeChange,
 }: InfoSectionProps) => {
   const {
     mailInfo,
@@ -121,6 +128,38 @@ export const InfoSection = ({
           readOnly={readOnly}
           value={formData.subject}
         />
+      )}
+      {reservationTime && (
+        <div className="border-line-basicMedium flex min-h-[56px] w-full flex-row gap-[12px] border-b-1 px-[20px] py-[10px]">
+          <div className="typo-b1_sb_16 text-text-basicPrimary flex min-w-[72px] items-center">
+            예약 시간
+          </div>
+          {onReservationTimeChange ? (
+            <button
+              className="typo-b1_rg_16 text-text-basicPrimary flex items-center hover:underline"
+              onClick={() => {
+                overlay.open(({ isOpen, close }) => (
+                  <MailReservationDialog
+                    initialDate={reservationTime}
+                    onClose={close}
+                    onReserve={async (date: Date) => {
+                      onReservationTimeChange(date);
+                      close();
+                    }}
+                    open={isOpen}
+                  />
+                ));
+              }}
+              type="button"
+            >
+              {formatTemplates['01/01(월) 00:00'](reservationTime)}
+            </button>
+          ) : (
+            <span className="typo-b1_rg_16 text-text-basicPrimary flex items-center">
+              {formatTemplates['01/01(월) 00:00'](reservationTime)}
+            </span>
+          )}
+        </div>
       )}
     </div>
   );
