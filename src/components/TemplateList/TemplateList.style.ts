@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const TemplateItemContainer = styled.div`
+export const TemplateItemContainer = styled.div<{ $variant?: 'error' }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,7 +10,11 @@ export const TemplateItemContainer = styled.div`
   border-radius: ${({ theme }) => theme.semantic.radius.s}px;
   background: ${({ theme }) => theme.semantic.color.bgBasicDefault};
   padding: 20px;
-  border: 1px solid ${({ theme }) => theme.semantic.color.lineBasicMedium};
+  border: 1px solid
+    ${({ $variant, theme }) =>
+      $variant === 'error'
+        ? 'var(--color-line-statusNegative)'
+        : theme.semantic.color.lineBasicMedium};
   cursor: pointer;
 `;
 
@@ -26,9 +30,10 @@ export const TemplateTitle = styled.h3`
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
 `;
 
-export const TemplateDate = styled.span`
+export const TemplateDate = styled.span<{ $variant?: 'error' }>`
   ${({ theme }) => theme.typo.B2_Rg_15};
-  color: ${({ theme }) => theme.semantic.color.textBasicTertiary};
+  color: ${({ $variant, theme }) =>
+    $variant === 'error' ? 'var(--color-text-statusNegative)' : theme.semantic.color.textBasicTertiary};
 `;
 
 export const TrashIconButton = styled.button`

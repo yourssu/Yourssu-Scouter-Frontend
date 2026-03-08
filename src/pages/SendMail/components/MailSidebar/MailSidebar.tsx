@@ -1,4 +1,4 @@
-import { BoxButton } from '@yourssu/design-system-react';
+import { BoxButton, useSnackbar } from '@yourssu/design-system-react';
 import { overlay } from 'overlay-kit';
 import { Suspense } from 'react';
 
@@ -10,14 +10,16 @@ import { useMailValidation } from '@/pages/SendMail/hooks/useMailValidation';
 import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 
 export interface MailSidebarProps {
+  onReserveSuccess?: () => void;
   partId: number | undefined;
   templateId: number | undefined;
 }
 
-export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
+export const MailSidebar = ({ partId, templateId, onReserveSuccess }: MailSidebarProps) => {
   const { currentRecipientId } = useRecipientData();
   const { currentContent, defaultContent } = useMailData(templateId, currentRecipientId);
   const { sendReservation } = useMailActions();
+  const { snackbar } = useSnackbar();
 
   const { isReadyForReservation } = useMailValidation(templateId);
 
@@ -27,6 +29,15 @@ export const MailSidebar = ({ partId, templateId }: MailSidebarProps) => {
         onClose={close}
         onReserve={async (date: Date) => {
           await sendReservation(currentContent, defaultContent, date);
+          close();
+          snackbar({
+            type: 'info',
+            message: '메일을 예약했어요',
+            duration: 3000,
+            width: '400px',
+            position: 'center',
+          });
+          onReserveSuccess?.();
         }}
         open={isOpen}
       />

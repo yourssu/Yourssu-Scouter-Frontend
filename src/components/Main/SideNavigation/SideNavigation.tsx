@@ -50,7 +50,7 @@ const SideNavigation = () => {
         },
         {
           icon: <IcMailLine />,
-          text: '메일 전송',
+          text: '메일',
           pathname: '/send-mail',
         },
       ],

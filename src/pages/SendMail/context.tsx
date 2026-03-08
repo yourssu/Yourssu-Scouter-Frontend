@@ -99,9 +99,15 @@ export const MailVariableProvider = ({
 };
 
 // 2. 메일 내용 Provider
-export const MailContentProvider = ({ children }: { children: ReactNode }) => {
+export const MailContentProvider = ({
+  children,
+  initialBody,
+}: {
+  children: ReactNode;
+  initialBody?: Record<string, string>;
+}) => {
   const [mailContent, setMailContent] = useState<MailContentData>({
-    body: {},
+    body: initialBody ?? {},
     bodyFormat: 'HTML',
     inlineImages: [],
     attachments: [],
@@ -139,12 +145,18 @@ export const MailContentProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // 3. 메일 인포 Provider
-export const MailInfoProvider = ({ children }: { children: ReactNode }) => {
+export const MailInfoProvider = ({
+  children,
+  initialMailInfo,
+}: {
+  children: ReactNode;
+  initialMailInfo?: Partial<MailInfoData>;
+}) => {
   const [mailInfo, setMailInfo] = useState<MailInfoData>({
-    receiver: [],
-    cc: [],
-    bcc: [],
-    subject: '',
+    receiver: initialMailInfo?.receiver ?? [],
+    cc: initialMailInfo?.cc ?? [],
+    bcc: initialMailInfo?.bcc ?? [],
+    subject: initialMailInfo?.subject ?? '',
   });
 
   const actions = useMemo(

@@ -6,14 +6,19 @@ import { MiniTimeField } from '@/components/CalendarDialog/MiniTimeField';
 import { Dialog } from '@/components/dialog';
 
 interface MailReservationDialogProps {
+  initialDate?: Date;
   onClose: () => void;
   onReserve: (date: Date) => Promise<void>;
   open: boolean;
 }
 
-export const MailReservationDialog = ({ open, onClose, onReserve }: MailReservationDialogProps) => {
-  const today = new Date();
-  const [selectedDate, setSelectedDate] = useState<Date>(today);
+export const MailReservationDialog = ({
+  open,
+  onClose,
+  onReserve,
+  initialDate,
+}: MailReservationDialogProps) => {
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate ?? new Date());
 
   const handleReserve = async () => {
     try {
@@ -28,7 +33,7 @@ export const MailReservationDialog = ({ open, onClose, onReserve }: MailReservat
   return (
     <Dialog onClose={onClose} open={open}>
       <Dialog.Header onClickCloseButton={onClose}>
-        <Dialog.Title>메일 예약하기</Dialog.Title>
+        <Dialog.Title>{initialDate ? '예약 시간 수정' : '메일 예약하기'}</Dialog.Title>
       </Dialog.Header>
 
       <Dialog.Content className="flex flex-row items-start gap-[20px]">
@@ -48,7 +53,7 @@ export const MailReservationDialog = ({ open, onClose, onReserve }: MailReservat
           size="large"
           variant="filledPrimary"
         >
-          예약하기
+          {initialDate ? '수정하기' : '예약하기'}
         </Dialog.Button>
       </Dialog.ButtonGroup>
     </Dialog>
