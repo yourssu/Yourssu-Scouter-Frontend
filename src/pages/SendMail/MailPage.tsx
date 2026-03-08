@@ -32,7 +32,6 @@ export const MailPage = () => {
           <div className="border-line-basicLight border-t px-10 pb-12">
             {tab === '예약됨' ? (
               <MailTab
-                dialogReadOnly
                 emptyText="예약된 메일이 없습니다."
                 onCompose={() => setIsComposing(true)}
                 statuses={['SCHEDULED', 'PENDING_SEND']}

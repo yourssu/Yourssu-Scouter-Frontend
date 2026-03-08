@@ -21,6 +21,8 @@ import {
   useMailInfoContext,
 } from '@/pages/SendMail/context';
 import { applicantOptions } from '@/query/applicant/options';
+import { deleteMailReservation } from '@/query/mail/mutation/deleteMailReservation';
+import { postMailReservation } from '@/query/mail/mutation/postMailReservation';
 import { putMailReservation } from '@/query/mail/mutation/putMailReservation';
 import { mailOptions, MailReservationKeys } from '@/query/mail/options';
 import { MailDetail } from '@/query/mail/schema';
@@ -61,28 +63,63 @@ const MailDialogSaveButton = ({
   };
 
   const handleSave = async () => {
-    await Promise.all(
-      mailDetails.map((detail) => {
+    const newReceiverEmails = mailInfo.receiver.map(convertNameToEmail);
+    const bccEmails = mailInfo.bcc.map(convertNameToEmail);
+    const ccEmails = mailInfo.cc.map(convertNameToEmail);
+
+    // 기존 예약을 이메일 기준으로 매핑
+    const existingEmails = mailDetails.flatMap((d) => d.receiverEmailAddresses);
+
+    const toUpdate = mailDetails.filter((detail) =>
+      detail.receiverEmailAddresses.some((email) => newReceiverEmails.includes(email)),
+    );
+    const toDelete = mailDetails.filter((detail) =>
+      detail.receiverEmailAddresses.every((email) => !newReceiverEmails.includes(email)),
+    );
+    const toCreate = newReceiverEmails.filter((email) => !existingEmails.includes(email));
+
+    const defaultBody = mailDetails[0]?.mailBody ?? '';
+    const defaultReservationTime = mailDetails[0]?.reservationTime ?? '';
+
+    await Promise.all([
+      ...toUpdate.map((detail) => {
         const applicant = allApplicants.find((a) =>
           detail.receiverEmailAddresses.includes(a.email),
         );
         const body = applicant
           ? (mailContent.body[String(applicant.applicantId)] ?? detail.mailBody)
           : detail.mailBody;
-
         return putMailReservation({
           reservationId: detail.reservationId,
           mailSubject: mailInfo.subject,
           mailBody: body,
           bodyFormat: detail.bodyFormat as 'HTML' | 'TEXT',
           receiverEmailAddresses: detail.receiverEmailAddresses,
-          ccEmailAddresses: mailInfo.cc.map(convertNameToEmail),
-          bccEmailAddresses: mailInfo.bcc.map(convertNameToEmail),
+          ccEmailAddresses: ccEmails,
+          bccEmailAddresses: bccEmails,
           reservationTime: detail.reservationTime,
           attachmentReferences: [],
         });
       }),
-    );
+      ...toDelete.map((detail) => deleteMailReservation({ reservationId: detail.reservationId })),
+      ...toCreate.map((email) => {
+        const applicant = allApplicants.find((a) => a.email === email);
+        const body = applicant
+          ? (mailContent.body[String(applicant.applicantId)] ?? defaultBody)
+          : defaultBody;
+        return postMailReservation({
+          mailSubject: mailInfo.subject,
+          mailBody: body,
+          bodyFormat: 'HTML',
+          receiverEmailAddresses: [email],
+          ccEmailAddresses: ccEmails,
+          bccEmailAddresses: bccEmails,
+          reservationTime: defaultReservationTime,
+          attachmentReferences: [],
+          inlineImageReferences: [],
+        });
+      }),
+    ]);
     queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
     onClose();
   };
