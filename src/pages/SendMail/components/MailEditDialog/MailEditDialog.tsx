@@ -1,5 +1,5 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { useQueryClient, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { BoxButton, IcCloseLine } from '@yourssu/design-system-react';
 import { Dialog } from 'radix-ui';
 import { Suspense, useMemo, useState } from 'react';
@@ -17,14 +17,10 @@ import {
   MailContentProvider,
   MailInfoProvider,
   MailVariableProvider,
-  useMailContentContext,
-  useMailInfoContext,
 } from '@/pages/SendMail/context';
+import { useMailActions } from '@/pages/SendMail/hooks/useMailReservation';
 import { applicantOptions } from '@/query/applicant/options';
-import { deleteMailReservation } from '@/query/mail/mutation/deleteMailReservation';
-import { postMailReservation } from '@/query/mail/mutation/postMailReservation';
-import { putMailReservation } from '@/query/mail/mutation/putMailReservation';
-import { mailOptions, MailReservationKeys } from '@/query/mail/options';
+import { mailOptions } from '@/query/mail/options';
 import { MailDetail } from '@/query/mail/schema';
 import { memberOptions } from '@/query/member/options';
 
@@ -36,93 +32,18 @@ interface MailEditDialogProps {
 }
 
 const MailDialogSaveButton = ({
-  allApplicants,
-  allMembers,
   mailDetails,
   onClose,
   reservationTime,
 }: {
-  allApplicants: { applicantId: number; email: string; name: string }[];
-  allMembers: { email: string; nickname: string }[];
   mailDetails: MailDetail[];
   onClose: () => void;
   reservationTime: Date;
 }) => {
-  const { mailInfo } = useMailInfoContext();
-  const { mailContent } = useMailContentContext();
-  const queryClient = useQueryClient();
-
-  const convertNameToEmail = (name: string) => {
-    const applicant = allApplicants.find((a) => a.name === name);
-    if (applicant) {
-      return applicant.email;
-    }
-    const member = allMembers.find((m) => m.nickname === name);
-    if (member) {
-      return member.email;
-    }
-    return name;
-  };
+  const { updateReservation } = useMailActions();
 
   const handleSave = async () => {
-    const newReceiverEmails = mailInfo.receiver.map(convertNameToEmail);
-    const bccEmails = mailInfo.bcc.map(convertNameToEmail);
-    const ccEmails = mailInfo.cc.map(convertNameToEmail);
-
-    // 기존 예약을 이메일 기준으로 매핑
-    const existingEmails = mailDetails.flatMap((d) => d.receiverEmailAddresses);
-
-    const toUpdate = mailDetails.filter((detail) =>
-      detail.receiverEmailAddresses.some((email) => newReceiverEmails.includes(email)),
-    );
-    const toDelete = mailDetails.filter((detail) =>
-      detail.receiverEmailAddresses.every((email) => !newReceiverEmails.includes(email)),
-    );
-    const toCreate = newReceiverEmails.filter((email) => !existingEmails.includes(email));
-
-    const defaultBody = mailDetails[0]?.mailBody ?? '';
-    const reservationTimeIso = reservationTime.toISOString();
-
-    await Promise.all([
-      ...toUpdate.map((detail) => {
-        const applicant = allApplicants.find((a) =>
-          detail.receiverEmailAddresses.includes(a.email),
-        );
-        const body = applicant
-          ? (mailContent.body[String(applicant.applicantId)] ?? detail.mailBody)
-          : detail.mailBody;
-        return putMailReservation({
-          reservationId: detail.reservationId,
-          mailSubject: mailInfo.subject,
-          mailBody: body,
-          bodyFormat: detail.bodyFormat as 'HTML' | 'TEXT',
-          receiverEmailAddresses: detail.receiverEmailAddresses,
-          ccEmailAddresses: ccEmails,
-          bccEmailAddresses: bccEmails,
-          reservationTime: reservationTimeIso,
-          attachmentReferences: [],
-        });
-      }),
-      ...toDelete.map((detail) => deleteMailReservation({ reservationId: detail.reservationId })),
-      ...toCreate.map((email) => {
-        const applicant = allApplicants.find((a) => a.email === email);
-        const body = applicant
-          ? (mailContent.body[String(applicant.applicantId)] ?? defaultBody)
-          : defaultBody;
-        return postMailReservation({
-          mailSubject: mailInfo.subject,
-          mailBody: body,
-          bodyFormat: 'HTML',
-          receiverEmailAddresses: [email],
-          ccEmailAddresses: ccEmails,
-          bccEmailAddresses: bccEmails,
-          reservationTime: reservationTimeIso,
-          attachmentReferences: [],
-          inlineImageReferences: [],
-        });
-      }),
-    ]);
-    queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
+    await updateReservation(mailDetails, reservationTime);
     onClose();
   };
 
@@ -209,8 +130,6 @@ const MailDialogContent = ({
 
           {!readOnly && (
             <MailDialogSaveButton
-              allApplicants={allApplicants}
-              allMembers={allMembers.members}
               mailDetails={mailDetails}
               onClose={onClose}
               reservationTime={reservationTime}
