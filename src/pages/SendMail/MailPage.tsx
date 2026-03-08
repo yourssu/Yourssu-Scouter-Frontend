@@ -22,7 +22,7 @@ export const MailPage = () => {
   }, [isComposing, setBackAction, clearBackAction]);
 
   if (isComposing) {
-    return <SendMail />;
+    return <SendMail onReserveSuccess={() => setIsComposing(false)} />;
   }
 
   return (

@@ -13,7 +13,11 @@ import {
 } from '@/pages/SendMail/context';
 import { Part } from '@/query/part/schema';
 
-export const SendMail = () => {
+interface SendMailProps {
+  onReserveSuccess?: () => void;
+}
+
+export const SendMail = ({ onReserveSuccess }: SendMailProps) => {
   const [selectedPart, setSelectedPart] = useState<Part | undefined>(undefined);
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | undefined>(undefined);
 
@@ -46,7 +50,11 @@ export const SendMail = () => {
                   />
                 ),
                 sidebar: (
-                  <MailSidebar partId={selectedPart?.partId} templateId={selectedTemplateId} />
+                  <MailSidebar
+                    onReserveSuccess={onReserveSuccess}
+                    partId={selectedPart?.partId}
+                    templateId={selectedTemplateId}
+                  />
                 ),
               }}
             />
