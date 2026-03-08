@@ -111,35 +111,62 @@ export const useMailActions = () => {
     );
     const toCreate = newReceiverEmails.filter((email) => !existingEmails.includes(email));
 
-    const defaultBody = mailDetails[0]?.mailBody ?? '';
     const reservationTimeIso = reservationTime.toISOString();
 
-    await Promise.all([
-      ...toUpdate.map((detail) => {
-        const applicant = allApplicants?.find((a) =>
-          detail.receiverEmailAddresses.includes(a.email),
-        );
-        const body = applicant
+    // 각 detail에 대해, 수신자별 body를 구하고 동일 여부에 따라 PUT 또는 삭제+재생성으로 분기
+    const putsToMake: { detail: MailDetail; body: string; emails: string[] }[] = [];
+    const detailsToSplit: MailDetail[] = [];
+
+    for (const detail of toUpdate) {
+      const relevantEmails = detail.receiverEmailAddresses.filter((e) =>
+        newReceiverEmails.includes(e),
+      );
+      const emailBodies = relevantEmails.map((email) => {
+        const applicant = allApplicants?.find((a) => a.email === email);
+        return applicant
           ? (mailContent.body[String(applicant.applicantId)] ?? detail.mailBody)
           : detail.mailBody;
-        return putMailReservation({
+      });
+      const allSameBody = emailBodies.every((b) => b === emailBodies[0]);
+
+      if (allSameBody && relevantEmails.length > 0) {
+        putsToMake.push({ detail, body: emailBodies[0], emails: relevantEmails });
+      } else {
+        // 수신자별로 다른 body → 기존 예약 삭제 후 개별 재생성
+        detailsToSplit.push(detail);
+      }
+    }
+
+    // 분리 대상 detail의 수신자 이메일은 새로 생성
+    const emailsFromSplit = detailsToSplit.flatMap((d) =>
+      d.receiverEmailAddresses.filter((e) => newReceiverEmails.includes(e)),
+    );
+    const allEmailsToCreate = [...toCreate, ...emailsFromSplit];
+
+    await Promise.all([
+      ...putsToMake.map(({ detail, body, emails }) =>
+        putMailReservation({
           reservationId: detail.reservationId,
           mailSubject: mailInfo.subject,
           mailBody: body,
           bodyFormat: detail.bodyFormat as 'HTML' | 'TEXT',
-          receiverEmailAddresses: detail.receiverEmailAddresses,
+          receiverEmailAddresses: emails,
           ccEmailAddresses: mailInfo.cc.map(convertNameToEmail),
           bccEmailAddresses: mailInfo.bcc.map(convertNameToEmail),
           reservationTime: reservationTimeIso,
           attachmentReferences: [],
-        });
-      }),
-      ...toDelete.map((detail) => deleteMailReservation({ reservationId: detail.reservationId })),
-      ...toCreate.map((email) => {
+        }),
+      ),
+      ...[...toDelete, ...detailsToSplit].map((detail) =>
+        deleteMailReservation({ reservationId: detail.reservationId }),
+      ),
+      ...allEmailsToCreate.map((email) => {
         const applicant = allApplicants?.find((a) => a.email === email);
+        const originalBody =
+          mailDetails.find((d) => d.receiverEmailAddresses.includes(email))?.mailBody ?? '';
         const body = applicant
-          ? (mailContent.body[String(applicant.applicantId)] ?? defaultBody)
-          : defaultBody;
+          ? (mailContent.body[String(applicant.applicantId)] ?? originalBody)
+          : originalBody;
         return mutatePostMailReservation(
           buildMailRequest({
             inlineImageReferences: [],

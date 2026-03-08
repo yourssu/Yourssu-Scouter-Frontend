@@ -18,7 +18,6 @@ import { MailToolbar } from '../MailToolbar/MailToolbar';
 import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
 
 interface MailEditorContentProps {
-  currentApplicantId?: string;
   initialContent?: string;
   onContentChange?: (html: string) => void;
   readOnly?: boolean;

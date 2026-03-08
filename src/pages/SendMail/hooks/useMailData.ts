@@ -25,10 +25,6 @@ export const useMailData = (
     }
   }, [templateDetail, actions]);
 
-  // console.log('선택된 템플릿 ID:', selectedTemplateId);
-  // console.log('가져온 템플릿:', defaultContent);
-  // console.log('현재 저장된 본문:', mailContent.body[currentId || '']);
-
   // 변수 값 치환 함수
   const getDisplayVariableValue = useCallback(
     (key: string, perRecipient: boolean) => {
@@ -62,12 +58,8 @@ export const useMailData = (
 
   // 내용 변경 핸들러
   const handleContentChange = useCallback(
-    (html: string) => {
-      if (!currentId) {
-        return;
-      }
-
-      const saved = mailContent.body[currentId];
+    (recipientId: string, html: string) => {
+      const saved = mailContent.body[recipientId];
       const base = saved ?? defaultContent;
 
       const isEffectivelyEmpty =
@@ -77,9 +69,9 @@ export const useMailData = (
         return;
       }
 
-      actions.updateBody(currentId, html);
+      actions.updateBody(recipientId, html);
     },
-    [currentId, defaultContent, mailContent.body, actions],
+    [defaultContent, mailContent.body, actions],
   );
 
   return {
