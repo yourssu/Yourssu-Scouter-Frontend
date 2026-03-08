@@ -6,6 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar';
 import { TemplateList } from '@/components/TemplateList/TemplateList';
 import { MailEditDialog } from '@/pages/SendMail/components/MailEditDialog/MailEditDialog';
+import { DeleteTemplateDialog } from '@/pages/Template/components/DeleteTemplateDialog/DeleteTemplateDialog';
 import { deleteMailReservation } from '@/query/mail/mutation/deleteMailReservation';
 import { mailOptions, MailReservationKeys } from '@/query/mail/options';
 import { MailItem } from '@/query/mail/schema';
@@ -25,6 +26,10 @@ export const MailTab = ({ dialogReadOnly, emptyText, onCompose, readOnly, status
   const searchValue = watch('search');
   const { data: mails } = useSuspenseQuery(mailOptions.all());
   const [selectedMailIds, setSelectedMailIds] = useState<null | number[]>(null);
+  const [pendingDeleteGroup, setPendingDeleteGroup] = useState<null | {
+    ids: number[];
+    subject: string;
+  }>(null);
   const queryClient = useQueryClient();
 
   const { mutate: deleteReservation } = useMutation({
@@ -34,8 +39,9 @@ export const MailTab = ({ dialogReadOnly, emptyText, onCompose, readOnly, status
     },
   });
 
-  const handleDelete = (reservationIds: number[]) => {
-    reservationIds.forEach((reservationId) => deleteReservation({ reservationId }));
+  const handleConfirmDelete = () => {
+    pendingDeleteGroup?.ids.forEach((id) => deleteReservation({ reservationId: id }));
+    setPendingDeleteGroup(null);
   };
 
   const filteredMails = useMemo(
@@ -108,7 +114,12 @@ export const MailTab = ({ dialogReadOnly, emptyText, onCompose, readOnly, status
               date={formatTemplates['01/01(월) 00:00'](group[0].reservationTime)}
               key={group[0].mailSubject}
               onClick={() => setSelectedMailIds(group.map((m) => m.reservationId))}
-              onDelete={() => handleDelete(group.map((m) => m.reservationId))}
+              onDelete={() =>
+                setPendingDeleteGroup({
+                  ids: group.map((m) => m.reservationId),
+                  subject: group[0].mailSubject,
+                })
+              }
               readonly={readOnly}
               text={isPendingSend ? '에 전송 실패' : readOnly ? '' : '에 예약됨'}
               title={group[0].mailSubject}
@@ -126,6 +137,14 @@ export const MailTab = ({ dialogReadOnly, emptyText, onCompose, readOnly, status
           readOnly={readOnly || dialogReadOnly}
         />
       )}
+
+      <DeleteTemplateDialog
+        isOpen={!!pendingDeleteGroup}
+        onClose={() => setPendingDeleteGroup(null)}
+        onConfirm={handleConfirmDelete}
+        templateTitle={pendingDeleteGroup?.subject ?? ''}
+        title="이 메일을 삭제하시겠습니까?"
+      />
     </FormProvider>
   );
 };

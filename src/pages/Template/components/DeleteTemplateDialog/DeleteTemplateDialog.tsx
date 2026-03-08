@@ -16,6 +16,7 @@ interface DeleteTemplateDialogProps {
   onClose: () => void;
   onConfirm: () => void;
   templateTitle: string;
+  title?: string;
 }
 
 export const DeleteTemplateDialog = ({
@@ -23,6 +24,7 @@ export const DeleteTemplateDialog = ({
   onClose,
   onConfirm,
   templateTitle,
+  title = '이 템플릿을 삭제하시겠습니까?',
 }: DeleteTemplateDialogProps) => {
   const handleDelete = () => {
     onConfirm();
@@ -34,7 +36,7 @@ export const DeleteTemplateDialog = ({
         <StyledOverlay />
         <StyledContent>
           <StyledHeader>
-            <StyledTitle>이 템플릿을 삭제하시겠습니까?</StyledTitle>
+            <StyledTitle>{title}</StyledTitle>
             <VisuallyHidden>
               <Dialog.Description />
             </VisuallyHidden>
