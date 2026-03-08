@@ -9,7 +9,7 @@ interface MemberTableFallbackProps {
 }
 
 const MemberTableFallback = ({ state }: MemberTableFallbackProps) => {
-  const columns = useMemberColumns(state);
+  const columns = useMemberColumns(state, false);
 
   const table = useReactTable({
     data: [],

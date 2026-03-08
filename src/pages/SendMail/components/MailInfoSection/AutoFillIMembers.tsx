@@ -58,9 +58,11 @@ export const AutoFillMembers = ({
       return;
     }
 
-    const applicantsData = results[0].data;
-    const partMembersData = results[1].data;
-    const hrMembersData = isSelectedPartHR ? partMembersData : (results[2]?.data ?? []);
+    const applicantsData = results[0].data as unknown as any[];
+    const partMembersData = (results[1].data as unknown as any).members as any[];
+    const hrMembersData = isSelectedPartHR
+      ? partMembersData
+      : ((results[2]?.data as unknown as any)?.members ?? []);
 
     if (applicantsData && partMembersData && !selectedTemplateId) {
       // 1. 현재 컨텍스트에 담긴 '이미 선택된 명단'을 가져옴
@@ -76,7 +78,7 @@ export const AutoFillMembers = ({
         return partReceivers.includes(receiver);
       });
       const filteredBcc = currentBcc.filter((bcc) => {
-        return partBcc.includes(bcc) || hrMembersData.some((hr) => hr.nickname === bcc); // HR 멤버는 항상 유지
+        return partBcc.includes(bcc) || hrMembersData.some((hr: any) => hr.nickname === bcc); // HR 멤버는 항상 유지
       });
 
       // 4. [기존 명단 + 새 명단]을 합치고 중복을 제거

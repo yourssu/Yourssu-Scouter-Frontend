@@ -7,11 +7,25 @@ import DepartmentSearchDialog from '@/components/DepartmentSearchDialog/Departme
 import { Tooltip } from '@/components/Tooltip/Tooltip.tsx';
 
 interface DepartmentCellProps extends PropsWithChildren {
+  disabled?: boolean;
   onSelect: (value: number) => void;
   tooltipContent: string;
 }
 
-const DepartmentCell = ({ tooltipContent, children, onSelect }: DepartmentCellProps) => {
+const DepartmentCell = ({
+  tooltipContent,
+  children,
+  onSelect,
+  disabled = false,
+}: DepartmentCellProps) => {
+  if (disabled) {
+    return (
+      <StyledContainer $bold={false} $editable={false}>
+        {children}
+      </StyledContainer>
+    );
+  }
+
   return (
     <Popover.Root>
       <Popover.Anchor>

@@ -9,8 +9,10 @@ export const MemberStateButton = ({
   selectedValue,
   onStateChange,
   contentProps,
+  disabled = false,
 }: {
   contentProps?: Popover.PopoverContentProps;
+  disabled?: boolean;
   onStateChange: (value: string) => void;
   selectedValue: string;
 }) => {
@@ -20,6 +22,7 @@ export const MemberStateButton = ({
   return (
     <StateButton
       contentProps={contentProps}
+      disabled={disabled}
       onSelect={onStateChange}
       options={options}
       selectedValue={selectedValue}

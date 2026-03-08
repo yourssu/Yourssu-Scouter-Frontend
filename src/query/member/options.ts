@@ -2,7 +2,7 @@ import { queryOptions } from '@tanstack/react-query';
 
 import { api } from '@/apis/api.ts';
 import { MEMBER_URI } from '@/constants/uri.ts';
-import { MemberArraySchema, MemberState } from '@/query/member/schema.ts';
+import { MemberResponseSchema, MemberState } from '@/query/member/schema.ts';
 
 type MemberQueryParams = {
   partId: null | number;
@@ -24,7 +24,7 @@ export const memberOptions = (state: MemberState, params?: MemberQueryParams) =>
         },
       });
       const data = await res.json();
-      return MemberArraySchema.parse(data);
+      return MemberResponseSchema.parse(data);
     },
   });
 };
