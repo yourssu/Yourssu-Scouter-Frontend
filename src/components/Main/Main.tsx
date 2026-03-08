@@ -3,6 +3,7 @@ import { Outlet } from 'react-router';
 
 import { StyledContainer, StyledRightContainer } from '@/components/Main/Main.style.ts';
 import Navigation from '@/components/Main/Navigation/Navigation.tsx';
+import { NavigationProvider } from '@/components/Main/Navigation/NavigationContext';
 import SideNavigation from '@/components/Main/SideNavigation/SideNavigation.tsx';
 import { departmentOptions } from '@/query/department/options.ts';
 import { partOptions } from '@/query/part/options.ts';
@@ -16,13 +17,15 @@ const Main = () => {
   usePrefetchQuery(semesterNowOptions());
 
   return (
-    <StyledContainer>
-      <SideNavigation />
-      <StyledRightContainer>
-        <Navigation />
-        <Outlet />
-      </StyledRightContainer>
-    </StyledContainer>
+    <NavigationProvider>
+      <StyledContainer>
+        <SideNavigation />
+        <StyledRightContainer>
+          <Navigation />
+          <Outlet />
+        </StyledRightContainer>
+      </StyledContainer>
+    </NavigationProvider>
   );
 };
 

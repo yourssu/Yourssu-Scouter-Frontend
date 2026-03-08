@@ -8,6 +8,7 @@ interface ApplicantInputFieldProps {
   items: string[];
   label: string;
   onItemsUpdate: (items: string[]) => void;
+  readOnly?: boolean;
   selectedPart?: Part;
 }
 
@@ -15,6 +16,7 @@ export const ApplicantInputField = ({
   items,
   label,
   onItemsUpdate,
+  readOnly,
   selectedPart,
 }: ApplicantInputFieldProps) => {
   const [inputValue, setInputValue] = useState('');
@@ -23,7 +25,7 @@ export const ApplicantInputField = ({
 
   const handleSelect = (name: string) => {
     if (!items.includes(name)) {
-      onItemsUpdate([...items, name]);
+      onItemsUpdate([...items, name].sort((a, b) => a.localeCompare(b, 'ko')));
       setInputValue(''); // 선택 후 입력값 초기화
       setIsActive(false);
     }
@@ -42,26 +44,28 @@ export const ApplicantInputField = ({
         {label}
       </div>
       <div className="flex flex-1 flex-wrap items-center gap-x-[8px] gap-y-[6px]">
-        <InputChipGroup deletable={true} items={items} onItemsUpdate={onItemsUpdate} />
-        <div className="min-w-[60px] flex-1">
-          <SearchedApplicantDialog
-            excludeItems={items}
-            isActive={isActive}
-            onSearchTextChange={setInputValue} // 검색어 변경 핸들러 전달
-            onSelect={handleSelect}
-            searchText={inputValue} // 외부 검색어 전달
-            selectedPart={selectedPart}
-            trigger={
-              <input
-                className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"
-                onChange={handleInputChange}
-                onFocus={() => setIsActive(true)}
-                ref={inputRef}
-                value={inputValue}
-              />
-            }
-          />
-        </div>
+        <InputChipGroup deletable={!readOnly} items={items} onItemsUpdate={onItemsUpdate} />
+        {!readOnly && (
+          <div className="min-w-[60px] flex-1">
+            <SearchedApplicantDialog
+              excludeItems={items}
+              isActive={isActive}
+              onSearchTextChange={setInputValue}
+              onSelect={handleSelect}
+              searchText={inputValue}
+              selectedPart={selectedPart}
+              trigger={
+                <input
+                  className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"
+                  onChange={handleInputChange}
+                  onFocus={() => setIsActive(true)}
+                  ref={inputRef}
+                  value={inputValue}
+                />
+              }
+            />
+          </div>
+        )}
       </div>
     </div>
   );

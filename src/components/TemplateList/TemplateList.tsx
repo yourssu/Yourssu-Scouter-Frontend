@@ -9,27 +9,49 @@ import {
 } from './TemplateList.style';
 
 export interface TemplateListProps {
+  action?: React.ReactNode;
   date: string;
   onClick?: () => void;
   onDelete: () => void;
+  readonly?: boolean;
+  text: string;
   title: string;
+  variant?: 'error';
 }
 
-export const TemplateList = ({ title, date, onDelete, onClick }: TemplateListProps) => {
+export const TemplateList = ({
+  action,
+  title,
+  date,
+  onDelete,
+  onClick,
+  text,
+  variant,
+  readonly,
+}: TemplateListProps) => {
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete();
   };
 
   return (
-    <TemplateItemContainer onClick={onClick}>
+    <TemplateItemContainer $variant={variant} onClick={onClick}>
       <TemplateItemContent>
         <TemplateTitle>{title}</TemplateTitle>
-        <TemplateDate>{date}에 수정됨</TemplateDate>
+        <TemplateDate $variant={variant}>
+          {date}
+          {text}
+        </TemplateDate>
       </TemplateItemContent>
-      <TrashIconButton onClick={handleDelete}>
-        <IcTrashLine />
-      </TrashIconButton>
+      {action ? (
+        <div onClick={(e) => e.stopPropagation()}>{action}</div>
+      ) : (
+        !readonly && (
+          <TrashIconButton onClick={handleDelete}>
+            <IcTrashLine />
+          </TrashIconButton>
+        )
+      )}
     </TemplateItemContainer>
   );
 };

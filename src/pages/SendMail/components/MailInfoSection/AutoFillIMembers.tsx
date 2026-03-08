@@ -83,7 +83,9 @@ export const AutoFillMembers = ({
 
       // 4. [기존 명단 + 새 명단]을 합치고 중복을 제거
       onMembersUpdate({
-        '받는 사람': uniq([...filteredReceivers, ...partReceivers]),
+        '받는 사람': uniq([...filteredReceivers, ...partReceivers]).sort((a, b) =>
+          a.localeCompare(b, 'ko'),
+        ),
         '숨은 참조': uniq([...filteredBcc, ...partBcc]),
       });
 
@@ -110,7 +112,6 @@ export const AutoFillMembers = ({
         items={mailInfo.receiver || []}
         label="받는 사람"
         onItemsUpdate={(items: string[]) => onMembersUpdate({ '받는 사람': items })}
-        selectedPart={selectedPart}
       />
       <MemberInputField
         items={mailInfo.bcc || []}

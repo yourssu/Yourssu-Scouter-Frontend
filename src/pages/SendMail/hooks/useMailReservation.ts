@@ -1,5 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import {
   useMailContentContext,
@@ -9,11 +8,16 @@ import {
 import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 import { useVariableValue } from '@/pages/SendMail/hooks/useVariableValue';
 import { applicantOptions } from '@/query/applicant/options';
+import { deleteMailReservation } from '@/query/mail/mutation/deleteMailReservation';
 import { postMailReservation } from '@/query/mail/mutation/postMailReservation';
+import { putMailReservation } from '@/query/mail/mutation/putMailReservation';
+import { MailReservationKeys } from '@/query/mail/options';
+import { MailDetail } from '@/query/mail/schema';
 import { memberOptions } from '@/query/member/options';
 import { buildMailRequest } from '@/utils/buildMailRequest';
 
 export const useMailActions = () => {
+  const queryClient = useQueryClient();
   const { mailInfo } = useMailInfoContext();
   const { mailContent } = useMailContentContext();
 
@@ -26,6 +30,9 @@ export const useMailActions = () => {
 
   const { mutateAsync: mutatePostMailReservation, isPending } = useMutation({
     mutationFn: postMailReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
+    },
   });
 
   const convertNameToEmail = (name: string) => {
@@ -90,6 +97,93 @@ export const useMailActions = () => {
 
   const executeSend = async (requestData: ReturnType<typeof buildMailRequest>['request']) => {
     return mutatePostMailReservation(requestData);
+  };
+
+  const updateReservation = async (mailDetails: MailDetail[], reservationTime: Date) => {
+    const newReceiverEmails = mailInfo.receiver.map(convertNameToEmail);
+    const existingEmails = mailDetails.flatMap((d) => d.receiverEmailAddresses);
+
+    const toUpdate = mailDetails.filter((detail) =>
+      detail.receiverEmailAddresses.some((email) => newReceiverEmails.includes(email)),
+    );
+    const toDelete = mailDetails.filter((detail) =>
+      detail.receiverEmailAddresses.every((email) => !newReceiverEmails.includes(email)),
+    );
+    const toCreate = newReceiverEmails.filter((email) => !existingEmails.includes(email));
+
+    const reservationTimeIso = reservationTime.toISOString();
+
+    // 각 detail에 대해, 수신자별 body를 구하고 동일 여부에 따라 PUT 또는 삭제+재생성으로 분기
+    const putsToMake: { detail: MailDetail; body: string; emails: string[] }[] = [];
+    const detailsToSplit: MailDetail[] = [];
+
+    for (const detail of toUpdate) {
+      const relevantEmails = detail.receiverEmailAddresses.filter((e) =>
+        newReceiverEmails.includes(e),
+      );
+      const emailBodies = relevantEmails.map((email) => {
+        const applicant = allApplicants?.find((a) => a.email === email);
+        return applicant
+          ? (mailContent.body[String(applicant.applicantId)] ?? detail.mailBody)
+          : detail.mailBody;
+      });
+      const allSameBody = emailBodies.every((b) => b === emailBodies[0]);
+
+      if (allSameBody && relevantEmails.length > 0) {
+        putsToMake.push({ detail, body: emailBodies[0], emails: relevantEmails });
+      } else {
+        // 수신자별로 다른 body → 기존 예약 삭제 후 개별 재생성
+        detailsToSplit.push(detail);
+      }
+    }
+
+    // 분리 대상 detail의 수신자 이메일은 새로 생성
+    const emailsFromSplit = detailsToSplit.flatMap((d) =>
+      d.receiverEmailAddresses.filter((e) => newReceiverEmails.includes(e)),
+    );
+    const allEmailsToCreate = [...toCreate, ...emailsFromSplit];
+
+    await Promise.all([
+      ...putsToMake.map(({ detail, body, emails }) =>
+        putMailReservation({
+          reservationId: detail.reservationId,
+          mailSubject: mailInfo.subject,
+          mailBody: body,
+          bodyFormat: detail.bodyFormat as 'HTML' | 'TEXT',
+          receiverEmailAddresses: emails,
+          ccEmailAddresses: mailInfo.cc.map(convertNameToEmail),
+          bccEmailAddresses: mailInfo.bcc.map(convertNameToEmail),
+          reservationTime: reservationTimeIso,
+          attachmentReferences: [],
+        }),
+      ),
+      ...[...toDelete, ...detailsToSplit].map((detail) =>
+        deleteMailReservation({ reservationId: detail.reservationId }),
+      ),
+      ...allEmailsToCreate.map((email) => {
+        const applicant = allApplicants?.find((a) => a.email === email);
+        const originalBody =
+          mailDetails.find((d) => d.receiverEmailAddresses.includes(email))?.mailBody ?? '';
+        const body = applicant
+          ? (mailContent.body[String(applicant.applicantId)] ?? originalBody)
+          : originalBody;
+        return mutatePostMailReservation(
+          buildMailRequest({
+            inlineImageReferences: [],
+            mailInfo: {
+              receiver: [email],
+              cc: mailInfo.cc.map(convertNameToEmail),
+              bcc: mailInfo.bcc.map(convertNameToEmail),
+              subject: mailInfo.subject,
+            },
+            mailContent: { ...mailContent, body },
+            reservedDate: reservationTime,
+          }).request,
+        );
+      }),
+    ]);
+
+    queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
   };
 
   const sendReservation = async (rawBody: string, defaultBody: string, reservedDate?: Date) => {
@@ -165,5 +259,5 @@ export const useMailActions = () => {
 
     await executeSend(requestBody);
   };
-  return { sendReservation, isPending };
+  return { sendReservation, updateReservation, isPending };
 };
