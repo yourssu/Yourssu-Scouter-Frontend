@@ -114,7 +114,7 @@ export const useMailActions = () => {
     const reservationTimeIso = reservationTime.toISOString();
 
     // 각 detail에 대해, 수신자별 body를 구하고 동일 여부에 따라 PUT 또는 삭제+재생성으로 분기
-    const putsToMake: { detail: MailDetail; body: string; emails: string[] }[] = [];
+    const putsToMake: { body: string; detail: MailDetail; emails: string[] }[] = [];
     const detailsToSplit: MailDetail[] = [];
 
     for (const detail of toUpdate) {
@@ -239,25 +239,39 @@ export const useMailActions = () => {
       return;
     }
 
-    const targetMailBody = replaceChips(rawBody);
-    const { resultHtml: finalBody, inlineImageReferences } = extractInlineImages(targetMailBody);
+    const sendPromises = mailInfo.receiver.map(async (receiverName) => {
+      const targetApplicant = allApplicants.find(
+        (a) => a.name === receiverName || a.email === receiverName,
+      );
+      const targetId = targetApplicant ? String(targetApplicant.applicantId) : undefined;
+      const targetEmail = targetApplicant?.email || receiverName;
 
-    const requestBody = buildMailRequest({
-      inlineImageReferences,
-      mailInfo: {
-        receiver: mailInfo.receiver.map(convertNameToEmail),
-        cc: mailInfo.cc.map(convertNameToEmail),
-        bcc: mailInfo.bcc.map(convertNameToEmail),
-        subject: mailInfo.subject,
-      },
-      mailContent: {
-        ...mailContent,
-        body: finalBody,
-      },
-      reservedDate: reservedDate || null,
-    }).request;
+      let specificBody = defaultBody;
+      if (targetId === currentRecipientId) {
+        specificBody = rawBody;
+      } else if (targetId && mailContent.body[targetId]) {
+        specificBody = mailContent.body[targetId];
+      }
 
-    await executeSend(requestBody);
+      const targetMailBody = replaceChips(specificBody, targetId);
+      const { resultHtml: finalBody, inlineImageReferences } = extractInlineImages(targetMailBody);
+
+      return executeSend(
+        buildMailRequest({
+          inlineImageReferences,
+          mailInfo: {
+            receiver: [targetEmail],
+            cc: mailInfo.cc.map(convertNameToEmail),
+            bcc: mailInfo.bcc.map(convertNameToEmail),
+            subject: mailInfo.subject,
+          },
+          mailContent: { ...mailContent, body: finalBody },
+          reservedDate: reservedDate || null,
+        }).request,
+      );
+    });
+
+    await Promise.all(sendPromises);
   };
   return { sendReservation, updateReservation, isPending };
 };
