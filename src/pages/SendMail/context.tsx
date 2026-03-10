@@ -42,6 +42,7 @@ export interface MailInfoData {
   bcc: string[];
   cc: string[];
   receiver: string[];
+  sender?: string;
   subject: string;
 }
 
@@ -156,6 +157,7 @@ export const MailInfoProvider = ({
     receiver: initialMailInfo?.receiver ?? [],
     cc: initialMailInfo?.cc ?? [],
     bcc: initialMailInfo?.bcc ?? [],
+    sender: initialMailInfo?.sender,
     subject: initialMailInfo?.subject ?? '',
   });
 

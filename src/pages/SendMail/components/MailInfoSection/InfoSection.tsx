@@ -41,7 +41,7 @@ export const InfoSection = ({
   const [formData, setFormData] = useState<MailFormData>({
     members: {
       '받는 사람': mailInfo.receiver || [],
-      '보내는 사람': [me.nickname],
+      '보내는 사람': mailInfo.sender ? [mailInfo.sender] : [me.nickname],
       '숨은 참조': mailInfo.bcc || [],
     },
     subject: mailInfo.subject || '',

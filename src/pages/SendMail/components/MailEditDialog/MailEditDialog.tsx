@@ -107,8 +107,14 @@ const MailDialogContent = ({
     new Date(mailDetails[0]?.reservationTime),
   );
 
+  const senderEmail = mailDetails[0]?.senderEmailAddress;
+  const sender = useMemo(
+    () => allMembers.members.find((m) => m.email === senderEmail)?.nickname ?? senderEmail,
+    [allMembers, senderEmail],
+  );
+
   return (
-    <MailInfoProvider initialMailInfo={{ bcc, cc, receiver: allReceivers, subject }}>
+    <MailInfoProvider initialMailInfo={{ bcc, cc, receiver: allReceivers, sender, subject }}>
       <MailContentProvider initialBody={initialBody}>
         <MailVariableProvider currentPart={undefined}>
           <StyledHeader>
