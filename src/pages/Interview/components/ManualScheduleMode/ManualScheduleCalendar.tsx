@@ -1,4 +1,4 @@
-import { setHours, setMinutes } from 'date-fns';
+import { setHours, setMinutes, subMinutes } from 'date-fns';
 
 import { useDateMap, UseDateMapAction } from '@/hooks/useDateMap';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
@@ -46,7 +46,19 @@ export const ManualScheduleCalendar = ({
       {({ date, hour, minute }) => {
         const targetDate = setMinutes(setHours(date, hour), minute);
         const isAvailable = map.has(targetDate);
-        const settedApplicantHere = completedScheduleMap.get(targetDate);
+
+        let settedApplicantHere = completedScheduleMap.get(targetDate);
+        let actualScheduleDate = targetDate;
+
+        if (!settedApplicantHere && duration === '1시간') {
+          const prevBlock = subMinutes(targetDate, 30);
+          const prevApplicant = completedScheduleMap.get(prevBlock);
+          if (prevApplicant) {
+            settedApplicantHere = prevApplicant;
+            actualScheduleDate = prevBlock;
+          }
+        }
+
         const settedApplicantHereIsMe =
           settedApplicantHere?.applicantId === selectedApplicant.applicantId;
 
@@ -54,12 +66,12 @@ export const ManualScheduleCalendar = ({
           (isAvailable || settedApplicantHere) && (
             <ManualScheduleBlock
               applicant={settedApplicantHere}
-              date={targetDate}
-              isFirstBlock={duration === '30분' || (duration === '1시간' && minute === 0)}
+              date={actualScheduleDate}
+              isFirstBlock={actualScheduleDate.getTime() === targetDate.getTime()}
               onClick={() => {
                 // 1. 클릭한 블럭에 채워져있는 게 내 일정이라면 지운다
                 if (settedApplicantHereIsMe) {
-                  completedScheduleMapAction.remove(targetDate);
+                  completedScheduleMapAction.remove(actualScheduleDate);
                   return;
                 }
                 // 2. 내 일정이 다른곳에서 이미 지정되어있다면 클릭한 블럭으로 변경한다

@@ -7,10 +7,7 @@ import { InterviewPageLayout } from '@/pages/Interview/components/InterviewPageL
 import { ManualScheduleCalendar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleCalendar';
 import { ManualScheduleHeader } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeader';
 import { ManualScheduleSidebar } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebar';
-import {
-  useInterviewAutoScheduleContext,
-  useInterviewPartSelectionContext,
-} from '@/pages/Interview/context';
+import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
 import { useWeekIndicator } from '@/pages/Interview/hooks/useWeekIndicator';
 import { applicantOptions } from '@/query/applicant/options';
 import { Applicant } from '@/query/applicant/schema';
@@ -18,7 +15,6 @@ import { scheduleOptions } from '@/query/schedule/options';
 import { semesterNowOptions } from '@/query/semester/now/options';
 
 export const ManualScheduleMode = () => {
-  const { duration } = useInterviewAutoScheduleContext();
   const { partId } = useInterviewPartSelectionContext();
 
   const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
@@ -55,7 +51,7 @@ export const ManualScheduleMode = () => {
   });
   const [completedScheduleMap, completedScheduleMapAction] = useDateMap<Applicant>({
     initialEntries: initialScheduleEntries,
-    precision: duration === '1시간' ? '시간' : '분',
+    precision: '분',
   });
   const [interviewMethod, setInterviewMethod] = useState<'대면' | '비대면'>('대면');
 
