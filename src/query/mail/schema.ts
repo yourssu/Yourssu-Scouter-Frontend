@@ -8,6 +8,7 @@ const BaseMailItemSchema = z.object({
   reservationTime: z.string(),
   status: z.enum(MailStateType),
   mailSubject: z.string(),
+  senderEmailAddress: z.string().email(),
   primaryReceiverEmailAddress: z.string(),
   hasAttachments: z.boolean(),
 });
@@ -22,6 +23,7 @@ export const MailDetailSchema = z.object({
   reservationTime: z.string(),
   status: z.enum(MailStateType),
   mailSubject: z.string(),
+  senderEmailAddress: z.string().email(),
   mailBody: z.string(),
   bodyFormat: z.string(),
   receiverEmailAddresses: z.array(z.string()),
