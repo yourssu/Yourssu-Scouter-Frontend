@@ -1,4 +1,4 @@
-import { setHours, setMinutes } from 'date-fns';
+import { setHours, setMinutes, subMinutes } from 'date-fns';
 
 import { useDateMap } from '@/hooks/useDateMap';
 import { AutoScheduleBlock } from '@/pages/Interview/components/AutoScheduleMode/AutoScheduleBlock';
@@ -23,7 +23,7 @@ export const AutoScheduleCalendar = ({
 
   const [map] = useDateMap({
     initialEntries: scheduleCandidate.schedules.map((v) => [new Date(v.startTime), v]),
-    precision: duration === '1시간' ? '시간' : '분',
+    precision: '분',
   });
 
   const earliestScheduleTime =
@@ -35,13 +35,23 @@ export const AutoScheduleCalendar = ({
     <InterviewCalendar month={month} week={week} year={year}>
       {({ date, hour, minute }) => {
         const targetDate = setMinutes(setHours(date, hour), minute);
-        const schedule = map.get(targetDate);
+        let schedule = map.get(targetDate);
+        let actualScheduleDate = targetDate;
+
+        if (!schedule && duration === '1시간') {
+          const prevBlock = subMinutes(targetDate, 30);
+          const prevSchedule = map.get(prevBlock);
+          if (prevSchedule) {
+            schedule = prevSchedule;
+            actualScheduleDate = prevBlock;
+          }
+        }
 
         return (
           !!schedule && (
             <AutoScheduleBlock
-              date={targetDate}
-              isFirstBlock={duration === '30분' || (duration === '1시간' && minute === 0)}
+              date={actualScheduleDate}
+              isFirstBlock={actualScheduleDate.getTime() === targetDate.getTime()}
               schedule={schedule}
               shouldScrollIntoView={earliestScheduleTime === targetDate.getTime()}
             />
