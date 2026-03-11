@@ -29,16 +29,36 @@ export const useMailValidation = (templateId?: number) => {
       return true;
     }
 
+    const isValidValue = (v: any, val?: string) => {
+      if (!val || val.trim() === '') {
+        return false;
+      }
+
+      if (v.type === 'LINK' || v.type === '링크') {
+        try {
+          const parsed = JSON.parse(val);
+          if (parsed && typeof parsed === 'object' && ('url' in parsed || 'text' in parsed)) {
+            return !!(parsed.url && parsed.url.trim() !== '');
+          }
+        } catch {
+          // fallback
+          return true;
+        }
+      }
+
+      return true;
+    };
+
     return requiredVariables.every((v) => {
       if (v.perRecipient) {
         return recipients.every((r) => {
           const val = variableValue.perApplicant[r.id]?.[v.key];
-          return val && val.trim() !== '';
+          return isValidValue(v, val);
         });
       }
 
       const commonVal = variableValue.common[v.key];
-      return commonVal && commonVal.trim() !== '';
+      return isValidValue(v, commonVal);
     });
   }, [template, recipients, variableValue, templateId]);
 
