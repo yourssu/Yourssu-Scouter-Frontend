@@ -138,9 +138,10 @@ const VariableValueContent: React.FC<NodeViewProps> = ({ node }) => {
       {displayValue ? (
         type === 'link' ? (
           <a
+            contentEditable={false}
             href={displayValue.startsWith('http') ? displayValue : `https://${displayValue}`}
             rel="noreferrer"
-            style={{ color: '#1155cc', textDecoration: 'underline' }}
+            style={{ color: '#1155cc' }}
             target="_blank"
           >
             {displayValue}
