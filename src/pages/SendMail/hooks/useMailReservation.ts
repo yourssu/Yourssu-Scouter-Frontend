@@ -70,7 +70,7 @@ export const useMailActions = () => {
 
       // 값이 있으면 치환, 없으면 칩 원본 그대로 반환
       if (typeof value === 'string' && value.trim() !== '') {
-        if (type === 'LINK') {
+        if (type.toUpperCase() === 'LINK') {
           let linkText = value;
           let linkUrl = value;
           try {

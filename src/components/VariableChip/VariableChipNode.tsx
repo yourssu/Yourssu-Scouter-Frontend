@@ -136,7 +136,7 @@ const VariableValueContent: React.FC<NodeViewProps> = ({ node }) => {
   let linkText = displayValue || '';
   let linkUrl = displayValue || '';
 
-  if (displayValue && type === 'link') {
+  if (displayValue && type?.toLowerCase() === 'link') {
     try {
       const parsed = JSON.parse(displayValue);
       if (parsed && typeof parsed === 'object') {
@@ -151,7 +151,7 @@ const VariableValueContent: React.FC<NodeViewProps> = ({ node }) => {
   return (
     <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
       {displayValue ? (
-        type === 'link' ? (
+        type?.toLowerCase() === 'link' ? (
           <a
             contentEditable={false}
             href={linkUrl.startsWith('http') ? linkUrl : `https://${linkUrl}`}

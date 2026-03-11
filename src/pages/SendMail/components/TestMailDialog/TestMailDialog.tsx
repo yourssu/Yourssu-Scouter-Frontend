@@ -61,7 +61,7 @@ export const TestMailDialog = ({
         // 공통 변수는 실제 값으로 치환
         const value = getVariableValue(key, false, label) ?? '';
         const type = chip.getAttribute('data-type');
-        if (type === 'LINK' && value.trim()) {
+        if (type?.toUpperCase() === 'LINK' && value.trim()) {
           let linkText = value;
           let linkUrl = value;
           try {

@@ -10,7 +10,11 @@ export const LinkVariableCard = ({ title, links, onValueChange }: LinkVariableCa
 
   const handleValueChange = (index: number, text: string, url: string) => {
     if (onValueChange) {
-      onValueChange(index, JSON.stringify({ text, url }));
+      if (!text && !url) {
+        onValueChange(index, '');
+      } else {
+        onValueChange(index, JSON.stringify({ text, url }));
+      }
     }
   };
 
