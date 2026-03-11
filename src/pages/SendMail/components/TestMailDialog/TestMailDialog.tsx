@@ -9,7 +9,7 @@ import { meOption } from '@/query/member/me/options';
 import { buildMailRequest } from '@/utils/buildMailRequest';
 
 export interface TestMailDialogProps {
-  close: (v: boolean) => void;
+  close: ({ error, success }: { error?: unknown; success: boolean }) => void;
   content: string;
   getVariableValue: (
     key: string,
@@ -96,15 +96,15 @@ export const TestMailDialog = ({
 
     try {
       await sendTestMail(req.request);
-      close(true);
-    } catch {
-      close(false);
+      close({ success: true });
+    } catch (error) {
+      close({ error, success: false });
     }
   };
 
   return (
-    <Dialog closeableWithOutside onClose={() => close(false)} open={isOpen}>
-      <Dialog.Header onClickCloseButton={() => close(false)}>
+    <Dialog closeableWithOutside onClose={() => close({ success: false })} open={isOpen}>
+      <Dialog.Header onClickCloseButton={() => close({ success: false })}>
         <Dialog.Title>테스트 메일 발송하기</Dialog.Title>
       </Dialog.Header>
 
@@ -136,7 +136,11 @@ export const TestMailDialog = ({
       </Dialog.Content>
 
       <Dialog.ButtonGroup>
-        <Dialog.Button onClick={() => close(false)} size="large" variant="filledSecondary">
+        <Dialog.Button
+          onClick={() => close({ success: false })}
+          size="large"
+          variant="filledSecondary"
+        >
           취소
         </Dialog.Button>
         <Dialog.Button

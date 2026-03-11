@@ -1,4 +1,5 @@
 import { BoxButton, useSnackbar } from '@yourssu/design-system-react';
+import { HTTPError } from 'ky';
 import { overlay } from 'overlay-kit';
 import { Suspense } from 'react';
 
@@ -51,16 +52,18 @@ export const MailSidebar = ({ partId, templateId, onReserveSuccess }: MailSideba
   };
 
   const handleTestMailClick = async () => {
-    const success = await overlay.openAsync<boolean>(({ isOpen, close }) => (
-      <TestMailDialog
-        close={close}
-        content={currentContent}
-        getVariableValue={getVariableValue}
-        isOpen={isOpen}
-        mailContent={mailContent}
-        mailInfo={mailInfo}
-      />
-    ));
+    const { success, error } = await overlay.openAsync<{ error?: unknown; success: boolean }>(
+      ({ isOpen, close }) => (
+        <TestMailDialog
+          close={close}
+          content={currentContent}
+          getVariableValue={getVariableValue}
+          isOpen={isOpen}
+          mailContent={mailContent}
+          mailInfo={mailInfo}
+        />
+      ),
+    );
 
     if (success) {
       snackbar({
@@ -70,13 +73,26 @@ export const MailSidebar = ({ partId, templateId, onReserveSuccess }: MailSideba
         type: 'info',
         width: '400px',
       });
-    } else {
-      snackbar({
-        duration: 3000,
-        message: '테스트 메일 발송에 실패했어요.',
-        position: 'center',
-        type: 'error',
-      });
+      return;
+    }
+
+    if (error) {
+      if (error instanceof HTTPError) {
+        const { message } = await error.response.json();
+        snackbar({
+          duration: 3000,
+          message,
+          position: 'center',
+          type: 'error',
+        });
+      } else {
+        snackbar({
+          duration: 3000,
+          message: '테스트 메일 발송에 실패했어요.',
+          position: 'center',
+          type: 'error',
+        });
+      }
     }
   };
 
