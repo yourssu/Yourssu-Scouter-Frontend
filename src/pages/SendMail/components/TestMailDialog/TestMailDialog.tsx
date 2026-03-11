@@ -60,8 +60,20 @@ export const TestMailDialog = ({
       } else {
         // 공통 변수는 실제 값으로 치환
         const value = getVariableValue(key, false, label) ?? '';
-        const textNode = doc.createTextNode(value);
-        chip.parentNode?.replaceChild(textNode, chip);
+        const type = chip.getAttribute('data-type');
+        if (type === 'LINK' && value.trim()) {
+          const a = doc.createElement('a');
+          a.href = value.startsWith('http') ? value : `https://${value}`;
+          a.style.color = '#1155cc';
+          a.style.textDecoration = 'underline';
+          a.textContent = value;
+          a.target = '_blank';
+          a.rel = 'noreferrer';
+          chip.parentNode?.replaceChild(a, chip);
+        } else {
+          const textNode = doc.createTextNode(value);
+          chip.parentNode?.replaceChild(textNode, chip);
+        }
       }
     });
 

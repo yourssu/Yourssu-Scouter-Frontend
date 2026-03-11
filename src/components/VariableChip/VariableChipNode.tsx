@@ -136,7 +136,19 @@ const VariableValueContent: React.FC<NodeViewProps> = ({ node }) => {
   return (
     <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
       {displayValue ? (
-        <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
+        type === 'link' ? (
+          <a
+            contentEditable={false}
+            href={displayValue.startsWith('http') ? displayValue : `https://${displayValue}`}
+            rel="noreferrer"
+            style={{ color: '#1155cc' }}
+            target="_blank"
+          >
+            {displayValue}
+          </a>
+        ) : (
+          <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
+        )
       ) : (
         <VariableChip label={label} size="small" type={type as any} />
       )}
