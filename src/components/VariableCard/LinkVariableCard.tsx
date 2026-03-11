@@ -8,30 +8,53 @@ export const LinkVariableCard = ({ title, links, onValueChange }: LinkVariableCa
   const hasLabels = links.some((link) => link.label);
   const count = hasLabels ? links.length : undefined;
 
-  const handleValueChange = (index: number, value: string) => {
+  const handleValueChange = (index: number, text: string, url: string) => {
     if (onValueChange) {
-      onValueChange(index, value);
+      onValueChange(index, JSON.stringify({ text, url }));
     }
   };
 
   return (
     <VariableCard count={count} title={title}>
-      {links.map((link, index) => (
-        <InputContainer key={index}>
-          {link.label && (
-            <Chip role="input" size="medium" style={{ whiteSpace: 'nowrap' }}>
-              {link.label}
-            </Chip>
-          )}
-          <TextField
-            onChange={(e) => handleValueChange(index, e.target.value)}
-            onClearButtonClick={() => handleValueChange(index, '')}
-            placeholder={'링크 변수 URL 입력'}
-            type="url"
-            value={link.value}
-          />
-        </InputContainer>
-      ))}
+      {links.map((link, index) => {
+        let text = '';
+        let url = link.value;
+
+        try {
+          const parsed = JSON.parse(link.value);
+          if (parsed && typeof parsed === 'object' && 'url' in parsed) {
+            text = parsed.text || '';
+            url = parsed.url || '';
+          }
+        } catch {
+          // Fallback to old format
+        }
+
+        return (
+          <InputContainer key={index} style={{ alignItems: 'flex-start' }}>
+            {link.label && (
+              <Chip role="input" size="medium" style={{ whiteSpace: 'nowrap', marginTop: '12px' }}>
+                {link.label}
+              </Chip>
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+              <TextField
+                onChange={(e) => handleValueChange(index, e.target.value, url)}
+                onClearButtonClick={() => handleValueChange(index, '', url)}
+                placeholder={'링크 변수 텍스트 입력 (선택)'}
+                value={text}
+              />
+              <TextField
+                onChange={(e) => handleValueChange(index, text, e.target.value)}
+                onClearButtonClick={() => handleValueChange(index, text, '')}
+                placeholder={'링크 변수 URL 입력'}
+                type="url"
+                value={url}
+              />
+            </div>
+          </InputContainer>
+        );
+      })}
     </VariableCard>
   );
 };

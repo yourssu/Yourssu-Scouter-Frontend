@@ -62,11 +62,23 @@ export const TestMailDialog = ({
         const value = getVariableValue(key, false, label) ?? '';
         const type = chip.getAttribute('data-type');
         if (type === 'LINK' && value.trim()) {
+          let linkText = value;
+          let linkUrl = value;
+          try {
+            const parsed = JSON.parse(value);
+            if (parsed && typeof parsed === 'object') {
+              linkText = parsed.text || parsed.url || value;
+              linkUrl = parsed.url || value;
+            }
+          } catch {
+            // fallback
+          }
+
           const a = doc.createElement('a');
-          a.href = value.startsWith('http') ? value : `https://${value}`;
+          a.href = linkUrl.startsWith('http') ? linkUrl : `https://${linkUrl}`;
           a.style.color = '#1155cc';
           a.style.textDecoration = 'underline';
-          a.textContent = value;
+          a.textContent = linkText;
           a.target = '_blank';
           a.rel = 'noreferrer';
           chip.parentNode?.replaceChild(a, chip);
