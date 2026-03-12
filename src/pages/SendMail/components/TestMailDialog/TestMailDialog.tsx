@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { Dialog } from '@/components/dialog';
 import { MailContentData, MailInfoData } from '@/pages/SendMail/context';
-import { postMailReservation } from '@/query/mail/mutation/postMailReservation';
+import { postMailSend } from '@/query/mail/mutation/postMailSend';
 import { meOption } from '@/query/member/me/options';
 import { buildMailRequest } from '@/utils/buildMailRequest';
 
@@ -34,7 +34,7 @@ export const TestMailDialog = ({
   const [email, setEmail] = useState(me.email);
 
   const { mutateAsync: sendTestMail, isPending: loading } = useMutation({
-    mutationFn: postMailReservation,
+    mutationFn: postMailSend,
   });
 
   const handleSend = async () => {
@@ -119,7 +119,13 @@ export const TestMailDialog = ({
     });
 
     try {
-      await sendTestMail(req.request);
+      await sendTestMail({
+        attachmentReferences: req.request.attachmentReferences,
+        bodyFormat: req.request.bodyFormat,
+        mailBody: req.request.mailBody,
+        mailSubject: req.request.mailSubject,
+        receiverEmailAddresses: req.request.receiverEmailAddresses,
+      });
       close({ success: true });
     } catch (error) {
       close({ error, success: false });
