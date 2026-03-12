@@ -45,13 +45,13 @@ export const LinkVariableCard = ({ title, links, onValueChange }: LinkVariableCa
               <TextField
                 onChange={(e) => handleValueChange(index, e.target.value, url)}
                 onClearButtonClick={() => handleValueChange(index, '', url)}
-                placeholder={'링크 변수 텍스트 입력 (선택)'}
+                placeholder="(선택) 링크 텍스트 입력"
                 value={text}
               />
               <TextField
                 onChange={(e) => handleValueChange(index, text, e.target.value)}
                 onClearButtonClick={() => handleValueChange(index, text, '')}
-                placeholder={'링크 변수 URL 입력'}
+                placeholder="링크 URL 입력"
                 type="url"
                 value={url}
               />
