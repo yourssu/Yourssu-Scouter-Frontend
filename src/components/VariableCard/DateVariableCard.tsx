@@ -35,15 +35,22 @@ export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCar
             </Chip>
           )}
           <CalendarDialog
-            onSelect={(selectedDate) =>
+            onSelect={(selectedDate, withTime) =>
               handleDateSelection(
                 index,
-                formatTemplates['01/01(월) 00:00'](setYear(selectedDate, new Date().getFullYear())),
+                withTime
+                  ? formatTemplates['01/01(월) 00:00'](setYear(selectedDate, new Date().getFullYear()))
+                  : formatTemplates['01/01(월)'](setYear(selectedDate, new Date().getFullYear())),
               )
             }
             selectedDate={
               date.value
-                ? parse(date.value, 'MM/dd(E) HH:mm', new Date(), { locale: ko })
+                ? parse(
+                    date.value,
+                    date.value.includes(':') ? 'MM/dd(E) HH:mm' : 'MM/dd(E)',
+                    new Date(),
+                    { locale: ko },
+                  )
                 : undefined
             }
             trigger={

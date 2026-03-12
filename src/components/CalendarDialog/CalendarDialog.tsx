@@ -2,8 +2,9 @@ import {
   BoxButton,
   IcArrowsChevronLeftLine,
   IcArrowsChevronRightLine,
+  Switch,
 } from '@yourssu/design-system-react';
-import { addHours, addMonths, isSameDay, setHours, setMinutes, startOfHour } from 'date-fns';
+import { addHours, addMonths, isSameDay, setHours, setMinutes, startOfDay, startOfHour } from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
 
@@ -23,16 +24,18 @@ import {
   DayCell,
   DayRow,
   StyledWrapper,
+  SwitchRow,
 } from './CalendarDialog.style';
 
 interface CalendarDialogProps {
-  onSelect: (date: Date) => void;
+  onSelect: (date: Date, withTime: boolean) => void;
   selectedDate?: Date | undefined;
   trigger: React.ReactNode;
 }
 
 export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDialogProps) => {
   const [open, setOpen] = useState(false);
+  const [withTime, setWithTime] = useState(false);
   const [tempDate, setTempDate] = useState<Date | undefined>(selectedDate); // 내부에서만 사용하는 임시 날짜 상태
   const today = new Date();
   const displayDate = tempDate ?? selectedDate ?? today;
@@ -63,7 +66,7 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
   // 확인 버튼을 눌렀을 때만 부모의 onSelect 호출
   const handleConfirm = () => {
     if (tempDate) {
-      onSelect(tempDate);
+      onSelect(withTime ? tempDate : startOfDay(tempDate), withTime);
       setOpen(false);
     }
   };
@@ -86,9 +89,13 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
           <Popover.Content style={{ zIndex: 50 }}>
             <CalendarDialogContainer>
               <CalendarContent onSelect={handleDateChange} selectedDate={tempDate} />
+              <SwitchRow>
+                <span>시간 포함</span>
+                <Switch isSelected={withTime} onSelectedChange={setWithTime} size="large" />
+              </SwitchRow>
               <DateFieldWrapper>
                 <MiniDateField date={displayDate} />
-                <MiniTimeField date={displayDate} onDateChange={handleTimeChange} />
+                {withTime && <MiniTimeField date={displayDate} onDateChange={handleTimeChange} />}
               </DateFieldWrapper>
               <BoxButton
                 className="w-full"
