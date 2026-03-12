@@ -44,14 +44,22 @@ export const MiniDateFieldContainer = styled(DateFieldContainer)<{
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
   ${({ theme }) => theme.typo.B1_Rg_16}
 
-  input {
+  input[type='time'] {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    background: transparent;
+    opacity: 0;
     border: none;
-    color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
-    ${({ theme }) => theme.typo.B1_Rg_16}
     outline: none;
+
+    &::-webkit-calendar-picker-indicator {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
   }
 `;
 
