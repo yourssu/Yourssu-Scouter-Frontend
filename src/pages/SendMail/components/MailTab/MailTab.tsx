@@ -40,15 +40,16 @@ export const MailTab = ({
   }>(null);
   const queryClient = useQueryClient();
 
-  const { mutate: deleteReservation } = useMutation({
+  const { mutateAsync: deleteReservation } = useMutation({
     mutationFn: deleteMailReservation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
-    },
   });
 
-  const handleConfirmDelete = () => {
-    pendingDeleteGroup?.ids.forEach((id) => deleteReservation({ reservationId: id }));
+  const handleConfirmDelete = async () => {
+    if (!pendingDeleteGroup) { return; }
+    await Promise.all(
+      pendingDeleteGroup.ids.map((id) => deleteReservation({ reservationId: id })),
+    );
+    queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
     setPendingDeleteGroup(null);
   };
 
