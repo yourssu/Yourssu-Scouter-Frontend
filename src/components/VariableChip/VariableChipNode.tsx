@@ -133,10 +133,37 @@ const VariableValueContent: React.FC<NodeViewProps> = ({ node }) => {
 
   const displayValue = getVariableValue(key, perRecipient, label);
 
+  let linkText = displayValue || '';
+  let linkUrl = displayValue || '';
+
+  if (displayValue && type?.toLowerCase() === 'link') {
+    try {
+      const parsed = JSON.parse(displayValue);
+      if (parsed && typeof parsed === 'object') {
+        linkText = parsed.text || parsed.url || displayValue;
+        linkUrl = parsed.url || displayValue;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
   return (
     <NodeViewWrapper as="span" className="variable-chip-node" style={{ display: 'inline-block' }}>
       {displayValue ? (
-        <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
+        type?.toLowerCase() === 'link' ? (
+          <a
+            contentEditable={false}
+            href={linkUrl.startsWith('http') ? linkUrl : `https://${linkUrl}`}
+            rel="noreferrer"
+            style={{ color: '#1155cc' }}
+            target="_blank"
+          >
+            {linkText}
+          </a>
+        ) : (
+          <span className="text-text-basicPrimary bg-transparent px-0">{displayValue}</span>
+        )
       ) : (
         <VariableChip label={label} size="small" type={type as any} />
       )}

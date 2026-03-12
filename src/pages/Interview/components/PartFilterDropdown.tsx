@@ -15,7 +15,7 @@ const PART_COLORS: Record<string, string> = {
   Backend: '#7C7C7C',
   Android: '#F4A3DB',
   iOS: '#A3EAF4',
-  'Web FE': '#B8F4A3',
+  Frontend: '#B8F4A3',
   'Product Design': '#6B5CFF',
 };
 

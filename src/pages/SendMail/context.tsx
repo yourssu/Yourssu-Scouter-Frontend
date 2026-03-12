@@ -20,7 +20,7 @@ interface MailVariableContextProps {
 }
 
 // 2. 메일 내용 관련 타입 (제목, 본문, 이미지, 파일)
-interface MailContentData {
+export interface MailContentData {
   attachments: AttachmentType[];
   body: Record<string, string>; // 지원자 id, 본문 내용
   bodyFormat: 'HTML' | 'PLAIN_TEXT';

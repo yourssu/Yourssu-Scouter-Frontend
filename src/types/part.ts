@@ -1,7 +1,7 @@
 export const partNames = [
   'Product Design',
   'Finance',
-  'Web FE',
+  'Frontend',
   'iOS',
   'Android',
   'Backend',

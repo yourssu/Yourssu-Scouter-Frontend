@@ -10,7 +10,7 @@ const container = tv({
   variants: {
     part: {
       'Product Design': 'bg-table-productDesignBackground',
-      'Web FE': 'bg-table-frontendBackground',
+      Frontend: 'bg-table-frontendBackground',
       iOS: 'bg-table-iosBackground',
       Android: 'bg-table-androidBackground',
       Backend: 'bg-table-backendBackground',

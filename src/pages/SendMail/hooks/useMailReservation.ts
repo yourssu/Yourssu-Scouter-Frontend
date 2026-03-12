@@ -59,15 +59,36 @@ export const useMailActions = () => {
       const keyMatch = match.match(/data-key="([^"]*)"/);
       const perRecipientMatch = match.match(/data-per-recipient="([^"]*)"/);
       const labelMatch = match.match(/data-label="([^"]*)"/);
+      const typeMatch = match.match(/data-type="([^"]*)"/);
 
       const key = keyMatch?.[1] || '';
       const isIndividual = perRecipientMatch?.[1] === 'true';
       const label = labelMatch?.[1] || '';
+      const type = typeMatch?.[1] || '';
 
       const value = getVariableValue(key, isIndividual, label, targetId);
 
       // 값이 있으면 치환, 없으면 칩 원본 그대로 반환
-      return typeof value === 'string' && value.trim() !== '' ? value : match;
+      if (typeof value === 'string' && value.trim() !== '') {
+        if (type.toUpperCase() === 'LINK') {
+          let linkText = value;
+          let linkUrl = value;
+          try {
+            const parsed = JSON.parse(value);
+            if (parsed && typeof parsed === 'object') {
+              linkText = parsed.text || parsed.url || value;
+              linkUrl = parsed.url || value;
+            }
+          } catch {
+            // fallback
+          }
+
+          const href = linkUrl.startsWith('http') ? linkUrl : `https://${linkUrl}`;
+          return `<a href="${href}" target="_blank" rel="noreferrer" style="color: #1155cc; text-decoration: underline;">${linkText}</a>`;
+        }
+        return value;
+      }
+      return match;
     });
   };
 
