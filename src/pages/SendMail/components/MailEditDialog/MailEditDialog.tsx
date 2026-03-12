@@ -95,13 +95,21 @@ const MailDialogContent = ({
     mailDetails.forEach((detail) => {
       detail.receiverEmailAddresses.forEach((email) => {
         const applicant = allApplicants.find((a) => a.email === email);
-        if (applicant) {
-          body[String(applicant.applicantId)] = detail.mailBody;
-        }
+        const key = applicant ? String(applicant.applicantId) : email;
+        body[key] = detail.mailBody;
       });
     });
     return body;
   }, [allApplicants, mailDetails]);
+
+  const initialAttachments = useMemo(
+    () =>
+      (mailDetails[0]?.attachmentReferences ?? []).map((ref) => ({
+        fileId: ref.fileId,
+        name: ref.fileName,
+      })),
+    [mailDetails],
+  );
 
   const [reservationTime, setReservationTime] = useState<Date>(
     new Date(mailDetails[0]?.reservationTime),
@@ -115,7 +123,7 @@ const MailDialogContent = ({
 
   return (
     <MailInfoProvider initialMailInfo={{ bcc, cc, receiver: allReceivers, sender, subject }}>
-      <MailContentProvider initialBody={initialBody}>
+      <MailContentProvider initialAttachments={initialAttachments} initialBody={initialBody}>
         <MailVariableProvider currentPart={undefined}>
           <StyledHeader>
             <StyledTitleInput readOnly value={subject} />

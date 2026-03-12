@@ -175,7 +175,7 @@ export const useMailActions = () => {
           ccEmailAddresses: mailInfo.cc.map(convertNameToEmail),
           bccEmailAddresses: mailInfo.bcc.map(convertNameToEmail),
           reservationTime: reservationTimeIso,
-          attachmentReferences: [],
+          attachmentReferences: mailContent.attachments.map((a) => ({ fileId: a.fileId })),
         }),
       ),
       ...[...toDelete, ...detailsToSplit].map((detail) =>
