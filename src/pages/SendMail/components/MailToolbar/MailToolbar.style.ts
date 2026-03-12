@@ -17,12 +17,12 @@ export const ToolbarContainer = styled.div`
   max-width: 100%;
 `;
 
-export const AttachmentList = styled.div`
+export const AttachmentList = styled.div<{ $readOnly?: boolean }>`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   padding: 8px 16px;
-  padding-top: 0;
+  padding-top: ${({ $readOnly }) => ($readOnly ? '8px' : '0')};
   border-top: 1px solid ${({ theme }) => theme.primitive.color.gray100};
 `;
 

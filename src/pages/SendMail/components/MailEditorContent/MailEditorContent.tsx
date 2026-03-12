@@ -149,7 +149,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
         <EditorWrapper>
           <StyledEditorContent editor={editor} />
         </EditorWrapper>
-        {!readOnly && <MailToolbar editor={editor} />}
+        <MailToolbar editor={editor} readOnly={readOnly} />
       </div>
     );
   },

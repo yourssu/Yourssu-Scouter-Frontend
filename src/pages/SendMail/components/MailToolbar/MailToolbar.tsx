@@ -33,12 +33,28 @@ import {
 
 interface MailToolbarProps {
   editor: Editor | null;
+  readOnly?: boolean;
 }
 
-export const MailToolbar = ({ editor }: MailToolbarProps) => {
+export const MailToolbar = ({ editor, readOnly }: MailToolbarProps) => {
   const { mailContent, actions } = useMailContentContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+
+  if (readOnly) {
+    if (mailContent.attachments.length === 0) { return null; }
+    return (
+      <ToolbarWrapper>
+        <AttachmentList $readOnly>
+          {mailContent.attachments.map((file) => (
+            <AttachmentChip key={file.fileId}>
+              <span>{file.name}</span>
+            </AttachmentChip>
+          ))}
+        </AttachmentList>
+      </ToolbarWrapper>
+    );
+  }
 
   if (!editor) {
     return null;
