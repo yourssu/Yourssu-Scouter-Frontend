@@ -20,7 +20,13 @@ interface MailTabProps {
   statuses: MailItem['status'][];
 }
 
-export const MailTab = ({ dialogReadOnly, emptyText, onCompose, readOnly, statuses }: MailTabProps) => {
+export const MailTab = ({
+  dialogReadOnly,
+  emptyText,
+  onCompose,
+  readOnly,
+  statuses,
+}: MailTabProps) => {
   const methods = useForm({ defaultValues: { search: '' } });
   const { watch } = methods;
   const searchValue = watch('search');
@@ -68,7 +74,7 @@ export const MailTab = ({ dialogReadOnly, emptyText, onCompose, readOnly, status
       if (aFailed !== bFailed) {
         return aFailed ? -1 : 1;
       }
-      return new Date(a[0].reservationTime).getTime() - new Date(b[0].reservationTime).getTime();
+      return new Date(b[0].reservationTime).getTime() - new Date(a[0].reservationTime).getTime();
     });
   }, [filteredMails]);
 
@@ -78,7 +84,12 @@ export const MailTab = ({ dialogReadOnly, emptyText, onCompose, readOnly, status
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-24">
         <p className="typo-b1_rg_16 text-text-basicTertiary">{emptyText}</p>
-        <BoxButton leftIcon={<IcPlusLine />} onClick={onCompose} size="medium" variant="filledPrimary">
+        <BoxButton
+          leftIcon={<IcPlusLine />}
+          onClick={onCompose}
+          size="medium"
+          variant="filledPrimary"
+        >
           메일 작성하기
         </BoxButton>
       </div>
