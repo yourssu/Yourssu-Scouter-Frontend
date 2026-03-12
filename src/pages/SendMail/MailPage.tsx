@@ -34,10 +34,16 @@ export const MailPage = () => {
               <MailTab
                 emptyText="예약된 메일이 없습니다."
                 onCompose={() => setIsComposing(true)}
+                sortOrder="asc"
                 statuses={['SCHEDULED', 'PENDING_SEND']}
               />
             ) : (
-              <MailTab emptyText="전송 완료된 메일이 없습니다." onCompose={() => setIsComposing(true)} readOnly statuses={['SENT']} />
+              <MailTab
+                emptyText="전송 완료된 메일이 없습니다."
+                onCompose={() => setIsComposing(true)}
+                readOnly
+                statuses={['SENT']}
+              />
             )}
           </div>
         )}
