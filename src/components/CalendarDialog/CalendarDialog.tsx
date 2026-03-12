@@ -1,10 +1,19 @@
 import {
   BoxButton,
+  Divider,
   IcArrowsChevronLeftLine,
   IcArrowsChevronRightLine,
   Switch,
 } from '@yourssu/design-system-react';
-import { addHours, addMonths, isSameDay, setHours, setMinutes, startOfDay, startOfHour } from 'date-fns';
+import {
+  addHours,
+  addMonths,
+  isSameDay,
+  setHours,
+  setMinutes,
+  startOfDay,
+  startOfHour,
+} from 'date-fns';
 import { Popover } from 'radix-ui';
 import { useState } from 'react';
 
@@ -89,6 +98,7 @@ export const CalendarDialog = ({ onSelect, trigger, selectedDate }: CalendarDial
           <Popover.Content style={{ zIndex: 50 }}>
             <CalendarDialogContainer>
               <CalendarContent onSelect={handleDateChange} selectedDate={tempDate} />
+              <Divider thickness={1} />
               <SwitchRow>
                 <span>시간 포함</span>
                 <Switch isSelected={withTime} onSelectedChange={setWithTime} size="large" />
