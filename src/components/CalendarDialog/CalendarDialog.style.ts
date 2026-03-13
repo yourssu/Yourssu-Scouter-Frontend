@@ -62,6 +62,14 @@ export const DatesWrapper = styled.div`
   gap: 8px;
 `;
 
+export const SwitchRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  text: ${({ theme }) => theme.typo.B1_Rg_16};
+`;
+
 export const StyledWrapper = styled.div`
   display: inline-block;
   z-index: 2;

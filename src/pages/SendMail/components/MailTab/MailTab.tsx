@@ -17,6 +17,7 @@ interface MailTabProps {
   emptyText: string;
   onCompose?: () => void;
   readOnly?: boolean; // 메일 예약 목록을 읽기 전용으로 보여줄지 여부
+  sortOrder?: 'asc' | 'desc';
   statuses: MailItem['status'][];
 }
 
@@ -25,6 +26,7 @@ export const MailTab = ({
   emptyText,
   onCompose,
   readOnly,
+  sortOrder = 'desc',
   statuses,
 }: MailTabProps) => {
   const methods = useForm({ defaultValues: { search: '' } });
@@ -38,15 +40,16 @@ export const MailTab = ({
   }>(null);
   const queryClient = useQueryClient();
 
-  const { mutate: deleteReservation } = useMutation({
+  const { mutateAsync: deleteReservation } = useMutation({
     mutationFn: deleteMailReservation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
-    },
   });
 
-  const handleConfirmDelete = () => {
-    pendingDeleteGroup?.ids.forEach((id) => deleteReservation({ reservationId: id }));
+  const handleConfirmDelete = async () => {
+    if (!pendingDeleteGroup) { return; }
+    await Promise.all(
+      pendingDeleteGroup.ids.map((id) => deleteReservation({ reservationId: id })),
+    );
+    queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
     setPendingDeleteGroup(null);
   };
 
@@ -74,9 +77,11 @@ export const MailTab = ({
       if (aFailed !== bFailed) {
         return aFailed ? -1 : 1;
       }
-      return new Date(b[0].reservationTime).getTime() - new Date(a[0].reservationTime).getTime();
+      const timeA = new Date(a[0].reservationTime).getTime();
+      const timeB = new Date(b[0].reservationTime).getTime();
+      return sortOrder === 'asc' ? timeA - timeB : timeB - timeA;
     });
-  }, [filteredMails]);
+  }, [filteredMails, sortOrder]);
 
   const hasAnyMails = mails.some((mail) => statuses.includes(mail.status));
 

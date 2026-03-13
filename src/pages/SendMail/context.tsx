@@ -103,15 +103,17 @@ export const MailVariableProvider = ({
 export const MailContentProvider = ({
   children,
   initialBody,
+  initialAttachments,
 }: {
   children: ReactNode;
+  initialAttachments?: AttachmentType[];
   initialBody?: Record<string, string>;
 }) => {
   const [mailContent, setMailContent] = useState<MailContentData>({
     body: initialBody ?? {},
     bodyFormat: 'HTML',
     inlineImages: [],
-    attachments: [],
+    attachments: initialAttachments ?? [],
   });
   const [reservationTime, setReservationTime] = useState<Date | null>(null);
 
