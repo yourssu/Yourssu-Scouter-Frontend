@@ -13,6 +13,12 @@ import { applicantOptions } from '@/query/applicant/options';
 import { Applicant } from '@/query/applicant/schema';
 import { scheduleOptions } from '@/query/schedule/options';
 import { semesterNowOptions } from '@/query/semester/now/options';
+import { LocationType } from '@/types/location';
+
+export type ScheduledApplicant = Applicant & {
+  locationDetail?: null | string;
+  locationType?: LocationType;
+};
 
 export const ManualScheduleMode = () => {
   const { partId } = useInterviewPartSelectionContext();
@@ -26,7 +32,7 @@ export const ManualScheduleMode = () => {
 
   // 기존 스케줄을 Applicant와 매칭하여 초기 엔트리로 변환
   const initialScheduleEntries = useMemo(() => {
-    const entries: [Date, Applicant][] = [];
+    const entries: [Date, ScheduledApplicant][] = [];
 
     existingSchedules.forEach((schedule) => {
       // 이름으로 지원자 매칭
@@ -35,21 +41,28 @@ export const ManualScheduleMode = () => {
       );
 
       if (matchedApplicant) {
-        entries.push([new Date(schedule.startTime), matchedApplicant]);
+        entries.push([
+          new Date(schedule.startTime),
+          {
+            ...matchedApplicant,
+            locationType: schedule.locationType,
+            locationDetail: schedule.locationDetail,
+          },
+        ]);
       }
     });
 
     return entries;
   }, [existingSchedules, applicants]);
 
-  const [selectedApplicant, setSelectedApplicant] = useState(applicants[0]);
+  const [selectedApplicant, setSelectedApplicant] = useState<ScheduledApplicant>(applicants[0]);
   const { year, month, week, handlePrevWeek, handleNextWeek, jump } = useWeekIndicator({
     initialDate:
       existingSchedules.length > 0
         ? existingSchedules[0].startTime
         : selectedApplicant?.availableTimes[0],
   });
-  const [completedScheduleMap, completedScheduleMapAction] = useDateMap<Applicant>({
+  const [completedScheduleMap, completedScheduleMapAction] = useDateMap<ScheduledApplicant>({
     initialEntries: initialScheduleEntries,
     precision: '분',
   });
@@ -57,13 +70,20 @@ export const ManualScheduleMode = () => {
 
   useEffect(() => {
     completedScheduleMapAction.reset();
-    setSelectedApplicant(applicants[0]);
+    const firstApplicant = applicants[0];
+    const initialMatchedApplicant = initialScheduleEntries.find(
+      ([, a]) => a.applicantId === firstApplicant?.applicantId,
+    )?.[1];
+    setSelectedApplicant(initialMatchedApplicant || firstApplicant);
     // eslint-disable-next-line
   }, [initialScheduleEntries]);
 
   useEffect(() => {
-    setSelectedApplicant(applicants[0]);
-  }, [applicants]);
+    const initialMatchedApplicant = initialScheduleEntries.find(
+      ([, a]) => a.applicantId === applicants[0]?.applicantId,
+    )?.[1];
+    setSelectedApplicant(initialMatchedApplicant || applicants[0]);
+  }, [applicants, initialScheduleEntries]);
 
   return (
     <InterviewPageLayout
@@ -83,15 +103,21 @@ export const ManualScheduleMode = () => {
                 .entries()
                 .find(([, applicant]) => applicant.applicantId === v.applicantId);
 
+              const initialMatchedApplicant = initialScheduleEntries.find(
+                ([, a]) => a.applicantId === v.applicantId,
+              )?.[1];
+
+              const targetApplicant = settedApplicantEntry?.[1] || initialMatchedApplicant || v;
+
               if (settedApplicantEntry) {
                 jump(settedApplicantEntry[0]);
-              } else if (v.availableTimes.length > 0) {
+              } else if (targetApplicant.availableTimes.length > 0) {
                 const earliest = Math.min(
-                  ...v.availableTimes.map((time) => new Date(time).getTime()),
+                  ...targetApplicant.availableTimes.map((time) => new Date(time).getTime()),
                 );
                 jump(new Date(earliest));
               }
-              setSelectedApplicant(v);
+              setSelectedApplicant(targetApplicant);
             }}
             selectedApplicant={selectedApplicant}
           />

@@ -2,14 +2,15 @@ import { setHours, setMinutes, subMinutes } from 'date-fns';
 
 import { useDateMap, UseDateMapAction } from '@/hooks/useDateMap';
 import { InterviewCalendar } from '@/pages/Interview/components/InterviewCalendar/InterviewCalendar';
+import { ScheduledApplicant } from '@/pages/Interview/components/ManualScheduleMode/index';
 import { ManualScheduleBlock } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleBlock';
 import { useInterviewAutoScheduleContext } from '@/pages/Interview/context';
 import { Applicant } from '@/query/applicant/schema';
 import { DateMap } from '@/utils/DateMap';
 
 interface ManualScheduleCalendarProps {
-  completedScheduleMap: DateMap<Applicant>;
-  completedScheduleMapAction: UseDateMapAction<Applicant>;
+  completedScheduleMap: DateMap<ScheduledApplicant>;
+  completedScheduleMapAction: UseDateMapAction<ScheduledApplicant>;
   month: number;
   selectedApplicant: Applicant;
   week: number;
@@ -68,6 +69,8 @@ export const ManualScheduleCalendar = ({
               applicant={settedApplicantHere}
               date={actualScheduleDate}
               isFirstBlock={actualScheduleDate.getTime() === targetDate.getTime()}
+              locationDetail={settedApplicantHere?.locationDetail}
+              locationType={settedApplicantHere?.locationType}
               onClick={() => {
                 // 1. 클릭한 블럭에 채워져있는 게 내 일정이라면 지운다
                 if (settedApplicantHereIsMe) {
@@ -76,8 +79,9 @@ export const ManualScheduleCalendar = ({
                 }
                 // 2. 내 일정이 다른곳에서 이미 지정되어있다면 클릭한 블럭으로 변경한다
                 if (meAlreadySettedAt) {
+                  const myScheduledData = completedScheduleMap.get(meAlreadySettedAt);
                   completedScheduleMapAction.remove(meAlreadySettedAt);
-                  completedScheduleMapAction.set(targetDate, selectedApplicant);
+                  completedScheduleMapAction.set(targetDate, myScheduledData ?? selectedApplicant);
                   return;
                 }
                 // 3. 클릭한 블럭에 아무도 채워져있지 않다면 채운다

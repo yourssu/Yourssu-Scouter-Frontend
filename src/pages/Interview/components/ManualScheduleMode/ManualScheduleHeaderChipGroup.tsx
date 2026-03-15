@@ -1,13 +1,14 @@
 import { IcCheckLine } from '@yourssu/design-system-react';
 import { tv } from 'tailwind-variants';
 
+import { ScheduledApplicant } from '@/pages/Interview/components/ManualScheduleMode/index';
 import { Applicant } from '@/query/applicant/schema';
 
 interface ManualScheduleHeaderChipGroupProps {
   applicants: Applicant[];
-  completedApplicants: Applicant[];
+  completedApplicants: ScheduledApplicant[];
   onSelectedApplicantChange: (v: Applicant) => void;
-  selectedApplicant: Applicant;
+  selectedApplicant: ScheduledApplicant;
 }
 
 const chip = tv({

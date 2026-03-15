@@ -5,7 +5,7 @@ interface PostScheduleParams {
   schedules: Array<{
     applicantId: number;
     endTime: string;
-    locationDetail?: string;
+    locationDetail?: null | string;
     locationType: LocationType;
     partId: number;
     startTime: string;
