@@ -12,4 +12,42 @@
     font-size: 3.2em;
     line-height: 1.1;
   }
+  ul {
+    margin: 0;
+    margin-top: 4px;
+    list-style: none;
+  }
+  ul li {
+    margin-top: 4px;
+    position: relative;
+    padding-left: 24px;
+  }
+  ul li:before {
+    content: '•';
+    display: inline-block;
+    min-width: 22px;
+    position: absolute;
+    left: 0;
+    text-align: center;
+  }
+  ol {
+    margin: 0;
+    margin-top: 4px;
+    list-style: none;
+    counter-reset: list-counter;
+  }
+  ol li {
+    margin-top: 4px;
+    position: relative;
+    padding-left: 24px;
+    counter-increment: list-counter;
+  }
+  ol li:before {
+    content: counter(list-counter) '.';
+    display: inline-block;
+    min-width: 22px;
+    position: absolute;
+    left: 0;
+    text-align: center;
+  }
 }
