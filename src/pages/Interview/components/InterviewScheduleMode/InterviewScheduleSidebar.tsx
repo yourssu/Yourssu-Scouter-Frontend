@@ -59,12 +59,24 @@ export const InterviewScheduleSidebar = ({ schedules }: InterviewScheduleSidebar
       )}
       <InterviewSidebarLayout.CardList>
         {confilctGroups.length > 0
-          ? confilctGroups.map((group, i) => (
-              <InterviewSidebarConflictCard key={i} schedules={group} />
-            ))
-          : classroomGroups.map((group, i) => (
-              <InterviewSidebarClassroomCard key={i} schedules={group} />
-            ))}
+          ? confilctGroups.map(
+              (group) =>
+                group.length > 0 && (
+                  <InterviewSidebarConflictCard
+                    key={`conflict-${group[0].id}-${group.length}`}
+                    schedules={group}
+                  />
+                ),
+            )
+          : classroomGroups.map(
+              (group) =>
+                group.length > 0 && (
+                  <InterviewSidebarClassroomCard
+                    key={`classroom-${group[0].id}-${group.length}`}
+                    schedules={group}
+                  />
+                ),
+            )}
         <InterviewSidebarDownloadCard />
       </InterviewSidebarLayout.CardList>
     </InterviewSidebarLayout>
