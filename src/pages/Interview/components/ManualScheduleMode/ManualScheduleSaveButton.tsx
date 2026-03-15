@@ -4,19 +4,19 @@ import { addHours, addMinutes, isBefore } from 'date-fns';
 import { assert } from 'es-toolkit';
 
 import { useAlertDialog } from '@/hooks/useAlertDialog';
+import { ScheduledApplicant } from '@/pages/Interview/components/ManualScheduleMode/index';
 import {
   useInterviewAutoScheduleContext,
   useInterviewCalendarModeContext,
   useInterviewPartSelectionContext,
 } from '@/pages/Interview/context';
 import { useScheduleConfirmDialog } from '@/pages/Interview/hooks/useScheduleConfirmDialog';
-import { Applicant } from '@/query/applicant/schema';
 import { useInvalidateSchedule } from '@/query/schedule/hooks/useInvalidateSchedule';
 import { deletePartSchedule } from '@/query/schedule/mutations/deletePartSchedule';
 import { postSchedule } from '@/query/schedule/mutations/postSchedule';
 
 interface ManualScheduleSaveButtonProps {
-  completedApplicants: [Date, Applicant][];
+  completedApplicants: [Date, ScheduledApplicant][];
   method: '대면' | '비대면';
   totalApplicantCount: number;
 }
@@ -55,7 +55,8 @@ export const ManualScheduleSaveButton = ({
       applicantName: applicant.name,
       part: applicant.part,
       endTime: (duration === '1시간' ? addHours(date, 1) : addMinutes(date, 30)).toISOString(),
-      locationType: method === '대면' ? '동방' : ('비대면' as '동방' | '비대면'),
+      locationType: applicant.locationType ?? (method === '대면' ? '동방' : '비대면'),
+      locationDetail: applicant.locationDetail ?? null,
       partId,
       startTime: date.toISOString(),
     }));
@@ -89,6 +90,7 @@ export const ManualScheduleSaveButton = ({
       schedules: schedulesToSave.map((schedule) => ({
         applicantId: schedule.applicantId,
         endTime: schedule.endTime,
+        locationDetail: schedule.locationDetail,
         locationType: schedule.locationType,
         partId,
         startTime: schedule.startTime,

@@ -1,4 +1,5 @@
 import { InterviewHeaderLayout } from '@/pages/Interview/components/InterviewHeaderLayout';
+import { ScheduledApplicant } from '@/pages/Interview/components/ManualScheduleMode/index';
 import { ManualScheduleHeaderChipGroup } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleHeaderChipGroup';
 import { ScheduleModeToggleButton } from '@/pages/Interview/components/ScheduleModeToggleButton';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
@@ -6,7 +7,7 @@ import { Applicant } from '@/query/applicant/schema';
 
 interface ManualScheduleHeaderProps {
   applicants: Applicant[];
-  completedApplicants: Applicant[];
+  completedApplicants: ScheduledApplicant[];
   indicator: {
     month: number;
     onNextWeek: () => void;
@@ -14,7 +15,7 @@ interface ManualScheduleHeaderProps {
     week: number;
   };
   onSelectedApplicantChange: (v: Applicant) => void;
-  selectedApplicant: Applicant;
+  selectedApplicant: ScheduledApplicant;
 }
 
 export const ManualScheduleHeader = ({
