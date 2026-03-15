@@ -113,11 +113,15 @@ export const InterviewSidebarClassroomCard = ({
     } as const;
 
     const loc = locations[scheduleId];
-    await mutateAsync({
-      scheduleId,
-      locationType: locMap[loc.type as LocationType],
-      locationDetail: loc.detail,
-    });
+    try {
+      await mutateAsync({
+        scheduleId,
+        locationType: locMap[loc.type as LocationType],
+        locationDetail: loc.detail,
+      });
+    } catch (error) {
+      console.error('Failed to save schedule location:', error);
+    }
 
     setEditedSchedules((prev) => ({ ...prev, [scheduleId]: false }));
   };
