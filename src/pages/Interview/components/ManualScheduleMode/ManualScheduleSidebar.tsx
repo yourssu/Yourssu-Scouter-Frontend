@@ -1,14 +1,14 @@
 import { InterviewSidebarLayout } from '@/pages/Interview/components/InterviewSidebarLayout';
+import { ScheduledApplicant } from '@/pages/Interview/components/ManualScheduleMode/index';
 import { ManualScheduleSaveButton } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSaveButton';
 import { ManualScheduleSidebarDurationCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarDurationCard';
 import { ManualScheduleSidebarMethodCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarMethodCard';
 import { ManualScheduleSidebarPartCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarPartCard';
 import { ManualScheduleSidebarProgressCard } from '@/pages/Interview/components/ManualScheduleMode/ManualScheduleSidebarProgressCard';
 import { useInterviewPartSelectionContext } from '@/pages/Interview/context';
-import { Applicant } from '@/query/applicant/schema';
 
 interface ManualScheduleSidebarProps {
-  completedApplicants: [Date, Applicant][];
+  completedApplicants: [Date, ScheduledApplicant][];
   method: '대면' | '비대면';
   onChangeMethod: (method: '대면' | '비대면') => void;
   totalApplicantCount: number;
