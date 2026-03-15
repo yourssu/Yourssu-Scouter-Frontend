@@ -129,11 +129,15 @@ export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConf
 
     const paramsList = schedules.map((s) => ({
       scheduleId: s.id,
-      locationType: locMap[locations[s.id].type as LocationType],
+      locationType: locMap[locations[s.id].type],
       locationDetail: locations[s.id].detail,
     }));
 
-    await mutateAsync(paramsList);
+    try {
+      await mutateAsync(paramsList);
+    } catch (error) {
+      console.error('Failed to save schedule locations:', error);
+    }
   };
 
   if (!schedules.length) {
@@ -145,12 +149,18 @@ export const InterviewSidebarConflictCard = ({ schedules }: InterviewSidebarConf
   const locValues = Object.values(locations);
   const hasChanges = schedules.some((s) => {
     const loc = locations[s.id];
+    if (!loc) {
+      return false;
+    }
     const initialType = s.locationType === '동방' ? '동아리방' : (s.locationType as LocationType);
     const initialDetail = s.locationDetail ?? '';
     return loc.type !== initialType || loc.detail !== initialDetail;
   });
 
   const isSaveEnabled = locValues.every((loc) => {
+    if (!loc) {
+      return false;
+    }
     if (loc.type === '강의실' || loc.type === '기타') {
       return loc.detail.trim().length > 0;
     }
