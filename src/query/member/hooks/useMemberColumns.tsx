@@ -86,28 +86,32 @@ export const useMemberColumns = (
       header: '파트',
       size: 214,
     }),
-    columnHelper.accessor('role', {
-      header: '역할',
-      cell: (info) => {
-        return (
-          <Cell>
-            <RoleStateButton
-              contentProps={{
-                align: 'start',
-              }}
-              disabled={isSensitiveMasked}
-              onStateChange={(state) => {
-                if (handlePatchMember) {
-                  handlePatchMember(info.row.original.memberId, 'role', state);
-                }
-              }}
-              selectedValue={info.getValue()}
-            />
-          </Cell>
-        );
-      },
-      size: 146,
-    }),
+    ...(state !== '탈퇴'
+      ? [
+          columnHelper.accessor('role', {
+            header: '역할',
+            cell: (info) => {
+              return (
+                <Cell>
+                  <RoleStateButton
+                    contentProps={{
+                      align: 'start',
+                    }}
+                    disabled={isSensitiveMasked}
+                    onStateChange={(state) => {
+                      if (handlePatchMember) {
+                        handlePatchMember(info.row.original.memberId, 'role', state);
+                      }
+                    }}
+                    selectedValue={info.getValue()}
+                  />
+                </Cell>
+              );
+            },
+            size: 146,
+          }),
+        ]
+      : []),
     columnHelper.accessor('name', {
       header: '이름',
       cell: (info) => (
@@ -145,133 +149,143 @@ export const useMemberColumns = (
       ),
       size: 192,
     }),
-    columnHelper.accessor('state', {
-      header: '상태',
-      cell: (info) => (
-        <Cell>
-          <MemberStateButton
-            contentProps={{
-              align: 'start',
-            }}
-            disabled={isSensitiveMasked}
-            onStateChange={(value) => {
-              if (handlePatchMember) {
-                handlePatchMember(info.row.original.memberId, 'state', value);
-              }
-            }}
-            selectedValue={info.getValue()}
-          />
-        </Cell>
-      ),
-      size: 144,
-    }),
-    columnHelper.accessor('email', {
-      header: '유어슈 이메일',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue()}
-          disabled={isSensitiveMasked}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'email', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-      size: 235,
-    }),
-    columnHelper.accessor('phoneNumber', {
-      header: '연락처',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue() ?? '010-****-****'}
-          disabled={isSensitiveMasked}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'phoneNumber', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue() ?? '010-****-****'}
-        </InputCell>
-      ),
-      size: 175,
-    }),
-    columnHelper.accessor('department', {
-      header: '전공',
-      cell: (info) => (
-        <DepartmentCell
-          disabled={isSensitiveMasked}
-          onSelect={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'departmentId', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue()}
-        </DepartmentCell>
-      ),
-      size: 260,
-    }),
-    columnHelper.accessor('studentId', {
-      header: '학번',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue() ?? '********'}
-          disabled={isSensitiveMasked}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'studentId', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue() ?? '********'}
-        </InputCell>
-      ),
-      size: 136,
-    }),
-    columnHelper.accessor('birthDate', {
-      header: '생년월일',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue() ?? '********'}
-          disabled={isSensitiveMasked}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'birthDate', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue() ?? '********'}
-        </InputCell>
-      ),
-      size: 142,
-    }),
-    columnHelper.accessor('joinDate', {
-      header: '가입일',
-      cell: (info) => (
-        <InputCell
-          defaultValue={info.getValue()}
-          disabled={isSensitiveMasked}
-          handleSubmit={(value) => {
-            if (handlePatchMember) {
-              handlePatchMember(info.row.original.memberId, 'joinDate', value);
-            }
-          }}
-          tooltipContent={`${info.row.original.name} 정보 수정`}
-        >
-          {info.getValue()}
-        </InputCell>
-      ),
-      size: 142,
-    }),
+    ...(state !== '탈퇴'
+      ? [
+          columnHelper.accessor('state', {
+            header: '상태',
+            cell: (info) => (
+              <Cell>
+                <MemberStateButton
+                  contentProps={{
+                    align: 'start',
+                  }}
+                  disabled={isSensitiveMasked}
+                  onStateChange={(value) => {
+                    if (handlePatchMember) {
+                      handlePatchMember(info.row.original.memberId, 'state', value);
+                    }
+                  }}
+                  selectedValue={info.getValue()}
+                />
+              </Cell>
+            ),
+            size: 144,
+          }),
+          columnHelper.accessor((row) => (row as Exclude<Member, { state: '탈퇴' }>).email, {
+            id: 'email',
+            header: '유어슈 이메일',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue()}
+                disabled={isSensitiveMasked}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'email', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue()}
+              </InputCell>
+            ),
+            size: 235,
+          }),
+          columnHelper.accessor((row) => (row as Exclude<Member, { state: '탈퇴' }>).phoneNumber, {
+            id: 'phoneNumber',
+            header: '연락처',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue() ?? '010-****-****'}
+                disabled={isSensitiveMasked}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'phoneNumber', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue() ?? '010-****-****'}
+              </InputCell>
+            ),
+            size: 175,
+          }),
+          columnHelper.accessor((row) => (row as Exclude<Member, { state: '탈퇴' }>).department, {
+            id: 'department',
+            header: '전공',
+            cell: (info) => (
+              <DepartmentCell
+                disabled={isSensitiveMasked}
+                onSelect={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'departmentId', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue()}
+              </DepartmentCell>
+            ),
+            size: 260,
+          }),
+          columnHelper.accessor((row) => (row as Exclude<Member, { state: '탈퇴' }>).studentId, {
+            id: 'studentId',
+            header: '학번',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue() ?? '********'}
+                disabled={isSensitiveMasked}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'studentId', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue() ?? '********'}
+              </InputCell>
+            ),
+            size: 136,
+          }),
+          columnHelper.accessor((row) => (row as Exclude<Member, { state: '탈퇴' }>).birthDate, {
+            id: 'birthDate',
+            header: '생년월일',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue() ?? '********'}
+                disabled={isSensitiveMasked}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'birthDate', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue() ?? '********'}
+              </InputCell>
+            ),
+            size: 142,
+          }),
+          columnHelper.accessor((row) => (row as Exclude<Member, { state: '탈퇴' }>).joinDate, {
+            id: 'joinDate',
+            header: '가입일',
+            cell: (info) => (
+              <InputCell
+                defaultValue={info.getValue()}
+                disabled={isSensitiveMasked}
+                handleSubmit={(value) => {
+                  if (handlePatchMember) {
+                    handlePatchMember(info.row.original.memberId, 'joinDate', value);
+                  }
+                }}
+                tooltipContent={`${info.row.original.name} 정보 수정`}
+              >
+                {info.getValue()}
+              </InputCell>
+            ),
+            size: 142,
+          }),
+        ]
+      : []),
     ...(state === '액티브' && !isSensitiveMasked
       ? [
           columnHelper.accessor('membershipFee', {
@@ -396,13 +410,13 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...(state === '졸업' || state === '수료'
+    ...(state === '졸업'
       ? [
           columnHelper.accessor('activePeriod', {
             header: '활동 기간',
             cell: (info) => {
               const member = info.row.original;
-              if (member.state === '졸업' || member.state === '수료') {
+              if (member.state === '졸업') {
                 const activePeriod = member.activePeriod || {
                   startSemester: '****-*',
                   endSemester: '****-*',
@@ -571,7 +585,34 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...((state === '졸업' || state === '수료') && !isSensitiveMasked
+    ...(state === '수료'
+      ? [
+          columnHelper.accessor('completionSemester', {
+            header: '수료 일자',
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '수료') {
+                return (
+                  <InputCell
+                    defaultValue={member.completionSemester ?? ''}
+                    disabled={isSensitiveMasked}
+                    handleSubmit={(value) => {
+                      if (handlePatchMember) {
+                        handlePatchMember(member.memberId, 'completionSemester', value);
+                      }
+                    }}
+                    tooltipContent={`${member.name} 정보 수정`}
+                  >
+                    {member.completionSemester ?? ''}
+                  </InputCell>
+                );
+              }
+            },
+            size: 142,
+          }),
+        ]
+      : []),
+    ...(state === '졸업' && !isSensitiveMasked
       ? [
           columnHelper.accessor('isAdvisorDesired', {
             header: '어드바이저 희망',
@@ -605,6 +646,33 @@ export const useMemberColumns = (
               </Cell>
             ),
             size: 131,
+          }),
+        ]
+      : []),
+    ...(state === '탈퇴'
+      ? [
+          columnHelper.accessor('withdrawnDate', {
+            header: '탈퇴 일자',
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '탈퇴') {
+                return (
+                  <InputCell
+                    defaultValue={member.withdrawnDate ?? ''}
+                    disabled={isSensitiveMasked}
+                    handleSubmit={(value) => {
+                      if (handlePatchMember) {
+                        handlePatchMember(member.memberId, 'withdrawnDate', value);
+                      }
+                    }}
+                    tooltipContent={`${member.name} 정보 수정`}
+                  >
+                    {member.withdrawnDate ?? ''}
+                  </InputCell>
+                );
+              }
+            },
+            size: 142,
           }),
         ]
       : []),

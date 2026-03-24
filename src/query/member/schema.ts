@@ -64,13 +64,19 @@ const GraduatedMemberSchema = BaseMemberSchema.extend({
 });
 
 const CompletedMemberSchema = BaseMemberSchema.extend({
-  activePeriod: PeriodSchema.nullable(),
-  isAdvisorDesired: z.boolean().nullable(),
+  completionSemester: z.string().nullable(),
   state: z.literal('수료'),
 });
 
-const WithdrawnMemberSchema = BaseMemberSchema.extend({
+const WithdrawnMemberSchema = z.object({
+  memberId: z.number(),
+  parts: z.array(PartSchema),
+  role: MemberRoleSchema,
+  name: z.string(),
+  nickname: z.string(),
   state: z.literal('탈퇴'),
+  withdrawnDate: DateSchema.nullable(),
+  note: z.string().nullable(),
 });
 
 const MemberSchema = z.discriminatedUnion('state', [
