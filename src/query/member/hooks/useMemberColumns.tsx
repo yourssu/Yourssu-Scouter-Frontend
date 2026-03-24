@@ -8,10 +8,7 @@ import InputCell from '@/components/Cell/InputCell.tsx';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
 import { GradeStateButton, MemberStateButton, RoleStateButton } from '@/components/StateButton';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
-import {
-  ActivePeriod,
-  InactivePeriod,
-} from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
+import { ActivePeriod } from '@/pages/Members/components/MemberTable/MemberTable.style.ts';
 import { Member, MemberState, PatchMember } from '@/query/member/schema.ts';
 import { partOptions } from '@/query/part/options.ts';
 import { semesterOptions } from '@/query/semester/options.ts';
@@ -399,17 +396,13 @@ export const useMemberColumns = (
           }),
         ]
       : []),
-    ...(state === '비액티브' || state === '졸업' || state === '수료'
+    ...(state === '졸업' || state === '수료'
       ? [
           columnHelper.accessor('activePeriod', {
             header: '활동 기간',
             cell: (info) => {
               const member = info.row.original;
-              if (
-                member.state === '비액티브' ||
-                member.state === '졸업' ||
-                member.state === '수료'
-              ) {
+              if (member.state === '졸업' || member.state === '수료') {
                 const activePeriod = member.activePeriod || {
                   startSemester: '****-*',
                   endSemester: '****-*',
@@ -440,6 +433,20 @@ export const useMemberColumns = (
               }
             },
             size: 185,
+          }),
+        ]
+      : []),
+    ...(state === '비액티브'
+      ? [
+          columnHelper.accessor('activeSemesterCountLabel', {
+            header: '액티브 학기 수',
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '비액티브') {
+                return <Cell>{member.activeSemesterCountLabel ?? '-'}</Cell>;
+              }
+            },
+            size: 137,
           }),
         ]
       : []),
@@ -479,42 +486,88 @@ export const useMemberColumns = (
       : []),
     ...(state === '비액티브'
       ? [
-          columnHelper.accessor('inactivePeriod', {
-            header: '비액티브 기간',
+          columnHelper.accessor('inactiveSemesterCountLabel', {
+            header: '비액티브 학기 수',
             cell: (info) => {
               const member = info.row.original;
               if (member.state === '비액티브') {
-                const inactivePeriod = member.inactivePeriod || {
-                  startSemester: '****-*',
-                  endSemester: '****-*',
-                };
+                return <Cell>{member.inactiveSemesterCountLabel ?? '-'}</Cell>;
+              }
+            },
+            size: 152,
+          }),
+          columnHelper.accessor('reason', {
+            header: '비액티브 사유',
+            meta: { fixedWidth: true },
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '비액티브') {
+                return (
+                  <InputCell
+                    defaultValue={member.reason ?? ''}
+                    disabled={isSensitiveMasked}
+                    handleSubmit={(value) => {
+                      if (handlePatchMember) {
+                        handlePatchMember(member.memberId, 'reason', value);
+                      }
+                    }}
+                    tooltipContent={`${member.name} 정보 수정`}
+                    truncate
+                  >
+                    {member.reason ?? ''}
+                  </InputCell>
+                );
+              }
+            },
+            size: 400,
+          }),
+          columnHelper.accessor('smsReplied', {
+            header: '문자회신여부',
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '비액티브') {
                 return (
                   <Cell>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
+                    <Checkbox
+                      disabled={isSensitiveMasked}
+                      onChange={(e) => {
+                        if (handlePatchMember) {
+                          handlePatchMember(member.memberId, 'smsReplied', e.currentTarget.checked);
+                        }
                       }}
+                      selected={Boolean(member.smsReplied)}
+                      size="large"
                     >
-                      <InactivePeriod disabled size="small" variant="filledSecondary">
-                        {inactivePeriod.startSemester}
-                      </InactivePeriod>
-                      ~
-                      <InactivePeriod
-                        disabled
-                        size="small"
-                        style={{ pointerEvents: 'none' }}
-                        variant="filledSecondary"
-                      >
-                        {inactivePeriod.endSemester}
-                      </InactivePeriod>
-                    </div>
+                      {''}
+                    </Checkbox>
                   </Cell>
                 );
               }
             },
-            size: 185,
+            size: 120,
+          }),
+          columnHelper.accessor('smsReplyDesiredPeriod', {
+            header: '문자회신 희망시기',
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '비액티브') {
+                return (
+                  <InputCell
+                    defaultValue={member.smsReplyDesiredPeriod ?? ''}
+                    disabled={isSensitiveMasked}
+                    handleSubmit={(value) => {
+                      if (handlePatchMember) {
+                        handlePatchMember(member.memberId, 'smsReplyDesiredPeriod', value);
+                      }
+                    }}
+                    tooltipContent={`${member.name} 정보 수정`}
+                  >
+                    {member.smsReplyDesiredPeriod ?? ''}
+                  </InputCell>
+                );
+              }
+            },
+            size: 152,
           }),
         ]
       : []),

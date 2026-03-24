@@ -42,7 +42,7 @@ const ActiveMemberSchema = BaseMemberSchema.extend({
   membershipFee: z.boolean().nullable(),
   state: z.literal('액티브'),
   grade: z.number().nullable(),
-  isOnLeave: z.boolean().nullable(),
+  isOnLeave: z.boolean().nullable(), // 휴학 여부
 });
 
 const InactiveMemberSchema = BaseMemberSchema.extend({
@@ -50,6 +50,11 @@ const InactiveMemberSchema = BaseMemberSchema.extend({
   expectedReturnSemester: z.string().nullable(),
   inactivePeriod: PeriodSchema.nullable(),
   state: z.literal('비액티브'),
+  reason: z.string().nullable(), // 비액티브 사유
+  smsReplied: z.boolean().nullable(), // 문자 회신 여부
+  smsReplyDesiredPeriod: z.string().nullable(), // 문자 회신 희망 시기
+  activeSemesterCountLabel: z.string().nullable(), // 총 액티브 학기 수
+  inactiveSemesterCountLabel: z.string().nullable(), // 총 비액티브 학기 수
 });
 
 const GraduatedMemberSchema = BaseMemberSchema.extend({
