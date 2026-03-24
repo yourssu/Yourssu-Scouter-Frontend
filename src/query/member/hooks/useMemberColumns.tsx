@@ -6,7 +6,7 @@ import Cell from '@/components/Cell/Cell.tsx';
 import DepartmentCell from '@/components/Cell/DepartmentCell.tsx';
 import InputCell from '@/components/Cell/InputCell.tsx';
 import PartsCell from '@/components/Cell/PartsCell.tsx';
-import { MemberStateButton, RoleStateButton } from '@/components/StateButton';
+import { GradeStateButton, MemberStateButton, RoleStateButton } from '@/components/StateButton';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import {
   ActivePeriod,
@@ -320,6 +320,82 @@ export const useMemberColumns = (
               </Cell>
             ),
             size: 139,
+          }),
+        ]
+      : []),
+    ...(state === '액티브'
+      ? [
+          columnHelper.accessor('grade', {
+            header: '학년',
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '액티브') {
+                return (
+                  <Cell>
+                    <GradeStateButton
+                      contentProps={{ align: 'start' }}
+                      disabled={isSensitiveMasked}
+                      onStateChange={(value) => {
+                        if (handlePatchMember) {
+                          handlePatchMember(member.memberId, 'grade', value);
+                        }
+                      }}
+                      selectedValue={member.grade}
+                    />
+                  </Cell>
+                );
+              }
+            },
+            size: 120,
+          }),
+          columnHelper.accessor('isOnLeave', {
+            header: () => (
+              <div
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  paddingRight: 16,
+                }}
+              >
+                휴학여부
+              </div>
+            ),
+            cell: (info) => {
+              const member = info.row.original;
+              if (member.state === '액티브') {
+                return (
+                  <Cell>
+                    <div
+                      style={{
+                        paddingLeft: 8,
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Checkbox
+                        disabled={isSensitiveMasked}
+                        onChange={(e) => {
+                          if (handlePatchMember) {
+                            handlePatchMember(
+                              member.memberId,
+                              'isOnLeave',
+                              e.currentTarget.checked,
+                            );
+                          }
+                        }}
+                        selected={Boolean(info.getValue())}
+                        size="large"
+                      >
+                        {''}
+                      </Checkbox>
+                    </div>
+                  </Cell>
+                );
+              }
+            },
+            size: 120,
           }),
         ]
       : []),

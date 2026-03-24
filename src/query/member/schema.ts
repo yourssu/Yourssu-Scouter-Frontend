@@ -41,6 +41,8 @@ export const MeSchema = BaseMemberSchema.omit({
 const ActiveMemberSchema = BaseMemberSchema.extend({
   membershipFee: z.boolean().nullable(),
   state: z.literal('액티브'),
+  grade: z.number().nullable(),
+  isOnLeave: z.boolean().nullable(),
 });
 
 const InactiveMemberSchema = BaseMemberSchema.extend({
