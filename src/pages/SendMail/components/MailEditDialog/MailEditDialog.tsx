@@ -85,7 +85,9 @@ const MailDialogContent = ({
   const bcc = useMemo(
     () =>
       (mailDetails[0]?.bccEmailAddresses ?? []).map(
-        (email) => allMembers.members.find((m) => m.email === email)?.nickname ?? email,
+        (email) =>
+          allMembers.members.find((m) => m.state !== '탈퇴' && m.email === email)?.nickname ??
+          email,
       ),
     [allMembers, mailDetails],
   );
@@ -117,7 +119,9 @@ const MailDialogContent = ({
 
   const senderEmail = mailDetails[0]?.senderEmailAddress;
   const sender = useMemo(
-    () => allMembers.members.find((m) => m.email === senderEmail)?.nickname ?? senderEmail,
+    () =>
+      allMembers.members.find((m) => m.state !== '탈퇴' && m.email === senderEmail)?.nickname ??
+      senderEmail,
     [allMembers, senderEmail],
   );
 
