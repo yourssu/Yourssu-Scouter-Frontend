@@ -44,7 +44,7 @@ export const useMailActions = () => {
 
     // 멤버에서 찾기
     const member = allMembers?.members.find((m) => m.nickname === name);
-    if (member) {
+    if (member && member.state !== '탈퇴' && 'email' in member) {
       return member.email;
     }
 

@@ -9,5 +9,8 @@ export const getEmailAddress = ({ input }: GetEmailAddressParams) => {
   if (typeof input === 'string') {
     return input;
   }
-  return input.email;
+  if ('email' in input) {
+    return input.email;
+  }
+  return undefined;
 };

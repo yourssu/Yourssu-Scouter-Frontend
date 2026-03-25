@@ -37,7 +37,16 @@ const Body = ({ rows }: { rows: Row<unknown>[] }) => (
     {rows.map((row) => (
       <StyledList key={row.id}>
         {row.getVisibleCells().map((cell) => (
-          <StyledBodyCell key={cell.id} style={{ minWidth: `${cell.column.getSize()}px` }}>
+          <StyledBodyCell
+            key={cell.id}
+            style={{
+              minWidth: `${cell.column.getSize()}px`,
+              maxWidth: (cell.column.columnDef.meta as { fixedWidth?: boolean } | undefined)
+                ?.fixedWidth
+                ? `${cell.column.getSize()}px`
+                : undefined,
+            }}
+          >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </StyledBodyCell>
         ))}
