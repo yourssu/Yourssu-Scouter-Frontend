@@ -12,6 +12,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { forwardRef, useImperativeHandle } from 'react';
 
 import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
+import { PlainTextPaste } from '@/extensions/PlainTextPaste';
 import { VariableKeyType } from '@/types/editor';
 
 import { MailToolbar } from '../MailToolbar/MailToolbar';
@@ -46,6 +47,7 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
           link: false,
           underline: false,
         }),
+        PlainTextPaste,
         VariableChipNode,
         TextAlign.configure({
           types: ['heading', 'paragraph'],
