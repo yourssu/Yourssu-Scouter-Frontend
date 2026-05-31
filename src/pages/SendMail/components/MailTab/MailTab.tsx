@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar';
 import { TemplateList } from '@/components/TemplateList/TemplateList';
+import { VariableChip } from '@/components/VariableChip/VariableChip';
 import { MailEditDialog } from '@/pages/SendMail/components/MailEditDialog/MailEditDialog';
 import { DeleteTemplateDialog } from '@/pages/Template/components/DeleteTemplateDialog/DeleteTemplateDialog';
 import { deleteMailReservation } from '@/query/mail/mutation/deleteMailReservation';
@@ -21,6 +22,60 @@ interface MailTabProps {
   sortOrder?: 'asc' | 'desc';
   statuses: MailItem['status'][];
 }
+
+const chipTypeMap: Record<string, 'applicant' | 'date' | 'link' | 'part' | 'person' | 'text'> = {
+  PERSON: 'person',
+  DATE: 'date',
+  LINK: 'link',
+  TEXT: 'text',
+  APPLICANT: 'applicant',
+  PARTNAME: 'part',
+};
+
+const renderSubjectWithChips = (
+  subject: string,
+  variables: Array<{ displayName: string; key: string; type: string }>,
+) => {
+  if (!subject) {
+    return '';
+  }
+
+  const regex = /\{\{([^}]+)\}\}/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(subject)) !== null) {
+    const index = match.index;
+    const displayName = match[1];
+
+    if (index > lastIndex) {
+      parts.push(subject.substring(lastIndex, index));
+    }
+
+    const variable = variables.find((v) => v.displayName === displayName);
+    const backendType = variable?.type ?? 'TEXT';
+    const chipType = chipTypeMap[backendType] ?? 'text';
+
+    parts.push(
+      <VariableChip
+        deletable={false}
+        key={`${displayName}-${index}`}
+        label={displayName}
+        size="large"
+        type={chipType}
+      />,
+    );
+
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < subject.length) {
+    parts.push(subject.substring(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : subject;
+};
 
 export const MailTab = ({
   dialogReadOnly,
@@ -156,7 +211,7 @@ export const MailTab = ({
               }
               readonly={readOnly}
               text={isPendingSend ? '에 전송 실패' : readOnly ? '' : '에 예약됨'}
-              title={group.mailSubject}
+              title={renderSubjectWithChips(group.mailSubject, group.variables)}
               variant={isPendingSend ? 'error' : undefined}
             />
           );

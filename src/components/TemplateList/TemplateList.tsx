@@ -15,7 +15,7 @@ export interface TemplateListProps {
   onDelete: () => void;
   readonly?: boolean;
   text: string;
-  title: string;
+  title: React.ReactNode;
   variant?: 'error';
 }
 
