@@ -19,6 +19,7 @@ import {
   MailVariableProvider,
 } from '@/pages/SendMail/context';
 import { useMailActions } from '@/pages/SendMail/hooks/useMailReservation';
+import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 import { applicantOptions } from '@/query/applicant/options';
 import { mailOptions } from '@/query/mail/options';
 import { MailDetail } from '@/query/mail/schema';
@@ -53,6 +54,26 @@ const MailDialogSaveButton = ({
         저장하기
       </BoxButton>
     </StyledFooter>
+  );
+};
+
+const MailDialogHeader = ({
+  subjects,
+  defaultSubject,
+  onClose,
+}: {
+  defaultSubject: string;
+  onClose: () => void;
+  subjects: Record<string, string>;
+}) => {
+  const { currentRecipientId } = useRecipientData();
+  const currentSubject = (currentRecipientId && subjects[currentRecipientId]) || defaultSubject;
+
+  return (
+    <StyledHeader>
+      <StyledTitleInput readOnly value={currentSubject} />
+      <IcCloseLine onClick={onClose} />
+    </StyledHeader>
   );
 };
 
@@ -92,6 +113,18 @@ const MailDialogContent = ({
     [allMembers, mailDetails],
   );
 
+  const subjects = useMemo(() => {
+    const map: Record<string, string> = {};
+    mailDetails.forEach((detail) => {
+      detail.receiverEmailAddresses.forEach((email) => {
+        const applicant = allApplicants.find((a) => a.email === email);
+        const key = applicant ? String(applicant.applicantId) : email;
+        map[key] = detail.mailSubject;
+      });
+    });
+    return map;
+  }, [allApplicants, mailDetails]);
+
   const initialBody = useMemo(() => {
     const body: Record<string, string> = {};
     mailDetails.forEach((detail) => {
@@ -129,10 +162,7 @@ const MailDialogContent = ({
     <MailInfoProvider initialMailInfo={{ bcc, cc, receiver: allReceivers, sender, subject }}>
       <MailContentProvider initialAttachments={initialAttachments} initialBody={initialBody}>
         <MailVariableProvider currentPart={undefined}>
-          <StyledHeader>
-            <StyledTitleInput readOnly value={subject} />
-            <IcCloseLine onClick={onClose} />
-          </StyledHeader>
+          <MailDialogHeader defaultSubject={subject} onClose={onClose} subjects={subjects} />
 
           <InfoSection
             isTitleIncluded={false}

@@ -10,11 +10,12 @@ export const scheduleOptions = (partId: null | number) => {
     queryKey: partId !== null ? [...baseKey, partId] : baseKey,
     queryFn: async () => {
       const res = await api.get('recruiter/schedule', {
-        searchParams: partId !== null
-          ? {
-              partId: partId.toString(),
-            }
-          : undefined,
+        searchParams:
+          partId !== null
+            ? {
+                partId: partId.toString(),
+              }
+            : undefined,
       });
       const data = await res.json();
       return ScheduleArraySchema.parse(data);

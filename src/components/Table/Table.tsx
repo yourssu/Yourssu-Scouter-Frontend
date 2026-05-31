@@ -41,7 +41,7 @@ const Body = ({ rows }: { rows: Row<unknown>[] }) => (
             key={cell.id}
             style={{
               minWidth: `${cell.column.getSize()}px`,
-              maxWidth: (cell.column.columnDef.meta as { fixedWidth?: boolean } | undefined)
+              maxWidth: (cell.column.columnDef.meta as undefined | { fixedWidth?: boolean })
                 ?.fixedWidth
                 ? `${cell.column.getSize()}px`
                 : undefined,

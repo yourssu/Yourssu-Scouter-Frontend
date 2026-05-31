@@ -21,6 +21,7 @@ import { EditorWrapper, StyledEditorContent } from './MailEditorContent.style';
 interface MailEditorContentProps {
   initialContent?: string;
   onContentChange?: (html: string) => void;
+  onFocus?: () => void;
   readOnly?: boolean;
   recipientName?: string;
 }
@@ -36,7 +37,7 @@ export interface MailEditorContentRef {
 }
 
 export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorContentProps>(
-  ({ recipientName, initialContent, onContentChange, readOnly }, ref) => {
+  ({ recipientName, initialContent, onContentChange, onFocus, readOnly }, ref) => {
     const placeholderText = recipientName
       ? `${recipientName}님에게 보낼 내용`
       : '내용을 입력하세요';
@@ -72,7 +73,23 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
         }).configure({
           allowBase64: true,
         }),
-        Link.configure({
+        Link.extend({
+          addAttributes() {
+            return {
+              ...this.parent?.(),
+              style: {
+                default: null,
+                parseHTML: (element) => element.getAttribute('style'),
+                renderHTML: (attributes) => {
+                  if (!attributes.style) {
+                    return {};
+                  }
+                  return { style: attributes.style };
+                },
+              },
+            };
+          },
+        }).configure({
           openOnClick: true,
           linkOnPaste: true,
           autolink: true,
@@ -94,6 +111,11 @@ export const MailEditorContent = forwardRef<MailEditorContentRef, MailEditorCont
       onUpdate: ({ editor }) => {
         if (onContentChange) {
           onContentChange(editor.getHTML());
+        }
+      },
+      onFocus: () => {
+        if (onFocus) {
+          onFocus();
         }
       },
     });

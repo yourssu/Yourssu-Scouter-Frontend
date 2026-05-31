@@ -8,6 +8,7 @@ interface PutTemplateParams {
   attachments?: AttachmentType[];
   content: string;
   id: number;
+  subject: string;
   title: string;
   variables: Variable[];
 }
@@ -15,6 +16,7 @@ interface PutTemplateParams {
 export const putTemplate = (params: PutTemplateParams) => {
   const formattedParams = {
     title: params.title,
+    subject: params.subject,
     bodyHtml: transformContentToBodyHtml(params.content),
     variables: transformVariables(params.variables),
     attachmentReferences: params.attachments?.map((a) => ({ fileId: a.fileId })) || [],

@@ -27,15 +27,17 @@ interface AddTemplateDialogProps {
 export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialogProps) => {
   const [formData, setFormData] = useState({
     title: '',
+    subject: '',
     content: '',
     variables: getDefaultVariables(),
     attachments: [] as AttachmentType[],
   });
 
   const handleSave = () => {
-    if (formData.title.trim()) {
+    if (formData.title.trim() && formData.subject.trim()) {
       onSave({
         title: formData.title.trim(),
+        subject: formData.subject.trim(),
         content: formData.content,
         variables: formData.variables,
         attachments: formData.attachments,
@@ -47,6 +49,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
   const handleClose = () => {
     setFormData({
       title: '',
+      subject: '',
       content: '',
       variables: getDefaultVariables(),
       attachments: [],
@@ -58,6 +61,13 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
     setFormData((prev) => ({
       ...prev,
       title: e.target.value,
+    }));
+  };
+
+  const handleSubjectChange = (subject: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      subject,
     }));
   };
 
@@ -94,7 +104,7 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
           <StyledHeader>
             <StyledTitleInput
               onChange={handleTitleChange}
-              placeholder="제목을 입력하세요"
+              placeholder="템플릿 제목을 입력하세요"
               value={formData.title}
             />
             <IcCloseLine onClick={onClose} />
@@ -104,16 +114,18 @@ export const AddTemplateDialog = ({ isOpen, onClose, onSave }: AddTemplateDialog
               <TemplateEditor
                 onAttachmentsChange={handleAttachmentsChange}
                 onContentChange={handleContentChange}
+                onSubjectChange={handleSubjectChange}
                 onVariablesChange={handleVariablesChange}
                 templateAttachments={formData.attachments}
                 templateContent={formData.content}
+                templateSubject={formData.subject}
                 templateVariables={formData.variables}
               />
             </MailContentProvider>
           </StyledBody>
           <StyledFooter>
             <BoxButton
-              disabled={!formData.title.trim()}
+              disabled={!formData.title.trim() || !formData.subject.trim()}
               onClick={handleSave}
               size="large"
               variant="filledPrimary"

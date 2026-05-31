@@ -42,7 +42,9 @@ export const MailToolbar = ({ editor, readOnly }: MailToolbarProps) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   if (readOnly) {
-    if (mailContent.attachments.length === 0) { return null; }
+    if (mailContent.attachments.length === 0) {
+      return null;
+    }
     return (
       <ToolbarWrapper>
         <AttachmentList $readOnly>

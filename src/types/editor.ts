@@ -4,6 +4,7 @@ export type VariableType = '날짜' | '링크' | '사람' | '사람/지원자' |
 export type VariableKeyType = `var-${string}`;
 
 export interface BaseVariable {
+  attributeKey?: null | string;
   displayName: string;
   key: VariableKeyType;
   perRecipient: boolean;
@@ -11,6 +12,7 @@ export interface BaseVariable {
 }
 
 export interface Variable extends Omit<BaseVariable, 'items' | 'type'> {
+  attributeKey?: null | string;
   items: { value: string }[];
   type: VariableType;
 }

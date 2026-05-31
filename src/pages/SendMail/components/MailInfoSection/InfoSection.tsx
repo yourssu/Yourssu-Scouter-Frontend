@@ -1,18 +1,24 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { EditorContent, Extension, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { overlay } from 'overlay-kit';
-import { Suspense, useCallback, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
+import { VariableChipNode } from '@/components/VariableChip/VariableChipNode';
+import { PlainTextPaste } from '@/extensions/PlainTextPaste';
 import { ApplicantInputField } from '@/pages/SendMail/components/MailInfoSection/ApplicantInputField';
 import { AutoFillMembers } from '@/pages/SendMail/components/MailInfoSection/AutoFillIMembers';
 import { MemberInputField } from '@/pages/SendMail/components/MailInfoSection/MemberInputField';
-import { TextInputField } from '@/pages/SendMail/components/MailInfoSection/TextInputField';
 import { MailReservationDialog } from '@/pages/SendMail/components/MailReservationDialog/MailReservationDialog';
 import { useMailInfoContext } from '@/pages/SendMail/context';
 import { meOption } from '@/query/member/me/options';
 import { Part } from '@/query/part/schema';
+import { templateOptions } from '@/query/template/options';
 import { MailFormData } from '@/types/editor';
 import { MemberInputFieldKey } from '@/types/editor';
 import { formatTemplates } from '@/utils/date';
+import { transformBodyHtmlToContent } from '@/utils/transformTemplate';
 
 interface InfoSectionProps {
   isTitleIncluded: boolean;
@@ -22,6 +28,22 @@ interface InfoSectionProps {
   selectedPart: Part | undefined;
   selectedTemplateId: number | undefined;
 }
+
+const StyledSubjectEditor = styled(EditorContent)`
+  width: 100%;
+  outline: none;
+  display: flex;
+  align-items: center;
+
+  .tiptap {
+    outline: none;
+    width: 100%;
+
+    p {
+      margin: 0;
+    }
+  }
+`;
 
 export const InfoSection = ({
   readOnly,
@@ -38,6 +60,53 @@ export const InfoSection = ({
 
   const { data: me } = useSuspenseQuery(meOption());
 
+  // 템플릿 정보 가져오기
+  const templateResults = useSuspenseQueries({
+    queries: [...(selectedTemplateId ? [templateOptions.detail(selectedTemplateId)] : [])],
+  });
+  const templateDetail = templateResults[0]?.data;
+
+  // 제목 에디터 설정
+  const subjectEditor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        link: false,
+        underline: false,
+      }),
+      PlainTextPaste,
+      VariableChipNode,
+      Extension.create({
+        name: 'singleLine',
+        addKeyboardShortcuts() {
+          return {
+            Enter: () => true,
+            'Shift-Enter': () => true,
+          };
+        },
+      }),
+    ],
+    content:
+      selectedTemplateId && templateDetail
+        ? transformBodyHtmlToContent(templateDetail.subject || '', templateDetail.variables)
+        : '',
+    editable: false,
+    immediatelyRender: false,
+  });
+
+  // 템플릿 변경 감지 및 에디터 내용 동기화
+  useEffect(() => {
+    if (subjectEditor) {
+      const nextContent =
+        selectedTemplateId && templateDetail
+          ? transformBodyHtmlToContent(templateDetail.subject || '', templateDetail.variables)
+          : '';
+      const nextHtml = nextContent ? `<p>${nextContent}</p>` : '<p></p>';
+      if (subjectEditor.getHTML() !== nextHtml) {
+        subjectEditor.commands.setContent(nextHtml);
+      }
+    }
+  }, [subjectEditor, selectedTemplateId, templateDetail]);
+
   const [formData, setFormData] = useState<MailFormData>({
     members: {
       '받는 사람': mailInfo.receiver || [],
@@ -46,6 +115,28 @@ export const InfoSection = ({
     },
     subject: mailInfo.subject || '',
   });
+
+  // 템플릿 변경 감지 및 제목 동기화
+  useEffect(() => {
+    if (selectedTemplateId && templateDetail) {
+      const nextSubject = templateDetail.subject || '';
+      setFormData((prev) => ({
+        ...prev,
+        subject: nextSubject,
+      }));
+      updateMailInfo({
+        subject: nextSubject,
+      });
+    } else if (!selectedTemplateId) {
+      setFormData((prev) => ({
+        ...prev,
+        subject: '',
+      }));
+      updateMailInfo({
+        subject: '',
+      });
+    }
+  }, [templateDetail, selectedTemplateId, updateMailInfo]);
 
   // 멤버(칩) 업데이트
   const handleMemberUpdate = useCallback(
@@ -122,12 +213,24 @@ export const InfoSection = ({
         </Suspense>
       )}
       {isTitleIncluded && (
-        <TextInputField
-          label="제목"
-          onChange={handleSubjectUpdate}
-          readOnly={readOnly}
-          value={formData.subject}
-        />
+        <div className="border-line-basicMedium flex min-h-[56px] w-full flex-row gap-[12px] border-b-1 px-[20px] py-[10px]">
+          <div className="typo-b1_sb_16 text-text-basicPrimary flex min-w-[72px] items-center">
+            제목
+          </div>
+          {selectedTemplateId ? (
+            <div className="typo-b1_rg_16 text-text-basicPrimary flex min-h-[36px] w-full items-center">
+              <StyledSubjectEditor editor={subjectEditor} />
+            </div>
+          ) : (
+            <input
+              className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full border-0 bg-transparent p-0 outline-none focus:ring-0"
+              onChange={handleSubjectUpdate}
+              placeholder="메일 제목을 입력하세요"
+              readOnly={readOnly}
+              value={formData.subject}
+            />
+          )}
+        </div>
       )}
       {reservationTime && (
         <div className="border-line-basicMedium flex min-h-[56px] w-full flex-row gap-[12px] border-b-1 px-[20px] py-[10px]">

@@ -1,15 +1,17 @@
 import { api } from '@/apis/api.ts';
 
-interface PutMailReservationParams {
-  attachmentReferences: { fileId: number }[];
-  bccEmailAddresses: string[];
-  bodyFormat: 'HTML' | 'TEXT';
-  ccEmailAddresses: string[];
-  mailBody: string;
-  mailSubject: string;
-  receiverEmailAddresses: string[];
+export interface PutMailReservationParams {
+  bccEmailAddresses?: string[];
+  ccEmailAddresses?: string[];
+  recipients: {
+    applicantId?: number;
+    bindings: Record<string, string>;
+    email: string;
+  }[];
   reservationId: number;
-  reservationTime: null | string;
+  reservationTime: string;
+  sharedBindings: Record<string, string>;
+  templateId: number;
 }
 
 export const putMailReservation = (params: PutMailReservationParams) => {

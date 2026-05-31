@@ -1,20 +1,16 @@
 import { api } from '@/apis/api.ts';
 
 export interface PostMailReservationParams {
-  attachmentReferences: {
-    fileId: number;
+  bccEmailAddresses?: string[];
+  ccEmailAddresses?: string[];
+  recipients: {
+    applicantId?: number;
+    bindings: Record<string, string>;
+    email: string;
   }[];
-  bccEmailAddresses: string[];
-  bodyFormat: 'HTML' | 'PLAIN_TEXT';
-  ccEmailAddresses: string[];
-  inlineImageReferences: {
-    contentId: string;
-    fileId: number;
-  }[];
-  mailBody: string;
-  mailSubject: string;
-  receiverEmailAddresses: string[];
   reservationTime: string;
+  sharedBindings: Record<string, string>;
+  templateId: number;
 }
 
 export const postMailReservation = (data: PostMailReservationParams) => {

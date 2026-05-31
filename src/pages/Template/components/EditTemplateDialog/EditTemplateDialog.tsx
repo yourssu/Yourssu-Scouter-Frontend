@@ -35,8 +35,15 @@ export const EditTemplateDialog = ({
 }: EditTemplateDialogProps) => {
   const { data: templateDetail } = useSuspenseQuery(templateOptions.detail(templateId));
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    attachments: AttachmentType[];
+    content: string;
+    subject: string;
+    title: string;
+    variables: Variable[];
+  }>({
     title: templateDetail.title,
+    subject: templateDetail.subject,
     content: templateDetail.content,
     variables: templateDetail.variables,
     attachments: templateDetail.attachments || [],
@@ -46,6 +53,7 @@ export const EditTemplateDialog = ({
   useEffect(() => {
     setFormData({
       title: templateDetail.title,
+      subject: templateDetail.subject,
       content: templateDetail.content,
       variables: templateDetail.variables,
       attachments: templateDetail.attachments || [],
@@ -53,12 +61,13 @@ export const EditTemplateDialog = ({
   }, [templateDetail]);
 
   const handleSave = () => {
-    if (!formData.title.trim()) {
+    if (!formData.title.trim() || !formData.subject.trim()) {
       return;
     }
     onSave({
       ...templateDetail,
       title: formData.title.trim(),
+      subject: formData.subject.trim(),
       content: formData.content,
       variables: formData.variables,
       attachments: formData.attachments,
@@ -75,6 +84,13 @@ export const EditTemplateDialog = ({
     setFormData((prev) => ({
       ...prev,
       title: e.target.value,
+    }));
+  };
+
+  const handleSubjectChange = (subject: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      subject,
     }));
   };
 
@@ -111,7 +127,7 @@ export const EditTemplateDialog = ({
             </VisuallyHidden>
             <StyledTitleInput
               onChange={handleTitleChange}
-              placeholder="제목을 입력하세요"
+              placeholder="템플릿 제목을 입력하세요"
               value={formData.title}
             />
             <IcCloseLine onClick={onClose} />
@@ -122,9 +138,11 @@ export const EditTemplateDialog = ({
               <TemplateEditor
                 onAttachmentsChange={handleAttachmentsChange}
                 onContentChange={handleContentChange}
+                onSubjectChange={handleSubjectChange}
                 onVariablesChange={handleVariablesChange}
                 templateAttachments={formData.attachments}
                 templateContent={formData.content}
+                templateSubject={formData.subject}
                 templateVariables={formData.variables}
               />
             </MailContentProvider>
@@ -132,7 +150,7 @@ export const EditTemplateDialog = ({
 
           <StyledFooter>
             <BoxButton
-              disabled={!formData.title.trim()}
+              disabled={!formData.title.trim() || !formData.subject.trim()}
               onClick={handleSave}
               size="large"
               variant="filledPrimary"
