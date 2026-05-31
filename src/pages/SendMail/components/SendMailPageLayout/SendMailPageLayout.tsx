@@ -13,7 +13,7 @@ export const SendMailPageLayout = ({ slots }: SendMailPageLayoutProps) => {
   return (
     <PageLayout>
       <div className="flex w-full flex-[1_1_0] flex-row">
-        <div className="flex w-full flex-col gap-[20px] p-[40px]">
+        <div className="flex min-w-0 flex-1 flex-col gap-[20px] p-[40px]">
           {slots.dropdown}
           {slots.info}
           <div className="flex h-full">{slots.editor}</div>

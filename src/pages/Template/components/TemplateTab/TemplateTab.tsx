@@ -72,6 +72,7 @@ export const TemplateTab = () => {
           ...oldData,
           date: data.updatedAt,
           title: updatedPayload.title,
+          subject: updatedPayload.subject,
           content: updatedPayload.content,
           variables: updatedPayload.variables,
         };

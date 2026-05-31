@@ -7,6 +7,7 @@ import { transformContentToBodyHtml, transformVariables } from '@/utils/transfor
 interface PostTemplateParams {
   attachments?: AttachmentType[];
   content: string;
+  subject: string;
   title: string;
   variables: Variable[];
 }
@@ -14,6 +15,7 @@ interface PostTemplateParams {
 export const postTemplateFromForms = (params: PostTemplateParams) => {
   const formattedParams = {
     title: params.title,
+    subject: params.subject,
     bodyHtml: transformContentToBodyHtml(params.content),
     variables: transformVariables(params.variables),
     attachmentReferences: params.attachments?.map((a) => ({ fileId: a.fileId })) || [],

@@ -4,6 +4,7 @@ import { DateVariableCard } from '@/components/VariableCard/DateVariableCard';
 import { LinkVariableCard } from '@/components/VariableCard/LinkVariableCard';
 import { NameVariableCard } from '@/components/VariableCard/NameVariableCard';
 import { TextVariableCard } from '@/components/VariableCard/TextVariableCard';
+import { useMailInfoContext } from '@/pages/SendMail/context';
 import { useMailData } from '@/pages/SendMail/hooks/useMailData';
 import { useRecipientData } from '@/pages/SendMail/hooks/useRecipientData';
 import { useVariableList } from '@/pages/SendMail/hooks/useVariableList';
@@ -17,20 +18,29 @@ export const VariableList = ({ templateId }: VariableListProps) => {
   const { variableCardData } = useVariableList(templateId);
   const { currentRecipientId } = useRecipientData(); // 현재 선택된 지원자 ID
   const { currentContent } = useMailData(templateId, currentRecipientId); // 현재 본문 데이터
+  const { mailInfo } = useMailInfoContext();
 
-  // 1. 본문(HTML)에서 data-key들을 순서대로 추출
-  const regex = /data-key="([^"]+)"/g;
   const keyOrder: string[] = [];
-  let match;
 
-  // currentContent가 있을 때만 정규표현식 실행
-  if (currentContent) {
-    while ((match = regex.exec(currentContent)) !== null) {
+  // 1. 제목(subject)에서 {{var-key}} 패턴으로 추출
+  if (mailInfo?.subject) {
+    const subjectRegex = /{{(var-[^}]+)}}/g;
+    let match;
+    while ((match = subjectRegex.exec(mailInfo.subject)) !== null) {
       keyOrder.push(match[1]);
     }
   }
 
-  // 2. 중복 키 제거 (본문에 여러 번 등장해도 첫 번째 위치 기준)
+  // 2. 본문(HTML)에서 data-key들을 순서대로 추출
+  if (currentContent) {
+    const bodyRegex = /data-key="([^"]+)"/g;
+    let match;
+    while ((match = bodyRegex.exec(currentContent)) !== null) {
+      keyOrder.push(match[1]);
+    }
+  }
+
+  // 3. 중복 키 제거 (제목/본문에 등장하는 첫 번째 위치 기준)
   const uniqueKeyOrder = [...new Set(keyOrder)];
 
   // 3. 추출된 순서에 따라 variableCardData 정렬

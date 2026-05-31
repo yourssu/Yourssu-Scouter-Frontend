@@ -21,7 +21,7 @@ export interface MailSidebarProps {
 
 export const MailSidebar = ({ partId, templateId, onReserveSuccess }: MailSidebarProps) => {
   const { currentRecipientId } = useRecipientData();
-  const { currentContent, defaultContent } = useMailData(templateId, currentRecipientId);
+  const { currentContent } = useMailData(templateId, currentRecipientId);
   const { sendReservation } = useMailActions();
   const { snackbar } = useSnackbar();
   const { mailInfo } = useMailInfoContext();
@@ -35,7 +35,9 @@ export const MailSidebar = ({ partId, templateId, onReserveSuccess }: MailSideba
       <MailReservationDialog
         onClose={close}
         onReserve={async (date: Date) => {
-          await sendReservation(currentContent, defaultContent, date);
+          if (templateId) {
+            await sendReservation(templateId, date);
+          }
           close();
           snackbar({
             type: 'info',

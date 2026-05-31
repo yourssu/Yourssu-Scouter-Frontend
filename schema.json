@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.dev.scouter.yourssu.com",
+      "url": "https://scouter-dev-api.yourssu.com",
       "description": "production server"
     }
   ],
@@ -224,8 +224,8 @@
               }
             }
           },
-          "404": {
-            "description": "예약을 찾을 수 없음",
+          "403": {
+            "description": "다른 사용자의 예약에 대한 접근 거부",
             "content": {
               "*/*": {
                 "schema": {
@@ -234,8 +234,8 @@
               }
             }
           },
-          "403": {
-            "description": "다른 사용자의 예약에 대한 접근 거부",
+          "404": {
+            "description": "예약을 찾을 수 없음",
             "content": {
               "*/*": {
                 "schema": {
@@ -277,8 +277,8 @@
             "description": "수정 성공",
             "content": {}
           },
-          "404": {
-            "description": "예약을 찾을 수 없음",
+          "403": {
+            "description": "다른 사용자의 예약에 대한 접근 거부",
             "content": {
               "*/*": {
                 "schema": {
@@ -287,8 +287,8 @@
               }
             }
           },
-          "403": {
-            "description": "다른 사용자의 예약에 대한 접근 거부",
+          "404": {
+            "description": "예약을 찾을 수 없음",
             "content": {
               "*/*": {
                 "schema": {
@@ -320,8 +320,8 @@
             "description": "취소 성공",
             "content": {}
           },
-          "404": {
-            "description": "예약을 찾을 수 없음",
+          "403": {
+            "description": "다른 사용자의 예약에 대한 접근 거부",
             "content": {
               "*/*": {
                 "schema": {
@@ -330,8 +330,8 @@
               }
             }
           },
-          "403": {
-            "description": "다른 사용자의 예약에 대한 접근 거부",
+          "404": {
+            "description": "예약을 찾을 수 없음",
             "content": {
               "*/*": {
                 "schema": {
@@ -603,13 +603,13 @@
       "post": {
         "tags": ["합격자 동기화 API", "유어슈 멤버"],
         "summary": "지정 학기 합격자 멤버 동기화",
-        "description": "지정한 학기(semesterString, 예: 2025-1)의 합격자만 멤버에 동기화합니다. 없으면 전체 동기화와 동일.",
+        "description": "지정한 학기(semesterString, yy-term 예: 25-1)의 합격자만 멤버에 동기화합니다. 없으면 전체 동기화와 동일.",
         "operationId": "includeFromApplicants_1",
         "parameters": [
           {
             "name": "semesterString",
             "in": "path",
-            "description": "학기 문자열 (예: 2025-1)",
+            "description": "학기 문자열 (yy-term, 예: 25-1)",
             "required": true,
             "schema": {
               "type": "string"
@@ -1062,8 +1062,8 @@
               }
             }
           },
-          "404": {
-            "description": "예약을 찾을 수 없음",
+          "403": {
+            "description": "다른 사용자의 예약에 대한 접근 거부",
             "content": {
               "*/*": {
                 "schema": {
@@ -1072,8 +1072,8 @@
               }
             }
           },
-          "403": {
-            "description": "다른 사용자의 예약에 대한 접근 거부",
+          "404": {
+            "description": "예약을 찾을 수 없음",
             "content": {
               "*/*": {
                 "schema": {
@@ -1243,7 +1243,7 @@
       "patch": {
         "tags": ["유어슈 멤버"],
         "summary": "비액티브 멤버 정보 수정",
-        "description": "변경되지 않은 정보는 보내면 안됩니다.",
+        "description": "한 요청에는 (1) 회원 공통 프로필 필드만 또는 (2) 비액티브 전용 필드만 보낸다. 비액티브 전용은 조회 응답과 동일한 키(복귀 예정 학기 문자열, 사유, 문자 회신, 활동학기 라벨, 학기 수 등)를 사용한다. 활동 기간(activePeriod)·비액티브 기간(inactivePeriod) 객체와 activeSemesterCountLabel·inactiveSemesterCountLabel은 조회 전용이며 본문에 넣으면 Member-007이다. 복귀 예정 학기 변경 시 서버가 비액티브 기간 종료 학기를 도메인 규칙에 맞게 조정할 수 있다.",
         "operationId": "updateInactiveById",
         "parameters": [
           {
@@ -1272,7 +1272,7 @@
             "content": {}
           },
           "400": {
-            "description": "Member-002 (잘못된 수정 요청: 한 번에 하나의 필드만 수정 가능 등)",
+            "description": "Member-002 (잘못된 수정 요청: 한 번에 하나의 필드만 수정 가능 등), Member-007 (조회 전용·기간 필드를 본문에 넣은 경우)",
             "content": {}
           },
           "403": {
@@ -1290,7 +1290,7 @@
       "patch": {
         "tags": ["유어슈 멤버"],
         "summary": "졸업 멤버 정보 수정",
-        "description": "변경되지 않은 정보는 보내면 안됩니다.",
+        "description": "한 요청에는 (1) 회원 공통 프로필만 또는 (2) isAdvisorDesired만 보낸다. 활동 기간(activePeriod)은 조회 전용이며 본문에 넣으면 Member-007이다.",
         "operationId": "updateGraduatedById",
         "parameters": [
           {
@@ -1319,7 +1319,7 @@
             "content": {}
           },
           "400": {
-            "description": "Member-002 (잘못된 수정 요청: 한 번에 하나의 필드만 수정 가능 등)",
+            "description": "Member-002 (잘못된 수정 요청: 한 번에 하나의 필드만 수정 가능 등), Member-007 (activePeriod 등 수정 불가 필드 포함)",
             "content": {}
           },
           "403": {
@@ -1682,7 +1682,7 @@
       "get": {
         "tags": ["유어슈 멤버"],
         "summary": "탈퇴 멤버 목록 조회/검색",
-        "description": "HR·스카우터가 아니면 isSensitiveMasked true, 연락처·생년월일·학번·탈퇴일자·비고 등 null.",
+        "description": "응답 필드: memberId, parts(구분·파트), role, name, nickname(영어(한글발음)), state, withdrawnDate, note. 이메일·연락처·전공·학번·생년월일·가입일은 포함하지 않음. HR·스카우터가 아니면 isSensitiveMasked true이며 탈퇴일자·비고는 null.",
         "operationId": "readAllWithdrawn",
         "parameters": [
           {
@@ -1819,7 +1819,7 @@
       "get": {
         "tags": ["유어슈 멤버"],
         "summary": "비액티브 멤버 목록 조회/검색",
-        "description": "HR·스카우터가 아니면 isSensitiveMasked true, 연락처·생년월일·학번·복귀예정·사유·문자회신·비고 등 null.",
+        "description": "응답은 기간 히스토리(activePeriod/inactivePeriod)와 UI 표기용 학기 수 라벨(activeSemesterCountLabel/inactiveSemesterCountLabel)을 함께 제공한다. 학기 수를 확정할 수 없으면 라벨은 null이다. HR·스카우터가 아니면 isSensitiveMasked true, 연락처·생년월일·학번·복귀예정·사유·문자회신·비고·학기 수 라벨 등 null.",
         "operationId": "readAllInActive",
         "parameters": [
           {
@@ -1901,7 +1901,7 @@
       "get": {
         "tags": ["유어슈 멤버"],
         "summary": "수료 멤버 목록 조회/검색",
-        "description": "HR·스카우터가 아니면 isSensitiveMasked true, 민감 필드 및 수료 기간(activePeriod) null.",
+        "description": "응답 필드: memberId, parts(구분·파트), role, name, nickname(영어(한글발음)), state, email, phoneNumber, department, studentId, birthDate, joinDate, completionSemester(수료 학기), note. HR·스카우터가 아니면 isSensitiveMasked true이며 연락처·생년월일·학번·비고·completionSemester는 null.",
         "operationId": "readAllCompleted",
         "parameters": [
           {
@@ -2151,6 +2151,26 @@
         }
       }
     },
+    "/api/mails/reservation/groups": {
+      "get": {
+        "tags": ["메일"],
+        "summary": "메일 그룹 목록 조회",
+        "description": "메일 예약 그룹 메타데이터와 각 그룹에 속한 메일 ID 목록을 조회합니다. 1 예약 요청 = 1 그룹, 수신자 수만큼 메일 ID가 존재합니다.",
+        "operationId": "getMailGroups",
+        "responses": {
+          "200": {
+            "description": "조회 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailGroupListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/mails/images": {
       "get": {
         "tags": ["메일"],
@@ -2337,6 +2357,12 @@
             "example": "합격 안내 메일",
             "minLength": 1
           },
+          "subject": {
+            "type": "string",
+            "description": "메일 제목. 변수는 {{var-{UUID}}} 형식으로 사용",
+            "example": "[유어슈] {{var-550e8400-e29b-41d4-a716-446655440000}}님 면접 안내",
+            "minLength": 1
+          },
           "bodyHtml": {
             "type": "string",
             "description": "메일 본문 HTML. 변수는 {{var-{UUID}}} 형식으로 사용",
@@ -2359,7 +2385,7 @@
             }
           }
         },
-        "required": ["attachmentReferences", "bodyHtml", "title", "variables"]
+        "required": ["attachmentReferences", "bodyHtml", "subject", "title", "variables"]
       },
       "TemplateVariableRequest": {
         "type": "object",
@@ -2384,8 +2410,13 @@
           },
           "perRecipient": {
             "type": "boolean",
-            "description": "수신자별로 다른 값 입력 여부",
+            "description": "수신자별로 다른 값 입력 여부. USER_INPUT 타입에만 적용",
             "example": true
+          },
+          "attributeKey": {
+            "type": "string",
+            "description": "APPLICANT 타입 변수의 속성 키. RecipientAttributeResolver.availableKeys() 에서 제공하는 값이어야 함",
+            "example": "applicant.name"
           }
         },
         "required": ["displayName", "key", "perRecipient", "type"]
@@ -2411,45 +2442,11 @@
         "type": "object",
         "description": "메일 예약 요청",
         "properties": {
-          "receiverEmailAddresses": {
-            "type": "array",
-            "description": "수신자 이메일 주소 목록",
-            "example": ["user@example.com"],
-            "items": {
-              "type": "string"
-            }
-          },
-          "ccEmailAddresses": {
-            "type": "array",
-            "description": "참조(CC) 이메일 주소 목록",
-            "example": [],
-            "items": {
-              "type": "string"
-            }
-          },
-          "bccEmailAddresses": {
-            "type": "array",
-            "description": "숨은참조(BCC) 이메일 주소 목록",
-            "example": [],
-            "items": {
-              "type": "string"
-            }
-          },
-          "mailSubject": {
-            "type": "string",
-            "description": "메일 제목",
-            "example": "면접 안내"
-          },
-          "mailBody": {
-            "type": "string",
-            "description": "메일 본문",
-            "example": "<p>안녕하세요</p>"
-          },
-          "bodyFormat": {
-            "type": "string",
-            "description": "본문 형식",
-            "enum": ["HTML", "PLAIN_TEXT"],
-            "example": "HTML"
+          "templateId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "사용할 템플릿 ID",
+            "example": 42
           },
           "reservationTime": {
             "type": "string",
@@ -2457,22 +2454,60 @@
             "description": "예약 발송 시간 (ISO 8601, UTC)",
             "example": "2026-02-06T02:00:00Z"
           },
-          "attachmentReferences": {
+          "recipients": {
             "type": "array",
-            "description": "첨부파일 참조 목록",
+            "description": "수신자 목록",
             "items": {
-              "$ref": "#/components/schemas/AttachmentReferenceRequest"
+              "$ref": "#/components/schemas/RecipientRequest"
+            }
+          },
+          "sharedBindings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "수신자 공통 바인딩 (perRecipient=false 변수)"
+          },
+          "ccEmailAddresses": {
+            "type": "array",
+            "description": "참조(CC) 이메일 주소 목록",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bccEmailAddresses": {
+            "type": "array",
+            "description": "숨은참조(BCC) 이메일 주소 목록",
+            "items": {
+              "type": "string"
             }
           }
         },
-        "required": [
-          "attachmentReferences",
-          "bodyFormat",
-          "mailBody",
-          "mailSubject",
-          "receiverEmailAddresses",
-          "reservationTime"
-        ]
+        "required": ["recipients", "reservationTime", "sharedBindings", "templateId"]
+      },
+      "RecipientRequest": {
+        "type": "object",
+        "description": "수신자 정보",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "수신자 이메일",
+            "example": "alice@example.com"
+          },
+          "applicantId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "지원자 ID (있으면 이메일보다 우선 사용)"
+          },
+          "bindings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "수신자별 바인딩 (perRecipient=true 변수)"
+          }
+        },
+        "required": ["bindings", "email"]
       },
       "ExceptionResponse": {
         "type": "object",
@@ -2616,13 +2651,17 @@
         "properties": {
           "failureMessages": {
             "type": "array",
+            "description": "동기화 실패 메시지 목록",
+            "example": ["email 중복: test@example.com"],
             "items": {
               "type": "string"
             }
           },
           "createdCount": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "description": "생성된 멤버 수",
+            "example": 12
           }
         },
         "required": ["createdCount", "failureMessages"]
@@ -2940,35 +2979,53 @@
         "properties": {
           "partIds": {
             "type": "array",
+            "description": "파트 ID 목록",
+            "example": [1, 2],
             "items": {
               "type": "integer",
               "format": "int64"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "WITHDRAWN"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호",
+            "example": "01012345678"
           },
           "departmentId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "학과/소속 ID",
+            "example": 7
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
@@ -2980,8 +3037,33 @@
             "format": "date",
             "example": "2024-01-01"
           },
+          "withdrawnDate": {
+            "type": "string",
+            "format": "date",
+            "description": "탈퇴 일자 (탈퇴 멤버 전용, 다른 회원 정보 필드와 동시에 보낼 수 없음)",
+            "example": "2025-09-01"
+          },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고",
+            "example": "메모"
+          }
+        }
+      },
+      "InactiveActivitySemestersPatch": {
+        "type": "object",
+        "description": "비액티브 활동학기 표시용 원문·총 학기 수 일괄 갱신",
+        "properties": {
+          "activitySemestersLabel": {
+            "type": "string",
+            "description": "시트 표기용 자유 텍스트",
+            "example": "23년도 1학기, 24년도 2학기~25년도 1학기"
+          },
+          "totalActiveSemesters": {
+            "type": "integer",
+            "format": "int32",
+            "description": "총 활동 학기 수",
+            "example": 3
           }
         }
       },
@@ -2990,35 +3072,53 @@
         "properties": {
           "partIds": {
             "type": "array",
+            "description": "파트 ID 목록",
+            "example": [1, 2],
             "items": {
               "type": "integer",
               "format": "int64"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "INACTIVE"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호",
+            "example": "01012345678"
           },
           "departmentId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "학과/소속 ID",
+            "example": 7
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
@@ -3030,12 +3130,48 @@
             "format": "date",
             "example": "2024-01-01"
           },
-          "expectedReturnSemesterId": {
-            "type": "integer",
-            "format": "int64"
-          },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고",
+            "example": "메모"
+          },
+          "expectedReturnSemester": {
+            "type": "string",
+            "description": "복귀 예정 학기(조회와 동일 yy-term, 예: 25-1)",
+            "example": "25-1"
+          },
+          "reason": {
+            "type": "string",
+            "description": "비액티브 사유",
+            "example": "개인 사정"
+          },
+          "smsReplied": {
+            "type": "boolean",
+            "description": "문자 회신 여부",
+            "example": true
+          },
+          "smsReplyDesiredPeriod": {
+            "type": "string",
+            "description": "문자 회신 희망 시기(자유 텍스트)",
+            "example": "다음 학기 시작 전"
+          },
+          "activitySemestersLabel": {
+            "type": "string",
+            "description": "비액티브 시트 활동학기 표시용 원문"
+          },
+          "totalActiveSemesters": {
+            "type": "integer",
+            "format": "int32",
+            "description": "총 활동 학기 수"
+          },
+          "totalInactiveSemesters": {
+            "type": "integer",
+            "format": "int32",
+            "description": "총 비액티브 학기 수"
+          },
+          "activitySemestersPatch": {
+            "$ref": "#/components/schemas/InactiveActivitySemestersPatch",
+            "description": "하위 호환용. [activitySemestersLabel]·[totalActiveSemesters]를 객체로 보낼 때 사용. 같은 필드를 본문 최상위와 동시에내면 이 객체의 값이 우선한다."
           }
         }
       },
@@ -3044,35 +3180,53 @@
         "properties": {
           "partIds": {
             "type": "array",
+            "description": "파트 ID 목록",
+            "example": [1, 2],
             "items": {
               "type": "integer",
               "format": "int64"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "GRADUATED"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호",
+            "example": "01012345678"
           },
           "departmentId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "학과/소속 ID",
+            "example": 7
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
@@ -3085,10 +3239,14 @@
             "example": "2024-01-01"
           },
           "isAdvisorDesired": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "지도교수 의향 여부",
+            "example": false
           },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고",
+            "example": "메모"
           }
         }
       },
@@ -3097,35 +3255,53 @@
         "properties": {
           "partIds": {
             "type": "array",
+            "description": "파트 ID 목록",
+            "example": [1, 2],
             "items": {
               "type": "integer",
               "format": "int64"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "COMPLETED"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호",
+            "example": "01012345678"
           },
           "departmentId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "학과/소속 ID",
+            "example": 7
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
@@ -3137,8 +3313,15 @@
             "format": "date",
             "example": "2024-01-01"
           },
+          "completionSemester": {
+            "type": "string",
+            "description": "수료 학기(조회 completionSemester와 동일 yy-term)",
+            "example": "25-1"
+          },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고",
+            "example": "메모"
           }
         }
       },
@@ -3147,35 +3330,53 @@
         "properties": {
           "partIds": {
             "type": "array",
+            "description": "파트 ID 목록",
+            "example": [1, 2],
             "items": {
               "type": "integer",
               "format": "int64"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "ACTIVE"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호",
+            "example": "01012345678"
           },
           "departmentId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "학과/소속 ID",
+            "example": 7
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
@@ -3188,7 +3389,9 @@
             "example": "2024-01-01"
           },
           "membershipFee": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "회비 납부 여부",
+            "example": true
           },
           "grade": {
             "type": "integer",
@@ -3202,7 +3405,9 @@
             "example": false
           },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고",
+            "example": "메모"
           }
         }
       },
@@ -3381,12 +3586,15 @@
         "properties": {
           "members": {
             "type": "array",
+            "description": "멤버 목록",
             "items": {
               "$ref": "#/components/schemas/ReadWithdrawnMemberListItemResponse"
             }
           },
           "isSensitiveMasked": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "민감정보 마스킹 적용 여부",
+            "example": false
           }
         },
         "required": ["isSensitiveMasked", "members"]
@@ -3395,10 +3603,14 @@
         "type": "object",
         "properties": {
           "division": {
-            "type": "string"
+            "type": "string",
+            "description": "소속 구분(예: 개발, 디자인)",
+            "example": "개발"
           },
           "part": {
-            "type": "string"
+            "type": "string",
+            "description": "파트명",
+            "example": "백엔드"
           }
         },
         "required": ["division", "part"]
@@ -3408,65 +3620,50 @@
         "properties": {
           "memberId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "멤버 ID",
+            "example": 123
           },
           "parts": {
             "type": "array",
+            "description": "소속 파트 목록",
             "items": {
               "$ref": "#/components/schemas/ReadDivisionAndPartInMemberResponse"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "phoneNumber": {
-            "type": "string"
-          },
-          "department": {
-            "type": "string"
-          },
-          "studentId": {
-            "type": "string"
-          },
-          "birthDate": {
             "type": "string",
-            "format": "date"
-          },
-          "joinDate": {
-            "type": "string",
-            "format": "date"
+            "description": "멤버 상태",
+            "example": "WITHDRAWN"
           },
           "withdrawnDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "탈퇴 일자(민감정보 마스킹 시 null)",
+            "example": "2025-09-01"
           },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고(민감정보 마스킹 시 null)",
+            "example": "개인 사정"
           }
         },
-        "required": [
-          "department",
-          "email",
-          "joinDate",
-          "memberId",
-          "name",
-          "nickname",
-          "parts",
-          "role",
-          "state"
-        ]
+        "required": ["memberId", "name", "nickname", "parts", "role", "state"]
       },
       "MeResponse": {
         "type": "object",
@@ -3581,7 +3778,9 @@
         "properties": {
           "lastUpdatedTime": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "마지막 동기화 시각(UTC, 없으면 null)",
+            "example": "2026-03-24T09:30:00Z"
           }
         }
       },
@@ -3595,12 +3794,15 @@
         "properties": {
           "members": {
             "type": "array",
+            "description": "멤버 목록",
             "items": {
               "$ref": "#/components/schemas/ReadInactiveMemberListItemResponse"
             }
           },
           "isSensitiveMasked": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "민감정보 마스킹 적용 여부",
+            "example": false
           }
         },
         "required": ["isSensitiveMasked", "members"]
@@ -3610,63 +3812,118 @@
         "properties": {
           "memberId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "멤버 ID",
+            "example": 123
           },
           "parts": {
             "type": "array",
+            "description": "소속 파트 목록",
             "items": {
               "$ref": "#/components/schemas/ReadDivisionAndPartInMemberResponse"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "INACTIVE"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호(민감정보 마스킹 시 null)",
+            "example": "01012345678"
           },
           "department": {
-            "type": "string"
+            "type": "string",
+            "description": "학과(또는 소속)",
+            "example": "컴퓨터학부"
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번(민감정보 마스킹 시 null)",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "생년월일(민감정보 마스킹 시 null)",
+            "example": "2003-09-23"
           },
           "joinDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "가입일",
+            "example": "2024-01-01"
           },
           "activePeriod": {
-            "$ref": "#/components/schemas/ReadSemesterPeriodInMemberResponse"
+            "$ref": "#/components/schemas/ReadSemesterPeriodInMemberResponse",
+            "description": "활동 기간(학기 범위)"
           },
           "expectedReturnSemester": {
-            "type": "string"
+            "type": "string",
+            "description": "복귀 예정 학기(없으면 null, yy-term)",
+            "example": "25-1"
           },
           "inactivePeriod": {
-            "$ref": "#/components/schemas/ReadSemesterPeriodInMemberResponse"
+            "$ref": "#/components/schemas/ReadSemesterPeriodInMemberResponse",
+            "description": "비액티브 기간(학기 범위)"
           },
           "reason": {
-            "type": "string"
+            "type": "string",
+            "description": "비액티브 사유(민감정보 마스킹 시 null)",
+            "example": "개인 사정"
           },
           "smsReplied": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "문자 회신 여부(민감정보 마스킹 시 null)",
+            "example": true
           },
           "smsReplyDesiredPeriod": {
-            "type": "string"
+            "type": "string",
+            "description": "문자 회신 희망 시기(자유 텍스트, 없으면 null)",
+            "example": "다음 학기 시작 전"
+          },
+          "activitySemestersLabel": {
+            "type": "string",
+            "description": "비액티브 시트 활동학기 표시용 원문(없으면 null)"
+          },
+          "totalActiveSemesters": {
+            "type": "integer",
+            "format": "int32",
+            "description": "총 활동 학기 수(없으면 null)"
+          },
+          "totalInactiveSemesters": {
+            "type": "integer",
+            "format": "int32",
+            "description": "총 비액티브 학기 수(없으면 null)"
+          },
+          "activeSemesterCountLabel": {
+            "type": "string",
+            "description": "활동 기간 표기용 학기 수 라벨(예: 3학기, 모르면 null)"
+          },
+          "inactiveSemesterCountLabel": {
+            "type": "string",
+            "description": "비액티브 기간 표기용 학기 수 라벨(예: 2학기, 모르면 null)"
           },
           "note": {
             "type": "string"
@@ -3690,10 +3947,14 @@
         "type": "object",
         "properties": {
           "startSemester": {
-            "type": "string"
+            "type": "string",
+            "description": "시작 학기(yy-term, 조회·저장 동일 형식)",
+            "example": "23-2"
           },
           "endSemester": {
-            "type": "string"
+            "type": "string",
+            "description": "종료 학기(yy-term, 조회·저장 동일 형식)",
+            "example": "24-2"
           }
         },
         "required": ["endSemester", "startSemester"]
@@ -3708,12 +3969,15 @@
         "properties": {
           "members": {
             "type": "array",
+            "description": "멤버 목록",
             "items": {
               "$ref": "#/components/schemas/ReadGraduatedMemberListItemResponse"
             }
           },
           "isSensitiveMasked": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "민감정보 마스킹 적용 여부",
+            "example": false
           }
         },
         "required": ["isSensitiveMasked", "members"]
@@ -3723,54 +3987,82 @@
         "properties": {
           "memberId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "멤버 ID",
+            "example": 123
           },
           "parts": {
             "type": "array",
+            "description": "소속 파트 목록",
             "items": {
               "$ref": "#/components/schemas/ReadDivisionAndPartInMemberResponse"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "GRADUATED"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호(민감정보 마스킹 시 null)",
+            "example": "01012345678"
           },
           "department": {
-            "type": "string"
+            "type": "string",
+            "description": "학과(또는 소속)",
+            "example": "컴퓨터학부"
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번(민감정보 마스킹 시 null)",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "생년월일(민감정보 마스킹 시 null)",
+            "example": "2003-09-23"
           },
           "joinDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "가입일",
+            "example": "2024-01-01"
           },
           "activePeriod": {
-            "$ref": "#/components/schemas/ReadSemesterPeriodInMemberResponse"
+            "$ref": "#/components/schemas/ReadSemesterPeriodInMemberResponse",
+            "description": "활동 기간(학기 범위, 없으면 null)"
           },
           "isAdvisorDesired": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "지도교수 의향 여부",
+            "example": false
           },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고(민감정보 마스킹 시 null)",
+            "example": "메모"
           }
         },
         "required": [
@@ -3796,12 +4088,15 @@
         "properties": {
           "members": {
             "type": "array",
+            "description": "멤버 목록",
             "items": {
               "$ref": "#/components/schemas/ReadCompletedMemberListItemResponse"
             }
           },
           "isSensitiveMasked": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "민감정보 마스킹 적용 여부",
+            "example": false
           }
         },
         "required": ["isSensitiveMasked", "members"]
@@ -3811,60 +4106,83 @@
         "properties": {
           "memberId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "멤버 ID",
+            "example": 123
           },
           "parts": {
             "type": "array",
+            "description": "소속 파트 목록",
             "items": {
               "$ref": "#/components/schemas/ReadDivisionAndPartInMemberResponse"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "COMPLETED"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호(민감정보 마스킹 시 null)",
+            "example": "01012345678"
           },
           "department": {
-            "type": "string"
+            "type": "string",
+            "description": "학과(또는 소속)",
+            "example": "컴퓨터학부"
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번(민감정보 마스킹 시 null)",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "생년월일(민감정보 마스킹 시 null)",
+            "example": "2003-09-23"
           },
           "joinDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "가입일",
+            "example": "2024-01-01"
           },
-          "activePeriod": {
-            "$ref": "#/components/schemas/ReadSemesterPeriodInMemberResponse"
-          },
-          "isAdvisorDesired": {
-            "type": "boolean"
+          "completionSemester": {
+            "type": "string",
+            "description": "수료 학기(없으면 null, yy-term)",
+            "example": "25-1"
           },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고(민감정보 마스킹 시 null)",
+            "example": "메모"
           }
         },
         "required": [
           "department",
           "email",
-          "isAdvisorDesired",
           "joinDate",
           "memberId",
           "name",
@@ -3884,12 +4202,15 @@
         "properties": {
           "members": {
             "type": "array",
+            "description": "멤버 목록",
             "items": {
               "$ref": "#/components/schemas/ReadActiveMemberListItemResponse"
             }
           },
           "isSensitiveMasked": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "민감정보 마스킹 적용 여부",
+            "example": false
           }
         },
         "required": ["isSensitiveMasked", "members"]
@@ -3899,58 +4220,89 @@
         "properties": {
           "memberId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "멤버 ID",
+            "example": 123
           },
           "parts": {
             "type": "array",
+            "description": "소속 파트 목록",
             "items": {
               "$ref": "#/components/schemas/ReadDivisionAndPartInMemberResponse"
             }
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 역할",
+            "example": "MEMBER"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "이름",
+            "example": "홍길동"
           },
           "nickname": {
-            "type": "string"
+            "type": "string",
+            "description": "닉네임(영문/한글 조합)",
+            "example": "gil동"
           },
           "state": {
-            "type": "string"
+            "type": "string",
+            "description": "멤버 상태",
+            "example": "ACTIVE"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "이메일",
+            "example": "gildong@example.com"
           },
           "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "전화번호(민감정보 마스킹 시 null)",
+            "example": "01012345678"
           },
           "department": {
-            "type": "string"
+            "type": "string",
+            "description": "학과(또는 소속)",
+            "example": "컴퓨터학부"
           },
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "description": "학번(민감정보 마스킹 시 null)",
+            "example": 20201234
           },
           "birthDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "생년월일(민감정보 마스킹 시 null)",
+            "example": "2003-09-23"
           },
           "joinDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "description": "가입일",
+            "example": "2024-01-01"
           },
           "membershipFee": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "회비 납부 여부(민감정보 마스킹 시 null)",
+            "example": true
           },
           "grade": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "description": "학년(민감정보 마스킹 시 null)",
+            "example": 3
           },
           "isOnLeave": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "재휴학 여부",
+            "example": false
           },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "비고(민감정보 마스킹 시 null)",
+            "example": "메모"
           }
         },
         "required": [
@@ -4172,8 +4524,13 @@
           },
           "perRecipient": {
             "type": "boolean",
-            "description": "수신자별로 다른 값 입력 여부",
+            "description": "수신자별로 다른 값 입력 여부. UserInput 타입에만 유효",
             "example": true
+          },
+          "attributeKey": {
+            "type": "string",
+            "description": "APPLICANT 타입 변수의 속성 키",
+            "example": "applicant.name"
           }
         },
         "required": ["displayName", "key", "perRecipient", "type"]
@@ -4192,6 +4549,11 @@
             "type": "string",
             "description": "템플릿 제목",
             "example": "합격 안내 메일"
+          },
+          "subject": {
+            "type": "string",
+            "description": "메일 제목. 변수는 {{var-{UUID}}} 형식으로 사용",
+            "example": "[유어슈] {{var-550e8400-e29b-41d4-a716-446655440000}}님 면접 안내"
           },
           "bodyHtml": {
             "type": "string",
@@ -4218,7 +4580,15 @@
             "description": "최종 수정 시간"
           }
         },
-        "required": ["attachmentReferences", "bodyHtml", "id", "title", "updatedAt", "variables"]
+        "required": [
+          "attachmentReferences",
+          "bodyHtml",
+          "id",
+          "subject",
+          "title",
+          "updatedAt",
+          "variables"
+        ]
       },
       "MailReservationListItem": {
         "type": "object",
@@ -4397,6 +4767,54 @@
         },
         "required": ["items"]
       },
+      "MailGroupItem": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "senderEmail": {
+            "type": "string"
+          },
+          "templateId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reservationTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["SCHEDULED", "PENDING_SEND", "SENDING", "SENT"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "mailIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "required": ["createdAt", "groupId", "mailIds", "reservationTime", "senderEmail", "status"]
+      },
+      "MailGroupListResponse": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MailGroupItem"
+            }
+          }
+        },
+        "required": ["groups"]
+      },
       "MailFileListResponse": {
         "type": "object",
         "properties": {
@@ -4441,8 +4859,8 @@
         "flows": {
           "authorizationCode": {
             "authorizationUrl": "https://accounts.google.com/o/oauth2/auth",
-            "tokenUrl": "https://api.dev.scouter.yourssu.com/oauth2/swagger/callback",
-            "refreshUrl": "https://api.dev.scouter.yourssu.com/oauth2/swagger/callback",
+            "tokenUrl": "https://scouter-dev-api.yourssu.com/oauth2/swagger/callback",
+            "refreshUrl": "https://scouter-dev-api.yourssu.com/oauth2/swagger/callback",
             "scopes": {
               "openid": "OpenId Connect",
               "profile": "기본 프로필 정보",

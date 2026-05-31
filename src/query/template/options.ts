@@ -53,6 +53,7 @@ export const templateOptions = {
             displayName: variable.displayName,
             type: variableTypeMap[variable.type],
             perRecipient: variable.perRecipient,
+            attributeKey: variable.attributeKey,
             items:
               variable.items ??
               (['APPLICANT', 'PERSON'].includes(variable.type) ? [] : [{ value: '' }]),
@@ -63,6 +64,7 @@ export const templateOptions = {
         const templateDetail = {
           id: response.id,
           title: response.title,
+          subject: response.subject,
           content: transformBodyHtmlToContent(response.bodyHtml, templateVariables),
           variables: templateVariables,
           attachments:

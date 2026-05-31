@@ -38,11 +38,19 @@ export const transformBodyHtmlToContent = (bodyHtml: string, variables: BaseVari
 
 export const transformVariables = (variables: Variable[]) => {
   return variables.map((variable) => {
+    const backendType = variableTypeMap[variable.type];
+    const isApplicant = backendType === 'APPLICANT';
+
     return {
       key: variable.key,
-      type: variableTypeMap[variable.type],
+      type: backendType,
       displayName: variable.displayName,
       perRecipient: variable.perRecipient,
+      ...(isApplicant && {
+        // TODO: UI 레벨에서 key 변경이 가능하도록 지원하기 (applicant.email, applicant.phoneNumber 등)
+        // https://www.notion.so/mail-api-5-5-3562704010cd80ac8825d84a6677ca54?source=copy_link#3562704010cd81afa718d6659eacf6c4
+        attributeKey: 'applicant.name',
+      }),
     };
   });
 };
