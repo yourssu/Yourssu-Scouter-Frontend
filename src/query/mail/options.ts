@@ -130,10 +130,13 @@ export const mailOptions = {
               }
             }
 
+            const template = group.templateId ? templateMap.get(group.templateId) : null;
+
             return {
               ...group,
               mailSubject,
               resolvedReservationIds,
+              variables: template ? template.variables : [],
             };
           });
       },

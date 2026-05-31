@@ -14,6 +14,7 @@ type ChipSize = 'large' | 'small';
 type ChipType = 'applicant' | 'date' | 'link' | 'part' | 'person' | 'text';
 
 interface VariableChipProps {
+  deletable?: boolean;
   label: string;
   onClick?: () => void;
   onDelete?: () => void;
@@ -36,6 +37,7 @@ export const VariableChip = ({
   size = 'large',
   onClick,
   onDelete,
+  deletable = true,
 }: VariableChipProps) => {
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 버블링 방지
@@ -44,7 +46,7 @@ export const VariableChip = ({
     }
   };
 
-  const isDeletable = !(type === 'part' || type === 'applicant');
+  const isDeletable = deletable && !(type === 'part' || type === 'applicant');
 
   return (
     <ChipWrapper onClick={onClick} size={size} style={{ cursor: onClick ? 'pointer' : 'default' }}>

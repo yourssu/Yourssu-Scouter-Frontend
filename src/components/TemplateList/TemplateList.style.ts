@@ -28,6 +28,10 @@ export const TemplateItemContent = styled.div`
 export const TemplateTitle = styled.h3`
   ${({ theme }) => theme.typo.T3_Sb_20};
   color: ${({ theme }) => theme.semantic.color.textBasicPrimary};
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
 `;
 
 export const TemplateDate = styled.span<{ $variant?: 'error' }>`
