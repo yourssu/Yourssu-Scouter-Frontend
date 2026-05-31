@@ -36,6 +36,12 @@ export const MemberInputField = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && inputValue === '' && items.length > 0) {
+      onItemsUpdate(items.slice(0, -1));
+    }
+  };
+
   return (
     <div className="border-line-basicMedium flex min-h-[56px] w-full flex-row gap-[12px] border-b-1 px-[20px] py-[10px]">
       <div className="typo-b1_sb_16 text-text-basicPrimary flex min-w-[72px] items-center">
@@ -56,6 +62,7 @@ export const MemberInputField = ({
                   className="typo-b1_rg_16 text-text-basicPrimary h-[36px] w-full flex-1 border-0 bg-transparent p-0 outline-none focus:ring-0"
                   onChange={handleInputChange}
                   onFocus={() => setIsActive(true)}
+                  onKeyDown={handleKeyDown}
                   ref={inputRef}
                   value={inputValue}
                 />

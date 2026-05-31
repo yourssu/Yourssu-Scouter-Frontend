@@ -42,6 +42,24 @@ export const MailListSchema = z.object({
   items: z.array(BaseMailItemSchema),
 });
 
+const MailGroupStateType = ['SCHEDULED', 'PENDING_SEND', 'SENDING', 'SENT'] as const;
+
+export const MailGroupItemSchema = z.object({
+  groupId: z.number(),
+  senderEmail: z.string(),
+  templateId: z.number().nullable().optional(),
+  reservationTime: z.string(),
+  status: z.enum(MailGroupStateType),
+  createdAt: z.string(),
+  mailIds: z.array(z.number()),
+});
+
+export const MailGroupListSchema = z.object({
+  groups: z.array(MailGroupItemSchema),
+});
+
 export type MailItem = z.infer<typeof MailItemSchema>;
 export type MailDetail = z.infer<typeof MailDetailSchema>;
 export type MailList = z.infer<typeof MailListSchema>;
+export type MailGroupItem = z.infer<typeof MailGroupItemSchema>;
+export type MailGroupList = z.infer<typeof MailGroupListSchema>;

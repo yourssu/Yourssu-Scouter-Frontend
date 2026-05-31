@@ -33,7 +33,9 @@ export const TemplateTitle = styled.h3`
 export const TemplateDate = styled.span<{ $variant?: 'error' }>`
   ${({ theme }) => theme.typo.B2_Rg_15};
   color: ${({ $variant, theme }) =>
-    $variant === 'error' ? 'var(--color-text-statusNegative)' : theme.semantic.color.textBasicTertiary};
+    $variant === 'error'
+      ? 'var(--color-text-statusNegative)'
+      : theme.semantic.color.textBasicTertiary};
 `;
 
 export const TrashIconButton = styled.button`

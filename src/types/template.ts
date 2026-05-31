@@ -5,6 +5,7 @@ export interface Template {
   content: string;
   date: string;
   id: number;
+  subject: string;
   title: string;
   variables: Variable[];
 }

@@ -8,6 +8,7 @@ import { TemplateList } from '@/components/TemplateList/TemplateList';
 import { MailEditDialog } from '@/pages/SendMail/components/MailEditDialog/MailEditDialog';
 import { DeleteTemplateDialog } from '@/pages/Template/components/DeleteTemplateDialog/DeleteTemplateDialog';
 import { deleteMailReservation } from '@/query/mail/mutation/deleteMailReservation';
+import { postMailReservationRetry } from '@/query/mail/mutation/postMailReservationRetry';
 import { mailOptions, MailReservationKeys } from '@/query/mail/options';
 import { MailItem } from '@/query/mail/schema';
 import { formatTemplates } from '@/utils/date';
@@ -26,12 +27,17 @@ export const MailTab = ({
   emptyText,
   onCompose,
   readOnly,
-  sortOrder = 'desc',
+  sortOrder = 'asc',
   statuses,
 }: MailTabProps) => {
-  const methods = useForm({ defaultValues: { search: '' } });
-  const { watch } = methods;
-  const searchValue = watch('search');
+  const methods = useForm({
+    defaultValues: {
+      search: '',
+    },
+  });
+
+  const searchValue = methods.watch('search');
+
   const { data: mails } = useSuspenseQuery(mailOptions.all());
   const [selectedMailIds, setSelectedMailIds] = useState<null | number[]>(null);
   const [pendingDeleteGroup, setPendingDeleteGroup] = useState<null | {
@@ -42,48 +48,53 @@ export const MailTab = ({
 
   const { mutateAsync: deleteReservation } = useMutation({
     mutationFn: deleteMailReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
+    },
+  });
+
+  const { mutateAsync: retryReservation } = useMutation({
+    mutationFn: postMailReservationRetry,
   });
 
   const handleConfirmDelete = async () => {
-    if (!pendingDeleteGroup) { return; }
-    await Promise.all(
-      pendingDeleteGroup.ids.map((id) => deleteReservation({ reservationId: id })),
-    );
+    if (!pendingDeleteGroup) {
+      return;
+    }
+    await Promise.all(pendingDeleteGroup.ids.map((id) => deleteReservation({ reservationId: id })));
     queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
     setPendingDeleteGroup(null);
+  };
+
+  const handleConfirmRetry = async (mailIds: number[]) => {
+    await Promise.all(mailIds.map((id) => retryReservation({ reservationId: id })));
+    queryClient.invalidateQueries({ queryKey: MailReservationKeys.all });
   };
 
   const filteredMails = useMemo(
     () =>
       mails.filter(
         (mail) =>
-          statuses.includes(mail.status) &&
+          statuses.includes(mail.status as any) &&
           mail.mailSubject.toLowerCase().includes(searchValue.toLowerCase()),
       ),
     [mails, statuses, searchValue],
   );
 
-  const groupedMails = useMemo(() => {
-    const map = new Map<string, typeof filteredMails>();
-    for (const mail of filteredMails) {
-      if (!map.has(mail.mailSubject)) {
-        map.set(mail.mailSubject, []);
-      }
-      map.get(mail.mailSubject)!.push(mail);
-    }
-    return [...map.values()].sort((a, b) => {
-      const aFailed = a.some((m) => m.status === 'PENDING_SEND');
-      const bFailed = b.some((m) => m.status === 'PENDING_SEND');
+  const sortedMails = useMemo(() => {
+    return [...filteredMails].sort((a, b) => {
+      const aFailed = a.status === 'PENDING_SEND';
+      const bFailed = b.status === 'PENDING_SEND';
       if (aFailed !== bFailed) {
         return aFailed ? -1 : 1;
       }
-      const timeA = new Date(a[0].reservationTime).getTime();
-      const timeB = new Date(b[0].reservationTime).getTime();
+      const timeA = new Date(a.reservationTime).getTime();
+      const timeB = new Date(b.reservationTime).getTime();
       return sortOrder === 'asc' ? timeA - timeB : timeB - timeA;
     });
   }, [filteredMails, sortOrder]);
 
-  const hasAnyMails = mails.some((mail) => statuses.includes(mail.status));
+  const hasAnyMails = mails.some((mail) => statuses.includes(mail.status as any));
 
   if (!hasAnyMails) {
     return (
@@ -116,29 +127,36 @@ export const MailTab = ({
       </div>
 
       <div className="flex flex-col gap-3">
-        {groupedMails.map((group) => {
-          const isPendingSend = group.some((m) => m.status === 'PENDING_SEND');
+        {sortedMails.map((group) => {
+          const isPendingSend = group.status === 'PENDING_SEND';
           return (
             <TemplateList
               action={
                 isPendingSend ? (
-                  <BoxButton onClick={() => {}} size="small" variant="outlined">
+                  <BoxButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleConfirmRetry(group.resolvedReservationIds);
+                    }}
+                    size="small"
+                    variant="outlined"
+                  >
                     재전송하기
                   </BoxButton>
                 ) : undefined
               }
-              date={formatTemplates['01/01(월) 00:00'](group[0].reservationTime)}
-              key={group[0].mailSubject}
-              onClick={() => setSelectedMailIds(group.map((m) => m.reservationId))}
+              date={formatTemplates['01/01(월) 00:00'](group.reservationTime)}
+              key={group.groupId}
+              onClick={() => setSelectedMailIds(group.resolvedReservationIds)}
               onDelete={() =>
                 setPendingDeleteGroup({
-                  ids: group.map((m) => m.reservationId),
-                  subject: group[0].mailSubject,
+                  ids: group.resolvedReservationIds,
+                  subject: group.mailSubject,
                 })
               }
               readonly={readOnly}
               text={isPendingSend ? '에 전송 실패' : readOnly ? '' : '에 예약됨'}
-              title={group[0].mailSubject}
+              title={group.mailSubject}
               variant={isPendingSend ? 'error' : undefined}
             />
           );

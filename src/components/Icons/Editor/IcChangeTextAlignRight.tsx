@@ -1,10 +1,6 @@
 import { BaseIconProps } from '@/components/Icons/type';
 
-export const IcChangeTextAlignRight = ({
-  width = 16,
-  height = 16,
-  ...props
-}: BaseIconProps) => {
+export const IcChangeTextAlignRight = ({ width = 16, height = 16, ...props }: BaseIconProps) => {
   return (
     <svg
       fill="none"

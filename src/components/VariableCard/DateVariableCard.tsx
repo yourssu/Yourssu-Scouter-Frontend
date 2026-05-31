@@ -39,7 +39,9 @@ export const DateVariableCard = ({ title, dates, onDateChange }: DateVariableCar
               handleDateSelection(
                 index,
                 withTime
-                  ? formatTemplates['01/01(월) 00:00'](setYear(selectedDate, new Date().getFullYear()))
+                  ? formatTemplates['01/01(월) 00:00'](
+                      setYear(selectedDate, new Date().getFullYear()),
+                    )
                   : formatTemplates['01/01(월)'](setYear(selectedDate, new Date().getFullYear())),
               )
             }

@@ -23,6 +23,7 @@ const VariableSchema = z.object({
   displayName: z.string(),
   perRecipient: z.boolean(),
   items: z.array(VariableItemSchema).optional(),
+  attributeKey: z.string().optional().nullable(),
 });
 
 export const VariablePayloadSchema = VariableSchema.extend({
@@ -34,6 +35,7 @@ export const VariablePayloadSchema = VariableSchema.extend({
 export const BaseTemplateSchema = z.object({
   id: z.number(),
   title: z.string(),
+  subject: z.string(),
   bodyHtml: z.string(),
   variables: z.array(VariableSchema),
   attachmentReferences: z
