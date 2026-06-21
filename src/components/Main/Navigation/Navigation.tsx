@@ -26,7 +26,7 @@ const Navigation = () => {
         <div />
       )}
       {tokenService.hasTokens() && (
-        <BoxButton onClick={handleClick} size="small" variant="filledPrimary">
+        <BoxButton onClick={handleClick} size="small" variant="filledSecondary">
           로그아웃
         </BoxButton>
       )}
