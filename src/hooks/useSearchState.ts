@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createSearchParams, SetURLSearchParams, useLocation, useNavigate } from 'react-router';
 
-export function useSearchParams(): [URLSearchParams, SetURLSearchParams] {
+export function useSearchState(): [URLSearchParams, SetURLSearchParams] {
   const location = useLocation();
   const navigate = useNavigate();
 

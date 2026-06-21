@@ -8,7 +8,7 @@ import { PartStateButton } from '@/components/StateButton/PartStateButton.tsx';
 import { SemesterStateButton } from '@/components/StateButton/SemesterStateButton.tsx';
 import TableSearchBar from '@/components/TableSearchBar/TableSearchBar.tsx';
 import { usePartFilter } from '@/hooks/usePartFilter.ts';
-import { useSearchParams } from '@/hooks/useSearchParams.ts';
+import { useSearchState } from '@/hooks/useSearchState';
 import {
   StyledContainer,
   StyledLastUpdate,
@@ -40,7 +40,7 @@ const ApplicantTab = ({ state }: ApplicantTabProps) => {
 
   const { data: semesterNow } = useSuspenseQuery(semesterNowOptions());
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchState();
 
   const [semesterId, setSemesterId] = useState(
     searchParams.get('semesterId') !== null ? Number(searchParams.get('semesterId')) : null,

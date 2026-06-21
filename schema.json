@@ -2279,6 +2279,51 @@
         }
       }
     },
+    "/api/mails/reservation/groups/{groupId}": {
+      "delete": {
+        "tags": ["메일"],
+        "summary": "메일 그룹 삭제",
+        "description": "그룹 ID로 메일 예약 그룹을 삭제합니다. 그룹에 속한 모든 예약과 메일이 함께 삭제됩니다. 본인이 보낸 그룹이거나 스카우터 팀원만 삭제할 수 있습니다.",
+        "operationId": "deleteMailGroup",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "삭제 성공",
+            "content": {}
+          },
+          "403": {
+            "description": "다른 사용자의 그룹에 대한 접근 거부",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "그룹을 찾을 수 없음",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/mails/files/{fileId}": {
       "delete": {
         "tags": ["메일"],
@@ -4597,10 +4642,6 @@
             "type": "integer",
             "format": "int64"
           },
-          "mailId": {
-            "type": "integer",
-            "format": "int64"
-          },
           "reservationTime": {
             "type": "string",
             "format": "date-time"
@@ -4634,7 +4675,6 @@
         },
         "required": [
           "attachmentReferences",
-          "mailId",
           "mailSubject",
           "reservationId",
           "reservationTime",
@@ -4658,10 +4698,6 @@
         "type": "object",
         "properties": {
           "reservationId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "mailId": {
             "type": "integer",
             "format": "int64"
           },
@@ -4721,7 +4757,6 @@
           "bodyFormat",
           "ccEmailAddresses",
           "mailBody",
-          "mailId",
           "mailSubject",
           "receiverEmailAddresses",
           "reservationId",
@@ -4737,10 +4772,6 @@
             "type": "integer",
             "format": "int64"
           },
-          "mailId": {
-            "type": "integer",
-            "format": "int64"
-          },
           "reservationTime": {
             "type": "string",
             "format": "date-time"
@@ -4753,7 +4784,7 @@
             "format": "date-time"
           }
         },
-        "required": ["mailId", "reservationId", "reservationTime"]
+        "required": ["reservationId", "reservationTime"]
       },
       "MailReservationStatusResponse": {
         "type": "object",

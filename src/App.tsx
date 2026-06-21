@@ -5,8 +5,9 @@ import { GoogleCallback } from '@/components/Auth/GoogleCallback';
 import Main from '@/components/Main/Main.tsx';
 import ScouterErrorBoundary from '@/components/ScouterErrorBoundary.tsx';
 import { Applicants } from '@/pages/Applicants/Applicants.tsx';
-import { InterviewPage } from '@/pages/Interview/Interview';
 import { Members } from '@/pages/Members/Members.tsx';
+import { NewInterviewPage } from '@/pages/NewInterview';
+import { NewInterviewNewPage } from '@/pages/NewInterview/NewInterviewNew';
 import { MailPage } from '@/pages/SendMail/MailPage';
 import { Templates } from '@/pages/Template/Templates';
 
@@ -18,7 +19,9 @@ function App() {
           <Route element={<GoogleCallback />} path="/oauth/callback/google" />
           <Route element={<Main />} path="*">
             <Route element={<Navigate replace to="/members" />} index />
-            <Route element={<InterviewPage />} path="interview" />
+            {/* <Route element={<InterviewPage />} path="interview" /> */}
+            <Route element={<NewInterviewPage />} path="interview" />
+            <Route element={<NewInterviewNewPage />} path="interview/new" />
             <Route element={<Members />} path="members" />
             <Route element={<Applicants />} path="recruiting" />
             <Route element={<Templates />} path="templates" />

@@ -13,6 +13,11 @@ export const formatTemplates = {
   'Mon 12': formatEn('EEE dd'),
   '23:59': formatKo('HH:mm'),
   '2025.01.01': formatKo('yyyy.MM.dd'),
+  '1월 1일': formatKo('MMM do'),
+  '1.1 (월)': formatKo('M.d (E)'),
+  '1월 1일 (월) 23:00': formatKo('MMM do (E) HH:mm'),
+  '1.01 (월) 23:00': formatKo('M.dd (E) HH:mm'),
+  '23:00': formatKo('HH:mm'),
 };
 
 export type DateFormatTemplateNames = keyof typeof formatTemplates;

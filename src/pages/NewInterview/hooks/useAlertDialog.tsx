@@ -1,43 +1,49 @@
+import { merge } from 'es-toolkit';
 import { overlay } from 'overlay-kit';
 import React from 'react';
 
-import { Dialog } from '@/components/dialog';
+import { Dialog } from '../_ui/Dialog';
 
 type OpenPayload = {
   closeAsFalse: () => void;
   closeAsTrue: () => void;
 };
 
-interface UseAlertDialogOpenProps {
+type Option = {
   closeableWithOutside?: boolean;
   closeButton?: boolean;
-  /**
-   * 다이얼로그 본문.
-   * - 기본 모드: 텍스트/JSX 노드를 넘기면 프레임워크가 Dialog.Content 로 감싸고,
-   *   primaryButtonText/secondaryButtonText 로 버튼그룹을 자동 렌더해요.
-   * - customized 모드: content 가 Dialog.Content + Dialog.ButtonGroup 까지 포함한
-   *   전체 본문을 직접 반환해요 (버튼에 로딩 상태 등을 넣을 때 사용).
-   */
   content: ((payload: OpenPayload) => React.ReactNode) | React.ReactNode;
-  customized?: boolean;
+  customized?: boolean; // Dialog 콘텐츠를 전부 커스텀할지 여부를 결정해요. true면 Dialog.Content와 Dialog.ButtonGroup을 직접 렌더링해야해요.
   primaryButtonText?: string;
   secondaryButtonText?: string;
   title: string;
-}
+};
 
-export const useAlertDialog = () => {
-  const open = async ({
-    title,
-    content,
-    customized = false,
-    closeButton = true,
-    closeableWithOutside = true,
-    primaryButtonText,
-    secondaryButtonText,
-  }: UseAlertDialogOpenProps) =>
+// Todo: 복잡한 콘텐츠의 경우 overlay.openAsync의 콜백 함수에서 직접 Dialog를 렌더링하는 것이 더 나을 수 있음. customized 제거하고 이건 단순 alert 렌더링으로 제약걸기?
+export const useAlertDialog = (option: Partial<Option> = {}) => {
+  const fallbackOption = (option: Partial<Option>) => {
+    return {
+      ...option,
+      closeableWithOutside: option.closeableWithOutside ?? true,
+      closeButton: option.closeButton ?? true,
+      customized: option.customized ?? false,
+    };
+  };
+
+  const open = async (renderOption: Option) =>
     await overlay.openAsync<boolean>(({ isOpen, close }) => {
       const closeAsTrue = () => close(true);
       const closeAsFalse = () => close(false);
+
+      const {
+        primaryButtonText,
+        secondaryButtonText,
+        customized,
+        content,
+        closeButton,
+        closeableWithOutside,
+        title,
+      } = merge(fallbackOption(option), fallbackOption(renderOption));
 
       const renderAnyButton = !!primaryButtonText || !!secondaryButtonText;
       const renderedContent =
@@ -52,12 +58,12 @@ export const useAlertDialog = () => {
           {!customized && renderAnyButton && (
             <Dialog.ButtonGroup>
               {!!secondaryButtonText && (
-                <Dialog.Button onClick={closeAsFalse} size="large" variant="filledSecondary">
+                <Dialog.Button onClick={closeAsFalse} size="lg" variant="secondary">
                   {secondaryButtonText}
                 </Dialog.Button>
               )}
               {!!primaryButtonText && (
-                <Dialog.Button onClick={closeAsTrue} size="large" variant="filledPrimary">
+                <Dialog.Button onClick={closeAsTrue} size="lg" variant="primary">
                   {primaryButtonText}
                 </Dialog.Button>
               )}
